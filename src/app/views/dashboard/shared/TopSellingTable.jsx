@@ -2,6 +2,7 @@ import React from 'react'
 import { Paragraph } from 'app/components/Typography'
 import { Box, styled, useTheme } from '@mui/system'
 import {
+    Switch,
     Card,
     Icon,
     IconButton,
@@ -68,11 +69,11 @@ const TopSellingTable = () => {
     return (
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
             <CardHeader>
-                <Title>top selling products</Title>
-                <Select size="small" defaultValue="this_month">
+                <Title>Top Inventory (by quantity)</Title>
+                {/* <Select size="small" defaultValue="this_month">
                     <MenuItem value="this_month">This Month</MenuItem>
                     <MenuItem value="last_month">Last Month</MenuItem>
-                </Select>
+                </Select> */}
             </CardHeader>
             <Box overflow="auto">
                 <ProductTable>
@@ -82,13 +83,13 @@ const TopSellingTable = () => {
                                 Name
                             </TableCell>
                             <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Revenue
+                                Price
                             </TableCell>
                             <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Stock Status
+                                Active
                             </TableCell>
                             <TableCell sx={{ px: 0 }} colSpan={1}>
-                                Action
+                                Stock Status
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -101,7 +102,7 @@ const TopSellingTable = () => {
                                     sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
                                     <Box display="flex" alignItems="center">
-                                        <Avatar src={product.imgUrl} />
+                                        <Avatar src={product.coverImage} />
                                         <Paragraph sx={{ m: 0, ml: 4 }}>
                                             {product.name}
                                         </Paragraph>
@@ -112,11 +113,8 @@ const TopSellingTable = () => {
                                     colSpan={2}
                                     sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
-                                    $
-                                    {product.price > 999
-                                        ? (product.price / 1000).toFixed(1) +
-                                        'k'
-                                        : product.price}
+                                    PKR
+                                    {product.price}
                                 </TableCell>
 
                                 <TableCell
@@ -124,26 +122,24 @@ const TopSellingTable = () => {
                                     align="left"
                                     colSpan={2}
                                 >
-                                    {product.available ? (
-                                        product.available < 20 ? (
-                                            <Small bgcolor={bgSecondary}>
-                                                {product.available} available
-                                            </Small>
+                                    {product.status ? (
+                                        product.status === true ? (
+                                           
+                                                <Switch defaultChecked />
+                                            
                                         ) : (
-                                            <Small bgcolor={bgPrimary}>
+                                            <Small>
                                                 in stock
                                             </Small>
                                         )
                                     ) : (
-                                        <Small bgcolor={bgError}>
+                                        <Small>
                                             out of stock
                                         </Small>
                                     )}
                                 </TableCell>
                                 <TableCell sx={{ px: 0 }} colSpan={1}>
-                                    <IconButton>
-                                        <Icon color="primary">edit</Icon>
-                                    </IconButton>
+                                    {product.quantity}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -153,38 +149,65 @@ const TopSellingTable = () => {
         </Card>
     )
 }
+const productList = [{
+    id:1,
+    name:"TABLES",
+    price:"1200",
+    coverImage:'https://img.made.com/image/upload/c_pad,d_madeplusgrey.svg,f_auto,w_768,dpr_2.0,q_auto:good,b_rgb:f5f6f4/v4/catalog/product/asset/3/2/b/e/32be1f750db0ebaaa7f06a4fe36e3ac7088aaa6b_TBLDVI017BLK_UK_Deauville_Extending_Dining_Table_Oak_Charcoal_Black_ar3_2_LB01_PS.png',
+    colors:"black",
+    status: true,
+    priceSale:"12000",
+    quantity: "12"
+  },{
+    id:3,
+    name:"CHAIRS",
+    cover:"coverimage",
+    price:"10500",
+    coverImage:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
+    colors:"black",
+    status: true,
+    priceSale:"1200",
+    quantity: "08"
+  },{
+    id:4,
+    name:"SOFAS",
+    cover:"coverimage",
+    coverImage:'https://sc04.alicdn.com/kf/H197463f73be24ae5b8ca20cd671736bcf.jpg',
+    price:"7850",
+    colors:"black",
+    status:true ,
+    priceSale:"1200",
+    quantity: "25"
 
-const productList = [
-    {
-        imgUrl: '/assets/images/products/headphone-2.jpg',
-        name: 'earphone',
-        price: 100,
-        available: 15,
-    },
-    {
-        imgUrl: '/assets/images/products/headphone-3.jpg',
-        name: 'earphone',
-        price: 1500,
-        available: 30,
-    },
-    {
-        imgUrl: '/assets/images/products/iphone-2.jpg',
-        name: 'iPhone x',
-        price: 1900,
-        available: 35,
-    },
-    {
-        imgUrl: '/assets/images/products/iphone-1.jpg',
-        name: 'iPhone x',
-        price: 100,
-        available: 0,
-    },
-    {
-        imgUrl: '/assets/images/products/headphone-3.jpg',
-        name: 'Head phone',
-        price: 1190,
-        available: 5,
-    },
-]
-
+  },{
+    id:6,
+    name:"LAPTOPS",
+    cover:"coverimage",
+    price:"6600",
+    coverImage:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
+    colors:"black",
+    status:true ,
+    priceSale:"1200",
+    quantity: "55"
+  },{
+    id:7,
+    name:"LED'S",
+    cover:"coverimage",
+    price:"568",
+    colors:"black",
+    coverImage:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
+    status:true ,
+    priceSale:"1200",
+    quantity: "12"
+  },{
+    id:8,
+    name:"CABNET'S",
+    cover:"coverimage",
+    price:"1200",
+    colors:"black",
+    coverImage:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
+    status:true ,
+    priceSale:"1200",
+    quantity: "33",
+  }]
 export default TopSellingTable

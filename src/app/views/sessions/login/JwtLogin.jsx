@@ -99,7 +99,7 @@ const JwtLogin = () => {
                                 <TextValidator
                                     sx={{ mb: 3, width: '100%' }}
                                     variant="outlined"
-                                    size="small"
+                                    size="small"Sign in
                                     label="Email"
                                     onChange={handleChange}
                                     type="email"

@@ -33,26 +33,10 @@ const Paragraph = styled('p')(({ theme }) => ({
 
 const UpgradeCard = () => {
     return (
-        <CardRoot>
-            <StyledCard elevation={0}>
-                <img
-                    src="/assets/images/illustrations/upgrade.svg"
-                    alt="upgrade"
-                />
-                <Paragraph>
-                    Upgrade to <b>MatX PRO</b> for <br /> more resources
-                </Paragraph>
-                <Button
-                    size="large"
-                    color="primary"
-                    variant="contained"
-                    sx={{ textTransform: 'uppercase' }}
-                >
-                    upgrade now
-                </Button>
-            </StyledCard>
-        </CardRoot>
-    )
+        <div>
+            
+        </div>
+    );
 }
 
 export default UpgradeCard
