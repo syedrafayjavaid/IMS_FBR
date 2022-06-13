@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom'
 // material
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Chip from '@mui/material/Chip';
 
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
+import ProductDetail from 'app/views/Products/ProductDetail';
 
 // ----------------------------------------------------------------------
 
@@ -28,24 +30,36 @@ CategoryCard.propTypes = {
 
 
 
- function CategoryCard({ product }) {
+ function CategoryCard({ product ,onEdit,onDelete }) {
  
-  const { name, coverImage, price, colors, status, priceSale } = product;
+  const { name , photo, _id} = product;
   const navigate = useNavigate()
   const viewProduct = (product)=>{
     navigate('/session/signup')
   };
 
+  const url='http://192.168.18.117:5000/';
+   const imgeBaseUrl='uploads/';
 
+
+   const adiitHandler = (adit) =>{
+    //  console.log(props, 'props');
+     console.log(name, 'name');
+     onEdit(_id,name)
+   }
+   const delHandler = () =>{
+    onDelete(_id)
+    }
+   
   return (
     <Card  >
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        <ProductImgStyle alt="No Image" src={coverImage} />
+        <ProductImgStyle alt="No Image" src={url+imgeBaseUrl+photo} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
           <Typography variant="subtitle2" noWrap>
-            {name}
+           name : {name}
           </Typography>
      
 
@@ -62,7 +76,7 @@ CategoryCard.propTypes = {
               Quantitiy:
             </Typography>
             &nbsp;
-            {price}
+            {/* {price} */}
           </Typography>
           <Typography variant="subtitle1">
             <Typography
@@ -72,8 +86,13 @@ CategoryCard.propTypes = {
                 color: 'text.disabled',
                 textDecoration: ''
               }}
-            >
-              <Chip label="Active" variant="filled" size="small" color='primary'/>
+            ><button onClick={delHandler}>
+                     <DeleteIcon  />
+                     </button>
+                     <button onClick={adiitHandler}>
+                     <EditIcon  />
+                     </button>
+
             </Typography>
            
             
@@ -82,6 +101,6 @@ CategoryCard.propTypes = {
       </Stack>
     </Card>
   );
-}
+ }
 
 export default CategoryCard;

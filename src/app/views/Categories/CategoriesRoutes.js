@@ -11,4 +11,4 @@ const categoriesRoutes = [
     },
 ]
 
-export default categoriesRoutes
+export default categoriesRoutes;
