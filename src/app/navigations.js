@@ -21,8 +21,8 @@ export const navigations = [
     },
     {
         name: 'Product List',
-        icon: 'type',
-        path: '/producrtTypeList/list',
+        icon: 'shopping_cart_checkout',
+        path: '/productTypeList/list',
         
     },
   

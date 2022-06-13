@@ -6,7 +6,7 @@ const ProductTypeList = Loadable(lazy(() => import("./ProductTypeList")));
 
 const productTypeRoute = [
     {
-        path: '/producrtTypeList/list',
+        path: '/productTypeList/list',
         element: <ProductTypeList/>,
     },
 ]
