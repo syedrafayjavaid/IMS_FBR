@@ -14,6 +14,11 @@ export const navigations = [
         path:'/session/signin'
     },
     {
+        name: 'UsersList',
+        icon: 'group',
+        path:'/user/UsersList'
+    },
+    {
         name: 'Categories',
         icon: 'category',
         path: '/categories/list',

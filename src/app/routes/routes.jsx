@@ -12,6 +12,8 @@ import qrcodeRoutes from 'app/views/QRcode/qrCodeRoutes'
 import mapRuotes from 'app/views/map/mapRoutes'
 import { Navigate } from 'react-router-dom'
 import MapRuotes from 'app/views/map/mapRoutes'
+import UsersListRoute from 'app/views/users/UsersRoute'
+import usersRoute from 'app/views/users/UsersRoute'
 
 export const AllPages = () => {
     const all_routes = [
@@ -21,7 +23,7 @@ export const AllPages = () => {
                     <MatxLayout />
                 </AuthGuard>
             ),
-            children: [...dashboardRoutes, ...chartsRoute,...qrcodeRoutes,...MapRuotes, ...materialRoutes,...productsRoutes,...categoriesRoutes,...productTypeRoute],
+            children: [...dashboardRoutes, ...chartsRoute,...qrcodeRoutes,...MapRuotes, ...materialRoutes,...productsRoutes,...categoriesRoutes,...productTypeRoute, ...usersRoute],
         },
         ...sessionRoutes,
         {

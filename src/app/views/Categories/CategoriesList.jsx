@@ -56,9 +56,6 @@ const CategoriesList = () => {
   const handleClose = () => {
     setCategory('')
     setOpen(false);
-  }; const handleOpen = (id) => {
-    console.log(id, 'id');
-    setOpen(true);
   };
 
   //snackbar 
@@ -295,8 +292,6 @@ const CategoriesList = () => {
         <br></br>
         <br></br>
       </Container>
-
-
 
 
       <Dialog
