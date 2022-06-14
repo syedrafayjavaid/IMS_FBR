@@ -93,11 +93,7 @@ const executeScroll = () => scrollToRef(myRef)
   return (
             <>
     
-            <Tooltip title="Add Product">
-                <Fab color="secondary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",bottom:"10vh",position:"fixed"}} onClick={()=>navigate('/products/add')} >
-                        <AddIcon />
-                    </Fab>
-                </Tooltip>
+         
 
 
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
@@ -124,7 +120,7 @@ const executeScroll = () => scrollToRef(myRef)
                         </Box>
                         <Box>
                             <span>CNIC:</span>
-                            <span>232323232323233</span>
+                            <span>2323-2323-3</span>
                         </Box>  
                     </Box>
                     
@@ -171,12 +167,6 @@ const executeScroll = () => scrollToRef(myRef)
 
             
                 </Grid>
-
-
-
-            
-                
-
             </Card>
 
 

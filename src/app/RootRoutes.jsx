@@ -8,8 +8,10 @@ import categoriesRoutes from './views/Categories/categoriesRoutes'
 import productTypeRoute from './views/product-type/PrductTypeRoutes'
 import qrcodeRoutes from './views/QRcode/qrCodeRoutes'
 import mapRuotes from './views/map/mapRoutes'
-import UsersListRoute from './views/users/UsersRoute'
 import usersRoute from './views/users/UsersRoute'
+import brandsRoute from './views/brands/BrandsRoute'
+import officesRoutes from './views/offices/OfficeRoutes'
+import purchaseditemsRoute from './views/items/purchaseditemsRoute'
 
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v<YOUR_MAPBOX_VERSION>/mapbox-gl.css' rel='stylesheet' />
 const redirectRoute = [
@@ -38,7 +40,10 @@ const routes = [
     ...redirectRoute,
     ...errorRoute,
     ...errorRoute,
-    ...usersRoute
+    ...usersRoute,
+    ...brandsRoute,
+    ...officesRoutes,
+    ...purchaseditemsRoute
 ]
 
 export default routes

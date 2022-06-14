@@ -14,6 +14,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+
+import Button from '@mui/material/Button';
 import {
     Card,
     Table,
@@ -25,7 +30,6 @@ import {
     MenuItem,
     Select,
 } from '@mui/material'
-import { Button } from 'bootstrap'
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -80,7 +84,9 @@ const AllUsersTable = () => {
     const [category, setCategory] = React.useState('');
     const [categoryError, setcategoryError] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-    const[image, setImage] = React.useState()
+    const[image, setImage] = React.useState('')
+
+  const [quantity, setQuantity] = React.useState('');
     
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value);
@@ -101,15 +107,19 @@ const AllUsersTable = () => {
         setCategory('')
         setOpen(false);
       }; 
+      const handleType = (event) => {
+        setQuantity(event.target.value);
+      };
+    
 
      
       
     return (
         <>
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-            <CardHeader>
+            {/* <CardHeader>
                 <Title>Apple MacBook X512FL-EJ723T 10th Gen Intel Core i9</Title>
-            </CardHeader>
+            </CardHeader> */}
             <Box overflow="auto">
                 <ProductTable>
                     <TableHead>
@@ -130,12 +140,9 @@ const AllUsersTable = () => {
                             <TableRow key={index} hover >
                                 <TableCell
                                     colSpan={4}
-                                    align="left"
-                                    sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
                                     <Box display="flex" alignItems="center">
-                                        <Avatar src={product.imgUrl} />
-                                        <Paragraph sx={{ m: 0, ml: 4 }}>
+                                        <Paragraph >
                                             {product.location}
                                         </Paragraph>
                                     </Box>
@@ -154,53 +161,56 @@ const AllUsersTable = () => {
                                     align="left"
                                     colSpan={2}
                                 >
-                            <button onClick={()=>setOpen(true)}>Transfer</button>
+                            <Button onClick={()=>setOpen(true)}>Transfer</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </ProductTable>
             </Box>
+            
         </Card>
-
-
         <Dialog
         open={open}
         onClose={handleClose}
+        fullWidth={true}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"ADD CATEGORY"}
+          {"Transfer To"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <br></br>
             <Grid container spacing={3}>
 
-              <Grid item lg={5} md={5} sm={5} xs={5}  >
-                <TextField
-                  error={categoryError}
-                  id="category"
-                  label="Category Name"
-                  placeholder="Category Name"
-                  size="small"
-                  autoComplete="off"
-                  helperText={categoryError === true ? "Field Required" : ''}
-                  value={category}
-                  onChange={(e) => handleChange(e, setCategory, setcategoryError)}
-                  variant="outlined"
-                  fullWidth
+              <Grid item lg={10} md={10} sm={10} xs={10}  >
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl size="small" fullWidth>
+                  <InputLabel id="demo-simple-select-label">User</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={quantity}
+                    label="User"
+                    onChange={handleType}
 
-                />
+                  >
+                    <MenuItem value={10}>ali</MenuItem>
+                    <MenuItem value={20}>umer</MenuItem>
+                    <MenuItem value={20}>usman</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
 
               </Grid>
 
 
               <Grid item lg={3} md={3} sm={3} xs={3}   >
-
-                <span>Active</span>
-                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+{/* 
+                <span>Demo</span>
+                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
 
 
 
@@ -230,14 +240,32 @@ const AllUsersTable = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus>
+          <Button >
             Confirm
           </Button>
         </DialogActions>
 
 {/* snackbar */}
         {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
+      {/* <Snackbar
+        open={sopen}
+        autoHideDuration={5000}
+        onClose={handleClosed}
+        message="Note archived"
+        action={action}
+      /> */}
+
+
+        {/* <Snackbar
+          open={sanakbar}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Note archived"
+          action={action}
+        /> */}
       </Dialog>
+
+    
 
 
         </>

@@ -1,0 +1,83 @@
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import { TableCell, TableRow } from '@mui/material'
+import Button from '@mui/material/Button'
+import { Box } from '@mui/system'
+import { Paragraph } from 'app/components/Typography'
+import { useNavigate } from 'react-router-dom'
+
+const OfficeCard = ({office, onEdit, onDelete}) => {
+
+    const navigate = useNavigate()
+    const url = 'http://192.168.18.117:5000/'
+
+    const adiitHandler = (adit) => {
+        // onEdit(brand._id, brand.name)
+    }
+    const delHandler = () => {
+        // onDelete(brand._id)
+    }
+
+  return (
+    <TableRow
+            hover >
+            <TableCell
+                colSpan={2}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.name}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={2}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Address`}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={2}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{`City`}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={2}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Longitude`}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={2}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box display="flex" alignItems="center">
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Latitude`}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
+                <Button onClick={adiitHandler}>
+                    <EditIcon />
+                </Button>
+            </TableCell>
+            <TableCell sx={{ px: 0 }} colSpan={1}>
+                <Button onClick={delHandler}>
+                    <DeleteIcon />
+                </Button>
+            </TableCell>
+        </TableRow>
+  )
+}
+
+export default OfficeCard

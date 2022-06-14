@@ -1,7 +1,13 @@
-// import React ,{useState, useEffect} from 'react'
 
-// material
-import React from 'react';
+import * as React from 'react';
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
+
+
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
+
+//////
 import { Container, Stack, Typography,Grid } from '@mui/material';
 import ProductCard from '../../components/products/ProductCard'
 import { Fab  } from '@mui/material';
@@ -17,7 +23,7 @@ import QRCode from 'qrcode';
 import QrReader from 'react-qr-reader';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Switch from '@mui/material/Switch';
-import Box from '@mui/material/Box';
+
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -32,35 +38,126 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/system'
 import axios from 'axios';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-
+/////
+//datepicker
 
 const Title = styled('span')(() => ({
-  fontSize: '1rem',
-  fontWeight: '500',
-  textTransform: 'capitalize',
-  display: "flex",
+    fontSize: '1rem',
+    fontWeight: '500',
+    textTransform: 'capitalize',
+    display: "flex",
+  
+  }))
+  
+  const CardHeader = styled('div')(() => ({
+    paddingLeft: '24px',
+    paddingRight: '24px',
+    marginBottom: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }))
+  const Input = styled('input')({
+    display: 'none',
+  });
 
-}))
+  
+function valuetext(value) {
+    return `${value}°C`;
+  }
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
-const CardHeader = styled('div')(() => ({
-  paddingLeft: '24px',
-  paddingRight: '24px',
-  marginBottom: '12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}))
-const Input = styled('input')({
-  display: 'none',
-});
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
+//brand
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+const brands = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+   
+  ];
+  
+  function getBrand(brand, brandName, themes) {
+    return {
+      fontWeight:
+        brandName.indexOf(brand) === -1
+          ? themes.typography.fontWeightRegular
+          : themes.typography.fontWeightMedium,
+    };
+  }
 
+  //status
+  const status = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+   
+  ];
+  
+  function getStatu(statu, statuName, themestatus) {
+    return {
+      fontWeight:
+      statuName.indexOf(statu) === -1
+          ? themestatus.typography.fontWeightRegular
+          : themestatus.typography.fontWeightMedium,
+    };
+  }
+//
+const offices = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+   
+  ];
+function getoffice(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+      officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
 
-
-
-
-const ProductsList = () => {
-
+ const PurchasedItems=()=> {
+  const theme = useTheme();
+  const themes = useTheme();
+  const themestatu = useTheme();
+  const themesoffice = useTheme();
+  const [personName, setPersonName] = React.useState([]);
+  const [brandName, setBrandName] = React.useState([]);
+  const [statuName, setStatuName] = React.useState([]);
+  const [value, setValue] = React.useState([20, 37]);
+  const [officeName, setOfficeName] = React.useState([]);
 
 
   const [imageUrl, setImageUrl] = React.useState('');
@@ -80,13 +177,8 @@ const ProductsList = () => {
   const [descriptionError, setdescriptionError] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
   const [modelError, setModelError] = React.useState(false);
-  const [modifiedByError,setModifiedByError] =React.useState(false);
-  const [createdByError,setCreatedByError] =React.useState(false);
-
 
   // Setting States 
-  const [modifiedBy,setModifiedBy]=React.useState('');
-  const[createdBy,setCreatedBy]=React.useState('');
   const [name, setName] = React.useState('');
   const [quantity, setQuantity] = React.useState([]);
   const [productQuantity,setProductQuantity]= React.useState('')
@@ -111,10 +203,10 @@ const [product1,setProduct1]=React.useState([])
 
   const [text1, setText1] = useState('');
   const [imageUrl1, setImageUrl1] = useState('');
-  const [scanResultFile, setScanResultFile] = useState('');
-  // const [scanResultWebCam, setScanResultWebCam] =  useState('');
+//   const [scanResultFile, setScanResultFile] = useState('');
+//   const [scanResultWebCam, setScanResultWebCam] =  useState('');
   const classes = useStyles();
-  // const qrRef = useRef(null);
+  const qrRef = useRef(null);
 
 
 
@@ -127,25 +219,25 @@ const [product1,setProduct1]=React.useState([])
       console.log(error);
     }
   }
-  const handleErrorFile = (error) => {
-    console.log(error);
-  }
-  const handleScanFile = (result) => {
-      if (result) {
-          setScanResultFile(result);
-      }
-  }
-  // const onScanFile = () => {
-  //   qrRef.current.openImageDialog();
-  // }
-  const handleErrorWebCam = (error) => {
-    console.log(error);
-  }
-  // const handleScanWebCam = (result) => {
-  //   if (result){
-  //       setScanResultWebCam(result);
-  //   }
-  //  }
+//   const handleErrorFile = (error) => {
+//     console.log(error);
+//   }
+//   const handleScanFile = (result) => {
+//       if (result) {
+//           setScanResultFile(result);
+//       }
+//   }
+//   const onScanFile = () => {
+//     qrRef.current.openImageDialog();
+//   }
+//   const handleErrorWebCam = (error) => {
+//     console.log(error);
+//   }
+//   const handleScanWebCam = (result) => {
+//     if (result){
+//         setScanResultWebCam(result);
+//     }
+//    }
 
 
 
@@ -192,10 +284,10 @@ const [product1,setProduct1]=React.useState([])
 
 
 
-  const handleImage=(e)=>{
-    setImage(e.target.files[0])
-    console.log(e.target.files[0],'e.target.files[0]');
-  }
+//   const handleImage=(e)=>{
+//     setImage(e.target.files[0])
+//     console.log(e.target.files[0],'e.target.files[0]');
+//   }
 
 
   useEffect(() => {
@@ -308,112 +400,182 @@ const [product1,setProduct1]=React.useState([])
 
 
   const navigate = useNavigate()
-//   const [producst,setProdect]=React.useState('');
-//   useEffect(() => 
-//   { axios.get('http://192.168.18.117:5000/api/v1/products ').then((res) => 
-//   { console.log(res.data.data); 
-//     setProdect(res.data.data); 
-//     console.log(setProdect, 'setProdect'); }).catch((error)=>{
-// console.log(error,'error');
-//     }) }, []);
-  // const products = [{
-  //   id:1,
-  //   name:"HP 15.6 inch portable laptop",
-  //   price:"1200",
-  //   photo:'https://sc04.alicdn.com/kf/Ha008f89f0b9e496f8ab478de7c4ca6d23.jpg',
-  //   colors:"black",
-  //   status:"active",
-  //   productQuantity:"6"
-
-
-  // },{
-  //   id:2,
-  //   name:"MacBook Pro 2020 8GB Ram ",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   photo:'https://sc04.alicdn.com/kf/H781f8f65e0d34e9291b93164832bd0879.jpg',
-  //   colors:"black",
-  //   status:"active",
-  //   productQuantity:"90"
-
-
-  // },{
-  //   id:3,
-  //   name:"Middle Back Cloth Chair",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   photo:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
-  //   colors:"black",
-  //   status:"active",
-  //   productQuantity:"78"
-
-
-  // },{
-  //   id:4,
-  //   name:"Multi-functional Computer Table",
-  //   cover:"coverimage",
-  //   photo:'https://sc04.alicdn.com/kf/Hc781203418b1496da17a99f61ec8348dU.jpg',
-  //   price:"1200",
-  //   colors:"black",
-  //   status:"active",
-  //   productQuantity:"24"
-
-
-  // },{
-  //   id:5,
-  //   name:"Modern Design Coffee Table",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   colors:"black",    
-  //   photo:'https://sc04.alicdn.com/kf/Hf2fcc8d04cc64a6080c4c30105a219bfp.jpg',
-  //   status:"active",
-  //   productQuantity:"120"
-
-
-  // },{
-  //   id:6,
-  //   name:"Core i7 RAM 8GB ROM 256 GB Laptop Computer Notebook",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   photo:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
-  //   colors:"black",
-  //   status:"active",
-  //   productQuantity:"12"
-
-
-  // },{
-  //   id:7,
-  //   name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   colors:"black",
-  //   photo:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
-  //   status:"active",
-  //   productQuantity:"10"
-
-
-  // },{
-  //   id:8,
-  //   name:"Pure Wooden Cabinet",
-  //   cover:"coverimage",
-  //   price:"1200",
-  //   colors:"black",
-  //   photo:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
-  //   status:"active",
-  //   productQuantity:"130"
-
-
-  // }]
 
 
 
+  //card set
+////
+  const handleBox = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleChan = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const handleBrand = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setBrandName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
 
+  const handleStatus = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setStatuName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
-    
+  ///office
+
+  const offceChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setOfficeName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+
   return (
     <>
+      
+      <FormControl sx={{ m: 1, width: 400 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Category</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={personName}
+          onChange={handleChan}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, personName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+       
+      <FormControl sx={{ m: 1, width: 400 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={brandName}
+          onChange={handleBrand}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {brands.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getBrand(name, brandName, themes)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+       
+      <FormControl sx={{ m: 1, width: 400 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Status</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={statuName}
+          onChange={handleStatus}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {status.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStatu(name, statuName, themestatu)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+       <br></br>
+      <FormControl sx={{ m: 1, width: 500 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Office</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={officeName}
+          onChange={offceChange}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {offices.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, officeName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
+
+      <FormControl sx={{ m: 1, width: 400 }}>
+     <InputLabel id="demo-multiple-name-label">Price</InputLabel>
+      <Slider
+        getAriaLabel={() => 'Temperature range'}
+        value={value}
+        onChange={handleBox}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      />
+     </FormControl>
+      {/* <Box sx={{ width: 300 }}>
+      <Slider
+        getAriaLabel={() => 'Temperature range'}
+        value={value}
+        onChange={handleBox}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      />
+    </Box> */}
     <Tooltip title="Search Product">
         <Fab color="primary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",top:"13vh",position:"fixed"}} onClick={() => setOpen(true)} >
                 <SearchIcon />
@@ -521,18 +683,45 @@ const [product1,setProduct1]=React.useState([])
        
 
 
-        <CardContent>
 
+
+
+        <CardContent>
+        
 
           <Grid container spacing={3}>
+
+          <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+
+<Box sx={{ minWidth: 120 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">Product</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={category}
+      label="Product Category"
+      onChange={handleType2}
+
+    >
+      <MenuItem value={10}>Sofa</MenuItem>
+      <MenuItem value={20}>Table</MenuItem>
+      <MenuItem value={30}>Laptop</MenuItem>
+      <MenuItem value={30}>Tablet</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
 
             <Grid item lg={4} md={4} sm={4} xs={6}  >
 
               <TextField
                 error={nameError}
                 id="name"
-                label="Product Name"
-                placeholder="Product Name"
+                label="Model"
+                placeholder="Model"
                 autoComplete="off"
                 helperText={nameError === true ? "Field Required" : ''}
                 value={name}
@@ -547,9 +736,32 @@ const [product1,setProduct1]=React.useState([])
 
             </Grid>
 
-
-
             <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField
+  error={nameError}
+  id="name"
+  label="Product Name"
+  placeholder="Product Name"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={name}
+  size="small"
+  onChange={(e) => handleChange(e, setName, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+
+
+</Grid>
+
+
+
+
+
+            {/* <Grid item lg={4} md={4} sm={4} xs={6}  >
 
 <Box sx={{ minWidth: 120 }}>
   <FormControl size="small" fullWidth>
@@ -569,31 +781,9 @@ const [product1,setProduct1]=React.useState([])
   </FormControl>
 </Box>
 </Grid>
+ */}
 
 
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-
-<Box sx={{ minWidth: 120 }}>
-  <FormControl size="small" fullWidth>
-    <InputLabel id="demo-simple-select-label">Product Category</InputLabel>
-    <Select
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      value={category}
-      label="Product Category"
-      onChange={handleType2}
-
-    >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
-    </Select>
-  </FormControl>
-</Box>
-
-</Grid>
 
 
 
@@ -609,8 +799,8 @@ const [product1,setProduct1]=React.useState([])
               <TextField
                 error={nameError}
                 id="name"
-                label="Model"
-                placeholder="Model"
+                label="Purchase Order(PO)"
+                placeholder="Purchase Order(PO)"
                 autoComplete="off"
                 helperText={nameError === true ? "Field Required" : ''}
                 value={description}
@@ -624,29 +814,29 @@ const [product1,setProduct1]=React.useState([])
 
 
             </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}  >
-            <Box sx={{ minWidth: 120 }}>
-  <FormControl size="small" fullWidth>
-    <InputLabel id="demo-simple-select-label">Product Category</InputLabel>
-    <Select
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      value={brand}
-      label="Brand"
-      onChange={handleType2}
 
-    >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
-    </Select>
-  </FormControl>
-</Box>
+            <Grid item lg={4} md={4} sm={4} xs={4}  >
+          
+
+          <TextField
+            error={productQuantityError}
+            id="name"
+            label="Product Quantity"
+            placeholder="Product Quantity"
+            autoComplete="off"
+            helperText={productQuantityError === true ? "Field Required" : ''}
+            value={productQuantity}
+            size="small"
+            onChange={(e) => handleChange(e, setProductQuantity, setProductQuantityError)}
+            variant="outlined"
+            fullWidth
+
+          />
+
 
         </Grid>
 
-            <Grid item lg={4} md={4} sm={4} xs={4} style={{ justifyContent: "center"}}  >
+            <Grid item lg={4} md={4} sm={4} xs={6} style={{ justifyContent: "center", marginLeft: "12px" }}  >
               <Box>
                 {/* <span>Active</span>
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
@@ -689,23 +879,22 @@ const [product1,setProduct1]=React.useState([])
                 </a>) : null}
             </Grid> */}
            
-          
+            <Grid item lg={4} md={4} sm={4} xs={4}  >
+            </Grid>
+            <br></br>
             <br></br>
 
-           
-                    <Grid item xl={4} lg={4} md={6} sm={12} >
-                        <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} xs={{}}/>
-                    </Grid>
-                        <Grid item xl={4} lg={4} md={6} sm={12} >
+            <Grid container spacing={2}>
+                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                        <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)}/>
                         <Button className={classes.btn} variant="contained" 
                           color="primary" onClick={() => generateQrCode()}>Generate</Button>
-                          </Grid>
                           <br></br>
                           {imageUrl1 ? (
                             <a href={imageUrl1} download>
                                 <img src={imageUrl1} alt="img"/>
                             </a>) : null}
-                   
+                    </Grid>
                     {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
                       <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
                       <QrReader
@@ -717,8 +906,8 @@ const [product1,setProduct1]=React.useState([])
                         legacyMode
                       />
                       <h3>Code: {scanResultFile}</h3>
-                    </Grid> */}
-                    {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                    </Grid>
+                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
                        <h3>Qr:</h3>
                        <QrReader
                        delay={300}
@@ -728,93 +917,19 @@ const [product1,setProduct1]=React.useState([])
                        />
                        <h3>Code: {scanResultWebCam}</h3>
                     </Grid> */}
-                    <Grid item lg={4} md={4} sm={4} xs={4}  >
-            </Grid>
-            
-       
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-<TextField
-  error={modifiedByError}
-  id="name"
-  label="Modified By"
-  placeholder="Modified By"
-  autoComplete="off"
-  helperText={setModifiedByError === true ? "Field Required" : ''}
-  value={modifiedBy}
-  size="small"
-  onChange={(e) => handleChange(e, setModifiedBy, setModifiedByError)}
-  variant="outlined"
-  fullWidth
-  disabled
-/>
-
-
-
-</Grid>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-<TextField
- disabled
-  error={createdByError}
-  id="name"
-  label="Created By"
-  placeholder="Created By"
-  autoComplete="off"
-  helperText={setCreatedByError === true ? "Field Required" : ''}
-  value={createdBy}
-  size="small"
-  onChange={(e) => handleChange(e, setCreatedBy, setCreatedByError)}
-  variant="outlined"
-  fullWidth
-
-/>
-
-
-
-</Grid>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-
-
-
-</Grid>
-
-<Grid item lg={8} md={8} sm={8} xs={8}  >
-<TextField
-  label="Detail"
-  placeholder="Detail"
-  style={{textAlign: 'left'}}
-  hintText="Message Field"
-  floatingLabelText="MultiLine and FloatingLabel"
-  multiline
-  fullWidth
-  rows={3}
-/>
-</Grid>
                 </Grid>
         
 
 
 
-          
+          </Grid>
+         
 
 
 
 
  
         </CardContent>
-
-
-
-
-
-   
-
-
-
-
-
 
 
 
@@ -830,31 +945,25 @@ const [product1,setProduct1]=React.useState([])
       </Dialog>
     </>
      
-
-  )
+    
+  );
 }
-
-
-
-// qrcode 
-
 const useStyles = makeStyles((theme) => ({
-  conatiner: {
-    marginTop: 10
-  },
-  title: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems:  'center',
-    background: '#3f51b5',
-    color: '#fff',
-    padding: 20
-  },
-  btn : {
-    marginTop: 10,
-    marginBottom: 20
-  }
-}));
-
-
-export default ProductsList
+    conatiner: {
+      marginTop: 10
+    },
+    title: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems:  'center',
+      background: '#3f51b5',
+      color: '#fff',
+      padding: 20
+    },
+    btn : {
+      marginTop: 10,
+      marginBottom: 20
+    }
+  }));
+  
+export default PurchasedItems

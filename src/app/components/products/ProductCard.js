@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 
 
@@ -28,19 +31,41 @@ ProductCard.propTypes = {
 
 
 
+
  function ProductCard({ product }) {
  
-  const { name, coverImage, price, colors, status, priceSale } = product;
+  const { name, photo, price, productQuantity } = product;
   const navigate = useNavigate()
   const viewProduct = (product)=>{
     navigate('/products/details')
   };
+  const url='http://192.168.18.117:5000/';
+  const imgeBaseUrl='uploads/';
 
+
+  const adiitHandler = (adit) =>{
+    //  console.log(props, 'props');
+     console.log(product, 'producrt');
+// product.onCallBack(_id);
+   }
+   const delHandler = () =>{
+    
+  //     console.log(_id,'id');
+  //     console.log(`http://192.168.18.117:5000/api/v1/category/${_id}`);
+  //      axios.delete(`http://192.168.18.117:5000/api/v1/category/${_id}`).then((res) => 
+  //   { console.log(res.msg); 
+  //     }).catch((error)=>{
+  // console.log(error,'error');
+  //     }) 
+    }
+
+
+  
 
   return (
     <Card onClick={()=>viewProduct(product)} >
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        <ProductImgStyle alt="No Image" src={coverImage} />
+        <ProductImgStyle alt="No Image" src={url+imgeBaseUrl+photo} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }} >
@@ -60,7 +85,7 @@ ProductCard.propTypes = {
               }}
             >
               Quantitiy: &nbsp;
-            {price}
+            {productQuantity}
             </Typography>
            
           </Typography>
@@ -74,8 +99,27 @@ ProductCard.propTypes = {
               }}
             >
               Price: &nbsp;
-            80000
+            {price}
             </Typography>
+            
+          </Typography>
+          <Typography variant="subtitle1">
+            <Typography
+              component="span"
+              variant="body1"
+              sx={{
+                color: 'text.disabled',
+                textDecoration: ''
+              }}
+            ><button onClick={delHandler}>
+                     <DeleteIcon  />
+                     </button>
+                     <button onClick={adiitHandler}>
+                     <EditIcon  />
+                     </button>
+
+            </Typography>
+           
             
           </Typography>
         </Stack>

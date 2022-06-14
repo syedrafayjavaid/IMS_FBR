@@ -24,6 +24,8 @@ import {
 } from '@mui/material';
 
 import { Paragraph } from 'app/components/Typography';
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
 
 const ProductTypeCard = ({product, onEdit, onDelete}) => {
 
@@ -33,11 +35,11 @@ const ProductTypeCard = ({product, onEdit, onDelete}) => {
   
   
      const adiitHandler = (adit) =>{
-        console.log('props the producttype card');
-    
+        
+        onEdit(product._id,product.name)
      }
      const delHandler = () =>{
-    //   onDelete(_id)
+      onDelete(product._id)
       }
 
   return (
@@ -61,8 +63,18 @@ const ProductTypeCard = ({product, onEdit, onDelete}) => {
                                     colSpan={2}
                                     sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
+
+              
+
+
+<Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
                                    
-                                        {product.category} 
+                                    
                                 </TableCell>
 
                                 <TableCell

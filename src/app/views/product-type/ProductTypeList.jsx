@@ -1,6 +1,6 @@
-import React from 'react'
-// material
 
+// material
+import React, { useEffect ,useState} from 'react'
 import AddIcon from '@mui/icons-material/Add';
 
 import Tooltip from '@mui/material/Tooltip';
@@ -78,6 +78,99 @@ const Small = styled('small')(({ bgcolor }) => ({
 }))
 
 const ProductTypeList = () => {
+
+
+
+  const [productList,setProductList]=React.useState([])
+
+  useEffect(() => {
+    getAlldata();
+  }, []);
+
+
+  const getAlldata = () => {
+    axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
+      console.log(res.data.data);
+      setProductList(res.data.data);
+      console.log(productList, 'arry');
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
+  }
+
+
+  const createHandler = () => {
+    if(catogoryId===''){
+      let data = new FormData();
+      data.append('name', category );
+      data.append('demo', demo);
+      axios.post('http://192.168.18.117:5000/api/v1/productType', data).then((res) => {
+        console.log(res.data.data);
+        if(res){
+          handleClose()
+          getAlldata(); 
+        }
+        setCatogoryId('')
+       
+      }).catch((error) => {
+        console.log(error, 'error');
+      })
+    }
+    else{
+
+      let data = new FormData();
+      data.append('name', category);
+  
+      axios.put(`http://192.168.18.117:5000/api/v1/productType/${catogoryId}`, data).then((res) => {
+        console.log(res.msg);
+        if (res) {
+          getAlldata();
+          handleClose()
+        //  console.log("hello console");
+        }
+    
+      }).catch((error) => {
+        console.log(error, 'error');
+        console.log("hello console");
+
+      })
+      
+    }
+
+    
+    // else{
+
+    //   let data = new FormData();
+    //   data.append('name', category);
+  
+    //   axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
+    //     console.log(res.msg);
+    //     if (res) {
+    //       getAlldata();
+    //       handleClose()
+    //     //  console.log("hello console");
+    //     }
+    
+    //   }).catch((error) => {
+    //     console.log(error, 'error');
+    //     console.log("hello console");
+    //     handleClick()
+
+    //   })
+      
+    // }
+   
+  }
+
+
+
+
+
+
+
+
+
+
     const { palette } = useTheme()
     const bgError = palette.error.main
     const bgPrimary = palette.primary.main
@@ -85,10 +178,14 @@ const ProductTypeList = () => {
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
     const [category, setCategory] = React.useState("");
+    // const [prodectTypeName,setProdectTypeName]=React.useState("");
+    const [demo,setDemo]=React.useState(false);
     const [categoryError, setcategoryError] = React.useState(false);
+    const [catogoryId,setCatogoryId] = React.useState('');
 
     const handleClose = () => {
       setCategory('')
+      setCatogoryId('')
       setOpen(false);
     }; 
     
@@ -142,9 +239,8 @@ const ProductTypeList = () => {
     });
 
     const onDelhandler = (editData) => {
-      console.log('id');
-      console.log(`http://192.168.18.117:5000/api/v1/category/`);
-      axios.delete(`http://192.168.18.117:5000/api/v1/category/`).then((res) => {
+      console.log(editData);
+      axios.delete(` http://192.168.18.117:5000/api/v1/productType/${editData}`).then((res) => {
         // console.log(res.msg);
         // getAlldata();
           // let arr = category
@@ -157,6 +253,9 @@ const ProductTypeList = () => {
   
           // setSanakbar(true);
           // setArryCatagory(arr.splice(indexOfObject, 1))
+          if(res){
+            getAlldata();
+          }
   
         
       }
@@ -166,17 +265,24 @@ const ProductTypeList = () => {
       })
   
     }
-    const onEdithandler = () => {
-  
+    const onEdithandler = (editIde ,name) => {
+
+  setCategory(name);
       setOpen(true)
-  
-      console.log('id');
-      // console.log('editDataName');
-      // setCategory(editDataName)
-      // setImage('');
-      // setIdCategory(editDataId)
-  
-      // console.log(`http://192.168.18.117:5000/api/v1/category/`);
+      
+      console.log(editIde,name);
+      setCatogoryId(editIde);
+      // axios.post(`http://192.168.18.117:5000/api/v1/productType/${editIde}`, data).then((res) => {
+      //   console.log(res.data.data);
+      //   if(res){
+      //     handleClose()
+      //     getAlldata();
+      //     setCategory('')
+      //   }
+       
+      // }).catch((error) => {
+      //   console.log(error, 'error');
+      // })
     }
 
     return (
@@ -277,7 +383,7 @@ const ProductTypeList = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus>
+          <Button autoFocus onClick={createHandler}>
             Confirm
           </Button>
         </DialogActions>
@@ -311,109 +417,109 @@ const ProductTypeList = () => {
     )
 }
 
-const productList = [{
-    id:1,
-    name:"Glass Dining Room Set Metal Leg",
-    price:"1200",
-    coverImage:'https://sc04.alicdn.com/kf/Hdc887d99681d4ee49ecd721a5b84eddbO.jpg',
-    colors:"black",
-    status:"active",
-    category:"Table",
-    priceSale:"1200",
-    quantity:"80"
+// const productList = [{
+//     id:1,
+//     name:"Glass Dining Room Set Metal Leg",
+//     price:"1200",
+//     coverImage:'https://sc04.alicdn.com/kf/Hdc887d99681d4ee49ecd721a5b84eddbO.jpg',
+//     colors:"black",
+//     status:"active",
+//     category:"Table",
+//     priceSale:"1200",
+//     quantity:"80"
 
 
-  },{
-    id:2,
-    name:"Pure Wood Table",
-    cover:"coverimage",
-    price:"1200",
-    coverImage:'https://sc04.alicdn.com/kf/H6bd0cecce9034464ace0221e3cbc99d7l.jpg',
-    colors:"black",
-    status:"active",
-    category:"Table",
-    priceSale:"1200",
-    quantity:"120"
+//   },{
+//     id:2,
+//     name:"Pure Wood Table",
+//     cover:"coverimage",
+//     price:"1200",
+//     coverImage:'https://sc04.alicdn.com/kf/H6bd0cecce9034464ace0221e3cbc99d7l.jpg',
+//     colors:"black",
+//     status:"active",
+//     category:"Table",
+//     priceSale:"1200",
+//     quantity:"120"
 
 
-  },{
-    id:3,
-    name:"Middle back conference net cloth Chair",
-    cover:"coverimage",
-    price:"1200",
-    coverImage:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
-    colors:"black",
-    status:"active",
-    category:"Chair",
-    priceSale:"1200",
-    quantity:"10"
+//   },{
+//     id:3,
+//     name:"Middle back conference net cloth Chair",
+//     cover:"coverimage",
+//     price:"1200",
+//     coverImage:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
+//     colors:"black",
+//     status:"active",
+//     category:"Chair",
+//     priceSale:"1200",
+//     quantity:"10"
 
 
-  },{
-    id:4,
-    name:"Pure Leather Sofa",
-    cover:"coverimage",
-    coverImage:'https://sc04.alicdn.com/kf/H197463f73be24ae5b8ca20cd671736bcf.jpg',
-    price:"1200",
-    colors:"black",
-    status:"active",
-    category:"Sofa",
-    priceSale:"1200",
-    quantity:"50"
+//   },{
+//     id:4,
+//     name:"Pure Leather Sofa",
+//     cover:"coverimage",
+//     coverImage:'https://sc04.alicdn.com/kf/H197463f73be24ae5b8ca20cd671736bcf.jpg',
+//     price:"1200",
+//     colors:"black",
+//     status:"active",
+//     category:"Sofa",
+//     priceSale:"1200",
+//     quantity:"50"
 
 
-  },{
-    id:5,
-    name:"Nordic Upholstered Velvet Sofa ",
-    cover:"coverimage",
-    price:"1200",
-    colors:"black",    
-    coverImage:'https://sc04.alicdn.com/kf/H5aecfcc540de4edcbe4c4974ef5148bd1.jpg',
-    status:"active",
-    category:"Sofa",
-    priceSale:"1200",
-    quantity:"40"
+//   },{
+//     id:5,
+//     name:"Nordic Upholstered Velvet Sofa ",
+//     cover:"coverimage",
+//     price:"1200",
+//     colors:"black",    
+//     coverImage:'https://sc04.alicdn.com/kf/H5aecfcc540de4edcbe4c4974ef5148bd1.jpg',
+//     status:"active",
+//     category:"Sofa",
+//     priceSale:"1200",
+//     quantity:"40"
 
 
-  },{
-    id:6,
-    name:"Core i7 RAM 8GB ROM 256 GB Laptop Computer Notebook",
-    cover:"coverimage",
-    price:"1200",
-    coverImage:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
-    colors:"black",
-    category:"Laptop",
-    status:"active",
-    priceSale:"1200",
-    quantity:"30"
+//   },{
+//     id:6,
+//     name:"Core i7 RAM 8GB ROM 256 GB Laptop Computer Notebook",
+//     cover:"coverimage",
+//     price:"1200",
+//     coverImage:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
+//     colors:"black",
+//     category:"Laptop",
+//     status:"active",
+//     priceSale:"1200",
+//     quantity:"30"
 
 
-  },{
-    id:7,
-    name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
-    cover:"coverimage",
-    price:"1200",
-    colors:"black",
-    coverImage:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
-    status:"active",
-    category:"Laptop",
-    priceSale:"1200",
-    quantity:"20"
+//   },{
+//     id:7,
+//     name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
+//     cover:"coverimage",
+//     price:"1200",
+//     colors:"black",
+//     coverImage:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
+//     status:"active",
+//     category:"Laptop",
+//     priceSale:"1200",
+//     quantity:"20"
 
 
-  },{
-    id:8,
-    name:"Wooden Wardrobe Cabinet Clothes Closet",
-    cover:"coverimage",
-    price:"1200",
-    colors:"black",
-    coverImage:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
-    status:"active",
-    category:"Cabinet",
-    priceSale:"1200",
-    quantity:"20"
+//   },{
+//     id:8,
+//     name:"Wooden Wardrobe Cabinet Clothes Closet",
+//     cover:"coverimage",
+//     price:"1200",
+//     colors:"black",
+//     coverImage:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
+//     status:"active",
+//     category:"Cabinet",
+//     priceSale:"1200",
+//     quantity:"20"
 
 
-  }]
+//   }]
 
 export default ProductTypeList

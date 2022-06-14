@@ -14,7 +14,7 @@ export const navigations = [
         path:'/session/signin'
     },
     {
-        name: 'UsersList',
+        name: 'Employee',
         icon: 'group',
         path:'/user/UsersList'
     },
@@ -30,7 +30,24 @@ export const navigations = [
         path: '/productTypeList/list',
         
     },
-  
+    {
+        name: 'Brand',
+        icon: 'shopping_cart_checkout',
+        path: '/brand/list',
+        
+    },
+    {
+        name: 'Office',
+        icon: 'shopping_cart_checkout',
+        path: '/office/list',
+        
+    },
+    {
+        name: 'Purchased Items',
+        icon: 'shopping_cart_checkout',
+        path: 'items/PurchasedItems',
+        
+    },
     {
         name: 'Products',
         icon: 'shopping_cart_checkout',
