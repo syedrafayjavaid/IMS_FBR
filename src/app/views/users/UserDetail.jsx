@@ -98,7 +98,7 @@ const executeScroll = () => scrollToRef(myRef)
 
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
                 <CardHeader>
-                <Title>USER DETAILS</Title>
+                <Title>EMPLOYEE DETAILS</Title>
                 </CardHeader>
                     <hr></hr>
                 <Grid container>
@@ -160,7 +160,7 @@ const executeScroll = () => scrollToRef(myRef)
                     </Box>
                     <Box>
                         <br></br>
-                        <Button variant='contained'  onClick={showTbl} >Inventory Details</Button>
+                        <Button variant='contained'  onClick={showTbl} >Employee Details</Button>
                         
                     </Box>
                 </Grid>

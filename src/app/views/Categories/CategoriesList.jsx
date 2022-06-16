@@ -42,6 +42,7 @@ const CategoriesList = () => {
 
   //snacvkbar
   const [sopen, setsOpen] = React.useState(false);
+  const [popen, setpOpen] = React.useState(false);
   // fir edit api 
   const[idCategory,setIdCategory] = React.useState('')
 
@@ -62,13 +63,17 @@ const CategoriesList = () => {
   const handleClick = () => {
     setsOpen(true);
   };
+
   const handleClosed = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
+///
+//when the edit click the button
 
     setsOpen(false);
   };
+
   const action = (
     <React.Fragment>
       <Button color="secondary" size="small" onClick={handleClose}>
@@ -85,6 +90,42 @@ const CategoriesList = () => {
     </React.Fragment>
   );
 
+
+
+
+
+
+//////edit pup mesage
+
+const handlepClick = () => {
+  setpOpen(true);
+};
+
+const handlepClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+
+  setpOpen(false);
+};
+
+const paction = (
+  <React.Fragment>
+    <Button color="secondary" size="small" onClick={handlepClose}>
+      UNDO
+    </Button>
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={handlepClose}
+    >
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  </React.Fragment>
+);
+///////
+  
     
 
 
@@ -360,7 +401,10 @@ const CategoriesList = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={checking}>
+          <Button autoFocus onClick={()=>{checking();
+          handlepClick();
+
+         }} >
             Confirm
           </Button>
         </DialogActions>
@@ -371,7 +415,7 @@ const CategoriesList = () => {
         open={sopen}
         autoHideDuration={5000}
         onClose={handleClosed}
-        message="Note archived"
+        message="Your image fields is data is not valid"
         action={action}
       />
 
@@ -385,8 +429,14 @@ const CategoriesList = () => {
         /> */}
       </Dialog>
 
-
-
+      <Snackbar
+        open={popen}
+        autoHideDuration={6000}
+        onClose={handlepClose}
+        message="Edit Confirm"
+        action={paction}
+      />
+    
 
     </>
 

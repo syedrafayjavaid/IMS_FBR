@@ -394,14 +394,6 @@ const [vender,setVender]=React.useState([])
   }
 
 
-
-
-
-
-
-
-
-
   const checking = () => {
   //   if(imge){
   //     let data = new FormData();
@@ -531,8 +523,8 @@ const [vender,setVender]=React.useState([])
 
   return (
     <>
-      
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <Card style={{marginTop:"2"}}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Category</InputLabel>
       
@@ -557,7 +549,7 @@ const [vender,setVender]=React.useState([])
         </Select>
       </FormControl>
        
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
       
@@ -582,7 +574,7 @@ const [vender,setVender]=React.useState([])
         </Select>
       </FormControl>
        
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Status</InputLabel>
       
@@ -606,8 +598,8 @@ const [vender,setVender]=React.useState([])
           ))}
         </Select>
       </FormControl>
-       <br></br>
-      <FormControl sx={{ m: 1, width: 500 }}>
+      
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Office</InputLabel>
       
@@ -633,7 +625,7 @@ const [vender,setVender]=React.useState([])
       </FormControl>
 
 
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 ,marginTop:4}}>
      <InputLabel id="demo-multiple-name-label">Price</InputLabel>
       <Slider
         getAriaLabel={() => 'Temperature range'}
@@ -652,21 +644,21 @@ const [vender,setVender]=React.useState([])
         getAriaValueText={valuetext}
       />
     </Box> */}
-    <Tooltip title="Search Product">
-        <Fab color="primary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",top:"13vh",position:"fixed"}} onClick={() => setOpen(true)} >
-                <SearchIcon />
-            </Fab>
-        </Tooltip>
+   
+   </Card>
 
-
-    <Tooltip title="Add Product">
+    <Tooltip title="Add Items">
     <Fab color="secondary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",bottom:"8vh",position:"fixed"}} onClick={() => setOpen(true)} >
             <AddIcon />
         </Fab>
     </Tooltip>
 
-
-     
+    <Tooltip title="Search Items">
+        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw",bottom:"17vh",position:"fixed"}} onClick={() => setOpen(true)}>
+                <SearchIcon />
+            </Fab>
+        </Tooltip>
+   
 
      <Container>
           <br></br>
@@ -752,15 +744,6 @@ const [vender,setVender]=React.useState([])
 
 
             </Grid> */}
-
-
-
-
-
-       
-
-
-
 
 
         <CardContent>
@@ -1270,6 +1253,8 @@ const [vender,setVender]=React.useState([])
           </Button>
         </DialogActions>
       </Dialog>
+      
+      
     </>
      
     
