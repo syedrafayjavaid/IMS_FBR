@@ -15,7 +15,6 @@ const BrandCard = ({brand, onEdit, onDelete}) => {
         onEdit(brand._id, brand.name)
     }
     const delHandler = () => {
-        console.log(brand._id);
          onDelete(brand._id)
     }
 

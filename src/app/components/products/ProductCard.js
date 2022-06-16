@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
 
 
 
@@ -32,7 +33,7 @@ ProductCard.propTypes = {
 
 
 
- function ProductCard({ product }) {
+ function ProductCard({ product, onDelete }) {
  
   const { name, photo, price, productQuantity } = product;
   const navigate = useNavigate()
@@ -49,21 +50,15 @@ ProductCard.propTypes = {
 // product.onCallBack(_id);
    }
    const delHandler = () =>{
-    
-  //     console.log(_id,'id');
-  //     console.log(`http://192.168.18.117:5000/api/v1/category/${_id}`);
-  //      axios.delete(`http://192.168.18.117:5000/api/v1/category/${_id}`).then((res) => 
-  //   { console.log(res.msg); 
-  //     }).catch((error)=>{
-  // console.log(error,'error');
-  //     }) 
+    console.log("Delete Product");
+    onDelete(product._id)
     }
 
 
   
 
   return (
-    <Card onClick={()=>viewProduct(product)} >
+    <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
         <ProductImgStyle alt="No Image" src={url+imgeBaseUrl+photo} />
       </Box>
