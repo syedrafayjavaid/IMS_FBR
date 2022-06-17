@@ -38,6 +38,7 @@ const CategoriesList = () => {
   const navigate = useNavigate()
   // Form validation errors State Setting 
   const [categoryError, setcategoryError] = React.useState(false);
+  const [categoryError1, setcategoryError1] = React.useState(false);
   const [imge, setImage] = React.useState('');
 
   //snacvkbar
@@ -49,8 +50,8 @@ const CategoriesList = () => {
 
   // Setting States 
   const [category, setCategory] = React.useState('');
-
-
+  const [category1, setCategory1] = React.useState('');
+  const [open1, setOpen1] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [sanakbar,setSanakbar] =React.useState(false)
 
@@ -58,12 +59,17 @@ const CategoriesList = () => {
     setCategory('')
     setOpen(false);
   };
-
+  const handleClose1 = () => {
+    setCategory1('')
+    setOpen1(false);
+  };
   //snackbar 
   const handleClick = () => {
     setsOpen(true);
   };
-
+  const handleClick1 = () => {
+    setsOpen(true);
+  };
   const handleClosed = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -223,6 +229,7 @@ const paction = (
     })
   }
 
+
   const handleImage = (e) => {
     setImage(e.target.files[0])
     console.log(e.target.files[0], 'e.target.files[0]');
@@ -235,43 +242,85 @@ const paction = (
       data.append('modifiedBy', modifiedBy);
       data.append('createdBy', createdBy);
       console.log(data.value, 'data');
-      axios.post('http://192.168.18.117:5000/api/v1/category', data).then((res) => {
-        console.log(res.data.data);
-        if(res){
-          handleClose()
-          getAlldata();
-        }
-       
-      }).catch((error) => {
-        console.log(error, 'error');
-        handleClick()
-      })
 
-    }
-    else{
-
-      let data = new FormData();
-      data.append('name', category);
   
-      axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
-        console.log(res.msg);
-        if (res) {
-          getAlldata();
-          handleClose()
-        //  console.log("hello console");
-        }
-    
-      }).catch((error) => {
-        console.log(error, 'error');
-        console.log("hello console");
-        handleClick()
 
+      const producst =  arryCatagory.find((index) => {
+        return index.name === category;
       })
+      if (producst) {
+      checking();
+      
+        return;
+      }
+
+    
+        axios.post('http://192.168.18.117:5000/api/v1/category', data).then((res) => {
+          console.log(res.data.data);
+          if(res){
+            handleClose()
+            getAlldata();
+          }
+         
+        }).catch((error) => {
+          console.log(error, 'error');
+          handleClick()
+        })
+     
+
       
     }
-   
+  
   }
 
+
+  const editfun = () =>{
+    let data = new FormData();
+    data.append('name', category1);
+    const producst = arryCatagory.find((index) => {
+      return index.name === category1;
+    })
+    if (producst) {
+     checking();
+     
+    
+      return;
+    }
+    axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
+      console.log(res.msg);
+      if (res) {
+        getAlldata();
+        handleClose1()
+      //  console.log("hello console");
+      }
+  
+    }).catch((error) => {
+      console.log(error, 'error');
+      console.log("hello console");
+      handleClick1()
+
+    })
+    
+  
+  }
+
+  const handleOpenClick = () => {
+    if (category === '') {
+      setcategoryError(true)
+    
+    } else {
+      checking();
+    }
+  }
+
+  const handleOpenClick1 = () => {
+    if (category1 === '') {
+      setcategoryError1(true)
+    } else {
+      editfun();
+      
+    }
+  }
   const onDelhandler = (editData) => {
     console.log(editData, 'id');
     console.log(`http://192.168.18.117:5000/api/v1/category/${editData}`);
@@ -297,11 +346,12 @@ const paction = (
   }
   const onEdithandler = (editDataId,editDataName) => {
 
-    setOpen(true)
-
+   
+    setOpen1(true)
     console.log(editDataId, 'id');
     console.log(editDataName,'editDataName');
     setCategory(editDataName)
+    setCategory1(editDataName)
     setImage('');
     setIdCategory(editDataId)
 
@@ -310,9 +360,36 @@ const paction = (
 
 
 
+// snackbar 
+const handleMopen = () => {
+  setpOpen(true);
+};
+const handleClosep = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+
+  setpOpen(false);
+};
+const actionp = (
+  <React.Fragment>
+    <Button color="secondary" size="small" onClick={handleClosep}>
+      UNDO
+    </Button>
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={handleClosep}
+    >
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  </React.Fragment>
+);
+
   return (
     <>
-      <Tooltip title="Add Category">
+      <Tooltip title="Adding Category">
         <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setOpen(true)}>
           <AddIcon />
         </Fab>
@@ -342,7 +419,7 @@ const paction = (
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"ADD CATEGORY"}
+          {"Adding Category"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -402,7 +479,7 @@ const paction = (
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button autoFocus onClick={()=>{checking();
-          handlepClick();
+          handleOpenClick();
 
          }} >
             Confirm
@@ -429,13 +506,104 @@ const paction = (
         /> */}
       </Dialog>
 
-      <Snackbar
+            {/* ///Editing Dialog */}
+
+            <Dialog
+        open={open1}
+        onClose={handleClose1}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Edit Category"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <br></br>
+            <Grid container spacing={3}>
+
+              <Grid item lg={5} md={5} sm={5} xs={5}  >
+                <TextField
+                  error={categoryError1}
+                  id="category"
+                  label="Category Name"
+                  placeholder="Category Name"
+                  size="small"
+                  autoComplete="off"
+                  helperText={categoryError1 === true ? "Field Required" : ''}
+                  value={category1}
+                  onChange={(e) => handleChange(e, setCategory1, setcategoryError1)}
+                  variant="outlined"
+                  fullWidth
+
+                />
+
+              </Grid>
+
+{/* 
+              <Grid item lg={3} md={3} sm={3} xs={3}   >
+
+                <span>Active</span>
+                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+              </Grid> */}
+              <Grid item lg={4} md={4} sm={4} xs={4}   >
+
+
+
+                <label htmlFor="contained-button-file">
+                  <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleImage} />
+                  <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />}>
+                    Upload
+                  </Button>
+                </label>
+
+
+
+              </Grid>
+
+
+
+
+            </Grid>
+
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose1}>Cancel</Button>
+          <Button autoFocus onClick={()=>{handleMopen();
+          handleOpenClick1();
+
+         }} >
+            Confirm
+          </Button>
+        </DialogActions>
+
+{/* snackbar */}
+        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
+      {/* <Snackbar
+        open={sopen}
+        autoHideDuration={5000}
+        onClose={handleClosed}
+        message="Your image fields is data is not valid"
+        action={paction}
+      /> */}
+
+
+<Snackbar
         open={popen}
         autoHideDuration={6000}
         onClose={handlepClose}
         message="Edit Confirm"
         action={paction}
       />
+      </Dialog>
+
+
+    
     
 
     </>
