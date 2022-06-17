@@ -27,8 +27,6 @@ const UsersList = () => {
       })
     }
 
-    console.log(users)
-      
     return (
       <>
   

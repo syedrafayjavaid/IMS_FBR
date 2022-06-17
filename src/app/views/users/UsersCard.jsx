@@ -8,7 +8,7 @@ const UsersCard = (user) => {
 
   const navigate = useNavigate()
   const viewUser = (user)=>{
-    navigate('/user/details')
+    navigate('/user/details', { state: { id: user.user._id } })
   };
 
   const UserImgStyle = styled('img')({
@@ -19,14 +19,14 @@ const UsersCard = (user) => {
     position: 'absolute'
   });
 
-  console.log(user.user)
-  
+  const url='http://192.168.18.117:5000/';
+  const imgeBaseUrl='uploads/';
 
   return (
     // <div>Hello Card</div>
     <Card onClick={()=>viewUser(user)} >
-      { user.user.photo && <Box sx={{ pt: '100%', position: 'relative' }}>
-        <UserImgStyle alt="No Image" src={user.user.photo} />
+      {<Box sx={{ pt: '100%', position: 'relative' }}>
+        <UserImgStyle alt="No Image" src={url+imgeBaseUrl+user.user.photo} />
       </Box>}
 
       <Stack spacing={2} sx={{ p: 3 }} >
