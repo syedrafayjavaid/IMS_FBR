@@ -154,15 +154,17 @@ const ProductsList = () => {
     }
 
     const handleCreateType = (event) => {
-        console.log(quantity, 'event')
+        console.log(event.target.value);
         setCreateProductTypeName(event.target.value)
     }
 
     const handleCreateType2 = (event) => {
+        console.log(event.target.value);
         setCreateProductCategory(event.target.value)
     }
 
     const handleCreateType3 = (event) => {
+        console.log(event.target.value);
         setCreateBrandName(event.target.value)
     }
 
@@ -236,8 +238,8 @@ const ProductsList = () => {
             if (editProductTypeName === '') {
                 setEditProductTypeNameError(true)
             }
-            if (createProductCategory === '') {
-                setCreateProductCategoryError(true)
+            if (editProductCategory === '') {
+                setEditProductCategory(true)
             }
             if (createBrandName === '') {
                 setCreateBrandNameError(true)
@@ -317,10 +319,10 @@ const ProductsList = () => {
             let data = new FormData()
 
             data.append('name', createName)
-            data.append('productType', createProductTypeName)
-            data.append('productCategory', createProductCategory)
+            data.append('productTypeId', createProductTypeName)
+            data.append('categoryId', createProductCategory)
             data.append('model', createModel)
-            data.append('brandName', createBrandName)
+            data.append('brandId', createBrandName)
             data.append('file', image)
             data.append('createdBy', createdBy)
             data.append('description', createDescription)
@@ -388,6 +390,28 @@ const ProductsList = () => {
         </React.Fragment>
     )
 
+    // const onEditHandler = (editDataId,editDataName) => {
+    //     setEditProductDialog(true)
+    //     console.log(editDataId, 'id');
+    //     console.log(editDataName,'editDataName');
+    //   }
+
+    //   const editHandler = () => {
+    //     let data = new FormData();
+    //       data.append('name', editBrandName);
+      
+    //       axios.put(`http://192.168.18.117:5000/api/v1/products/`, data).then((res) => {
+    //         console.log(res.msg);
+    //         if (res) {
+    //           getAlldata();
+    //           handleEditClose()
+    //         }
+        
+    //       }).catch((error) => {
+    //         console.log(error, 'error');
+    //       })
+    //   }
+
     return (
         <>
             {/* <Tooltip title="Search Product">
@@ -442,6 +466,7 @@ const ProductsList = () => {
                             <ProductCard
                                 product={product}
                                 onDelete={onDelhandler}
+                                // onEdit={onEditHandler}
                             />
                         </Grid>
                     ))}
@@ -513,7 +538,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType.name.toLowerCase()}
+                                                            value={productType._id}
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
@@ -552,7 +577,7 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
-                                                                value={productCategory.name.toLowerCase()}
+                                                                value={productCategory._id}
                                                             >
                                                                 {
                                                                     productCategory.name
@@ -619,7 +644,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
-                                                            value={brand.name.toLowerCase()}
+                                                            value={brand._id}
                                                         >
                                                             {brand.name}
                                                         </MenuItem>
@@ -823,7 +848,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType.name.toLowerCase()}
+                                                            value={productType._id}
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
@@ -862,7 +887,7 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
-                                                                value={productCategory.name.toLowerCase()}
+                                                                value={productCategory._id}
                                                             >
                                                                 {
                                                                     productCategory.name
@@ -929,7 +954,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
-                                                            value={brand.name.toLowerCase()}
+                                                            value={brand._id}
                                                         >
                                                             {brand.name}
                                                         </MenuItem>
@@ -1440,7 +1465,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType.name.toLowerCase()}
+                                                            value={productType._id}
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
