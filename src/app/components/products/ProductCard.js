@@ -33,7 +33,7 @@ ProductCard.propTypes = {
 
 
 
- function ProductCard({ product, onDelete }) {
+ function ProductCard({ product, onDelete, onEdit }) {
  
   const { name, photo, price, productQuantity } = product;
   const navigate = useNavigate()
@@ -45,12 +45,9 @@ ProductCard.propTypes = {
 
 
   const adiitHandler = (adit) =>{
-    //  console.log(props, 'props');
-     console.log(product, 'producrt');
-// product.onCallBack(_id);
+    onEdit(product._id, product)
    }
    const delHandler = () =>{
-    console.log("Delete Product");
     onDelete(product._id)
     }
 
