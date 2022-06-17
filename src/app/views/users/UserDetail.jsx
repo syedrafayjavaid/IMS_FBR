@@ -93,9 +93,6 @@ const executeScroll = () => scrollToRef(myRef)
   return (
             <>
     
-         
-
-
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
                 <CardHeader>
                 <Title>USER DETAILS</Title>

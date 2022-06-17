@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // material
 import { Container, Stack, Typography,Grid } from '@mui/material';
@@ -8,38 +8,26 @@ import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import SearchIcon from '@mui/icons-material/Search';
 import UsersCard from './UsersCard';
+import axios from 'axios';
 
 const UsersList = () => {
     const navigate = useNavigate()
 
-    const users = [{
-      id:1,
-      name:"genesis engineering",
-     office:"#312",
-    cnic:"323-23332-3",
-      coverImage:'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-    
-    },{
-      id:2,
-      name:"genesis engineering",
-      office:"#312",
-      cnic:"323-23232-3",
-      coverImage:'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-    
-    },{
-      id:3,
-      name:"genesis engineering",
-      office:"#312",
-      cnic:"323-233232-3",
-      coverImage:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80',
-  
-    },{
-      id:4,
-      name:"genesis engineering",
-      office:"#312",
-      cnic:"3323-23332-3",
-      coverImage:'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-    },]
+    const [users, setUsers] = React.useState([]);
+
+    useEffect(() => {
+      getAlldata();
+    }, []);
+    const getAlldata = () => {
+      axios.get('http://192.168.18.117:5000/api/v1/employee').then((res) => {
+        console.log(res)
+        setUsers(res.data.data);
+      }).catch((error) => {
+        console.log(error, 'error');
+      })
+    }
+
+    console.log(users)
       
     return (
       <>

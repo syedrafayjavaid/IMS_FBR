@@ -18,14 +18,16 @@ const UsersCard = (user) => {
     objectFit: 'cover',
     position: 'absolute'
   });
+
+  console.log(user.user)
   
 
   return (
     // <div>Hello Card</div>
     <Card onClick={()=>viewUser(user)} >
-      <Box sx={{ pt: '100%', position: 'relative' }}>
-        <UserImgStyle alt="No Image" src={user.user.coverImage} />
-      </Box>
+      { user.user.photo && <Box sx={{ pt: '100%', position: 'relative' }}>
+        <UserImgStyle alt="No Image" src={user.user.photo} />
+      </Box>}
 
       <Stack spacing={2} sx={{ p: 3 }} >
           <Typography variant="subtitle2" noWrap>
@@ -44,7 +46,7 @@ const UsersCard = (user) => {
               }}
             >
               Office: &nbsp;
-            {user.user.office}
+            Islamabad
             </Typography>
            
           </Typography>
@@ -58,7 +60,7 @@ const UsersCard = (user) => {
               }}
             >
               CNIC: &nbsp;
-            {user.user.cnic}
+            32132513232
             </Typography>
             
           </Typography>
