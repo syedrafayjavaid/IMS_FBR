@@ -1,73 +1,114 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 // material
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Card, Link, Typography, Stack } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 
-const UsersCard = (user) => {
+const UsersCard = ( {user, onDelete, onEdit}) => {
+    const navigate = useNavigate();
+    const viewUser = (user) => {
+        navigate('/user/details', { state: { id: user._id } })
+    }
 
-  const navigate = useNavigate()
-  const viewUser = (user)=>{
-    navigate('/user/details', { state: { id: user.user._id } })
-  };
+    const UserImgStyle = styled('img')({
+        top: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        position: 'absolute',
+    })
 
-  const UserImgStyle = styled('img')({
-    top: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    position: 'absolute'
-  });
+    const url = 'http://192.168.18.117:5000/'
+    const imgeBaseUrl = 'uploads/'
 
-  const url='http://192.168.18.117:5000/';
-  const imgeBaseUrl='uploads/';
 
-  return (
-    // <div>Hello Card</div>
-    <Card onClick={()=>viewUser(user)} >
-      {<Box sx={{ pt: '100%', position: 'relative' }}>
-        <UserImgStyle alt="No Image" src={url+imgeBaseUrl+user.user.photo} />
-      </Box>}
+    const onEditHandler = () => {
+        onEdit(user._id, user)
+    }
 
-      <Stack spacing={2} sx={{ p: 3 }} >
-          <Typography variant="subtitle2" noWrap>
-            {user.user.name}
-          </Typography>
-     
+    const onDeleteHandler = () => {
+        onDelete(user._id);
+    }
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between"style={{marginTop:"10px"}}>
-          <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text',
-                textDecoration: ''
-              }}
-            >
-              Office: &nbsp;
-            Islamabad
-            </Typography>
-           
-          </Typography>
-          <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text',
-                textDecoration: ''
-              }}
-            >
-              CNIC: &nbsp;
-            32132513232
-            </Typography>
-            
-          </Typography>
-        </Stack>
-      </Stack>
-    </Card>
-  )
+    return (
+        <Card style= {{cursor: "pointer"}}>
+            {
+                <Box sx={{ pt: '100%', position: 'relative' }}>
+                    <UserImgStyle
+                        alt="No Image"
+                        src={url + imgeBaseUrl + user.photo}
+                    />
+                </Box>
+            }
+
+            <Stack spacing={2} sx={{ p: 3 }}>
+                <Typography variant="subtitle2" noWrap>
+                    {user.name}
+                </Typography>
+
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    style={{ marginTop: '10px' }}
+                >
+                    <Typography variant="subtitle1">
+                        <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                                color: 'text',
+                                textDecoration: '',
+                            }}
+                        >
+                            Office: &nbsp;
+                            {user.office}
+                        </Typography>
+                    </Typography>
+                </Stack>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    style={{ marginTop: '10px' }}
+                >
+                    <Typography variant="subtitle1">
+                        <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                                color: 'text',
+                                textDecoration: '',
+                            }}
+                        >
+                            CNIC: &nbsp;
+                            {user.CNIC}
+                        </Typography>
+                    </Typography>
+                    
+                </Stack>
+                <Typography variant="subtitle1">
+                        <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                                color: 'text.disabled',
+                                textDecoration: '',
+                            }}
+                        >
+                            <button onClick={onDeleteHandler}>
+                                <DeleteIcon />
+                            </button>
+                            <button onClick={onEditHandler}>
+                                <EditIcon />
+                            </button>
+                        </Typography>
+                    </Typography>
+            </Stack>
+        </Card>
+    )
 }
 
 export default UsersCard

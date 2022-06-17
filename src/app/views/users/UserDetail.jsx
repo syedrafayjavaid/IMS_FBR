@@ -127,11 +127,11 @@ useEffect(() => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box style={{marginRight: "9.9rem"}}>
                             <span>Office:</span>
-                            <span>Islamabad</span>
+                            <span>{userData?.office}</span>
                         </Box>
                         <Box>
                             <span>CNIC:</span>
-                            <span>2323-2323-3</span>
+                            <span>{userData?.CNIC}</span>
                         </Box>  
                     </Box>
                     
@@ -167,7 +167,7 @@ useEffect(() => {
                     <hr></hr>
                     <Box>
                     <h4>Description: </h4>    
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore, totam alias porro fugit maiores error non voluptate optio quis consectetur, veniam autem ea, commodi numquam placeat nulla aliquam. Sit, eum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos tempora blanditiis dignissimos voluptates accusantium odio nisi recusandae error iste accusamus doloremque doloribus itaque, quam totam? Maxime molestiae repudiandae delectus sed!
+                    {userData?.detail}
                     </Box>
                     <Box>
                         <br></br>

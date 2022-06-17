@@ -646,21 +646,7 @@ const [product1,setProduct1]=React.useState([])
 
         </Grid>
 
-            <Grid item lg={4} md={4} sm={4} xs={4} style={{ justifyContent: "center"}}  >
-              <Box>
-                {/* <span>Active</span>
-                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-
-                <label htmlFor="contained-button-file">
-                  <Input accept="image/*" id="contained-button-file" multiple type="file"  />
-                  <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />}>
-                    Upload
-                  </Button>
-                </label>
-              </Box>
-
-
-            </Grid>
+            
             
 
 
