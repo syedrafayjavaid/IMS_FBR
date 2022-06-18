@@ -88,6 +88,8 @@ const executeScroll = () => scrollToRef(myRef)
 
 const {state} = useLocation();
 
+console.log(state);
+
 const [userData, setUserData] = React.useState(null)
 
 useEffect(() => {
