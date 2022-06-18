@@ -1,4 +1,4 @@
-import React ,{ useRef }  from 'react'
+import React ,{ useEffect, useRef }  from 'react'
 import { Box, styled } from '@mui/system'
 import { Card,CardContent,Grid } from '@mui/material'
 import Switch from '@mui/material/Switch';
@@ -10,6 +10,8 @@ import Tooltip from '@mui/material/Tooltip';
 import ALLProductsTable from 'app/components/products/AllProductTable';
 import { Tune } from '@mui/icons-material';
 import AllUsersTable from './AllUserTable';
+import axios from 'axios';
+import moment from 'moment';
 
 
 
@@ -65,10 +67,6 @@ const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
 
 const UserDetail = () => {
 
-    const { state } = useLocation();
-
-    console.log(state);
-
     const navigate = useNavigate()
 
     // States
@@ -88,39 +86,54 @@ const myRef = useRef(null)
 const executeScroll = () => scrollToRef(myRef)
 
 
+const {state} = useLocation();
 
+console.log(state);
+
+const [userData, setUserData] = React.useState(null)
+
+useEffect(() => {
+    getAlldata();
+  }, []);
+  const getAlldata = () => {
+    axios.get(`http://192.168.18.117:5000/api/v1/employee/${state.id}`).then((res) => {
+      setUserData(res.data.data);
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
+  }
+
+  const url='http://192.168.18.117:5000/';
+  const imgeBaseUrl='uploads/';
 
   return (
             <>
     
-         
-
-
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
                 <CardHeader>
-                <Title>EMPLOYEE DETAILS</Title>
+                <Title>USER DETAILS</Title>
                 </CardHeader>
                     <hr></hr>
                 <Grid container>
                 <Grid item lg={5} md={5} sm={12} xs={12}>
                             <ContentBox >
                                 <IMG
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                                src={url+imgeBaseUrl+userData?.photo}
                                 alt=""
                                 />
                             </ContentBox>
 
                 </Grid>
                 <Grid item lg={7} md={7} sm={12} xs={12} style={{padding: "1rem 3rem"}}>
-                <h3>genesis engineering</h3>
+                <h3>{userData?.name}</h3>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box style={{marginRight: "9.9rem"}}>
                             <span>Office:</span>
-                            <span>Islamabad</span>
+                            <span>{userData?.office}</span>
                         </Box>
                         <Box>
                             <span>CNIC:</span>
-                            <span>2323-2323-3</span>
+                            <span>{userData?.CNIC}</span>
                         </Box>  
                     </Box>
                     
@@ -145,24 +158,24 @@ const executeScroll = () => scrollToRef(myRef)
                     <Box sx={{ display: 'flex'}} style={{paddingTop: "1rem"}}>
                         <Box style={{marginRight: "8rem"}}>
                             <span>Created Date: </span>
-                            <span style={{color: 'green'}}><b>12-26-2021</b></span>
+                            <span style={{color: 'green'}}><b>{ moment(userData?.createdAt).format('MMMM d, YYYY') }</b></span>
                         </Box>
                         <Box>
                             <span>Modification Date: </span>
-                            <span style={{color: 'green'}}><b>12-26-2021</b></span>
+                            <span style={{color: 'green'}}><b>{userData?.modifiedAt === undefined ? moment(userData?.createdAt).format('MMMM d, YYYY') : moment(userData?.modifiedAt).format('MMMM d, YYYY')}</b></span>
                         </Box>
                     </Box>
 
                     <hr></hr>
                     <Box>
-                    <h4>Description: </h4>    
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore, totam alias porro fugit maiores error non voluptate optio quis consectetur, veniam autem ea, commodi numquam placeat nulla aliquam. Sit, eum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos tempora blanditiis dignissimos voluptates accusantium odio nisi recusandae error iste accusamus doloremque doloribus itaque, quam totam? Maxime molestiae repudiandae delectus sed!
+                    <h4>Detail: </h4>    
+                    {userData?.detail}
                     </Box>
-                    <Box>
+                    {/* <Box>
                         <br></br>
-                        <Button variant='contained'  onClick={showTbl} >Employee Details</Button>
+                        <Button variant='contained'  onClick={showTbl} >Inventory Details</Button>
                         
-                    </Box>
+                    </Box> */}
                 </Grid>
 
             
