@@ -33,7 +33,7 @@ const UsersCard = (user) => {
           </Typography>
      
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between"style={{marginTop:"10px"}}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" style={{marginTop:"10px"}}>
           <Typography variant="subtitle1">
             <Typography
               component="span"

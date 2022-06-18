@@ -17,6 +17,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import {
   Switch,
@@ -104,6 +107,17 @@ const ProductTypeList = () => {
       let data = new FormData();
       data.append('name', category );
       data.append('demo', demo);
+
+      const producst = productList.find((index) => {
+        return index.name === category;
+      })
+      if (producst) {
+       alert("You have enter same name");
+      
+        return;
+      }
+  
+
       axios.post('http://192.168.18.117:5000/api/v1/productType', data).then((res) => {
         console.log(res.data.data);
         if(res){
@@ -134,10 +148,19 @@ const ProductTypeList = () => {
         console.log("hello console");
 
       })
+      // const brandNameExist = productType.find((productType) => {
+      //   return productType.name === createBrandName;
+      // })
+      // if (brandNameExist) {
+      //   setSnackBar(true);
+      //   return;
+      // }
       
     }
 
-    
+
+
+
     // else{
 
     //   let data = new FormData();
@@ -177,6 +200,7 @@ const ProductTypeList = () => {
     const bgSecondary = palette.secondary.main
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false);
+    const [mopen, setMopen] = React.useState(false);
     const [category, setCategory] = React.useState("");
     // const [prodectTypeName,setProdectTypeName]=React.useState("");
     const [demo,setDemo]=React.useState(false);
@@ -199,32 +223,32 @@ const ProductTypeList = () => {
   
      
     }
-    //snackbar 
-    // const handleClick = () => {
-    //   setOpen(true);
-    // };
-    // const handleClosed = (event, reason) => {
-    //   if (reason === 'clickaway') {
-    //     return;
-    //   }
+   // snackbar 
+    const handleMopen = () => {
+      setMopen(true);
+    };
+    const handleClosed = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
   
-    //   setsOpen(false);
-    // };
-    // const action = (
-    //   <React.Fragment>
-    //     <Button color="secondary" size="small" onClick={handleClose}>
-    //       UNDO
-    //     </Button>
-    //     <IconButton
-    //       size="small"
-    //       aria-label="close"
-    //       color="inherit"
-    //       onClick={handleClose}
-    //     >
-    //       <CloseIcon fontSize="small" />
-    //     </IconButton>
-    //   </React.Fragment>
-    // );
+      setMopen(false);
+    };
+    const action = (
+      <React.Fragment>
+        <Button color="secondary" size="small" onClick={handleClosed}>
+          UNDO
+        </Button>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClosed}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
 
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
@@ -285,6 +309,15 @@ const ProductTypeList = () => {
       // })
     }
 
+    const handleOpenClick = () => {
+      if (category === '') {
+        setcategoryError(true)
+      } else {
+        createHandler();
+      }
+    }
+
+  
     return (
       <>
 
@@ -324,7 +357,7 @@ const ProductTypeList = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"ADD CATEGORY"}
+          {"ADD PRODUCT LIST"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -332,7 +365,7 @@ const ProductTypeList = () => {
             <Grid container spacing={3}>
 
               <Grid item lg={5} md={5} sm={5} xs={5}  >
-                <TextField
+                <TextField required
                   error={categoryError}
                   id="producttype"
                   label="Product Type Name"
@@ -354,8 +387,6 @@ const ProductTypeList = () => {
 
                 <span>Demo</span>
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
 
 
               </Grid>
@@ -383,7 +414,7 @@ const ProductTypeList = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={createHandler}>
+          <Button autoFocus onClick={handleOpenClick}>
             Confirm
           </Button>
         </DialogActions>
@@ -399,17 +430,18 @@ const ProductTypeList = () => {
       /> */}
 
 
-        {/* <Snackbar
-          open={sanakbar}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="Note archived"
+        <Snackbar
+          open={mopen}
+          autoHideDuration={2000}
+          onClose={handleClosed}
+          message="CREATE PRODUCT"
           action={action}
-        /> */}
+        />
       </Dialog>
 
-        <Tooltip title="Add Category">
-        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setOpen(true)}>
+        <Tooltip title="ADD PRODUCT LIST">
+        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => {setOpen(true);
+        handleMopen();}}>
           <AddIcon />
         </Fab>
       </Tooltip>

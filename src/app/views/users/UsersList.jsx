@@ -52,7 +52,7 @@ const UsersList = () => {
           </Typography>
           <Grid container spacing={3} >
         {users.map((user) => (
-          <Grid key={user.id} item xs={12} sm={6} md={3}  >
+          <Grid key={user.id} item lg={4} xs={12} sm={6} md={4}  >
             <UsersCard user={user} />
           </Grid>
         ))}

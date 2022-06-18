@@ -42,7 +42,6 @@ ProductCard.propTypes = {
   const url='http://192.168.18.117:5000/';
   const imgeBaseUrl='uploads/';
 
-
   const adiitHandler = (adit) =>{
     //  console.log(props, 'props');
      console.log(product, 'producrt');

@@ -38,7 +38,21 @@ import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/system'
 import axios from 'axios';
+import { number } from 'prop-types';
 /////
+
+const dateStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+  },
+}));
+
 //datepicker
 
 const Title = styled('span')(() => ({
@@ -194,8 +208,12 @@ function getoffice(office, officeName, themesoffice) {
   const [categoryData, setCategoryData] = React.useState({});
   const [subcategoryData, setSubcategoryData] = React.useState({});
 const [product1,setProduct1]=React.useState([])
-
-
+const myclass = dateStyles();
+///
+//API For the dialogbox
+const [purchaseItems,setPurchaseItems]=React.useState([]);
+///dialog state
+const [model, setModel] = React.useState([]);
 
 
 
@@ -203,14 +221,22 @@ const [product1,setProduct1]=React.useState([])
 
   const [text1, setText1] = useState('');
   const [imageUrl1, setImageUrl1] = useState('');
-//   const [scanResultFile, setScanResultFile] = useState('');
-//   const [scanResultWebCam, setScanResultWebCam] =  useState('');
+  const [scanResultFile, setScanResultFile] = useState('');
+  const [scanResultWebCam, setScanResultWebCam] =  useState('');
   const classes = useStyles();
   const qrRef = useRef(null);
 
-
-
-
+///dialog 
+const [statusDialog,setStatusDialog]=React.useState([])
+const [officeDialog,setOfficeDialog]=React.useState([])
+const [purchasedDialog,setPurchasedDialog]=React.useState([])
+const [customerDialog,setCustomerDialog]=React.useState([])
+const [createdbyDialog,setCreatedbyDialog]=React.useState([])
+const [createdOnDialog,setCreatedOnDialog]=React.useState([])
+const [modifyByDialog,setModifyByDialog]=React.useState([])
+const [modifyOnDialog,setModifyOnDialog]=React.useState([])
+const [ownerShipDialog,setOwnerShipDialog]=React.useState([])
+const [vender,setVender]=React.useState([])
   const generateQrCode = async () => {
     try {
           const response = await QRCode.toDataURL(text1);
@@ -219,25 +245,25 @@ const [product1,setProduct1]=React.useState([])
       console.log(error);
     }
   }
-//   const handleErrorFile = (error) => {
-//     console.log(error);
-//   }
-//   const handleScanFile = (result) => {
-//       if (result) {
-//           setScanResultFile(result);
-//       }
-//   }
-//   const onScanFile = () => {
-//     qrRef.current.openImageDialog();
-//   }
-//   const handleErrorWebCam = (error) => {
-//     console.log(error);
-//   }
-//   const handleScanWebCam = (result) => {
-//     if (result){
-//         setScanResultWebCam(result);
-//     }
-//    }
+  const handleErrorFile = (error) => {
+    console.log(error);
+  }
+  const handleScanFile = (result) => {
+      if (result) {
+          setScanResultFile(result);
+      }
+  }
+  const onScanFile = () => {
+    qrRef.current.openImageDialog();
+  }
+  const handleErrorWebCam = (error) => {
+    console.log(error);
+  }
+  const handleScanWebCam = (result) => {
+    if (result){
+        setScanResultWebCam(result);
+    }
+   }
 
 
 
@@ -251,6 +277,14 @@ const [product1,setProduct1]=React.useState([])
     errorFunc(false)
   }
 
+  
+  const handleModel = (e, func, errorFunc) => {
+    func(e.target.value);
+    console.log(e.target.model, e.target.value)
+    errorFunc(false)
+  }
+
+
   const handleType = (event) => {
     console.log(quantity,"event");
     setQuantity(event.target.value);
@@ -261,15 +295,50 @@ const [product1,setProduct1]=React.useState([])
     setCategory(event.target.value);
   };
 
+  const handleStatusDialog = (event) => {
+    console.log(event.target,'rula');
+    setStatusDialog(event.target.value);
+  };
 
+  const handleOfficeDialog = (event) => {
+    console.log(event.target,'rula');
+    setOfficeDialog(event.target.value);
+  };
 
+  const handlePurchasedDialog = (event) => {
+    console.log(event.target,'rula');
+    setPurchasedDialog(event.target.value);
+  };
 
+  const handleCustomerDialog = (event) => {
+    console.log(event.target,'rula');
+    setCustomerDialog(event.target.value);
+  };
 
-
-
-
-
-
+  const handleCreatedByDialog = (event) => {
+    console.log(event.target,'rula');
+    setCreatedbyDialog(event.target.value);
+  };
+  const handleCreatedOnDialog = (event) => {
+    console.log(event.target,'rula');
+    setCreatedOnDialog(event.target.value);
+  };
+  const handleModifyByDialog = (event) => {
+    console.log(event.target,'rula');
+    setModifyByDialog(event.target.value);
+  };
+  const handleModifyOnDialog = (event) => {
+    console.log(event.target,'rula');
+    setModifyOnDialog(event.target.value);
+  };
+  const handleOwenerShipeDialog = (event) => {
+    console.log(event.target,'rula');
+    setOwnerShipDialog(event.target.value);
+  };
+  const handleVender = (event) => {
+    console.log(event.target,'rula');
+    setVender(event.target.value);
+  };
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
@@ -315,15 +384,14 @@ const [product1,setProduct1]=React.useState([])
     }).catch((error) => {
       console.log(error, 'error');
     })
+    axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
+      console.log(res.data.data);
+      setPurchaseItems(res.data.data);
+      console.log(purchaseItems, 'status___________status');
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
   }
-
-
-
-
-
-
-
-
 
 
   const checking = () => {
@@ -455,8 +523,8 @@ const [product1,setProduct1]=React.useState([])
 
   return (
     <>
-      
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <Card style={{marginTop:"2"}}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Category</InputLabel>
       
@@ -481,7 +549,7 @@ const [product1,setProduct1]=React.useState([])
         </Select>
       </FormControl>
        
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
       
@@ -506,7 +574,7 @@ const [product1,setProduct1]=React.useState([])
         </Select>
       </FormControl>
        
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Status</InputLabel>
       
@@ -530,8 +598,8 @@ const [product1,setProduct1]=React.useState([])
           ))}
         </Select>
       </FormControl>
-       <br></br>
-      <FormControl sx={{ m: 1, width: 500 }}>
+      
+      <FormControl sx={{ m: 1, width: 300 }}>
        
         <InputLabel id="demo-multiple-name-label">Office</InputLabel>
       
@@ -557,7 +625,7 @@ const [product1,setProduct1]=React.useState([])
       </FormControl>
 
 
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 300 ,marginTop:4}}>
      <InputLabel id="demo-multiple-name-label">Price</InputLabel>
       <Slider
         getAriaLabel={() => 'Temperature range'}
@@ -576,29 +644,30 @@ const [product1,setProduct1]=React.useState([])
         getAriaValueText={valuetext}
       />
     </Box> */}
-    <Tooltip title="Search Product">
-        <Fab color="primary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",top:"13vh",position:"fixed"}} onClick={() => setOpen(true)} >
-                <SearchIcon />
-            </Fab>
-        </Tooltip>
+   
+   </Card>
 
-
-    <Tooltip title="Add Product">
+    <Tooltip title="Add Items">
     <Fab color="secondary" aria-label="Add" size="medium"  style={{zIndex:999,right:"4vw",bottom:"8vh",position:"fixed"}} onClick={() => setOpen(true)} >
             <AddIcon />
         </Fab>
     </Tooltip>
 
-
-     
+    <Tooltip title="Search Items">
+        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw",bottom:"17vh",position:"fixed"}} onClick={() => setOpen(true)}>
+                <SearchIcon />
+            </Fab>
+        </Tooltip>
+   
 
      <Container>
           <br></br>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+         PURCHASE ITEMS
         </Typography>
         <Grid container spacing={3} >
       {product1.map((product) => (
+      
         <Grid key={product._id} item xs={12} sm={6} md={3}  >
           <ProductCard product={product} />
         </Grid>
@@ -621,7 +690,7 @@ const [product1,setProduct1]=React.useState([])
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"ADD PRODUCT"}
+          {"PURCHASE ITEMS"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -677,15 +746,6 @@ const [product1,setProduct1]=React.useState([])
             </Grid> */}
 
 
-
-
-
-       
-
-
-
-
-
         <CardContent>
         
 
@@ -724,9 +784,9 @@ const [product1,setProduct1]=React.useState([])
                 placeholder="Model"
                 autoComplete="off"
                 helperText={nameError === true ? "Field Required" : ''}
-                value={name}
+                value={model}
                 size="small"
-                onChange={(e) => handleChange(e, setName, setNameError)}
+                onChange={(e) => handleModel(e, setModel, setNameError)}
                 variant="outlined"
                 fullWidth
 
@@ -741,13 +801,13 @@ const [product1,setProduct1]=React.useState([])
 <TextField
   error={nameError}
   id="name"
-  label="Product Name"
-  placeholder="Product Name"
+  label="Price"
+  placeholder="Price"
   autoComplete="off"
   helperText={nameError === true ? "Field Required" : ''}
   value={name}
   size="small"
-  onChange={(e) => handleChange(e, setName, setNameError)}
+  onChange={(e) => handleModel(e, setName, setNameError)}
   variant="outlined"
   fullWidth
 
@@ -836,14 +896,14 @@ const [product1,setProduct1]=React.useState([])
 
         </Grid>
 
-            <Grid item lg={4} md={4} sm={4} xs={6} style={{ justifyContent: "center", marginLeft: "12px" }}  >
+            <Grid item lg={4} md={4} sm={4} xs={6} style={{ justifyContent: "center", marginLeft: "0px" }}  >
               <Box>
                 {/* <span>Active</span>
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
 
                 <label htmlFor="contained-button-file">
                   <Input accept="image/*" id="contained-button-file" multiple type="file"  />
-                  <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />}>
+                  <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />} style={{width:'100%'}}>
                     Upload
                   </Button>
                 </label>
@@ -851,17 +911,250 @@ const [product1,setProduct1]=React.useState([])
 
 
             </Grid>
-            
+      
+            <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+<Box sx={{ minWidth: 120 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">Status</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={statusDialog}
+      label="Status"
+      onChange={handleStatusDialog}
+  
+    >
+      <MenuItem value={10}>Inuse</MenuItem>
+      <MenuItem value={20}>Replacement</MenuItem>
+      <MenuItem value={30}>Scrap</MenuItem>
+    
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
+
+<Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+<Box sx={{ minWidth: 120 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">Office</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={officeDialog}
+      label="Office"
+      onChange={handleOfficeDialog}
+
+    >
+      <MenuItem value={10}>Sofa</MenuItem>
+      <MenuItem value={20}>Table</MenuItem>
+      <MenuItem value={30}>Laptop</MenuItem>
+      <MenuItem value={30}>Tablet</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
+
+
+<Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+
+<form className={myclass.container} noValidate>
+      <TextField
+        id="date" size='small'
+        label="Birthday"
+        type="date"
+        defaultValue="2017-05-24"
+        className={myclass.textField}
+        InputLabelProps={{
+          shrink: true,
+
+        }}
+      />
+    </form>
+
+
+</Grid>
+
+
+<Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+<Box sx={{ minWidth: 120 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={purchasedDialog}
+      label="Purchased by"
+      onChange={handlePurchasedDialog}
+
+    >
+      <MenuItem value={10}>Sofa</MenuItem>
+      <MenuItem value={20}>Table</MenuItem>
+      <MenuItem value={30}>Laptop</MenuItem>
+      <MenuItem value={30}>Tablet</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
+
+<Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+<Box sx={{ minWidth: 120 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">Customer Emp ID</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={customerDialog}
+      label="Customer Emp ID"
+      onChange={handleCustomerDialog}
+
+    >
+      <MenuItem value={10}>Sofa</MenuItem>
+      <MenuItem value={20}>Table</MenuItem>
+      <MenuItem value={30}>Laptop</MenuItem>
+      <MenuItem value={30}>Tablet</MenuItem>
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
+
+          {/* <Grid item lg={4} md={4} sm={4} xs={4} >
+                      
+                      <Button className={classes.btn} variant="contained" 
+                        color="primary" onClick={() => generateQrCode()}>Generate</Button>
+                        <br></br>
+                        {imageUrl1 ? (
+                          <a href={imageUrl1} download>
+                              <img src={imageUrl1} alt="img"/>
+                          </a>) : null}
+                  </Grid> */}
+
+                  
+        
+          <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  id="name"
+  label="Created by"
+  placeholder="Created by"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={createdbyDialog}
+  size="small"
+  onChange={(e) => handleCreatedByDialog(e, setCreatedbyDialog, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
+
+
+<br></br>
+<Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  id="name"
+  label="Created on"
+  placeholder="Created on"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={createdOnDialog}
+  size="small"
+  onChange={(e) => handleCreatedOnDialog(e, setCreatedOnDialog, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
 
 
 
 
+<br></br>
+<Grid item lg={4} md={4} sm={4} xs={6}  >
 
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  id="name"
+  label="Modify by"
+  placeholder="Modify by"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={modifyByDialog}
+  size="small"
+  onChange={(e) => handleModifyByDialog(e, setModifyByDialog, setNameError)}
+  variant="outlined"
+  fullWidth
 
+/>
 
-
-          </Grid>
+</Grid>
           <br></br>
+
+        
+<Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  id="name"
+  label="Modify on"
+  placeholder="Modify on"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={modifyOnDialog}
+  size="small"
+  onChange={(e) => handleModifyOnDialog(e, setModifyOnDialog, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
+<Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+<Box sx={{ minWidth: 514 }}>
+  <FormControl size="small" fullWidth>
+    <InputLabel id="demo-simple-select-label">OwnerShip</InputLabel>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      value={ownerShipDialog}
+      label="Customer Emp ID"
+      onChange={handleOwenerShipeDialog}
+
+    >
+      <MenuItem value={10}>PRAL</MenuItem>
+      <MenuItem value={20}>FBR</MenuItem>
+     
+    </Select>
+  </FormControl>
+</Box>
+
+</Grid>
+
+</Grid>
+          <br></br>
+
+
+{/* this is the qr code of the PRAL */}
 
           <Grid container spacing={3}>
 
@@ -881,21 +1174,20 @@ const [product1,setProduct1]=React.useState([])
            
             <Grid item lg={4} md={4} sm={4} xs={4}  >
             </Grid>
-            <br></br>
-            <br></br>
+           
 
             <Grid container spacing={2}>
-                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                        <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)}/>
+                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
+                        <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)}  style={{marginLeft: '24px'}}/>
                         <Button className={classes.btn} variant="contained" 
-                          color="primary" onClick={() => generateQrCode()}>Generate</Button>
+                          color="primary" onClick={() => generateQrCode()} style={{marginLeft: '24px'}}>Generate</Button>
                           <br></br>
                           {imageUrl1 ? (
                             <a href={imageUrl1} download>
-                                <img src={imageUrl1} alt="img"/>
+                                <img src={imageUrl1} alt="img" style={{marginLeft: '24px'}}/>
                             </a>) : null}
                     </Grid>
-                    {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
                       <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
                       <QrReader
                         ref={qrRef}
@@ -916,12 +1208,30 @@ const [product1,setProduct1]=React.useState([])
                        onScan={handleScanWebCam}
                        />
                        <h3>Code: {scanResultWebCam}</h3>
-                    </Grid> */}
+                    </Grid>
                 </Grid>
+        
         
 
 
+                <Grid item lg={4} md={4} sm={4} xs={6}  >
 
+<TextField style={{"width":"514px"}}
+  error={nameError}
+  id="name"
+  label="Vender"
+  placeholder="Vender"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={vender}
+  size="small"
+  onChange={(e) => handleVender(e, setVender, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
           </Grid>
          
 
@@ -943,6 +1253,8 @@ const [product1,setProduct1]=React.useState([])
           </Button>
         </DialogActions>
       </Dialog>
+      
+      
     </>
      
     
