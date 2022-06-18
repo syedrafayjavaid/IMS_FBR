@@ -111,7 +111,7 @@ useEffect(() => {
     
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
                 <CardHeader>
-                <Title>EMPLOYEE DETAILS</Title>
+                <Title>USER DETAILS</Title>
                 </CardHeader>
                     <hr></hr>
                 <Grid container>
@@ -173,7 +173,7 @@ useEffect(() => {
                     </Box>
                     {/* <Box>
                         <br></br>
-                        <Button variant='contained'  onClick={showTbl} >Employee Details</Button>
+                        <Button variant='contained'  onClick={showTbl} >Inventory Details</Button>
                         
                     </Box> */}
                 </Grid>
