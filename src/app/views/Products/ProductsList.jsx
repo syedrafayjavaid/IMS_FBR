@@ -112,6 +112,8 @@ const ProductsList = () => {
     const [product1, setProduct1] = React.useState([])
     const [brands, setBrands] = React.useState([])
 
+    const [selectedBrandName, setSelectedBrandName] = React.useState('')
+
     // web came code
 
     const [text1, setText1] = useState('')
@@ -327,7 +329,7 @@ const ProductsList = () => {
             data.append('brandId', createBrandName)
             data.append('file', image)
             data.append('createdBy', createdBy)
-            data.append('description', createDescription)
+            data.append('detail', createDescription)
             console.log(data.value, 'data')
 
             const productNameExist = product1.find((product) => {
@@ -353,6 +355,18 @@ const ProductsList = () => {
                     console.log(error, 'error')
                     // handleClick()
                 })
+
+                axios
+            .get(`http://192.168.18.117:5000/api/v1/brand/${createBrandName}`)
+            .then((res) => {
+                // console.log(res.data.data)
+                setSelectedBrandName(res.data.data.name)
+                // console.log(brand, 'brand');
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+
         }
     }
 
@@ -380,7 +394,6 @@ const ProductsList = () => {
           data.append('photo', image);
           data.append('modifiedBy', modifiedBy);
           data.append('detail', editDescription);
-          
 
       
           axios.put(`http://192.168.18.117:5000/api/v1/products/${productId}`, data).then((res) => {
@@ -992,7 +1005,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
-                                                            value={brand.name.toLowerCase()}
+                                                            value={brand._id}
                                                         >
                                                             {brand.name}
                                                         </MenuItem>

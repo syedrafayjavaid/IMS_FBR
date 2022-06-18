@@ -81,8 +81,10 @@ ProductCard.propTypes = {
             </Typography>
            
           </Typography>
-          <Typography variant="subtitle1">
-            <Typography
+          
+        </Stack>
+        <Typography variant="subtitle1">
+            { product.avgPrice === undefined ? <Typography
               component="span"
               variant="body1"
               sx={{
@@ -90,9 +92,19 @@ ProductCard.propTypes = {
                 textDecoration: ''
               }}
             >
-              Price: &nbsp;
-            {price}
-            </Typography>
+              Avg. Price: &nbsp;
+            {product.avgPrice}
+            </Typography> : <Typography
+              component="span"
+              variant="body1"
+              sx={{
+                color: 'text',
+                textDecoration: ''
+              }}
+            >
+              Avg. Price: &nbsp;
+            N/A
+            </Typography> }
             
           </Typography>
           <Typography variant="subtitle1">
@@ -114,7 +126,6 @@ ProductCard.propTypes = {
            
             
           </Typography>
-        </Stack>
       </Stack>
     </Card>
   );
