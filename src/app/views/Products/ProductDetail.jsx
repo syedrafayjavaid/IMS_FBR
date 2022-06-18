@@ -104,6 +104,8 @@ const getAlldata = () => {
     console.log(error, 'error');
   })
 }
+
+const notAvailable = "N/A";
     
   return (
     <>
@@ -153,16 +155,16 @@ const getAlldata = () => {
 
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Purchase Price:   </span>
-                            <span style={{color: 'green'}}><b>Rs 10000</b></span>
+                        <span>Price:   </span>
+                            <span style={{color: 'green'}}><b>{state.product.avgPrice === undefined ? notAvailable : state.product.avgPrice}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Quantity: </span>
-                            <span style={{color: 'green'}}><b>23</b></span>
+                            <span style={{color: 'green'}}><b>{state.product.productQuantity}</b></span>
                         </Grid>  
                     </Grid>
                     <hr></hr>
-                    <Grid container >
+                    {/* <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Purchaser Name:   </span>
                             <span style={{color: 'green'}}><b>Asadullah Baig</b></span>
@@ -172,8 +174,8 @@ const getAlldata = () => {
                             <span style={{color: 'green'}}><b>Syed Rafay Javaid</b></span>
                         </Grid>  
                     </Grid>
-                    <hr></hr>
-                    <Grid container >
+                    <hr></hr> */}
+                    {/* <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Comment's:   </span>
                             <span style={{color: 'green'}}><b>In Use</b></span>
@@ -183,7 +185,7 @@ const getAlldata = () => {
                             <span style={{color: 'green'}}><b>N/A</b></span>
                         </Grid>  
                     </Grid>
-                    <hr></hr>
+                    <hr></hr> */}
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Created Date: </span>
@@ -195,11 +197,11 @@ const getAlldata = () => {
                         </Grid>  
                     </Grid>
                     <hr></hr>
-                    <Box>
+                    {/* <Box>
                     <span>Office Address:</span>   
                     <span style={{color: 'green'}}> CA-265, 7th Rd, Block F Satellite Town, Rawalpindi, 46300</span> 
-                    </Box>
-                    <hr></hr>
+                    </Box> */}
+                    {/* <hr></hr> */}
                     {/* <Grid container >
                         <Grid item  lg={12} md={12} sm={12} xs={12} >
                         <span>Barcode: </span>

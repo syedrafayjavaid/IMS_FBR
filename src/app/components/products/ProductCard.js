@@ -92,7 +92,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                     textDecoration: ''
                   }}
                 >
-                  Avg. Price: &nbsp;
+                  Avg Price: &nbsp;
                 N/A
                 </Typography> : <Typography
                   component="span"
@@ -102,7 +102,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                     textDecoration: ''
                   }}
                 >
-                  Avg. Price: &nbsp;
+                  Avg Price: &nbsp;
                   {product?.avgPrice}
                 </Typography> }
 
