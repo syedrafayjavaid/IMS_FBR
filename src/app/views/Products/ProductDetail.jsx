@@ -88,6 +88,7 @@ const imgeBaseUrl='uploads/';
 
 const [categoryName, setCategoryName] = React.useState('');
 const [productTypeName, setProductTypeName] = React.useState('');
+const [brandName, setBrandName] = React.useState('');
 
 useEffect(() => {
   getAlldata();
@@ -100,6 +101,11 @@ const getAlldata = () => {
   })
   axios.get(`http://192.168.18.117:5000/api/v1/productType/${state.product.productTypeId}`).then((res) => {
     setProductTypeName(res.data.data.name);
+  }).catch((error) => {
+    console.log(error, 'error');
+  })
+  axios.get(`http://192.168.18.117:5000/api/v1/brand/${state.product.brandId}`).then((res) => {
+    setBrandName(res.data.data.name);
   }).catch((error) => {
     console.log(error, 'error');
   })
@@ -164,6 +170,17 @@ const notAvailable = "N/A";
                         </Grid>  
                     </Grid>
                     <hr></hr>
+                    <Grid container >
+                        <Grid item  lg={6} md={6} sm={6} xs={6} >
+                        <span>Model:   </span>
+                            <span style={{color: 'green'}}><b>{state.product.model}</b></span>
+                        </Grid>
+                        <Grid item  lg={6} md={6} sm={6} xs={6} >
+                        <span>Brand: </span>
+                            <span style={{color: 'green'}}><b>{brandName}</b></span>
+                        </Grid>  
+                    </Grid>
+                    <hr></hr>
                     {/* <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Purchaser Name:   </span>
@@ -201,7 +218,10 @@ const notAvailable = "N/A";
                     <span>Office Address:</span>   
                     <span style={{color: 'green'}}> CA-265, 7th Rd, Block F Satellite Town, Rawalpindi, 46300</span> 
                     </Box> */}
-                    {/* <hr></hr> */}
+                    <Box>
+                    <h4>Detail: </h4>    
+                    {state.product.detail}
+                    </Box>
                     {/* <Grid container >
                         <Grid item  lg={12} md={12} sm={12} xs={12} >
                         <span>Barcode: </span>
