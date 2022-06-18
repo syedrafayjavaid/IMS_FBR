@@ -168,14 +168,14 @@ useEffect(() => {
 
                     <hr></hr>
                     <Box>
-                    <h4>Description: </h4>    
+                    <h4>Detail: </h4>    
                     {userData?.detail}
                     </Box>
-                    <Box>
+                    {/* <Box>
                         <br></br>
                         <Button variant='contained'  onClick={showTbl} >Inventory Details</Button>
                         
-                    </Box>
+                    </Box> */}
                 </Grid>
 
             

@@ -139,7 +139,7 @@ const UsersList = () => {
           setEditDescriptionError(true)
         }
         if (editEmployeeId === '') {
-          setEditEmployeeId(true)
+          setEditEmployeeIdError(true)
         }
       } else {
         editHandler()
