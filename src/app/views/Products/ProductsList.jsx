@@ -158,22 +158,18 @@ const ProductsList = () => {
     }
 
     const handleCreateType = (event) => {
-        console.log(event.target.value);
         setCreateProductTypeName(event.target.value)
     }
 
     const handleCreateType2 = (event) => {
-        console.log(event.target.value);
         setCreateProductCategory(event.target.value)
     }
 
     const handleCreateType3 = (event) => {
-        console.log(event.target.value);
         setCreateBrandName(event.target.value)
     }
 
     const handleEditType = (event) => {
-        console.log(quantity, 'event')
         setEditProductTypeName(event.target.value)
     }
 
@@ -356,17 +352,6 @@ const ProductsList = () => {
                     // handleClick()
                 })
 
-                axios
-            .get(`http://192.168.18.117:5000/api/v1/brand/${createBrandName}`)
-            .then((res) => {
-                // console.log(res.data.data)
-                setSelectedBrandName(res.data.data.name)
-                // console.log(brand, 'brand');
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
-
         }
     }
 
@@ -375,7 +360,7 @@ const ProductsList = () => {
         setEditProductDialog(true)
         setEditName(product.name)
         setEditProductTypeName(product.productTypeId)
-        setEditProductCategory(product.productCategoryId)
+        setEditProductCategory(product.categoryId)
         setEditModel(product.model)
         setEditBrandName(product.brandId)
         setImage(product.photo)
@@ -388,7 +373,7 @@ const ProductsList = () => {
         let data = new FormData();
           data.append('name', editName);
           data.append('productTypeId', editProductTypeName);
-          data.append('productCategoryId', editProductCategory);
+          data.append('categoryId', editProductCategory);
           data.append('model', editModel);
           data.append('brandId', editBrandName);
           data.append('photo', image);
@@ -465,6 +450,8 @@ const ProductsList = () => {
     //         console.log(error, 'error');
     //       })
     //   }
+
+    console.log(createProductCategory)
 
     return (
         <>
@@ -902,7 +889,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType.name.toLowerCase()}
+                                                            value={productType._id}
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
@@ -941,7 +928,7 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
-                                                                value={productCategory.name.toLowerCase()}
+                                                                value={productCategory._id}
                                                             >
                                                                 {
                                                                     productCategory.name
