@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { Span } from 'app/components/Typography'
 import { Card, Checkbox, FormControlLabel, Grid, Button } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
+import logo1 from '../pral.jpeg'
+import logo2 from '../pral_logo.jpg'
 
 const FlexBox = styled(Box)(() => ({
     display: 'flex',
@@ -47,12 +49,18 @@ const JwtRegister = () => {
         })
     }
 
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = async (event) => {
         try {
-            register(state.email, state.username, state.password)
+            await register(state.email, state.username, state.password)
             navigate('/')
         } catch (e) {
-            console.log(e)
+            if (e.error == "Duplicate field value entered") {
+                alert("Username Already exists, try different username")
+            }
+            else {
+                alert(e.error)
+            }
+
         }
     }
 
@@ -65,7 +73,7 @@ const JwtRegister = () => {
                     <Grid item lg={5} md={5} sm={5} xs={12}>
                         <ContentBox>
                             <IMG
-                                src="/assets/images/illustrations/posting_photo.svg"
+                                src={logo1}
                                 alt=""
                             />
                         </ContentBox>

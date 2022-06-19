@@ -34,22 +34,21 @@ ProductCard.propTypes = {
     product: PropTypes.object,
 }
 
-<<<<<<< HEAD
-  const adiitHandler = (adit) =>{
+const adiitHandler = (adit) => {
     //  console.log(props, 'props');
-     console.log(product, 'producrt');
-// product.onCallBack(_id);
-   }
-   const delHandler = () =>{
-    
-  //     console.log(_id,'id');
-  //     console.log(`http://192.168.18.117:5000/api/v1/category/${_id}`);
-  //      axios.delete(`http://192.168.18.117:5000/api/v1/category/${_id}`).then((res) => 
-  //   { console.log(res.msg); 
-  //     }).catch((error)=>{
-  // console.log(error,'error');
-  //     }) 
-=======
+    // console.log(product, 'producrt');
+    // product.onCallBack(_id);
+}
+const delHandler = () => {
+
+    //     console.log(_id,'id');
+    //     console.log(`http://192.168.18.117:5000/api/v1/category/${_id}`);
+    //      axios.delete(`http://192.168.18.117:5000/api/v1/category/${_id}`).then((res) => 
+    //   { console.log(res.msg); 
+    //     }).catch((error)=>{
+    // console.log(error,'error');
+    //     }) 
+}
 function ProductCard({ product, onDelete, onEdit }) {
     const navigate = useNavigate()
     const url = 'http://192.168.18.117:5000/'
@@ -60,7 +59,6 @@ function ProductCard({ product, onDelete, onEdit }) {
     }
     const delHandler = () => {
         onDelete(product._id)
->>>>>>> 58fd0ac389b86949b82721fffa6c36aa2860f2a7
     }
 
     const navigateToDetailsPage = () => {
@@ -101,29 +99,29 @@ function ProductCard({ product, onDelete, onEdit }) {
                         </Typography>
                     </Stack>
                     <Typography variant="subtitle1">
-                { product?.avgPrice === undefined ? <Typography
-                  component="span"
-                  variant="body1"
-                  sx={{
-                    color: 'text',
-                    textDecoration: ''
-                  }}
-                >
-                  Avg Price: &nbsp;
-                N/A
-                </Typography> : <Typography
-                  component="span"
-                  variant="body1"
-                  sx={{
-                    color: 'text',
-                    textDecoration: ''
-                  }}
-                >
-                  Avg Price: &nbsp;
-                  {product?.avgPrice}
-                </Typography> }
+                        {product?.avgPrice === undefined ? <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                                color: 'text',
+                                textDecoration: ''
+                            }}
+                        >
+                            Avg Price: &nbsp;
+                            N/A
+                        </Typography> : <Typography
+                            component="span"
+                            variant="body1"
+                            sx={{
+                                color: 'text',
+                                textDecoration: ''
+                            }}
+                        >
+                            Avg Price: &nbsp;
+                            {product?.avgPrice}
+                        </Typography>}
 
-               </Typography>
+                    </Typography>
                 </CardContent>
             </Box>
             <CardActions>

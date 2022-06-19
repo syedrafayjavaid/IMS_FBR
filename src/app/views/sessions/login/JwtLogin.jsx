@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import { Box, styled, useTheme } from '@mui/system'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { Paragraph, Span } from 'app/components/Typography'
+import logo1 from '../pral.jpeg'
+import logo2 from '../pral_logo.jpg'
 
 const FlexBox = styled(Box)(() => ({
     display: 'flex',
@@ -75,7 +77,7 @@ const JwtLogin = () => {
             await login(userInfo.email, userInfo.password)
             navigate('/dashboard/default')
         } catch (e) {
-            console.log(e)
+            alert(e.error);
             setMessage(e.message)
             setLoading(false)
         }
@@ -88,7 +90,7 @@ const JwtLogin = () => {
                     <Grid item lg={5} md={5} sm={5} xs={12}>
                         <JustifyBox p={4} height="100%">
                             <IMG
-                                src="/assets/images/illustrations/dreamer.svg"
+                                src={logo1}
                                 alt=""
                             />
                         </JustifyBox>
@@ -99,7 +101,7 @@ const JwtLogin = () => {
                                 <TextValidator
                                     sx={{ mb: 3, width: '100%' }}
                                     variant="outlined"
-                                    size="small"Sign in
+                                    size="small" Sign in
                                     label="Email"
                                     onChange={handleChange}
                                     type="email"

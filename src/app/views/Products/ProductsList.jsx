@@ -355,7 +355,7 @@ const ProductsList = () => {
         }
     }
 
-    const onEditHandler = (id,product) => {
+    const onEditHandler = (id, product) => {
         console.log(product)
         setEditProductDialog(true)
         setEditName(product.name)
@@ -367,31 +367,31 @@ const ProductsList = () => {
         setModifiedBy(product.createdBy)
         setEditDescription(product.detail)
         setProductId(id)
-      }
+    }
 
     const editHandler = () => {
         let data = new FormData();
-          data.append('name', editName);
-          data.append('productTypeId', editProductTypeName);
-          data.append('categoryId', editProductCategory);
-          data.append('model', editModel);
-          data.append('brandId', editBrandName);
-          data.append('photo', image);
-          data.append('modifiedBy', modifiedBy);
-          data.append('detail', editDescription);
+        data.append('name', editName);
+        data.append('productTypeId', editProductTypeName);
+        data.append('categoryId', editProductCategory);
+        data.append('model', editModel);
+        data.append('brandId', editBrandName);
+        data.append('photo', image);
+        data.append('modifiedBy', modifiedBy);
+        data.append('detail', editDescription);
 
-      
-          axios.put(`http://192.168.18.117:5000/api/v1/products/${productId}`, data).then((res) => {
+
+        axios.put(`http://192.168.18.117:5000/api/v1/products/${productId}`, data).then((res) => {
             console.log(res.msg);
             if (res) {
-              getAlldata();
-              handleEditClose()
+                getAlldata();
+                handleEditClose()
             }
-        
-          }).catch((error) => {
+
+        }).catch((error) => {
             console.log(error, 'error');
-          })
-      }
+        })
+    }
 
     const onDelhandler = (editData) => {
         console.log(editData, 'id')
@@ -420,172 +420,6 @@ const ProductsList = () => {
             </Button>
             <IconButton
                 size="small"
-<<<<<<< HEAD
-                onChange={(e) => handleChange(e, setDescription, setNameError)}
-                variant="outlined"
-                fullWidth
-
-              />
-
-
-
-            </Grid>
-            <Grid item lg={4} md={4} sm={4} xs={4}  >
-            <Box sx={{ minWidth: 120 }}>
-  <FormControl size="small" fullWidth>
-    <InputLabel id="demo-simple-select-label">Product Category</InputLabel>
-    <Select
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      value={brand}
-      label="Brand"
-      onChange={handleType2}
-
-    >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
-    </Select>
-  </FormControl>
-</Box>
-
-        </Grid>
-
-            
-            
-
-
-
-
-
-
-
-
-          </Grid>
-          <br></br>
-
-          <Grid container spacing={3}>
-
-
-            {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-              <TextField label="Enter Text Here" onChange={(e) => setText(e.target.value)} />
-              <Button variant="contained"
-                color="primary" onClick={() => generateQrCode()}>Generate</Button>
-              <br />
-              <br />
-              <br />
-              {imageUrl ? (
-                <a href={imageUrl} download>
-                  <img src={imageUrl} alt="img" />
-                </a>) : null}
-            </Grid> */}
-           
-          
-            <br></br>
-
-           
-                    <Grid item xl={4} lg={4} md={6} sm={12} >
-                        <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} xs={{}}/>
-                    </Grid>
-                        <Grid item xl={4} lg={4} md={6} sm={12} >
-                        <Button className={classes.btn} variant="contained" 
-                          color="primary" onClick={() => generateQrCode()}>Generate</Button>
-                          </Grid>
-                          <br></br>
-                          {imageUrl1 ? (
-                            <a href={imageUrl1} download>
-                                <img src={imageUrl1} alt="img"/>
-                            </a>) : null}
-                   
-                    {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                      <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
-                      <QrReader
-                        ref={qrRef}
-                        delay={300}
-                        style={{width: '100%'}}
-                        onError={handleErrorFile}
-                        onScan={handleScanFile}
-                        legacyMode
-                      />
-                      <h3>Code: {scanResultFile}</h3>
-                    </Grid> */}
-                    {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                       <h3>Qr:</h3>
-                       <QrReader
-                       delay={300}
-                       style={{width: '100%'}}
-                       onError={handleErrorWebCam}
-                       onScan={handleScanWebCam}
-                       />
-                       <h3>Code: {scanResultWebCam}</h3>
-                    </Grid> */}
-                    <Grid item lg={4} md={4} sm={4} xs={4}  >
-            </Grid>
-            
-       
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-<TextField
-  error={modifiedByError}
-  id="name"
-  label="Modified By"
-  placeholder="Modified By"
-  autoComplete="off"
-  helperText={setModifiedByError === true ? "Field Required" : ''}
-  value={modifiedBy}
-  size="small"
-  onChange={(e) => handleChange(e, setModifiedBy, setModifiedByError)}
-  variant="outlined"
-  fullWidth
-  disabled
-/>
-
-
-
-</Grid>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-<TextField
- disabled
-  error={createdByError}
-  id="name"
-  label="Created By"
-  placeholder="Created By"
-  autoComplete="off"
-  helperText={setCreatedByError === true ? "Field Required" : ''}
-  value={createdBy}
-  size="small"
-  onChange={(e) => handleChange(e, setCreatedBy, setCreatedByError)}
-  variant="outlined"
-  fullWidth
-
-/>
-
-
-
-</Grid>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-
-
-
-</Grid>
-
-<Grid item lg={8} md={8} sm={8} xs={8}  >
-<TextField
-  label="Detail"
-  placeholder="Detail"
-  style={{textAlign: 'left'}}
-  hintText="Message Field"
-  floatingLabelText="MultiLine and FloatingLabel"
-  multiline
-  fullWidth
-  rows={3}
-/>
-</Grid>
-                </Grid>
-=======
                 aria-label="close"
                 color="inherit"
                 onClick={handleClose}
@@ -604,15 +438,14 @@ const ProductsList = () => {
     //   const editHandler = () => {
     //     let data = new FormData();
     //       data.append('name', editBrandName);
-      
+
     //       axios.put(`http://192.168.18.117:5000/api/v1/products/`, data).then((res) => {
     //         console.log(res.msg);
     //         if (res) {
     //           getAlldata();
     //           handleEditClose()
     //         }
->>>>>>> 58fd0ac389b86949b82721fffa6c36aa2860f2a7
-        
+
     //       }).catch((error) => {
     //         console.log(error, 'error');
     //       })
@@ -756,7 +589,7 @@ const ProductsList = () => {
                                             <FormHelperText>
                                                 {' '}
                                                 {createProductTypeNameError ===
-                                                true
+                                                    true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
@@ -797,7 +630,7 @@ const ProductsList = () => {
                                             </Select>
                                             <FormHelperText>
                                                 {createProductCategoryError ===
-                                                true
+                                                    true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
@@ -1066,7 +899,7 @@ const ProductsList = () => {
                                             <FormHelperText>
                                                 {' '}
                                                 {editProductTypeNameError ===
-                                                true
+                                                    true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
