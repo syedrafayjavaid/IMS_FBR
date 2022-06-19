@@ -18,6 +18,7 @@ import {
     Hidden,
 } from '@mui/material'
 import { topBarHeight } from 'app/utils/constant'
+import logo from "../../../../app/views/sessions/pral.jpeg"
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
     color: theme.palette.text.primary,
@@ -122,20 +123,6 @@ const Layout1Topbar = () => {
                     <StyledIconButton onClick={handleSidebarToggle}>
                         <Icon>menu</Icon>
                     </StyledIconButton>
-
-                    {/* <IconBox>
-                        <StyledIconButton>
-                            <Icon>mail_outline</Icon>
-                        </StyledIconButton>
-
-                        <StyledIconButton>
-                            <Icon>web_asset</Icon>
-                        </StyledIconButton>
-
-                        <StyledIconButton>
-                            <Icon>star_outline</Icon>
-                        </StyledIconButton>
-                    </IconBox> */}
                 </Box>
                 <Box display="flex" alignItems="center">
                     <MatxSearchBox />
@@ -150,9 +137,13 @@ const Layout1Topbar = () => {
                             <UserMenu>
                                 <Hidden xsDown>
                                     <Span>
-                                        Hi <strong>PRAL</strong>
+                                        <strong>{user.name}</strong>
                                     </Span>
                                 </Hidden>
+                                <Avatar
+                                    src={logo}
+                                    sx={{ cursor: 'pointer' }}
+                                />
                             </UserMenu>
                         }
                     >
