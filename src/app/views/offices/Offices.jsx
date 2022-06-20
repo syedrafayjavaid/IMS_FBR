@@ -18,7 +18,6 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BrandCard from '../../../../../../Copied/all Updated/brands/BrandCard';
 import OfficeCard from './OfficeCard';
 import CloseIcon from '@mui/icons-material/Close';
 

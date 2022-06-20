@@ -207,7 +207,7 @@ function getoffice(office, officeName, themesoffice) {
   const [modelImage, setModelImage] = React.useState('');
   const [categoryData, setCategoryData] = React.useState({});
   const [subcategoryData, setSubcategoryData] = React.useState({});
-const [product1,setProduct1]=React.useState([])
+const [purchasedItems,setPurchasedItems]=React.useState([])
 const myclass = dateStyles();
 ///
 //API For the dialogbox
@@ -363,27 +363,27 @@ const [vender,setVender]=React.useState([])
     getAlldata();
   }, []);
   const getAlldata = () => {
-    axios.get('http://192.168.18.117:5000/api/v1/products').then((res) => {
-      console.log(res.data.data);
-      setProduct1(res.data.data);
-      console.log(product1, 'all');
-    }).catch((error) => {
-      console.log(error, 'error');
-    })
-    axios.get('http://192.168.18.117:5000/api/v1/category').then((res) => {
-      console.log(res.data.data);
-      setCategory(res.data.data);
-      console.log(category, 'category');
-    }).catch((error) => {
-      console.log(error, 'error');
-    })
-    axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
-      console.log(res.data.data);
-      setQuantity(res.data.data);
-      console.log(quantity, 'quantity');
-    }).catch((error) => {
-      console.log(error, 'error');
-    })
+    // axios.get('http://192.168.18.117:5000/api/v1/products').then((res) => {
+    //   console.log(res.data.data);
+    //   setProduct1(res.data.data);
+    //   console.log(product1, 'all');
+    // }).catch((error) => {
+    //   console.log(error, 'error');
+    // })
+    // axios.get('http://192.168.18.117:5000/api/v1/category').then((res) => {
+    //   console.log(res.data.data);
+    //   setCategory(res.data.data);
+    //   console.log(category, 'category');
+    // }).catch((error) => {
+    //   console.log(error, 'error');
+    // })
+    // axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
+    //   console.log(res.data.data);
+    //   setQuantity(res.data.data);
+    //   console.log(quantity, 'quantity');
+    // }).catch((error) => {
+    //   console.log(error, 'error');
+    // })
     axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
       console.log(res.data.data);
       setPurchaseItems(res.data.data);
@@ -434,23 +434,12 @@ const [vender,setVender]=React.useState([])
 
 
 
-  const onDelhandler = (editData) => {
-    // console.log(editData, 'id');
-    // console.log(`http://192.168.18.117:5000/api/v1/products/${editData}`);
-    // axios.delete(`http://192.168.18.117:5000/api/v1/products/${editData}`).then((res) => {
-    //   console.log(res.msg);
-    //   getAlldata();
-        // let arr = category
-        // console.log(arr);
-        // let indexOfObject = arr.findIndex(object => {
-        //   return object._id === editData;
-        // });
-        // console.log(indexOfObject); // :point_right:️ 1
-        // setSanakbar(true);
-        // setArryCatagory(arr.splice(indexOfObject, 1))
-    // }).catch((error) => {
-    //   console.log(error, 'error');
-    // })
+  const onDelhandler = (id) => {
+    axios.delete(`http://192.168.18.117:5000/api/v1/purchaseProduct/${id}`).then((res) => {
+      getAlldata();
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
   }
 
 
@@ -666,10 +655,10 @@ const [vender,setVender]=React.useState([])
          PURCHASE ITEMS
         </Typography>
         <Grid container spacing={3} >
-      {product1.map((product) => (
+      {purchaseItems.map((purchaseItem) => (
       
-        <Grid key={product._id} item xs={12} sm={6} md={3}  >
-          <ProductCard product={product} />
+        <Grid key={purchaseItem._id} item xs={12} sm={6} md={3}  >
+          <ProductCard purchaseItem={purchaseItem} onDelete={onDelhandler} />
         </Grid>
       ))}
     </Grid>

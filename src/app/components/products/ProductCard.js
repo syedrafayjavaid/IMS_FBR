@@ -49,34 +49,36 @@ const delHandler = () => {
     // console.log(error,'error');
     //     }) 
 }
-function ProductCard({ product, onDelete, onEdit }) {
+function ProductCard({ purchaseItem, onDelete, onEdit }) {
     const navigate = useNavigate()
     const url = 'http://192.168.18.117:5000/'
     const imgeBaseUrl = 'uploads/'
 
-    const adiitHandler = (adit) => {
-        onEdit(product._id, product)
-    }
+    // const adiitHandler = (adit) => {
+    //     onEdit(product._id, product)
+    // }
     const delHandler = () => {
-        onDelete(product._id)
+        onDelete(purchaseItem._id)
     }
 
-    const navigateToDetailsPage = () => {
-        navigate('/products/details', { state: { product: product } })
-    }
+    // const navigateToDetailsPage = () => {
+    //     navigate('/products/details', { state: { product: product } })
+    // }
+
+    console.log(purchaseItem);
 
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <Box onClick={navigateToDetailsPage}>
+            <Box>
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <ProductImgStyle
                         alt="No Image"
-                        src={url + imgeBaseUrl + product.photo}
+                        src={url + imgeBaseUrl + purchaseItem.photo}
                     />
                 </CardMedia>
                 <CardContent>
                     <Typography variant="subtitle2" noWrap>
-                        {product.name}
+                        {purchaseItem.name}
                     </Typography>
                     <Stack
                         direction="row"
@@ -94,12 +96,12 @@ function ProductCard({ product, onDelete, onEdit }) {
                                 }}
                             >
                                 Quantitiy: &nbsp;
-                                {product.productQuantity}
+                                {purchaseItem.productQuantity}
                             </Typography>
                         </Typography>
                     </Stack>
                     <Typography variant="subtitle1">
-                        {product?.avgPrice === undefined ? <Typography
+                        {purchaseItem?.avgPrice === undefined ? <Typography
                             component="span"
                             variant="body1"
                             sx={{
@@ -118,7 +120,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                             }}
                         >
                             Avg Price: &nbsp;
-                            {product?.avgPrice}
+                            {purchaseItem?.avgPrice}
                         </Typography>}
 
                     </Typography>
