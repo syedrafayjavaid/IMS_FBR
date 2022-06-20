@@ -39,7 +39,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/system'
 import axios from 'axios';
 import { number } from 'prop-types';
-import { Model } from 'echarts';
+import PurchaseItemCard from './PurchaseItemCard';
 /////
 
 const dateStyles = makeStyles((theme) => ({
@@ -174,42 +174,16 @@ function getoffice(office, officeName, themesoffice) {
   const [value, setValue] = React.useState([20, 37]);
   const [officeName, setOfficeName] = React.useState([]);
 
-
-  const [imageUrl, setImageUrl] = React.useState('');
-  const [text, setText] = React.useState('');
-
-
   // Form validation errors State Setting 
   const [nameError, setNameError] = React.useState(false);
   const [productQuantityError,setProductQuantityError]= React.useState(false)
-  const [stockError, setstockError] = React.useState(false);
-  const [categoryError, setcategoryError] = React.useState(false);
-  const [subCategoryError, setsubCategoryError] = React.useState(false);
-  const [costError, setcostError] = React.useState(false);
-  const [saleError, setsaleError] = React.useState(false);
-  const [colourError, setColourError] = React.useState(false);
-  const [brandError, setBrandError] = React.useState(false);
-  const [descriptionError, setdescriptionError] = React.useState(false);
-  const [imageError, setImageError] = React.useState(false);
-  const [modelError, setModelError] = React.useState(false);
 
   // Setting States 
   const [name, setName] = React.useState('');
   const [quantity, setQuantity] = React.useState([]);
   const [productQuantity,setProductQuantity]= React.useState('')
-  const [pcost, setPcost] = React.useState('');
-  const [price, setPrice] = React.useState('');
-  const [productId, setproductId] = React.useState('');
-  const [product, setProduct] = React.useState([]);
-  const [subCategory, setSubCategory] = React.useState('');
-  const [color, setColor] = React.useState('');
-  const [brand, setBrand] = React.useState('');
-  const [purchaseOrder, setPurchaseOrder] = React.useState('');
-  const [image, setImage] = React.useState('');
-  const [QRCodeImage, setQRCodeImage] = React.useState('');
-  const [categoryData, setCategoryData] = React.useState({});
-  const [subcategoryData, setSubcategoryData] = React.useState({});
-const [purchasedItems,setPurchasedItems]=React.useState([])
+  const [category, setCategory] = React.useState([]);
+  const [description, setDescription] = React.useState('');
 const myclass = dateStyles();
 ///
 //API For the dialogbox
@@ -789,7 +763,9 @@ const createHandler = () => {
       {purchaseItems.map((purchaseItem) => (
       
         <Grid key={purchaseItem._id} item xs={12} sm={6} md={3}  >
-          <ProductCard purchaseItem={purchaseItem} onDelete={onDelhandler} />
+          <PurchaseItemCard purchaseItem={purchaseItem} onDelete={onDelhandler}
+          // onEdit={onEditHandler}
+          />
         </Grid>
       ))}
     </Grid>

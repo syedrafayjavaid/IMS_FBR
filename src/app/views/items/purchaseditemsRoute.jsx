@@ -9,6 +9,10 @@ const purchaseditemsRoute = [
         path: 'items/PurchasedItems',
         element: <PurchasedItems/>,
     },
+    {
+        path: 'items/PurchasedItemsDetail',
+        element: <PurchasedItems/>,
+    },
 ]
 
 export default purchaseditemsRoute;

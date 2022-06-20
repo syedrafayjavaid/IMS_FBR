@@ -1,97 +1,57 @@
-// import React ,{useState, useEffect} from 'react'
-
-// material
-import { Grid } from '@mui/material';
-import React, { useEffect } from 'react';
+import { Box, styled } from '@mui/system'
+import React from 'react'
 import { useLocation } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 
-import { makeStyles } from '@material-ui/core/styles';
 import { Card } from '@mui/material';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/system';
-import axios from 'axios';
 import moment from 'moment';
 import config from 'config';
 
-
 const Title = styled('span')(() => ({
-  fontSize: '1rem',
-  fontWeight: '500',
-  textTransform: 'capitalize',
-  display: "flex",
+    fontSize: '1rem',
+    fontWeight: '500',
+    textTransform: 'capitalize',
+    display: "flex",
+  
+  }))
 
-}))
-
-const CardHeader = styled('div')(() => ({
-  paddingLeft: '24px',
-  paddingRight: '24px',
-  marginBottom: '12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}))
-const Input = styled('input')({
-  display: 'none',
-});
-
-
-
-
-
-const ProductsList = () => {
-
-  const FlexBox = styled(Box)(() => ({
+  const CardHeader = styled('div')(() => ({
+    paddingLeft: '24px',
+    paddingRight: '24px',
+    marginBottom: '12px',
     display: 'flex',
     alignItems: 'center',
-}))
+    justifyContent: 'space-between',
+  }))
 
-  const JustifyBox = styled(FlexBox)(() => ({
-    justifyContent: 'center',
-}))
+const PurchaseItemDetail = () => {
 
-
-  const IMG = styled('img')(() => ({
-    width: '100%',
-    height:'100%'
-}))
-
-const ContentBox = styled(JustifyBox)(() => ({
-  padding: '32px',
-  background: 'rgba(0, 0, 0, 0.01)',
-}))
-
-const {state} = useLocation();
-
-const imgeBaseUrl='uploads/';
-
-const [categoryName, setCategoryName] = React.useState('');
-const [productTypeName, setProductTypeName] = React.useState('');
-const [brandName, setBrandName] = React.useState('');
-
-useEffect(() => {
-  getAlldata();
-}, []);
-const getAlldata = () => {
-  axios.get(`${config.base_url}/api/v1/category/${state.product.categoryId}`).then((res) => {
-    setCategoryName(res.data.data.name);
-  }).catch((error) => {
-    console.log(error, 'error');
-  })
-  axios.get(`${config.base_url}/api/v1/productType/${state.product.productTypeId}`).then((res) => {
-    setProductTypeName(res.data.data.name);
-  }).catch((error) => {
-    console.log(error, 'error');
-  })
-  axios.get(`${config.base_url}/api/v1/brand/${state.product.brandId}`).then((res) => {
-    setBrandName(res.data.data.name);
-  }).catch((error) => {
-    console.log(error, 'error');
-  })
-}
-
-const notAvailable = "N/A";
+    const FlexBox = styled(Box)(() => ({
+        display: 'flex',
+        alignItems: 'center',
+    }))
     
+      const JustifyBox = styled(FlexBox)(() => ({
+        justifyContent: 'center',
+    }))
+    
+    
+      const IMG = styled('img')(() => ({
+        width: '100%',
+        height:'100%'
+    }))
+    
+    const ContentBox = styled(JustifyBox)(() => ({
+      padding: '32px',
+      background: 'rgba(0, 0, 0, 0.01)',
+    }))
+    
+    const {state} = useLocation();
+    
+    const imgeBaseUrl='uploads/';
+    
+
   return (
     <>
     
@@ -121,11 +81,11 @@ const notAvailable = "N/A";
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                             <span>Product Type: </span>
-                            <span style={{color: 'green'}}><b>{productTypeName}</b></span>
+                            <span style={{color: 'green'}}><b>{`productTypeName`}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Categoery Name: </span>
-                            <span style={{color: 'green'}}><b>{categoryName}</b></span>
+                            <span style={{color: 'green'}}><b>{`categoryName`}</b></span>
                         </Grid>  
                     </Grid>
                     
@@ -134,7 +94,7 @@ const notAvailable = "N/A";
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Avg Price:   </span>
-                            <span style={{color: 'green'}}><b>{state.product.avgPrice === undefined ? notAvailable : state.product.avgPrice}</b></span>
+                            <span style={{color: 'green'}}><b>{state.product.avgPrice === undefined ? `notAvailable` : state.product.avgPrice}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Quantity: </span>
@@ -149,7 +109,7 @@ const notAvailable = "N/A";
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Brand: </span>
-                            <span style={{color: 'green'}}><b>{brandName}</b></span>
+                            <span style={{color: 'green'}}><b>{`brandName`}</b></span>
                         </Grid>  
                     </Grid>
                     <hr></hr>
@@ -166,7 +126,7 @@ const notAvailable = "N/A";
                     <hr></hr>
                     <Box>
                     <h4>Detail: </h4>    
-                    {state.product.detail}
+                    {`state.product.detail`}
                     </Box>
     
                     <br></br>
@@ -176,32 +136,7 @@ const notAvailable = "N/A";
             </Card>
    
             </>
-     
-
   )
 }
 
-
-
-// qrcode 
-
-const useStyles = makeStyles((theme) => ({
-  conatiner: {
-    marginTop: 10
-  },
-  title: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems:  'center',
-    background: '#3f51b5',
-    color: '#fff',
-    padding: 20
-  },
-  btn : {
-    marginTop: 10,
-    marginBottom: 20
-  }
-}));
-
-
-export default ProductsList
+export default PurchaseItemDetail
