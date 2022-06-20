@@ -143,9 +143,9 @@ export const AuthProvider = ({ children }) => {
 
                 if (accessToken && isValidToken(accessToken)) {
                     setSession(accessToken)
-                    const response = await axios.get('/api/auth/profile')
-                    const { user } = response.data
-
+                    const user = {
+                        role: "SA"
+                    }
                     dispatch({
                         type: 'INIT',
                         payload: {
@@ -161,6 +161,7 @@ export const AuthProvider = ({ children }) => {
                             user: null,
                         },
                     })
+
                 }
             } catch (err) {
                 console.error(err)
