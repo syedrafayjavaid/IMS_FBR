@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { Span } from 'app/components/Typography'
 import { Card, Grid, Button } from '@mui/material'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
+import logo1 from './pral.jpeg'
+import logo2 from './pral_logo.jpg'
 
 const FlexBox = styled(Box)(() => ({
     display: 'flex',
@@ -59,7 +61,7 @@ const ForgotPassword = () => {
                     <Grid item lg={5} md={5} sm={5} xs={12}>
                         <JustifyBox p={4} height="100%">
                             <IMG
-                                src="/assets/images/illustrations/dreamer.svg"
+                                src={logo1}
                                 alt=""
                             />
                         </JustifyBox>

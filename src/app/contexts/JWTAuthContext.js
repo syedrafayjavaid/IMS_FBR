@@ -43,6 +43,7 @@ const reducer = (state, action) => {
         }
         case 'LOGIN': {
             const { user } = action.payload
+            console.log("This is the data inside user", user);
 
             return {
                 ...state,
@@ -84,13 +85,20 @@ export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const login = async (email, password) => {
-        const response = await axios.post('/api/auth/login', {
+        const response = await axios.post('http://localhost:5000/api/v1/auth/login', {
             email,
             password,
         })
-        const { accessToken, user } = response.data
+        const { token } = response.data
+        const user = {
+            name: response.data.data.userName,
+            id: response.data.data._id,
+            email: response.data.data.email,
+            avatar: "",
+            role: "SA"
+        }
 
-        setSession(accessToken)
+        setSession(token)
 
         dispatch({
             type: 'LOGIN',
@@ -101,15 +109,17 @@ export const AuthProvider = ({ children }) => {
     }
 
     const register = async (email, username, password) => {
-        const response = await axios.post('/api/auth/register', {
+        const userName = username;
+        const response = await axios.post('http://localhost:5000/api/v1/auth/register', {
             email,
-            username,
+            userName,
             password,
         })
 
-        const { accessToken, user } = response.data
+        console.log("Registration Response", response.data);
+        const { token, user } = response.data
 
-        setSession(accessToken)
+        setSession(token)
 
         dispatch({
             type: 'REGISTER',
@@ -117,6 +127,7 @@ export const AuthProvider = ({ children }) => {
                 user,
             },
         })
+
     }
 
     const logout = () => {
