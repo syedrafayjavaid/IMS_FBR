@@ -12,11 +12,13 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
     const url = 'http://192.168.18.117:5000/'
 
     const adiitHandler = (adit) => {
-        // onEdit(brand._id, brand.name)
+        onEdit(office._id, office.name, office.address, office.city, office.longitude, office.latitude);
     }
     const delHandler = () => {
-        // onDelete(brand._id)
+        onDelete(office._id)
     }
+
+    console.log(office);
 
   return (
     <TableRow
@@ -36,7 +38,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Address`}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.address}</Paragraph>
                 </Box>
             </TableCell>
             <TableCell
@@ -45,7 +47,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{`City`}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.city}</Paragraph>
                 </Box>
             </TableCell>
             <TableCell
@@ -54,7 +56,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Longitude`}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.longitude}</Paragraph>
                 </Box>
             </TableCell>
             <TableCell
@@ -63,7 +65,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{`Latitude`}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.latitude}</Paragraph>
                 </Box>
             </TableCell>
             <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
