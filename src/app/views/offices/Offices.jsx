@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import {
-    Card, Fab, Grid, Table, TableBody, TableCell, TableHead,
+    Card, Fab, Grid, IconButton, Snackbar, Table, TableBody, TableCell, TableHead,
     TableRow,
     Typography
 } from '@mui/material';
@@ -14,11 +14,13 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import { makeStyles } from "@mui/styles";
 import { Box, styled } from '@mui/system';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BrandCard from '../brands/BrandCard';
+import BrandCard from '../../../../../../Copied/all Updated/brands/BrandCard';
 import OfficeCard from './OfficeCard';
+import CloseIcon from '@mui/icons-material/Close';
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -45,21 +47,25 @@ const Offices = () => {
     const [brandError, setbrandError] = React.useState(false);
   
     // Setting States 
-    const [quantity, setQuantity] = React.useState([]);
-    const [brand, setBrand] = React.useState([]);
-    const [image, setImage] = React.useState('');
-  const [product1,setProduct1]=React.useState([])
-  const [demo,setDemo]=React.useState(false);
-  const [name, setName] = React.useState("");
-  const [nameError, setNameError] = React.useState(false);
-  const [address, setAddress] = React.useState("");
-  const [addressError, setAddressError] = React.useState(false);
-  const [city, setCity] = React.useState("");
-  const [cityError, setCityError] = React.useState(false);
-  const [longitude, setLongitude] = React.useState("");
-  const [longitudeError, setLongitudeError] = React.useState(false);
-  const [latitude, setLatitude] = React.useState("");
-  const [latitudeError, setLatitudeError] = React.useState(false);
+  const [offices, setOffices] = React.useState([])
+  const [createName, setCreateName] = React.useState("");
+  const [createNameError, setCreateNameError] = React.useState(false);
+  const [createAddress, setCreateAddress] = React.useState("");
+  const [createAddressError, setCreateAddressError] = React.useState(false);
+  const [createCity, setCreateCity] = React.useState("");
+  const [createCityError, setCreateCityError] = React.useState(false);
+  const [editName, setEditName] = React.useState("");
+  const [editNameError, setEditNameError] = React.useState(false);
+  const [editAddress, setEditAddress] = React.useState("");
+  const [editAddressError, setEditAddressError] = React.useState(false);
+  const [editCity, setEditCity] = React.useState("");
+  const [editCityError, setEditCityError] = React.useState(false);
+  // const [longitude, setLongitude] = React.useState("");
+  // const [longitudeError, setLongitudeError] = React.useState(false);
+  // const [latitude, setLatitude] = React.useState("");
+  // const [latitudeError, setLatitudeError] = React.useState(false);
+  const [officeId, setOfficeId] = React.useState("")
+  const [snackBar, setSnackBar] = React.useState(false);
   
   
     // const generateQrCode = async () => {
@@ -90,309 +96,189 @@ const Offices = () => {
     //   }
     //  }
   
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
       console.log(e.target.name, e.target.value)
       errorFunc(false)
     }
   
-    const handleType = (event) => {
-      console.log(quantity,"event");
-      setQuantity(event.target.value);
-    };
+    const [createOfficeDialog, setCreateOfficeDialog] = React.useState(false);
+    const [editOfficeDialog, setEditOfficeDialog] = React.useState(false);
   
-    const handleType2 = (event) => {
-      console.log(event.target,'rula');
-      setBrand(event.target.value);
-    };
-  
-    const [open, setOpen] = React.useState(false);
-    const [catogoryId,setCatogoryId] = React.useState('');
-  
-    const handleClose = () => {
-      setOpen(false);
-    }; const handleOpen = (id) => {
-      console.log(id,'id');
-      setOpen(true);
-    };
-    const handleClickOpen2 = () => {
-      setOpen(true);
-    };
-  
-  
-  
-    const handleImage=(e)=>{
-      setImage(e.target.files[0])
-      console.log(e.target.files[0],'e.target.files[0]');
-    }
-  
+    const handleCreateClose = () => {
+      setCreateOfficeDialog(false);
+    }; 
+    const handleEditClose = () => {
+      setEditOfficeDialog(false);
+    }; 
   
     useEffect(() => {
       getAlldata();
     }, []);
     const getAlldata = () => {
-      axios.get('http://192.168.18.117:5000/api/v1/products').then((res) => {
-        console.log(res.data.data);
-        setProduct1(res.data.data);
-        console.log(product1, 'all');
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
-      axios.get('http://192.168.18.117:5000/api/v1/category').then((res) => {
-        console.log(res.data.data);
-        // setBrand(res.data.data);
-        console.log(brand, 'category');
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
-      axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
-        console.log(res.data.data);
-        setQuantity(res.data.data);
-        console.log(quantity, 'quantity');
+      axios.get('http://192.168.18.117:5000/api/v1/office').then((res) => {
+        console.log(res)
+        setOffices(res.data.data);
       }).catch((error) => {
         console.log(error, 'error');
       })
     }
-  
-    const checking = () => {
-    //   if(imge){
-    //     let data = new FormData();
-    //     data.append('file', imge);
-    //     data.append('name', category);
-    //     data.append('modifiedBy', modifiedBy);
-    //     data.append('createdBy', createdBy);
-    //     console.log(data.value, 'data');
-    //     axios.post('http://192.168.18.117:5000/api/v1/products ', data).then((res) => {
-    //       console.log(res.data.data);
-    //       if(res){
-    //         handleClose()
-    //         getAlldata();
-    //       }
-    //     }).catch((error) => {
-    //       console.log(error, 'error');
-    //       handleClick()
-    //     })
-    //   }
-    //   else{
-    //     let data = new FormData();
-    //     data.append('name', category);
-    //     axios.put(`http://192.168.18.117:5000/api/v1/products/${idCategory}`, data).then((res) => {
-    //       console.log(res.msg);
-    //       if (res) {
-    //         getAlldata();
-    //         handleClose()
-    //       //  console.log("hello console");
-    //       }
-    //     }).catch((error) => {
-    //       console.log(error, 'error');
-    //       console.log("hello console");
-    //       handleClick()
-    //     })
-    //   }
-    }
-  
-  
-  
   
     const onDelhandler = (editData) => {
-      // console.log(editData, 'id');
-      // console.log(`http://192.168.18.117:5000/api/v1/products/${editData}`);
-      // axios.delete(`http://192.168.18.117:5000/api/v1/products/${editData}`).then((res) => {
-      //   console.log(res.msg);
-      //   getAlldata();
-          // let arr = category
-          // console.log(arr);
-          // let indexOfObject = arr.findIndex(object => {
-          //   return object._id === editData;
-          // });
-          // console.log(indexOfObject); // :point_right:️ 1
-          // setSanakbar(true);
-          // setArryCatagory(arr.splice(indexOfObject, 1))
-      // }).catch((error) => {
-      //   console.log(error, 'error');
-      // })
+      axios.delete(`http://192.168.18.117:5000/api/v1/office/${editData}`).then((res) => {
+        getAlldata();
+      }).catch((error) => {
+        console.log(error, 'error');
+      })
     }
   
   
   
-    const onEdithandler = (editDataId,editDataName) => {
-    //   setOpen(true)
-    //   console.log(editDataId, 'id');
-    //   console.log(editDataName,'editDataName');
-    //   setCategory(editDataName)
-    //   setImage('');
-    //   setIdCategory(editDataId)
-    //   console.log(`http://192.168.18.117:5000/api/v1/products/${editDataId}`);
+    const onEdithandler = (id,name, city, address ) => {
+      setEditOfficeDialog(true);
+      setEditName(name);
+      setEditAddress(address);
+      setEditCity(city);
+      setOfficeId(id);
     }
   
   
   
-    const navigate = useNavigate()
-  //   const [producst,setProdect]=React.useState('');
-  //   useEffect(() => 
-  //   { axios.get('http://192.168.18.117:5000/api/v1/products ').then((res) => 
-  //   { console.log(res.data.data); 
-  //     setProdect(res.data.data); 
-  //     console.log(setProdect, 'setProdect'); }).catch((error)=>{
-  // console.log(error,'error');
-  //     }) }, []);
-    const offices = [{
-      id:1,
-      name:"HP 15.6 inch portable laptop",
-      price:"1200",
-      photo:'https://sc04.alicdn.com/kf/Ha008f89f0b9e496f8ab478de7c4ca6d23.jpg',
-      colors:"black",
-      status:"active",
-      productQuantity:"6"
-  
-  
-    },{
-      id:2,
-      name:"MacBook Pro 2020 8GB Ram ",
-      cover:"coverimage",
-      price:"1200",
-      photo:'https://sc04.alicdn.com/kf/H781f8f65e0d34e9291b93164832bd0879.jpg',
-      colors:"black",
-      status:"active",
-      productQuantity:"90"
-  
-  
-    },{
-      id:3,
-      name:"Middle Back Cloth Chair",
-      cover:"coverimage",
-      price:"1200",
-      photo:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
-      colors:"black",
-      status:"active",
-      productQuantity:"78"
-  
-  
-    },{
-      id:4,
-      name:"Multi-functional Computer Table",
-      cover:"coverimage",
-      photo:'https://sc04.alicdn.com/kf/Hc781203418b1496da17a99f61ec8348dU.jpg',
-      price:"1200",
-      colors:"black",
-      status:"active",
-      productQuantity:"24"
-  
-  
-    },{
-      id:5,
-      name:"Modern Design Coffee Table",
-      cover:"coverimage",
-      price:"1200",
-      colors:"black",    
-      photo:'https://sc04.alicdn.com/kf/Hf2fcc8d04cc64a6080c4c30105a219bfp.jpg',
-      status:"active",
-      productQuantity:"120"
-  
-  
-    },{
-      id:6,
-      name:"Core i7 RAM 8GB ROM 256 GB Laptop Computer Notebook",
-      cover:"coverimage",
-      price:"1200",
-      photo:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
-      colors:"black",
-      status:"active",
-      productQuantity:"12"
-  
-  
-    },{
-      id:7,
-      name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
-      cover:"coverimage",
-      price:"1200",
-      colors:"black",
-      photo:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
-      status:"active",
-      productQuantity:"10"
-  
-  
-    },{
-      id:8,
-      name:"Pure Wooden Cabinet",
-      cover:"coverimage",
-      price:"1200",
-      colors:"black",
-      photo:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
-      status:"active",
-      productQuantity:"130"
-  
-  
-    }]
-  
-  
+    const navigate = useNavigate();
+
+
+
+      //Validation Check After Button Click
+  const handleCreateClickOpen = () => {
+    // Check if any field of Form is Empty
+    if (createName === '' || createAddress === '' || createCity === '' ) {
+      if (createName === '') {
+        setCreateNameError(true)
+      }
+      if (createAddress === '') {
+        setCreateAddressError(true)
+      }
+      if (createCity === '') {
+        setCreateCityError(true)
+      }
+
+    }
+    else {
+        createHandler();
+    }
+  };
+
+  const handleEditClickOpen = () => {
+    // Check if any field of Form is Empty
+    if ( editName === '' || editAddress === '' || editCity === '' ) {
+      if (editName === '') {
+        setEditNameError(true)
+      }
+      if (editAddress === '') {
+        setEditAddressError(true)
+      }
+      if (editCity === '') {
+        setEditCityError(true)
+      }
+
+    }
+    else {
+      editHandler();
+    }
+  };
+
     const createHandler = () => {
-        // if(catogoryId===''){
-        //   let data = new FormData();
-        //   data.append('name', brand );
-        //   data.append('demo', demo);
-        //   axios.post('http://192.168.18.117:5000/api/v1/productType', data).then((res) => {
-        //     console.log(res.data.data);
-        //     if(res){
-        //       handleClose()
-        //       getAlldata(); 
-        //     }
-        //     setCatogoryId('')
-           
-        //   }).catch((error) => {
-        //     console.log(error, 'error');
-        //   })
-        // }
-        // else{
-    
-        //   let data = new FormData();
-        //   data.append('name', brand);
       
-        //   axios.put(`http://192.168.18.117:5000/api/v1/productType/${catogoryId}`, data).then((res) => {
-        //     console.log(res.msg);
-        //     if (res) {
-        //       getAlldata();
-        //       handleClose()
-        //     //  console.log("hello console");
-        //     }
+        let data = new FormData();
+  
+        data.append('name', createName);
+        data.append('address', createAddress);
+        data.append('city', createCity);
+        data.append('longitude', "130.878633");
+        data.append('latitude', "79.526354");
+
+        const officeNameExist = offices.find((office) => {
+          return office.name === createName;
+        })
+
+        if (officeNameExist) {
+          setSnackBar(true);
+          // setCreateOfficeDialog(false);
+          return;
+        }
+
+        axios.post('http://192.168.18.117:5000/api/v1/office', data).then((res) => {
+            if(res){
+              handleCreateClose()
+              getAlldata(); 
+            }
+            setCreateName('');
+            setCreateCity('');
+            setCreateAddress('');
+          }).catch((error) => {
+            console.log(error, 'error');
+          })
+
+      }
+
+      const editHandler = () => {
+        let data = new FormData();
+  
+        data.append('name', editName);
+        data.append('address', editAddress);
+        data.append('city', editCity);
+
+        axios.put(`http://192.168.18.117:5000/api/v1/office/${officeId}`, data).then((res) => {
+            if (res) {
+              getAlldata();
+              handleEditClose()
+            //  console.log("hello console");
+            }
         
-        //   }).catch((error) => {
-        //     console.log(error, 'error');
-        //     console.log("hello console");
-    
-        //   })
-          
-        // }
-    
-        
-        // else{
-    
-        //   let data = new FormData();
-        //   data.append('name', category);
-      
-        //   axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
-        //     console.log(res.msg);
-        //     if (res) {
-        //       getAlldata();
-        //       handleClose()
-        //     //  console.log("hello console");
-        //     }
-        
-        //   }).catch((error) => {
-        //     console.log(error, 'error');
-        //     console.log("hello console");
-        //     handleClick()
-    
-        //   })
-          
-        // }
-       
+          }).catch((error) => {
+            console.log(error, 'error');
+          })
       }
   
-  
-  
-      
+      const libraries = ['places', 'drawing', 'geometry'];
+
+      const [mapTransform, setMapTransform] = React.useState(undefined);
+      const [mapContainerStyle, setMapContainerStyle] = React.useState({
+          width: "550",
+          height: "400",
+        });
+      const [mapZoom, setMapZoom] = React.useState(10);
+    
+      const mapRef = React.useRef();
+    
+      const onMapLoad = React.useCallback((map) => {
+        mapRef.current = map;
+      }, []);
+
+      const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setSnackBar(false);
+      };
+    
+      const action = (
+        <React.Fragment>
+          <Button color="secondary" size="small" onClick={handleClose}>
+            UNDO
+          </Button>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </React.Fragment>
+      );
+
     return (
         <>
 
@@ -435,8 +321,8 @@ const Offices = () => {
         </Card>
 
         <Dialog
-        open={open}
-        onClose={handleClose}
+        open={createOfficeDialog}
+        onClose={handleCreateClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -450,15 +336,15 @@ const Offices = () => {
 
               <Grid item lg={6} md={6} sm={6} xs={6}>
                 <TextField
-                  error={nameError}
+                  error={createNameError}
                   id="name"
                   label="Name"
                   placeholder="Enter Name"
                   size="small"
                   autoComplete="off"
-                  helperText={brandError === true ? "Field Required" : ''}
-                  value={name}
-                  onChange={(e) => handleChange(e, setName, setNameError)}
+                  helperText={createNameError === true ? "Field Required" : ''}
+                  value={createName}
+                  onChange={(e) => handleChange(e, setCreateName, setCreateNameError)}
                   variant="outlined"
                   fullWidth
 
@@ -466,101 +352,166 @@ const Offices = () => {
                 </Grid>
                 <Grid item lg={6} md={6} sm={6} xs={6}>
                 <TextField
-                  error={cityError}
+                  error={createCityError}
                   id="city"
                   label="City"
                   placeholder="Enter City"
                   size="small"
                   autoComplete="off"
-                  helperText={cityError === true ? "Field Required" : ''}
-                  value={city}
-                  onChange={(e) => handleChange(e, setAddress, setAddressError)}
+                  helperText={createCityError === true ? "Field Required" : ''}
+                  value={createCity}
+                  onChange={(e) => handleChange(e, setCreateCity, setCreateCityError)}
                   variant="outlined"
                   fullWidth
                 />
                 </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
                 <TextField
-                  error={addressError}
+                  error={createAddressError}
                   id="address"
                   label="Address"
                   placeholder="Enter Address"
                   size="small"
                   autoComplete="off"
-                  helperText={addressError === true ? "Field Required" : ''}
-                  value={address}
-                  onChange={(e) => handleChange(e, setAddress, setAddressError)}
+                  helperText={createAddressError === true ? "Field Required" : ''}
+                  value={createAddress}
+                  onChange={(e) => handleChange(e, setCreateAddress, setCreateAddressError)}
                   variant="outlined"
                   fullWidth
                 />
                 </Grid>
                 <Grid item lg={12} md={12} sm={12} xs={12}>
-                <Typography>Map</Typography>
+                <LoadScript googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`} libraries={libraries}>
+                <GoogleMap
+                id="map"
+                mapContainerStyle={{
+                  transformOrigin: 'left top',
+                  transform: mapTransform,
+                  width: `${mapContainerStyle.width}px`,
+                  height: `${mapContainerStyle.height}px`,
+                }}
+                zoom={mapZoom}
+                center={{lat: 33.738045, lng: 73.084488}}
+                onLoad={onMapLoad}
+                >
+                <Marker position = {{lat: 33.738045, lng: 73.084488}} />
+              </GoogleMap></LoadScript>
                 </Grid>
-                <Grid item lg={6} md={6} sm={6} xs={6}>
-                <TextField
-                  error={longitudeError}
-                  id="longitude"
-                  label="Longitude"
-                  placeholder="Enter Longitude"
-                  size="small"
-                  autoComplete="off"
-                  helperText={longitudeError === true ? "Field Required" : ''}
-                  value={longitude}
-                  onChange={(e) => handleChange(e, setAddress, setAddressError)}
-                  variant="outlined"
-                  fullWidth
-                />
-                </Grid><Grid item lg={6} md={6} sm={6} xs={6} spacing={3}>
-                <TextField
-                  error={latitudeError}
-                  id="latitude"
-                  label="Latitude"
-                  placeholder="Enter Longitude"
-                  size="small"
-                  autoComplete="off"
-                  helperText={latitudeError === true ? "Field Required" : ''}
-                  value={latitude}
-                  onChange={(e) => handleChange(e, setAddress, setAddressError)}
-                  variant="outlined"
-                  fullWidth
-                />
-              </Grid>
-
 
             </Grid>
 
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={createHandler}>
+          <Button onClick={handleCreateClose}>Cancel</Button>
+          <Button autoFocus onClick={handleCreateClickOpen}>
+            Confirm
+          </Button>
+        </DialogActions>
+        <Snackbar
+          open={snackBar}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Name already exists"
+          action={action}
+/>
+
+      </Dialog>
+        <Dialog
+        open={editOfficeDialog}
+        onClose={handleEditClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"EDIT OFFICE"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <br></br>
+            <Grid container spacing={3}>
+
+              <Grid item lg={6} md={6} sm={6} xs={6}>
+                <TextField
+                  error={editNameError}
+                  id="name"
+                  label="Name"
+                  placeholder="Enter Name"
+                  size="small"
+                  autoComplete="off"
+                  helperText={editNameError === true ? "Field Required" : ''}
+                  value={editName}
+                  onChange={(e) => handleChange(e, setEditName, setEditNameError)}
+                  variant="outlined"
+                  fullWidth
+
+                />
+                </Grid>
+                <Grid item lg={6} md={6} sm={6} xs={6}>
+                <TextField
+                  error={editCityError}
+                  id="city"
+                  label="City"
+                  placeholder="Enter City"
+                  size="small"
+                  autoComplete="off"
+                  helperText={editCityError === true ? "Field Required" : ''}
+                  value={editCity}
+                  onChange={(e) => handleChange(e, setEditCity, setEditCityError)}
+                  variant="outlined"
+                  fullWidth
+                />
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                <TextField
+                  error={editAddressError}
+                  id="address"
+                  label="Address"
+                  placeholder="Enter Address"
+                  size="small"
+                  autoComplete="off"
+                  helperText={editAddressError === true ? "Field Required" : ''}
+                  value={editAddress}
+                  onChange={(e) => handleChange(e, setEditAddress, setEditAddressError)}
+                  variant="outlined"
+                  fullWidth
+                />
+                </Grid>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
+                <LoadScript googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`} libraries={libraries}>
+                <GoogleMap
+                id="map"
+                mapContainerStyle={{
+                  transformOrigin: 'left top',
+                  transform: mapTransform,
+                  width: `${mapContainerStyle.width}px`,
+                  height: `${mapContainerStyle.height}px`,
+                }}
+                zoom={mapZoom}
+                center={{lat: 33.738045, lng: 73.084488}}
+                onLoad={onMapLoad}
+                >
+                <Marker position = {{lat: 33.738045, lng: 73.084488}} />
+              </GoogleMap></LoadScript>
+                </Grid>
+
+            </Grid>
+
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose}>Cancel</Button>
+          <Button autoFocus onClick={handleEditClickOpen}>
             Confirm
           </Button>
         </DialogActions>
 
-{/* snackbar */}
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
-      {/* <Snackbar
-        open={sopen}
-        autoHideDuration={5000}
-        onClose={handleClosed}
-        message="Note archived"
-        action={action}
-      /> */}
+        
 
-
-        {/* <Snackbar
-          open={sanakbar}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="Note archived"
-          action={action}
-        /> */}
       </Dialog>
 
-        <Tooltip title="Add Category">
-        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setOpen(true)}>
+        <Tooltip title="Add Office">
+        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setCreateOfficeDialog(true)}>
           <AddIcon />
         </Fab>
       </Tooltip>
