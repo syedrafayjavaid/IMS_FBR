@@ -39,6 +39,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { styled } from '@mui/system'
 import axios from 'axios';
 import { number } from 'prop-types';
+import { Model } from 'echarts';
 /////
 
 const dateStyles = makeStyles((theme) => ({
@@ -197,25 +198,25 @@ function getoffice(office, officeName, themesoffice) {
   const [quantity, setQuantity] = React.useState([]);
   const [productQuantity,setProductQuantity]= React.useState('')
   const [pcost, setPcost] = React.useState('');
-  const [sprice, setSprice] = React.useState('');
-  const [category, setCategory] = React.useState([]);
+  const [price, setPrice] = React.useState('');
+  const [productId, setproductId] = React.useState('');
+  const [product, setProduct] = React.useState([]);
   const [subCategory, setSubCategory] = React.useState('');
   const [color, setColor] = React.useState('');
   const [brand, setBrand] = React.useState('');
-  const [description, setDescription] = React.useState('');
+  const [purchaseOrder, setPurchaseOrder] = React.useState('');
   const [image, setImage] = React.useState('');
-  const [modelImage, setModelImage] = React.useState('');
+  const [QRCodeImage, setQRCodeImage] = React.useState('');
   const [categoryData, setCategoryData] = React.useState({});
   const [subcategoryData, setSubcategoryData] = React.useState({});
 const [product1,setProduct1]=React.useState([])
 const myclass = dateStyles();
 ///
 //API For the dialogbox
-const [purchaseItems,setPurchaseItems]=React.useState([]);
+const [purchaseBy,setPurchaseBy]=React.useState([]);
+const [PurchaseBy1,setPurchaseBy1]=React.useState('');
 ///dialog state
-const [model, setModel] = React.useState([]);
-
-
+const [model, setModel] = React.useState('');
 
   // web came code 
 
@@ -227,17 +228,25 @@ const [model, setModel] = React.useState([]);
   const qrRef = useRef(null);
 
 ///dialog 
-const [statusDialog,setStatusDialog]=React.useState([])
-const [officeDialog,setOfficeDialog]=React.useState([])
-const [purchasedDialog,setPurchasedDialog]=React.useState([])
-const [customerDialog,setCustomerDialog]=React.useState([])
-const [createdbyDialog,setCreatedbyDialog]=React.useState([])
-const [createdOnDialog,setCreatedOnDialog]=React.useState([])
-const [modifyByDialog,setModifyByDialog]=React.useState([])
-const [modifyOnDialog,setModifyOnDialog]=React.useState([])
-const [ownerShipDialog,setOwnerShipDialog]=React.useState([])
-const [vender,setVender]=React.useState([])
+const [statusDialog, setStatusDialog]=React.useState([])
+const [statusValue, setStatusValue]=React.useState('')
+const [officeDialog, setOfficeDialog]=React.useState([])
+const [officeNameList, setOfficeNameList]=React.useState('')
+const [purchasedDialog, setPurchasedDialog]=React.useState([])
+const [customerDialog, setCustomerDialog]=React.useState([])
+const [custodienId, setCustodienId]=React.useState([])
+const [createdBy, setCreatedBy]=React.useState('')
+const [createdAt, setCreatedAt]=React.useState('')
+const [modifyByDialog, setModifyByDialog]=React.useState([])
+const [modifyOnDialog, setModifyOnDialog]=React.useState([])
+const [ownership, setOwnerShipDialog]=React.useState([])
+const [ownerShip, setOwnerShip]=React.useState('')
+const [vender, setVender]=React.useState('')
+const [dataOfPurchase, setDateOfPurchase]=React.useState('')
+const [user, setUser]=React.useState('')
+
   const generateQrCode = async () => {
+
     try {
           const response = await QRCode.toDataURL(text1);
           setImageUrl1(response);
@@ -267,9 +276,6 @@ const [vender,setVender]=React.useState([])
 
 
 
-
-
-
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const handleChange = (e, func, errorFunc) => {
     func(e.target.value);
@@ -278,11 +284,11 @@ const [vender,setVender]=React.useState([])
   }
 
   
-  const handleModel = (e, func, errorFunc) => {
-    func(e.target.value);
-    console.log(e.target.model, e.target.value)
-    errorFunc(false)
-  }
+  // const handleModel = (e, func, errorFunc) => {
+  //   func(e.target.value);
+  //   console.log(e.target.model, e.target.value)
+  //   errorFunc(false)
+  // }
 
 
   const handleType = (event) => {
@@ -290,68 +296,92 @@ const [vender,setVender]=React.useState([])
     setQuantity(event.target.value);
   };
 
-  const handleType2 = (event) => {
+  const handleProduct = (event) => {
     console.log(event.target,'rula');
-    setCategory(event.target.value);
+    setproductId(event.target.value);
+  };
+  const handleModel = (event) => {
+    console.log(event.target.value,'rula');
+    setModel(event.target.value);
+  };
+
+  const handlePrice = (event) => {
+    console.log(event.target.value,'rula');
+    setPrice(event.target.value);
   };
 
   const handleStatusDialog = (event) => {
-    console.log(event.target,'rula');
-    setStatusDialog(event.target.value);
+    console.log(event.target.value,'rula');
+    setStatusValue(event.target.value);
   };
 
   const handleOfficeDialog = (event) => {
-    console.log(event.target,'rula');
-    setOfficeDialog(event.target.value);
+    console.log(event.target.value,'rula');
+    setOfficeNameList(event.target.value);
   };
 
+
   const handlePurchasedDialog = (event) => {
-    console.log(event.target,'rula');
-    setPurchasedDialog(event.target.value);
+    console.log(event.target.value,'rula');
+    setPurchaseBy1(event.target.value);
   };
 
   const handleCustomerDialog = (event) => {
-    console.log(event.target,'rula');
-    setCustomerDialog(event.target.value);
+   
+    setUser(event.target.value);
   };
 
-  const handleCreatedByDialog = (event) => {
-    console.log(event.target,'rula');
-    setCreatedbyDialog(event.target.value);
-  };
-  const handleCreatedOnDialog = (event) => {
-    console.log(event.target,'rula');
-    setCreatedOnDialog(event.target.value);
-  };
-  const handleModifyByDialog = (event) => {
-    console.log(event.target,'rula');
-    setModifyByDialog(event.target.value);
-  };
-  const handleModifyOnDialog = (event) => {
-    console.log(event.target,'rula');
-    setModifyOnDialog(event.target.value);
-  };
+  // const handleCreatedByDialog = (event) => {
+  //   console.log(event.target.value,'CreatedBy');
+  //   setCreatedBy(event.target.value);
+  // };
+  // const handleCreatedOnDialog = (event) => {
+  //   console.log(event.target.value,'CreatedAt');
+  //   setCreatedAt(event.target.value);
+  // };
+  // const handleModifyByDialog = (event) => {
+  //   console.log(event.target,'rula');
+  //   setModifyByDialog(event.target.value);
+  // };
+  // const handleModifyOnDialog = (event) => {
+  //   console.log(event.target,'rula');
+  //   setModifyOnDialog(event.target.value);
+  // };
   const handleOwenerShipeDialog = (event) => {
-    console.log(event.target,'rula');
-    setOwnerShipDialog(event.target.value);
+    console.log(event.target.value,'owenerShip');
+    setOwnerShip(event.target.value);
   };
   const handleVender = (event) => {
-    console.log(event.target,'rula');
+    console.log(event.target.value,'vender text value');
     setVender(event.target.value);
   };
+  const handlePurchasedDate = (event) => {
+    console.log(event.target.value,'vender text value');
+    setDateOfPurchase(event.target.value);
+  };
+//   const attachment = (e) => {
+//     attachment(e.target.files)
+//     console.log(e.target.files[0], 'image upload')
+// }
+
+const handlePhoto = (event) => {
+  console.log(event.target.files[0],'handle the photo');
+  setImage(event.target.files);
+};
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
-  }; const handleOpen = (id) => {
-    console.log(id,'id');
-    setOpen(true);
   };
-  const handleClickOpen2 = () => {
-    setOpen(true);
-  };
+  //  const handleOpen = (id) => {
+  //   console.log(id,'id');
+  //   setOpen(true);
+  // };
+  // const handleClickOpen2 = () => {
+  //   setOpen(true);
+  // };
 
-
+ 
 
 //   const handleImage=(e)=>{
 //     setImage(e.target.files[0])
@@ -364,35 +394,132 @@ const [vender,setVender]=React.useState([])
   }, []);
   const getAlldata = () => {
     axios.get('http://192.168.18.117:5000/api/v1/products').then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
+   
       setProduct1(res.data.data);
-      console.log(product1, 'all');
+       console.log(product1, 'setProduct1');
+    }).catch((error) => {
+      // console.log(error, 'error');
+    })
+
+    //product name fetch from the api
+
+    axios.get('http://192.168.18.117:5000/api/v1/productType').then((res) => {
+      // console.log(product, 'name_________product name');
+      // console.log(res.data.data);
+      setProduct(res.data.data);
+     
+    }).catch((error) => {
+      // console.log(error, 'error');
+    })
+    axios.get('http://192.168.18.117:5000/api/v1/office').then((res) => {
+      console.log(res.data.data);
+      setOfficeDialog(res.data.data);
+      console.log(model, 'model___model');
     }).catch((error) => {
       console.log(error, 'error');
     })
-    axios.get('http://192.168.18.117:5000/api/v1/category').then((res) => {
+    axios.get('http://192.168.18.117:5000/api/v1/auth/allUsers').then((res) => {
       console.log(res.data.data);
-      setCategory(res.data.data);
-      console.log(category, 'category');
+      setCustodienId(res.data.data);
+      
+     console.log(res.data.data, "res.data.data customer data");
     }).catch((error) => {
       console.log(error, 'error');
     })
-    axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
-      console.log(res.data.data);
-      setQuantity(res.data.data);
-      console.log(quantity, 'quantity');
+    //customker by name
+    
+    axios.get('http://192.168.18.117:5000/api/v1/employee').then((res) => {
+       const data = res.data.data;
+       const canPurchase = [];
+      var purcahedTrue = data.map((item)=> {
+        if(item.purchase == true){
+      
+          canPurchase.push(item);
+        }
+    });
+      setPurchaseBy(canPurchase);
+   
     }).catch((error) => {
       console.log(error, 'error');
     })
     axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
       console.log(res.data.data);
-      setPurchaseItems(res.data.data);
-      console.log(purchaseItems, 'status___________status');
+      setOwnerShipDialog(res.data.data);
+    //  console.log(purchaseBy, 'Purchase of the data');
     }).catch((error) => {
       console.log(error, 'error');
     })
   }
 
+ 
+
+
+///this is the  api of the text fileds data send to the next data
+const createHandler = () => {
+  let data = new FormData();
+
+  data.append('productId', productId);
+  data.append('price', price);
+  data.append('dataOfPurchase', dataOfPurchase);
+  data.append('ownership', ownerShip);
+  data.append('officeNameList', officeNameList);
+  data.append('statusValue', statusValue);
+ data.append('PurchaseBy1', PurchaseBy1);
+  data.append('vender', vender);
+  data.append('attachment', image);
+  data.append('QRCodeImage', imageUrl1);
+  data.append('user', user);
+ // console.log(scanResultFile);
+
+ 
+  axios.post('http://192.168.18.117:5000/api/v1/purchaseProduct', data).then((res) => {
+    console.log(res.data.data,"purchaseProduct ");
+    if(res){
+     // handleCreateClose()
+      getAlldata();
+      setOpen(false);
+    }
+    setDateOfPurchase('');
+    setModel('');
+    setPrice('');
+  
+    setVender('');
+   
+    
+  }).catch((error) => {
+    console.log(error, 'error');
+    // handleClick()
+  })
+}
+
+
+
+//////
+//error handling 
+// const handleCreateClickOpen = () => {
+//   if (createModel === '' || createOffice === '' || Price === '' || createVender === '' || createEmployeeId === '') {
+//     if (createName === '') {
+//       setCreateNameError(true)
+//     }
+//     if (createOffice === '') {
+//       setCreateOfficeError(true)
+//     }
+//     if (createCnic === '') {
+//       setCreateCnicError(true)
+//     }
+//     if (createDescription === '') {
+//       setCreateDescriptionError(true)
+//     }
+//     if (createEmployeeId === '') {
+//       setCreateEmployeeIdError(true)
+//     }
+//   } else {
+//     createHandler()
+//   }
+// }
+
+//aboue the send the api data of the text fileds data
 
   const checking = () => {
   //   if(imge){
@@ -523,8 +650,13 @@ const [vender,setVender]=React.useState([])
 
   return (
     <>
-      <Card style={{marginTop:"2"}}>
-      <FormControl sx={{ m: 1, width: 300 }}>
+     <Card >
+     <Typography variant="h4" sx={{ mb: 5 }}>
+        {/* Search Items */}
+        </Typography>
+            <Card style={{marginTop:"4"}}>
+        
+        {/* <FormControl sx={{ m: 1, width: 250 }}>
        
         <InputLabel id="demo-multiple-name-label">Category</InputLabel>
       
@@ -547,9 +679,9 @@ const [vender,setVender]=React.useState([])
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
        
-      <FormControl sx={{ m: 1, width: 300 }}>
+      {/* <FormControl sx={{ m: 1, width: 250 }}>
        
         <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
       
@@ -572,9 +704,9 @@ const [vender,setVender]=React.useState([])
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
        
-      <FormControl sx={{ m: 1, width: 300 }}>
+      {/* <FormControl sx={{ m: 1, width: 250 }}>
        
         <InputLabel id="demo-multiple-name-label">Status</InputLabel>
       
@@ -597,10 +729,9 @@ const [vender,setVender]=React.useState([])
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
       
-      <FormControl sx={{ m: 1, width: 300 }}>
-       
+      {/* <FormControl sx={{ m: 1, width: 250 }}>
         <InputLabel id="demo-multiple-name-label">Office</InputLabel>
       
         <Select
@@ -622,10 +753,10 @@ const [vender,setVender]=React.useState([])
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
 
 
-      <FormControl sx={{ m: 1, width: 300 ,marginTop:4}}>
+      {/* <FormControl sx={{ m: 1, width: 250 }}>
      <InputLabel id="demo-multiple-name-label">Price</InputLabel>
       <Slider
         getAriaLabel={() => 'Temperature range'}
@@ -634,7 +765,7 @@ const [vender,setVender]=React.useState([])
         valueLabelDisplay="auto"
         getAriaValueText={valuetext}
       />
-     </FormControl>
+     </FormControl> */}
       {/* <Box sx={{ width: 300 }}>
       <Slider
         getAriaLabel={() => 'Temperature range'}
@@ -653,12 +784,12 @@ const [vender,setVender]=React.useState([])
         </Fab>
     </Tooltip>
 
-    <Tooltip title="Search Items">
+    {/* <Tooltip title="Search Items">
         <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw",bottom:"17vh",position:"fixed"}} onClick={() => setOpen(true)}>
                 <SearchIcon />
             </Fab>
         </Tooltip>
-   
+    */}
 
      <Container>
           <br></br>
@@ -678,9 +809,12 @@ const [vender,setVender]=React.useState([])
         <br></br>
       </Container>
 
+          {/* this the data fetch on the purchase items on the dialogbox data */}
 
 
 
+</Card>
+            
 
       <Dialog
         open={open}
@@ -688,7 +822,7 @@ const [vender,setVender]=React.useState([])
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
+            >
         <DialogTitle id="alert-dialog-title">
           {"PURCHASE ITEMS"}
         </DialogTitle>
@@ -760,15 +894,24 @@ const [vender,setVender]=React.useState([])
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={category}
+      value={productId}
       label="Product Category"
-      onChange={handleType2}
+      onChange={handleProduct}
 
     >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
+                   {product1.map(
+                   (productList) => {
+                       return (
+                      <MenuItem
+                        value={productList._id}
+                         >
+                              {
+                    productList.name
+                             }
+                    </MenuItem>
+                           )
+                         }
+                   )}
     </Select>
   </FormControl>
 </Box>
@@ -793,7 +936,6 @@ const [vender,setVender]=React.useState([])
               />
 
 
-
             </Grid>
 
             <Grid item lg={4} md={4} sm={4} xs={6}  >
@@ -805,9 +947,9 @@ const [vender,setVender]=React.useState([])
   placeholder="Price"
   autoComplete="off"
   helperText={nameError === true ? "Field Required" : ''}
-  value={name}
+  value={price}
   size="small"
-  onChange={(e) => handleModel(e, setName, setNameError)}
+  onChange={(e) => handlePrice(e, setPrice, setNameError)}
   variant="outlined"
   fullWidth
 
@@ -863,9 +1005,9 @@ const [vender,setVender]=React.useState([])
                 placeholder="Purchase Order(PO)"
                 autoComplete="off"
                 helperText={nameError === true ? "Field Required" : ''}
-                value={description}
+                value={purchaseOrder}
                 size="small"
-                onChange={(e) => handleChange(e, setDescription, setNameError)}
+                onChange={(e) => handleChange(e, setPurchaseOrder, setNameError)}
                 variant="outlined"
                 fullWidth
 
@@ -902,7 +1044,7 @@ const [vender,setVender]=React.useState([])
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
 
                 <label htmlFor="contained-button-file">
-                  <Input accept="image/*" id="contained-button-file" multiple type="file"  />
+                  <Input accept="image/*" id="contained-button-file" multiple type="file"   onChange={handlePhoto} />
                   <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />} style={{width:'100%'}}>
                     Upload
                   </Button>
@@ -921,14 +1063,15 @@ const [vender,setVender]=React.useState([])
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={statusDialog}
+      value={statusValue}
       label="Status"
       onChange={handleStatusDialog}
   
     >
-      <MenuItem value={10}>Inuse</MenuItem>
-      <MenuItem value={20}>Replacement</MenuItem>
-      <MenuItem value={30}>Scrap</MenuItem>
+      
+      <MenuItem value={`inuse`}>Inuse</MenuItem>
+      <MenuItem value={`replacement`}>Replacement</MenuItem>
+      <MenuItem value={`scrap`}>Scrap</MenuItem>
     
     </Select>
   </FormControl>
@@ -945,15 +1088,24 @@ const [vender,setVender]=React.useState([])
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={officeDialog}
+      value={officeNameList}
       label="Office"
       onChange={handleOfficeDialog}
 
     >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
+      {officeDialog.map(
+                   (officeList) => {
+                       return (
+                      <MenuItem
+                        value={officeList._id}
+                         >
+                              {
+                    officeList.name
+                             }
+                    </MenuItem>
+                           )
+                         }
+                   )}
     </Select>
   </FormControl>
 </Box>
@@ -968,14 +1120,16 @@ const [vender,setVender]=React.useState([])
 <form className={myclass.container} noValidate>
       <TextField
         id="date" size='small'
-        label="Birthday"
+        label="Date Of Purchase"
         type="date"
+        value={dataOfPurchase}
         defaultValue="2017-05-24"
         className={myclass.textField}
         InputLabelProps={{
           shrink: true,
-
+         
         }}
+        onChange={handlePurchasedDate}
       />
     </form>
 
@@ -992,15 +1146,25 @@ const [vender,setVender]=React.useState([])
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={purchasedDialog}
+      value={PurchaseBy1}
       label="Purchased by"
+
       onChange={handlePurchasedDialog}
 
     >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
+      {purchaseBy.map(
+                   (pur) => {
+                       return (
+                      <MenuItem
+                        value={pur._id}
+                         >
+                              {
+                    pur.name
+                             }
+                    </MenuItem>
+                           )
+                         }
+                   )}
     </Select>
   </FormControl>
 </Box>
@@ -1016,15 +1180,24 @@ const [vender,setVender]=React.useState([])
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={customerDialog}
+      value={user}
       label="Customer Emp ID"
       onChange={handleCustomerDialog}
 
     >
-      <MenuItem value={10}>Sofa</MenuItem>
-      <MenuItem value={20}>Table</MenuItem>
-      <MenuItem value={30}>Laptop</MenuItem>
-      <MenuItem value={30}>Tablet</MenuItem>
+           {custodienId.map(
+                   (employee) => {
+                       return (
+                      <MenuItem
+                        value={employee._id}
+                         >
+                              {
+                    employee.employeeId
+                             }
+                    </MenuItem>
+                           )
+                         }
+                   )}
     </Select>
   </FormControl>
 </Box>
@@ -1044,7 +1217,7 @@ const [vender,setVender]=React.useState([])
 
                   
         
-          <Grid item lg={4} md={4} sm={4} xs={6}  >
+          {/* <Grid item lg={4} md={4} sm={4} xs={6}  >
 
 <TextField style={{"width":"160px"}}
   error={nameError}
@@ -1053,9 +1226,9 @@ const [vender,setVender]=React.useState([])
   placeholder="Created by"
   autoComplete="off"
   helperText={nameError === true ? "Field Required" : ''}
-  value={createdbyDialog}
+  value={createdBy}
   size="small"
-  onChange={(e) => handleCreatedByDialog(e, setCreatedbyDialog, setNameError)}
+  onChange={(e) => handleCreatedByDialog(e, setCreatedBy, setNameError)}
   variant="outlined"
   fullWidth
 
@@ -1070,13 +1243,13 @@ const [vender,setVender]=React.useState([])
 <TextField style={{"width":"160px"}}
   error={nameError}
   id="name"
-  label="Created on"
-  placeholder="Created on"
+  label="Created At"
+  placeholder="Created At"
   autoComplete="off"
   helperText={nameError === true ? "Field Required" : ''}
-  value={createdOnDialog}
+  value={createdAt}
   size="small"
-  onChange={(e) => handleCreatedOnDialog(e, setCreatedOnDialog, setNameError)}
+  onChange={(e) => handleCreatedOnDialog(e, setCreatedAt, setNameError)}
   variant="outlined"
   fullWidth
 
@@ -1126,23 +1299,23 @@ const [vender,setVender]=React.useState([])
 
 />
 
-</Grid>
+</Grid> */}
 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
 
-<Box sx={{ minWidth: 514 }}>
+<Box sx={{ minWidth: 145 }}>
   <FormControl size="small" fullWidth>
     <InputLabel id="demo-simple-select-label">OwnerShip</InputLabel>
     <Select
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      value={ownerShipDialog}
+      value={ownerShip}
       label="Customer Emp ID"
       onChange={handleOwenerShipeDialog}
 
     >
-      <MenuItem value={10}>PRAL</MenuItem>
-      <MenuItem value={20}>FBR</MenuItem>
+      <MenuItem value={`PRAL`}>PRAL</MenuItem>
+      <MenuItem value={`FBR`}>FBR</MenuItem>
      
     </Select>
   </FormControl>
@@ -1187,7 +1360,7 @@ const [vender,setVender]=React.useState([])
                                 <img src={imageUrl1} alt="img" style={{marginLeft: '24px'}}/>
                             </a>) : null}
                     </Grid>
-                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                    {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
                       <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
                       <QrReader
                         ref={qrRef}
@@ -1208,7 +1381,7 @@ const [vender,setVender]=React.useState([])
                        onScan={handleScanWebCam}
                        />
                        <h3>Code: {scanResultWebCam}</h3>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
         
         
@@ -1219,8 +1392,8 @@ const [vender,setVender]=React.useState([])
 <TextField style={{"width":"514px"}}
   error={nameError}
   id="name"
-  label="Vender"
-  placeholder="Vender"
+  label="Vendor"
+  placeholder="Vendor"
   autoComplete="off"
   helperText={nameError === true ? "Field Required" : ''}
   value={vender}
@@ -1235,10 +1408,6 @@ const [vender,setVender]=React.useState([])
           </Grid>
          
 
-
-
-
- 
         </CardContent>
 
 
@@ -1248,7 +1417,10 @@ const [vender,setVender]=React.useState([])
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={checking}>
+          <Button autoFocus onClick={()=>{
+          
+            createHandler();
+            }}>
             Confirm
           </Button>
         </DialogActions>

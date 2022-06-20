@@ -550,8 +550,6 @@ function AddProduct() {
             <Grid item lg={4} md={4} sm={4} xs={4}  >
 
 
-
-
             </Grid>
             <Grid item lg={4} md={4} sm={4} xs={4}  >
 
@@ -614,15 +612,6 @@ function AddProduct() {
           </Button>
         </DialogActions>
       </Dialog>
-
-
-
-
-
-
-
-
-
 
 
 
