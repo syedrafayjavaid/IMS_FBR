@@ -36,6 +36,7 @@ import { styled } from '@mui/system'
 import axios from 'axios'
 import QRCode from 'qrcode'
 import CloseIcon from '@mui/icons-material/Close'
+import config from "../../../config"
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -283,7 +284,7 @@ const ProductsList = () => {
                 console.log(error, 'error')
             })
         axios
-            .get('http://192.168.18.117:5000/api/v1/category')
+            .get(config.base_url + '/api/v1/category')
             .then((res) => {
                 console.log(res.data.data)
                 setCategory(res.data.data)
@@ -293,7 +294,7 @@ const ProductsList = () => {
                 console.log(error, 'error')
             })
         axios
-            .get('http://192.168.18.117:5000/api/v1/productType ')
+            .get(config.base_url + '/api/v1/productType ')
             .then((res) => {
                 console.log(res.data.data)
                 setQuantity(res.data.data)
@@ -303,7 +304,7 @@ const ProductsList = () => {
                 console.log(error, 'error')
             })
         axios
-            .get('http://192.168.18.117:5000/api/v1/brand')
+            .get(config.base_url + '/api/v1/brand')
             .then((res) => {
                 console.log(res.data.data)
                 setBrands(res.data.data)
@@ -339,7 +340,7 @@ const ProductsList = () => {
             }
 
             axios
-                .post('http://192.168.18.117:5000/api/v1/products ', data)
+                .post(config.base_url + '/api/v1/products ', data)
                 .then((res) => {
                     console.log(res.data.data)
                     if (res) {
@@ -381,7 +382,7 @@ const ProductsList = () => {
         data.append('detail', editDescription);
 
 
-        axios.put(`http://192.168.18.117:5000/api/v1/products/${productId}`, data).then((res) => {
+        axios.put(config.base_url + `/api/v1/products/${productId}`, data).then((res) => {
             console.log(res.msg);
             if (res) {
                 getAlldata();
@@ -396,7 +397,7 @@ const ProductsList = () => {
     const onDelhandler = (editData) => {
         console.log(editData, 'id')
         axios
-            .delete(`http://192.168.18.117:5000/api/v1/products/${editData}`)
+            .delete(config.base_url + `/api/v1/products/${editData}`)
             .then((res) => {
                 getAlldata()
             })
