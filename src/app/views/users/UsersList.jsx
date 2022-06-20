@@ -178,7 +178,7 @@ const UsersList = () => {
         data.append('purchase', createChecked)
 
         const userNameExist = users.find((user) => {
-            return user.name === createName
+            return user.employeeId === createEmployeeId
         })
 
         if (userNameExist) {
@@ -217,14 +217,14 @@ const UsersList = () => {
         data.append('employeeId', editEmployeeId)
         data.append('purchase', editChecked)
 
-        const userNameExist = users.find((user) => {
-            return user.name === editName
-        })
+        // const userNameExist = users.find((user) => {
+        //     return user.name === editName
+        // })
 
-        if (userNameExist) {
-            setSnackBar(true)
-            return;
-        }
+        // if (userNameExist) {
+        //     setSnackBar(true)
+        //     return;
+        // }
 
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
@@ -236,7 +236,10 @@ const UsersList = () => {
                 }
             })
             .catch((error) => {
-                console.log(error, 'error')
+                if(error.message === "Request failed with status code 400")
+            {
+                setSnackBar(true);
+            }
             })
     }
 
@@ -534,7 +537,7 @@ const UsersList = () => {
                     open={snackBar}
                     autoHideDuration={5000}
                     onClose={handleCreateClosed}
-                    message="Name Already Exists"
+                    message="Employee with same Id already exists"
                     action={createAction}
                 />
             </Dialog>
@@ -720,7 +723,7 @@ const UsersList = () => {
                     open={snackBar}
                     autoHideDuration={5000}
                     onClose={handleEditClosed}
-                    message="Name Already Exists"
+                    message="Employee with same Id already exists"
                     action={editAction}
                 />
             </Dialog>

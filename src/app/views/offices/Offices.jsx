@@ -108,6 +108,7 @@ const Offices = () => {
     const [editOfficeDialog, setEditOfficeDialog] = React.useState(false);
   
     const handleCreateClose = () => {
+      setSnackBar(false);
       setCreateOfficeDialog(false);
     }; 
     const handleEditClose = () => {
@@ -207,6 +208,8 @@ const Offices = () => {
           setSnackBar(true);
           return;
         }
+
+        setSnackBar(false);
 
         axios.post(`${config.base_url}/api/v1/office`, data).then((res) => {
             if(res){
@@ -421,7 +424,7 @@ const Offices = () => {
           </Button>
         </DialogActions>
         <Snackbar
-          open={snackBarTrue}
+          open={snackBar}
           autoHideDuration={6000}
           onClose={handleClose}
           message="Name already exists"

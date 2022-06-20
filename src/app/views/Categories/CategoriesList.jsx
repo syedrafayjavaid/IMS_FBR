@@ -364,7 +364,7 @@ const handleClosep = (event, reason) => {
         </DialogActions>
       <Snackbar
         open={sopen}
-        autoHideDuration={5000}
+        autoHideDuration={2000}
         onClose={handleClosed}
         message="Name already exists"
         action={action}
@@ -429,7 +429,7 @@ const handleClosep = (event, reason) => {
 
 <Snackbar
         open={popen}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handlepClose}
         message="Name already exists"
         action={paction}
