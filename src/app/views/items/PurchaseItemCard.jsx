@@ -8,11 +8,8 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import config from 'config'
-
 const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
-
     const navigate = useNavigate()
-
     const UserImgStyle = styled('img')({
         top: 0,
         width: '100%',
@@ -20,15 +17,16 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
         objectFit: 'cover',
         position: 'absolute',
     })
-
     const imgeBaseUrl = 'uploads/'
-
     // const onEditHandler = () => {
     //     onEdit(purchaseItem._id, purchaseItem)
     // }
-
     const onDeleteHandler = () => {
         onDelete(purchaseItem._id)
+    }
+
+    const onEditHandler = () => {
+        onEdit(purchaseItem._id, purchaseItem)
     }
 
     const navigateToDetailsPage = () => {
@@ -42,7 +40,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
                         alt="No Image"
-                        src={config.base_url + '/' + imgeBaseUrl + purchaseItem.photo}
+                        src={config.base_url + '/' + imgeBaseUrl + purchaseItem.attachment}
                     />
                 </CardMedia>
                 <CardContent>
@@ -104,7 +102,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                         <button onClick={onDeleteHandler}>
                             <DeleteIcon />
                         </button>
-                        <button>
+                        <button  onClick={onEditHandler}>
                             <EditIcon />
                         </button>
                     </Typography>
@@ -113,5 +111,4 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
         </Card>
   )
 }
-
 export default PurchaseItemCard
