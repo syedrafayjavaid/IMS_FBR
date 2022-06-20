@@ -22,6 +22,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import config from 'config';
 
 
 
@@ -130,11 +131,6 @@ const paction = (
     </IconButton>
   </React.Fragment>
 );
-///////
-  
-    
-
-
 
   const handleChange = (e, func, errorFunc) => {
     func(e.target.value);
@@ -145,82 +141,13 @@ const paction = (
   const Input = styled('input')({
     display: 'none',
   });
-
-
-
-  // const products = [{
-  //   id: 1,
-  //   name: "TABLES",
-  //   price: "1200",
-  //   coverImage: 'https://img.made.com/image/upload/c_pad,d_madeplusgrey.svg,f_auto,w_768,dpr_2.0,q_auto:good,b_rgb:f5f6f4/v4/catalog/product/asset/3/2/b/e/32be1f750db0ebaaa7f06a4fe36e3ac7088aaa6b_TBLDVI017BLK_UK_Deauville_Extending_Dining_Table_Oak_Charcoal_Black_ar3_2_LB01_PS.png',
-  //   colors: "black",
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }, {
-  //   id: 3,
-  //   name: "CHAIRS",
-  //   cover: "coverimage",
-  //   price: "1200",
-  //   coverImage: 'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
-  //   colors: "black",
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }, {
-  //   id: 4,
-  //   name: "SOFAS",
-  //   cover: "coverimage",
-  //   coverImage: 'https://sc04.alicdn.com/kf/H197463f73be24ae5b8ca20cd671736bcf.jpg',
-  //   price: "1200",
-  //   colors: "black",
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }, {
-  //   id: 6,
-  //   name: "LAPTOPS",
-  //   cover: "coverimage",
-  //   price: "1200",
-  //   coverImage: 'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
-  //   colors: "black",
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }, {
-  //   id: 7,
-  //   name: "LED'S",
-  //   cover: "coverimage",
-  //   price: "1200",
-  //   colors: "black",
-  //   coverImage: 'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }, {
-  //   id: 8,
-  //   name: "CABNET'S",
-  //   cover: "coverimage",
-  //   price: "1200",
-  //   colors: "black",
-  //   coverImage: 'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
-  //   status: "active",
-  //   priceSale: "1200"
-
-
-  // }]
   const [arryCatagory, setArryCatagory] = React.useState([])
   useEffect(() => {
     getAlldata();
   }, []);
 
   const getAlldata = () => {
-    axios.get('http://192.168.18.117:5000/api/v1/category').then((res) => {
+    axios.get(`${config.base_url}/api/v1/category`).then((res) => {
       console.log(res.data.data);
       setArryCatagory(res.data.data);
       console.log(arryCatagory, 'arry');
@@ -232,44 +159,36 @@ const paction = (
 
   const handleImage = (e) => {
     setImage(e.target.files[0])
-    console.log(e.target.files[0], 'e.target.files[0]');
   }
   const checking = () => {
-    if(imge){
+   
       let data = new FormData();
       data.append('file', imge);
       data.append('name', category);
       data.append('modifiedBy', modifiedBy);
       data.append('createdBy', createdBy);
-      console.log(data.value, 'data');
 
-  
-
-      const producst =  arryCatagory.find((index) => {
-        return index.name === category;
-      })
-      if (producst) {
-      checking();
+      // const producst =  arryCatagory.find((index) => {
+      //   return index.name === category;
+      // })
+      // if (producst) {
+      // checking();
       
-        return;
-      }
+      //   return;
+      // }
 
     
-        axios.post('http://192.168.18.117:5000/api/v1/category', data).then((res) => {
+        axios.post(`${config.base_url}/api/v1/category`, data).then((res) => {
           console.log(res.data.data);
           if(res){
             handleClose()
             getAlldata();
           }
-         
+
         }).catch((error) => {
           console.log(error, 'error');
-          handleClick()
         })
-     
-
-      
-    }
+    
   
   }
 
@@ -277,27 +196,28 @@ const paction = (
   const editfun = () =>{
     let data = new FormData();
     data.append('name', category1);
-    const producst = arryCatagory.find((index) => {
-      return index.name === category1;
-    })
-    if (producst) {
-     checking();
+    data.append('file', imge)
+    // const producst = arryCatagory.find((index) => {
+    //   return index.name === category;
+    // })
+    // if (producst) {
+    //  checking();
      
     
-      return;
-    }
-    axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
+    //   return;
+    // }
+    axios.put(`${config.base_url}/api/v1/category/${idCategory}`, data).then((res) => {
       console.log(res.msg);
       if (res) {
         getAlldata();
         handleClose1()
-      //  console.log("hello console");
       }
   
     }).catch((error) => {
-      console.log(error, 'error');
-      console.log("hello console");
-      handleClick1()
+      if(error.message === "Request failed with status code 400")
+            {
+              setsOpen(true);
+            }
 
     })
     
@@ -322,40 +242,20 @@ const paction = (
     }
   }
   const onDelhandler = (editData) => {
-    console.log(editData, 'id');
-    console.log(`http://192.168.18.117:5000/api/v1/category/${editData}`);
-    axios.delete(`http://192.168.18.117:5000/api/v1/category/${editData}`).then((res) => {
+    axios.delete(`${config.base_url}/api/v1/category/${editData}`).then((res) => {
       console.log(res.msg);
       getAlldata();
-        // let arr = category
-        // console.log(arr);
-        // let indexOfObject = arr.findIndex(object => {
-        //   return object._id === editData;
-        // });
-
-        // console.log(indexOfObject); // 👉️ 1
-
-        // setSanakbar(true);
-        // setArryCatagory(arr.splice(indexOfObject, 1))
-
-      
     }).catch((error) => {
       console.log(error, 'error');
     })
 
   }
   const onEdithandler = (editDataId,editDataName) => {
-
-   
     setOpen1(true)
-    console.log(editDataId, 'id');
-    console.log(editDataName,'editDataName');
-    setCategory(editDataName)
     setCategory1(editDataName)
     setImage('');
     setIdCategory(editDataId)
 
-    console.log(`http://192.168.18.117:5000/api/v1/category/${editDataId}`);
   }
 
 
@@ -371,21 +271,6 @@ const handleClosep = (event, reason) => {
 
   setpOpen(false);
 };
-const actionp = (
-  <React.Fragment>
-    <Button color="secondary" size="small" onClick={handleClosep}>
-      UNDO
-    </Button>
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={handleClosep}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
-  </React.Fragment>
-);
 
   return (
     <>
@@ -400,9 +285,9 @@ const actionp = (
           Categories
         </Typography>
         <Grid container spacing={3} >
-          {arryCatagory.map((product) => (
-            <Grid key={product._id} item xs={12} sm={6} md={3}  >
-              <CategoryCard product={product} onEdit={onEdithandler} onDelete={onDelhandler} />
+          {arryCatagory.map((category) => (
+            <Grid key={category._id} item xs={12} sm={6} md={3}  >
+              <CategoryCard category={category} onEdit={onEdithandler} onDelete={onDelhandler} />
             </Grid>
           ))}
         </Grid>
@@ -450,9 +335,6 @@ const actionp = (
                 <span>Active</span>
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-
-
-
               </Grid>
               <Grid item lg={4} md={4} sm={4} xs={4}>
 
@@ -465,12 +347,7 @@ const actionp = (
                   </Button>
                 </label>
 
-
-
               </Grid>
-
-
-
 
             </Grid>
 
@@ -478,35 +355,21 @@ const actionp = (
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={()=>{checking();
+          <Button autoFocus onClick={()=>{
           handleOpenClick();
 
          }} >
             Confirm
           </Button>
         </DialogActions>
-
-{/* snackbar */}
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
       <Snackbar
         open={sopen}
         autoHideDuration={5000}
         onClose={handleClosed}
-        message="Your image fields is data is not valid"
+        message="Name already exists"
         action={action}
       />
-
-
-        {/* <Snackbar
-          open={sanakbar}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="Note archived"
-          action={action}
-        /> */}
       </Dialog>
-
-            {/* ///Editing Dialog */}
 
             <Dialog
         open={open1}
@@ -539,20 +402,7 @@ const actionp = (
                 />
 
               </Grid>
-
-{/* 
-              <Grid item lg={3} md={3} sm={3} xs={3}   >
-
-                <span>Active</span>
-                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-              </Grid> */}
               <Grid item lg={4} md={4} sm={4} xs={4}   >
-
-
 
                 <label htmlFor="contained-button-file">
                   <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleImage} />
@@ -561,12 +411,7 @@ const actionp = (
                   </Button>
                 </label>
 
-
-
               </Grid>
-
-
-
 
             </Grid>
 
@@ -582,29 +427,14 @@ const actionp = (
           </Button>
         </DialogActions>
 
-{/* snackbar */}
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
-      {/* <Snackbar
-        open={sopen}
-        autoHideDuration={5000}
-        onClose={handleClosed}
-        message="Your image fields is data is not valid"
-        action={paction}
-      /> */}
-
-
 <Snackbar
         open={popen}
         autoHideDuration={6000}
         onClose={handlepClose}
-        message="Edit Confirm"
+        message="Name already exists"
         action={paction}
       />
       </Dialog>
-
-
-    
-    
 
     </>
 

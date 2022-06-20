@@ -30,7 +30,6 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const ProductTypeCard = ({product, onEdit, onDelete}) => {
 
     const navigate = useNavigate()
-    const url='http://192.168.18.117:5000/';
     
   
   

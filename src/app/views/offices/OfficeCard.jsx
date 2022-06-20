@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 const OfficeCard = ({office, onEdit, onDelete}) => {
 
     const navigate = useNavigate()
-    const url = 'http://192.168.18.117:5000/'
 
     const adiitHandler = (adit) => {
         onEdit(office._id, office.name, office.address, office.city, office.longitude, office.latitude);

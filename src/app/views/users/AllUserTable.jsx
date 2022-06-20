@@ -1,35 +1,24 @@
-import React from 'react'
-import { Paragraph } from 'app/components/Typography'
-import { Box, styled, useTheme } from '@mui/system'
-import { useNavigate } from 'react-router-dom'
-import AddIcon from '@mui/icons-material/Add';
-import { Grid, Switch } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import { Grid } from '@mui/material';
+import { Box, styled, useTheme } from '@mui/system';
+import { Paragraph } from 'app/components/Typography';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
-import Button from '@mui/material/Button';
 import {
-    Card,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Avatar,
-    MenuItem,
-    Select,
-} from '@mui/material'
+  Card, MenuItem,
+  Select, Table, TableBody, TableCell, TableHead,
+  TableRow
+} from '@mui/material';
+import Button from '@mui/material/Button';
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -117,9 +106,6 @@ const AllUsersTable = () => {
     return (
         <>
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-            {/* <CardHeader>
-                <Title>Apple MacBook X512FL-EJ723T 10th Gen Intel Core i9</Title>
-            </CardHeader> */}
             <Box overflow="auto">
                 <ProductTable>
                     <TableHead>
@@ -208,30 +194,12 @@ const AllUsersTable = () => {
 
 
               <Grid item lg={3} md={3} sm={3} xs={3}   >
-{/* 
-                <span>Demo</span>
-                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-
-
-
 
               </Grid>
               <Grid item lg={4} md={4} sm={4} xs={4}   >
 
 
-
-                {/* <label htmlFor="contained-button-file">
-                  <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleImage} />
-                  <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />}>
-                    Upload
-                  </Button>
-                </label> */}
-
-
-
               </Grid>
-
-
 
 
             </Grid>
@@ -245,24 +213,6 @@ const AllUsersTable = () => {
           </Button>
         </DialogActions>
 
-{/* snackbar */}
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
-      {/* <Snackbar
-        open={sopen}
-        autoHideDuration={5000}
-        onClose={handleClosed}
-        message="Note archived"
-        action={action}
-      /> */}
-
-
-        {/* <Snackbar
-          open={sanakbar}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="Note archived"
-          action={action}
-        /> */}
       </Dialog>
 
     

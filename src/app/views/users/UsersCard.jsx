@@ -1,27 +1,16 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 // material
-import {
-    Box,
-    Card,
-    Link,
-    Typography,
-    Stack,
-    CardMedia,
-    CardContent,
-    CardActions,
-    Button,
-} from '@mui/material'
-import { styled } from '@mui/material/styles'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import {
+    Box,
+    Card, CardActions, CardContent, CardMedia, Stack, Typography
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
+import config from 'config'
 
 const UsersCard = ({ user, onDelete, onEdit }) => {
     const navigate = useNavigate()
-    const viewUser = (user) => {
-        navigate('/user/details', { state: { id: user._id } })
-        console.log('Card Clicked')
-    }
 
     const UserImgStyle = styled('img')({
         top: 0,
@@ -31,7 +20,6 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
         position: 'absolute',
     })
 
-    const url = 'http://192.168.18.117:5000/'
     const imgeBaseUrl = 'uploads/'
 
     const onEditHandler = () => {
@@ -56,7 +44,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
                         alt="No Image"
-                        src={url + imgeBaseUrl + user.photo}
+                        src={config.base_url + '/' + imgeBaseUrl + user.photo}
                     />
                 </CardMedia>
                 <CardContent>

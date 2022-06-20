@@ -1,24 +1,11 @@
-import React ,{ useEffect, useRef }  from 'react'
+import { Card, Grid } from '@mui/material'
 import { Box, styled } from '@mui/system'
-import { Card,CardContent,Grid } from '@mui/material'
-import Switch from '@mui/material/Switch';
-import Button from '@mui/material/Button';
-import { Fab  } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { Router, useLocation, useNavigate, useParams } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import ALLProductsTable from 'app/components/products/AllProductTable';
-import { Tune } from '@mui/icons-material';
-import AllUsersTable from './AllUserTable';
-import axios from 'axios';
-import moment from 'moment';
-
-
-
-
-
-
-const label = { inputProps: { 'aria-label': 'Switch demo' } };
+import axios from 'axios'
+import config from 'config'
+import moment from 'moment'
+import React, { useEffect, useRef } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import AllUsersTable from './AllUserTable'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -33,8 +20,7 @@ const Title = styled('span')(() => ({
     fontSize: '1rem',
     fontWeight: '500',
     textTransform: 'capitalize',
-    display:"flex",
- 
+    display: 'flex',
 }))
 
 const FlexBox = styled(Box)(() => ({
@@ -42,11 +28,9 @@ const FlexBox = styled(Box)(() => ({
     alignItems: 'center',
 }))
 
-
 const JustifyBox = styled(FlexBox)(() => ({
     justifyContent: 'center',
 }))
-
 
 const ContentBox = styled(JustifyBox)(() => ({
     padding: '32px',
@@ -55,154 +39,148 @@ const ContentBox = styled(JustifyBox)(() => ({
 
 const IMG = styled('img')(() => ({
     width: '100%',
-    height:'100%'
+    height: '100%',
 }))
 
-
-
-
-
-const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop) 
-
+const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
 
 const UserDetail = () => {
-
     const navigate = useNavigate()
 
     // States
-    const [showTable, setShowTable] = React.useState(false);
+    const [showTable, setShowTable] = React.useState(false)
 
+    const showTbl = () => {
+        setShowTable(true)
+    }
 
+    const myRef = useRef(null)
+    const executeScroll = () => scrollToRef(myRef)
 
-const showTbl = () => {
-   
-    setShowTable(true)
+    const { state } = useLocation()
 
-    
-}
+    const [userData, setUserData] = React.useState(null)
 
+    useEffect(() => {
+        getAlldata()
+    }, [])
+    const getAlldata = () => {
+        axios
+            .get(`${config.base_url}/api/v1/employee/${state.id}`)
+            .then((res) => {
+                setUserData(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
 
-const myRef = useRef(null)
-const executeScroll = () => scrollToRef(myRef)
+    const imgeBaseUrl = 'uploads/'
 
-
-const {state} = useLocation();
-
-console.log(state);
-
-const [userData, setUserData] = React.useState(null)
-
-useEffect(() => {
-    getAlldata();
-  }, []);
-  const getAlldata = () => {
-    axios.get(`http://192.168.18.117:5000/api/v1/employee/${state.id}`).then((res) => {
-      setUserData(res.data.data);
-    }).catch((error) => {
-      console.log(error, 'error');
-    })
-  }
-
-  const url='http://192.168.18.117:5000/';
-  const imgeBaseUrl='uploads/';
-
-  return (
-            <>
-    
-          <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
+    return (
+        <>
+            <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
-                <Title>USER DETAILS</Title>
+                    <Title>USER DETAILS</Title>
                 </CardHeader>
-                    <hr></hr>
+                <hr></hr>
                 <Grid container>
-                <Grid item lg={5} md={5} sm={12} xs={12}>
-                            <ContentBox >
-                                <IMG
-                                src={url+imgeBaseUrl+userData?.photo}
+                    <Grid item lg={5} md={5} sm={12} xs={12}>
+                        <ContentBox>
+                            <IMG
+                                src={
+                                    config.base_url +
+                                    '/' +
+                                    imgeBaseUrl +
+                                    userData?.photo
+                                }
                                 alt=""
-                                />
-                            </ContentBox>
+                            />
+                        </ContentBox>
+                    </Grid>
+                    <Grid
+                        item
+                        lg={7}
+                        md={7}
+                        sm={12}
+                        xs={12}
+                        style={{ padding: '1rem 3rem' }}
+                    >
+                        <h3>{userData?.name}</h3>
+                        <Grid container>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Office:</span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                    {userData?.office}
+                                    </b>
+                                </span>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>CNIC:</span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                    {userData?.CNIC}
+                                    </b>
+                                </span>
+                            </Grid>
+                        </Grid>
 
-                </Grid>
-                <Grid item lg={7} md={7} sm={12} xs={12} style={{padding: "1rem 3rem"}}>
-                <h3>{userData?.name}</h3>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box style={{marginRight: "9.9rem"}}>
-                            <span>Office:</span>
-                            <span>{userData?.office}</span>
-                        </Box>
+                        <hr></hr>
+                        <Grid container>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Created Date: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {moment(userData?.createdAt).format(
+                                            'LL'
+                                        )}
+                                    </b>
+                                </span>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Modification Date: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {userData?.modifiedAt === undefined
+                                            ? moment(
+                                                  userData?.createdAt
+                                              ).format('LL')
+                                            : moment(
+                                                  userData?.modifiedAt
+                                              ).format('LL')}
+                                    </b>
+                                </span>
+                            </Grid>
+                        </Grid>
+                        <hr></hr>
+                        <Grid container>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Purchase: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {userData?.purchase ? 'true' : 'false'}
+                                    </b>
+                                </span>
+                            </Grid>
+                        </Grid>
+                        <hr></hr>
                         <Box>
-                            <span>CNIC:</span>
-                            <span>{userData?.CNIC}</span>
-                        </Box>  
-                    </Box>
-                    
-                    {/* <hr></hr> */}
-                    
-                    {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <span>Categoery Name: </span>
-                            <h4 style={{color: "rgba(52, 49, 76, 0.54)", margin: "0rem", paddingLeft: "0.8rem"}}>LAPTOPS</h4>
+                            <h4>Detail: </h4>
+                            {userData?.detail}
                         </Box>
-                        <Box>
-                            <span>Quantity: </span>
-                            <span><b>23</b></span>
-                        </Box>
-                        <Box>
-                            <span>Active</span>
-                            <Switch {...label} defaultChecked />
-                        </Box>
-                    </Box> */}
-                    
-                    <hr></hr>
-                    <Box sx={{ display: 'flex'}} style={{paddingTop: "1rem"}}>
-                        <Box style={{marginRight: "8rem"}}>
-                            <span>Created Date: </span>
-                            <span style={{color: 'green'}}><b>{ moment(userData?.createdAt).format('MMMM d, YYYY') }</b></span>
-                        </Box>
-                        <Box>
-                            <span>Modification Date: </span>
-                            <span style={{color: 'green'}}><b>{userData?.modifiedAt === undefined ? moment(userData?.createdAt).format('MMMM d, YYYY') : moment(userData?.modifiedAt).format('MMMM d, YYYY')}</b></span>
-                        </Box>
-                    </Box>
-
-                    <hr></hr>
-                    <Box>
-                    <h4>Detail: </h4>    
-                    {userData?.detail}
-                    </Box>
-                    {/* <Box>
-                        <br></br>
-                        <Button variant='contained'  onClick={showTbl} >Inventory Details</Button>
-                        
-                    </Box> */}
-                </Grid>
-
-            
+                    </Grid>
                 </Grid>
             </Card>
-
-
-
-   
-    { showTable ===true ? 
-
-   
-
-            <Card  elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
-            <AllUsersTable ></AllUsersTable>
-            </Card>
-                
-                :""}
-            
-   
-   
-            </>
-  
-
-
-   
-  )
+            {showTable === true ? (
+                <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
+                    <AllUsersTable></AllUsersTable>
+                </Card>
+            ) : (
+                ''
+            )}
+        </>
+    )
 }
 
 export default UserDetail

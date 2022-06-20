@@ -8,11 +8,11 @@ export const navigations = [
         label: 'ALL PAGES',
         type: 'label',
     },
-    {
-        name: 'Users',
-        icon: 'group',
-        path:'/session/signin'
-    },
+    // {
+    //     name: 'Users',
+    //     icon: 'group',
+    //     path:'/session/signin'
+    // },
     {
         name: 'Employee',
         icon: 'group',
@@ -53,22 +53,22 @@ export const navigations = [
         icon: 'shopping_cart_checkout',
         path: '/products/list'
     },
-    {
-        name: 'QR',
-        icon: 'qr_code',
-        path: '/qrCode/main'
-    },
+    // {
+    //     name: 'QR',
+    //     icon: 'qr_code',
+    //     path: '/qrCode/main'
+    // },
     
-    {
-        name: 'QR with Scane',
-        icon: 'qr_code',
-        path: '/qrCode/list'
-    },
-    {
-        name: 'Location',
-        icon: 'gps_fixed',
-        path: '/mapMain/main'
-    },
+    // {
+    //     name: 'QR with Scane',
+    //     icon: 'qr_code',
+    //     path: '/qrCode/list'
+    // },
+    // {
+    //     name: 'Location',
+    //     icon: 'gps_fixed',
+    //     path: '/mapMain/main'
+    // },
     // {
     //     label: 'Components',
     //     type: 'label',

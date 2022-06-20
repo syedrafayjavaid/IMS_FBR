@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 const BrandCard = ({brand, onEdit, onDelete}) => {
 
     const navigate = useNavigate()
-    const url = 'http://192.168.18.117:5000/'
 
     const adiitHandler = () => {
         onEdit(brand._id, brand.name)

@@ -34,6 +34,7 @@ import {
 } from '@mui/material'
 import ProductTypeCard from 'app/components/productType/ProductTypeCard';
 import axios from 'axios';
+import config from 'config';
 
 
 const CardHeader = styled('div')(() => ({
@@ -85,6 +86,7 @@ const ProductTypeList = () => {
 
 
   const [productList,setProductList]=React.useState([])
+  const [snackBar, setSnackBar] = React.useState(false);
 
   useEffect(() => {
     getAlldata();
@@ -92,7 +94,7 @@ const ProductTypeList = () => {
 
 
   const getAlldata = () => {
-    axios.get('http://192.168.18.117:5000/api/v1/productType ').then((res) => {
+    axios.get(`${config.base_url}/api/v1/productType`).then((res) => {
       console.log(res.data.data);
       setProductList(res.data.data);
       console.log(productList, 'arry');
@@ -103,6 +105,7 @@ const ProductTypeList = () => {
 
 
   const createHandler = () => {
+    setSnackBar(false);
     if(catogoryId===''){
       let data = new FormData();
       data.append('name', category );
@@ -112,13 +115,13 @@ const ProductTypeList = () => {
         return index.name === category;
       })
       if (producst) {
-       alert("You have enter same name");
+       setSnackBar(true)
       
         return;
       }
   
 
-      axios.post('http://192.168.18.117:5000/api/v1/productType', data).then((res) => {
+      axios.post(`${config.base_url}/api/v1/productType`, data).then((res) => {
         console.log(res.data.data);
         if(res){
           handleClose()
@@ -127,7 +130,10 @@ const ProductTypeList = () => {
         setCatogoryId('')
        
       }).catch((error) => {
-        console.log(error, 'error');
+        if(error.message === "Request failed with status code 400")
+            {
+                setSnackBar(true);
+            }
       })
     }
     else{
@@ -135,7 +141,7 @@ const ProductTypeList = () => {
       let data = new FormData();
       data.append('name', category);
   
-      axios.put(`http://192.168.18.117:5000/api/v1/productType/${catogoryId}`, data).then((res) => {
+      axios.put(`${config.base_url}/api/v1/productType/${catogoryId}`, data).then((res) => {
         console.log(res.msg);
         if (res) {
           getAlldata();
@@ -144,8 +150,10 @@ const ProductTypeList = () => {
         }
     
       }).catch((error) => {
-        console.log(error, 'error');
-        console.log("hello console");
+        if(error.message === "Request failed with status code 400")
+            {
+                setSnackBar(true);
+            }
 
       })
       // const brandNameExist = productType.find((productType) => {
@@ -206,6 +214,7 @@ const ProductTypeList = () => {
     const [demo,setDemo]=React.useState(false);
     const [categoryError, setcategoryError] = React.useState(false);
     const [catogoryId,setCatogoryId] = React.useState('');
+ 
 
     const handleClose = () => {
       setCategory('')
@@ -264,7 +273,7 @@ const ProductTypeList = () => {
 
     const onDelhandler = (editData) => {
       console.log(editData);
-      axios.delete(` http://192.168.18.117:5000/api/v1/productType/${editData}`).then((res) => {
+      axios.delete(`${config.base_url}/api/v1/productType/${editData}`).then((res) => {
         // console.log(res.msg);
         // getAlldata();
           // let arr = category
@@ -296,17 +305,6 @@ const ProductTypeList = () => {
       
       console.log(editIde,name);
       setCatogoryId(editIde);
-      // axios.post(`http://192.168.18.117:5000/api/v1/productType/${editIde}`, data).then((res) => {
-      //   console.log(res.data.data);
-      //   if(res){
-      //     handleClose()
-      //     getAlldata();
-      //     setCategory('')
-      //   }
-       
-      // }).catch((error) => {
-      //   console.log(error, 'error');
-      // })
     }
 
     const handleOpenClick = () => {
@@ -369,7 +367,7 @@ const ProductTypeList = () => {
                   error={categoryError}
                   id="producttype"
                   label="Product Type Name"
-                  placeholder="Product Type Name"
+                  placeholder="Type Name"
                   size="small"
                   autoComplete="off"
                   helperText={categoryError === true ? "Field Required" : ''}
@@ -383,7 +381,7 @@ const ProductTypeList = () => {
               </Grid>
 
 
-              <Grid item lg={3} md={3} sm={3} xs={3}   >
+              <Grid item lg={3} md={3} sm={3} xs={3}>
 
                 <span>Demo</span>
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -435,6 +433,13 @@ const ProductTypeList = () => {
           autoHideDuration={2000}
           onClose={handleClosed}
           message="CREATE PRODUCT"
+          action={action}
+        />
+        <Snackbar
+          open={snackBar}
+          autoHideDuration={2000}
+          onClose={handleClosed}
+          message="Name already exists"
           action={action}
         />
       </Dialog>

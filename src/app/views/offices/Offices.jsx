@@ -20,6 +20,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OfficeCard from './OfficeCard';
 import CloseIcon from '@mui/icons-material/Close';
+import config from 'config';
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -65,6 +66,8 @@ const Offices = () => {
   // const [latitudeError, setLatitudeError] = React.useState(false);
   const [officeId, setOfficeId] = React.useState("")
   const [snackBar, setSnackBar] = React.useState(false);
+
+  const [snackBarTrue, setSnackBarTrue] = React.useState(false);
   
   
     // const generateQrCode = async () => {
@@ -115,7 +118,7 @@ const Offices = () => {
       getAlldata();
     }, []);
     const getAlldata = () => {
-      axios.get('http://192.168.18.117:5000/api/v1/office').then((res) => {
+      axios.get(`${config.base_url}/api/v1/office`).then((res) => {
         console.log(res)
         setOffices(res.data.data);
       }).catch((error) => {
@@ -124,7 +127,7 @@ const Offices = () => {
     }
   
     const onDelhandler = (editData) => {
-      axios.delete(`http://192.168.18.117:5000/api/v1/office/${editData}`).then((res) => {
+      axios.delete(`${config.base_url}/api/v1/office/${editData}`).then((res) => {
         getAlldata();
       }).catch((error) => {
         console.log(error, 'error');
@@ -202,11 +205,10 @@ const Offices = () => {
 
         if (officeNameExist) {
           setSnackBar(true);
-          // setCreateOfficeDialog(false);
           return;
         }
 
-        axios.post('http://192.168.18.117:5000/api/v1/office', data).then((res) => {
+        axios.post(`${config.base_url}/api/v1/office`, data).then((res) => {
             if(res){
               handleCreateClose()
               getAlldata(); 
@@ -227,7 +229,18 @@ const Offices = () => {
         data.append('address', editAddress);
         data.append('city', editCity);
 
-        axios.put(`http://192.168.18.117:5000/api/v1/office/${officeId}`, data).then((res) => {
+        const officeNameExist = offices.find((office) => {
+          return office.name === editName;
+        })
+
+
+        if (officeNameExist) {
+          console.log("Condition True")
+          setSnackBar(true);
+          return;
+        }
+
+        axios.put(`${config.base_url}/api/v1/office/${officeId}`, data).then((res) => {
             if (res) {
               getAlldata();
               handleEditClose()
@@ -408,7 +421,7 @@ const Offices = () => {
           </Button>
         </DialogActions>
         <Snackbar
-          open={snackBar}
+          open={snackBarTrue}
           autoHideDuration={6000}
           onClose={handleClose}
           message="Name already exists"
@@ -505,7 +518,13 @@ const Offices = () => {
           </Button>
         </DialogActions>
 
-        
+        <Snackbar
+          open={snackBar}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Name already exists"
+          action={action}
+/>
 
       </Dialog>
 

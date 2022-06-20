@@ -18,6 +18,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BrandCard from './BrandCard';
 import CloseIcon from '@mui/icons-material/Close';
+import config from "../../../config"
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -124,7 +125,7 @@ const Brands = () => {
       getAlldata();
     }, []);
     const getAlldata = () => {
-      axios.get('http://192.168.18.117:5000/api/v1/brand').then((res) => {
+      axios.get(`${config.base_url}/api/v1/brand`).then((res) => {
         console.log(res.data.data);
         setBrand(res.data.data);
         console.log(brand, 'brand');
@@ -133,49 +134,9 @@ const Brands = () => {
       })
     }
   
-    const checking = () => {
-    //   if(imge){
-    //     let data = new FormData();
-    //     data.append('file', imge);
-    //     data.append('name', category);
-    //     data.append('modifiedBy', modifiedBy);
-    //     data.append('createdBy', createdBy);
-    //     console.log(data.value, 'data');
-    //     axios.post('http://192.168.18.117:5000/api/v1/products ', data).then((res) => {
-    //       console.log(res.data.data);
-    //       if(res){
-    //         handleClose()
-    //         getAlldata();
-    //       }
-    //     }).catch((error) => {
-    //       console.log(error, 'error');
-    //       handleClick()
-    //     })
-    //   }
-    //   else{
-    //     let data = new FormData();
-    //     data.append('name', category);
-    //     axios.put(`http://192.168.18.117:5000/api/v1/products/${idCategory}`, data).then((res) => {
-    //       console.log(res.msg);
-    //       if (res) {
-    //         getAlldata();
-    //         handleClose()
-    //       //  console.log("hello console");
-    //       }
-    //     }).catch((error) => {
-    //       console.log(error, 'error');
-    //       console.log("hello console");
-    //       handleClick()
-    //     })
-    //   }
-    }
-  
-  
-  
-  
     const onDelhandler = (editData) => {
       console.log(editData, 'id');
-      axios.delete(`http://192.168.18.117:5000/api/v1/brand/${editData}`).then((res) => {
+      axios.delete(`${config.base_url}/api/v1/brand/${editData}`).then((res) => {
         console.log(res.msg);
         getAlldata();
         
@@ -203,8 +164,6 @@ const Brands = () => {
           let data = new FormData();
           data.append('name', createBrandName );
 
-          console.log(createBrandName);
-
           const brandNameExist = brand.find((brand) => {
             return brand.name === createBrandName;
           })
@@ -214,7 +173,7 @@ const Brands = () => {
             return;
           }
 
-          axios.post('http://192.168.18.117:5000/api/v1/brand', data).then((res) => {
+          axios.post(`${config.base_url}/api/v1/brand`, data).then((res) => {
             if (res) {
               getAlldata();
               handleCreateClose()
@@ -224,7 +183,6 @@ const Brands = () => {
               setCreateBrandName('')
           }).catch((error) => {
             console.log(error, 'error');
-            console.log("hello");
           })
     
           
@@ -234,8 +192,17 @@ const Brands = () => {
       const editHandler = () => {
         let data = new FormData();
           data.append('name', editBrandName);
+
+          const brandNameExist = brand.find((brand) => {
+            return brand.name === editBrandName;
+          })
+  
+          if (brandNameExist) {
+            setSnackBar(true);
+            return;
+          }
       
-          axios.put(`http://192.168.18.117:5000/api/v1/brand/${brandId}`, data).then((res) => {
+          axios.put(`${config.base_url}/api/v1/brand/${brandId}`, data).then((res) => {
             console.log(res.msg);
             if (res) {
               getAlldata();

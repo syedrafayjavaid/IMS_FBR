@@ -5,18 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import {
     Box,
     Card,
-    Link,
-    Typography,
-    Stack,
     CardActions,
-    CardMedia,
     CardContent,
+    CardMedia,
+    Stack,
+    Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import axios from 'axios'
+import config from 'config'
 
 // ----------------------------------------------------------------------
 
@@ -34,51 +33,34 @@ ProductCard.propTypes = {
     product: PropTypes.object,
 }
 
-const adiitHandler = (adit) => {
-    //  console.log(props, 'props');
-    // console.log(product, 'producrt');
-    // product.onCallBack(_id);
-}
-const delHandler = () => {
-
-    //     console.log(_id,'id');
-    //     console.log(`http://192.168.18.117:5000/api/v1/category/${_id}`);
-    //      axios.delete(`http://192.168.18.117:5000/api/v1/category/${_id}`).then((res) => 
-    //   { console.log(res.msg); 
-    //     }).catch((error)=>{
-    // console.log(error,'error');
-    //     }) 
-}
-function ProductCard({ purchaseItem, onDelete, onEdit }) {
+function ProductCard({ product, onDelete, onEdit }) {
     const navigate = useNavigate()
-    const url = 'http://192.168.18.117:5000/'
     const imgeBaseUrl = 'uploads/'
 
-    // const adiitHandler = (adit) => {
-    //     onEdit(product._id, product)
-    // }
-    const delHandler = () => {
-        onDelete(purchaseItem._id)
+    const adiitHandler = () => {
+        onEdit(product._id, product)
     }
 
-    // const navigateToDetailsPage = () => {
-    //     navigate('/products/details', { state: { product: product } })
-    // }
+    const delHandler = () => {
+        onDelete(product._id)
+    }
 
-    console.log(purchaseItem);
+    const navigateToDetailsPage = () => {
+        navigate('/products/details', { state: { product: product } })
+    }
 
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <Box>
+            <Box onClick={navigateToDetailsPage}>
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <ProductImgStyle
                         alt="No Image"
-                        src={url + imgeBaseUrl + purchaseItem.photo}
+                        src={config.base_url + '/' + imgeBaseUrl + product.photo}
                     />
                 </CardMedia>
                 <CardContent>
                     <Typography variant="subtitle2" noWrap>
-                        {purchaseItem.name}
+                        {product.name}
                     </Typography>
                     <Stack
                         direction="row"
@@ -96,33 +78,35 @@ function ProductCard({ purchaseItem, onDelete, onEdit }) {
                                 }}
                             >
                                 Quantitiy: &nbsp;
-                                {purchaseItem.productQuantity}
+                                {product.productQuantity}
                             </Typography>
                         </Typography>
                     </Stack>
                     <Typography variant="subtitle1">
-                        {purchaseItem?.avgPrice === undefined ? <Typography
-                            component="span"
-                            variant="body1"
-                            sx={{
-                                color: 'text',
-                                textDecoration: ''
-                            }}
-                        >
-                            Avg Price: &nbsp;
-                            N/A
-                        </Typography> : <Typography
-                            component="span"
-                            variant="body1"
-                            sx={{
-                                color: 'text',
-                                textDecoration: ''
-                            }}
-                        >
-                            Avg Price: &nbsp;
-                            {purchaseItem?.avgPrice}
-                        </Typography>}
-
+                        {product?.avgPrice === undefined ? (
+                            <Typography
+                                component="span"
+                                variant="body1"
+                                sx={{
+                                    color: 'text',
+                                    textDecoration: '',
+                                }}
+                            >
+                                Avg Price: &nbsp; N/A
+                            </Typography>
+                        ) : (
+                            <Typography
+                                component="span"
+                                variant="body1"
+                                sx={{
+                                    color: 'text',
+                                    textDecoration: '',
+                                }}
+                            >
+                                Avg Price: &nbsp;
+                                {product?.avgPrice}
+                            </Typography>
+                        )}
                     </Typography>
                 </CardContent>
             </Box>

@@ -1,38 +1,18 @@
 // import React ,{useState, useEffect} from 'react'
 
 // material
-import React from 'react';
-import { Container, Stack, Typography,Grid } from '@mui/material';
-import ProductCard from '../../components/products/ProductCard'
-import { Fab  } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
-import SearchIcon from '@mui/icons-material/Search';
-import { useEffect, useState ,useRef} from 'react';
+import { Grid } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 
 import { makeStyles } from '@material-ui/core/styles';
-import QRCode from 'qrcode';
-import QrReader from 'react-qr-reader';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import Switch from '@mui/material/Switch';
+import { Card } from '@mui/material';
 import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Card, CardContent } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import { styled } from '@mui/system'
+import { styled } from '@mui/system';
 import axios from 'axios';
 import moment from 'moment';
+import config from 'config';
 
 
 const Title = styled('span')(() => ({
@@ -83,7 +63,6 @@ const ContentBox = styled(JustifyBox)(() => ({
 
 const {state} = useLocation();
 
-const url='http://192.168.18.117:5000/';
 const imgeBaseUrl='uploads/';
 
 const [categoryName, setCategoryName] = React.useState('');
@@ -94,17 +73,17 @@ useEffect(() => {
   getAlldata();
 }, []);
 const getAlldata = () => {
-  axios.get(`http://192.168.18.117:5000/api/v1/category/${state.product.categoryId}`).then((res) => {
+  axios.get(`${config.base_url}/api/v1/category/${state.product.categoryId}`).then((res) => {
     setCategoryName(res.data.data.name);
   }).catch((error) => {
     console.log(error, 'error');
   })
-  axios.get(`http://192.168.18.117:5000/api/v1/productType/${state.product.productTypeId}`).then((res) => {
+  axios.get(`${config.base_url}/api/v1/productType/${state.product.productTypeId}`).then((res) => {
     setProductTypeName(res.data.data.name);
   }).catch((error) => {
     console.log(error, 'error');
   })
-  axios.get(`http://192.168.18.117:5000/api/v1/brand/${state.product.brandId}`).then((res) => {
+  axios.get(`${config.base_url}/api/v1/brand/${state.product.brandId}`).then((res) => {
     setBrandName(res.data.data.name);
   }).catch((error) => {
     console.log(error, 'error');
@@ -132,7 +111,7 @@ const notAvailable = "N/A";
                 <Grid item lg={5} md={5} sm={12} xs={12}  >
                             <ContentBox >
                                 <IMG
-                                src={url+imgeBaseUrl+state.product.photo}
+                                src={config.base_url + '/' + imgeBaseUrl+state.product.photo}
                                 alt=""
                                 />
                             </ContentBox>
@@ -161,12 +140,12 @@ const notAvailable = "N/A";
 
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Price:   </span>
+                        <span>Avg Price:   </span>
                             <span style={{color: 'green'}}><b>{state.product.avgPrice === undefined ? notAvailable : state.product.avgPrice}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Quantity: </span>
-                            <span style={{color: 'green'}}><b>{state.product.productQuantity}</b></span>
+                            <span style={{color: 'green'}}><b>{state.product.productQuantity === undefined ? 'N/A' : state.product.productQuantity}</b></span>
                         </Grid>  
                     </Grid>
                     <hr></hr>
@@ -181,60 +160,21 @@ const notAvailable = "N/A";
                         </Grid>  
                     </Grid>
                     <hr></hr>
-                    {/* <Grid container >
-                        <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Purchaser Name:   </span>
-                            <span style={{color: 'green'}}><b>Asadullah Baig</b></span>
-                        </Grid>
-                        <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Vendor Name: </span>
-                            <span style={{color: 'green'}}><b>Syed Rafay Javaid</b></span>
-                        </Grid>  
-                    </Grid>
-                    <hr></hr> */}
-                    {/* <Grid container >
-                        <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Comment's:   </span>
-                            <span style={{color: 'green'}}><b>In Use</b></span>
-                        </Grid>
-                        <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Modified By: </span>
-                            <span style={{color: 'green'}}><b>N/A</b></span>
-                        </Grid>  
-                    </Grid>
-                    <hr></hr> */}
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Created Date: </span>
-                            <span style={{color: 'green'}}><b>{ moment(state.product?.createdAt).format('MMMM d, YYYY') }</b></span>
+                            <span style={{color: 'green'}}><b>{ moment(state.product?.createdAt).format('LL') }</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Last Modified: </span>
-                            <span style={{color: 'green'}}><b>{state.product.modifiedAt === undefined ? moment(state.product.createdAt).format('MMMM d, YYYY') : moment(state.product.modifiedAt).format('MMMM d, YYYY')}</b></span>
+                            <span style={{color: 'green'}}><b>{state.product.modifiedAt === undefined ? moment(state.product.createdAt).format('LL') : moment(state.product.modifiedAt).format('LL')}</b></span>
                         </Grid>  
                     </Grid>
                     <hr></hr>
-                    {/* <Box>
-                    <span>Office Address:</span>   
-                    <span style={{color: 'green'}}> CA-265, 7th Rd, Block F Satellite Town, Rawalpindi, 46300</span> 
-                    </Box> */}
                     <Box>
                     <h4>Detail: </h4>    
                     {state.product.detail}
                     </Box>
-                    {/* <Grid container >
-                        <Grid item  lg={12} md={12} sm={12} xs={12} >
-                        <span>Barcode: </span>
-                        <div >
-                        <Barcode  value={value}  height='30px' ></Barcode>
-                        </div>
-                        
-                        
-                      
-                     
-                        </Grid>  
-                    </Grid> */}
-                
     
                     <br></br>
                    

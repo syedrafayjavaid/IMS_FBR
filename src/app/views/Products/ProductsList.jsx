@@ -120,9 +120,7 @@ const ProductsList = () => {
     const [text1, setText1] = useState('')
     const [imageUrl1, setImageUrl1] = useState('')
     const [scanResultFile, setScanResultFile] = useState('')
-    // const [scanResultWebCam, setScanResultWebCam] =  useState('');
     const classes = useStyles()
-    // const qrRef = useRef(null);
 
     const generateQrCode = async () => {
         try {
@@ -140,17 +138,9 @@ const ProductsList = () => {
             setScanResultFile(result)
         }
     }
-    // const onScanFile = () => {
-    //   qrRef.current.openImageDialog();
-    // }
     const handleErrorWebCam = (error) => {
         console.log(error)
     }
-    // const handleScanWebCam = (result) => {
-    //   if (result){
-    //       setScanResultWebCam(result);
-    //   }
-    //  }
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
@@ -240,7 +230,7 @@ const ProductsList = () => {
                 setEditProductTypeNameError(true)
             }
             if (editProductCategory === '') {
-                setEditProductCategory(true)
+                setEditProductCategoryError(true)
             }
             if (editBrandName === '') {
                 setEditBrandNameError(true)
@@ -274,7 +264,7 @@ const ProductsList = () => {
     }, [])
     const getAlldata = () => {
         axios
-            .get('http://192.168.18.117:5000/api/v1/products')
+            .get(`${config.base_url}/api/v1/products`)
             .then((res) => {
                 console.log(res.data.data)
                 setProduct1(res.data.data)
@@ -306,9 +296,7 @@ const ProductsList = () => {
         axios
             .get(config.base_url + '/api/v1/brand')
             .then((res) => {
-                console.log(res.data.data)
                 setBrands(res.data.data)
-                // console.log(brand, 'brand');
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -316,7 +304,6 @@ const ProductsList = () => {
     }
 
     const checking = () => {
-        if (image) {
             let data = new FormData()
 
             data.append('name', createName)
@@ -327,7 +314,6 @@ const ProductsList = () => {
             data.append('file', image)
             data.append('createdBy', createdBy)
             data.append('detail', createDescription)
-            console.log(data.value, 'data')
 
             const productNameExist = product1.find((product) => {
                 return product.name === createName
@@ -335,7 +321,6 @@ const ProductsList = () => {
 
             if (productNameExist) {
                 setSnackBar(true)
-                // setCreateOfficeDialog(false);
                 return
             }
 
@@ -350,14 +335,12 @@ const ProductsList = () => {
                 })
                 .catch((error) => {
                     console.log(error, 'error')
-                    // handleClick()
                 })
 
-        }
+        
     }
 
     const onEditHandler = (id, product) => {
-        console.log(product)
         setEditProductDialog(true)
         setEditName(product.name)
         setEditProductTypeName(product.productTypeId)
@@ -381,6 +364,14 @@ const ProductsList = () => {
         data.append('modifiedBy', modifiedBy);
         data.append('detail', editDescription);
 
+        // const productNameExist = product1.find((product) => {
+        //     return product.name === editName
+        // })
+
+        // if (productNameExist) {
+        //     setSnackBar(true)
+        //     return
+        // }
 
         axios.put(config.base_url + `/api/v1/products/${productId}`, data).then((res) => {
             console.log(res.msg);
@@ -390,7 +381,10 @@ const ProductsList = () => {
             }
 
         }).catch((error) => {
-            console.log(error, 'error');
+            if(error.message === "Request failed with status code 400")
+            {
+                setSnackBar(true);
+            }
         })
     }
 
@@ -430,49 +424,8 @@ const ProductsList = () => {
         </React.Fragment>
     )
 
-    // const onEditHandler = (editDataId,editDataName) => {
-    //     setEditProductDialog(true)
-    //     console.log(editDataId, 'id');
-    //     console.log(editDataName,'editDataName');
-    //   }
-
-    //   const editHandler = () => {
-    //     let data = new FormData();
-    //       data.append('name', editBrandName);
-
-    //       axios.put(`http://192.168.18.117:5000/api/v1/products/`, data).then((res) => {
-    //         console.log(res.msg);
-    //         if (res) {
-    //           getAlldata();
-    //           handleEditClose()
-    //         }
-
-    //       }).catch((error) => {
-    //         console.log(error, 'error');
-    //       })
-    //   }
-
-    console.log(createProductCategory)
-
     return (
         <>
-            {/* <Tooltip title="Search Product">
-                <Fab
-                    color="primary"
-                    aria-label="Add"
-                    size="medium"
-                    style={{
-                        zIndex: 999,
-                        right: '4vw',
-                        top: '13vh',
-                        position: 'fixed',
-                    }}
-                    onClick={() => setCreateProductDialog(true)}
-                >
-                    <SearchIcon />
-                </Fab>
-            </Tooltip> */}
-
             <Tooltip title="Add Product">
                 <Fab
                     color="secondary"
@@ -733,32 +686,6 @@ const ProductsList = () => {
                             <br></br>
 
                             <Grid container spacing={3}>
-                                {/* <Grid item lg={6} md={6} sm={6} xs={6}>
-                                    <TextField
-                                        error={modifiedByError}
-                                        id="name"
-                                        label="Modified By"
-                                        placeholder="Modified By"
-                                        autoComplete="off"
-                                        helperText={
-                                            setModifiedByError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={modifiedBy}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setModifiedBy,
-                                                setModifiedByError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                        disabled
-                                    />
-                                </Grid> */}
                                 <Grid item lg={7} md={7} sm={7} xs={7}>
                                     <TextField
                                         error={createdByError}
@@ -1040,32 +967,6 @@ const ProductsList = () => {
                             <br></br>
 
                             <Grid container spacing={3}>
-                                {/* <Grid item lg={6} md={6} sm={6} xs={6}>
-                                    <TextField
-                                        error={modifiedByError}
-                                        id="name"
-                                        label="Modified By"
-                                        placeholder="Modified By"
-                                        autoComplete="off"
-                                        helperText={
-                                            setModifiedByError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={modifiedBy}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setModifiedBy,
-                                                setModifiedByError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                        disabled
-                                    />
-                                </Grid> */}
                                 <Grid item lg={7} md={7} sm={7} xs={7}>
                                     <TextField
                                         error={modifiedByError}
