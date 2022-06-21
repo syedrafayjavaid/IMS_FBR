@@ -99,6 +99,9 @@ export const AuthProvider = ({ children }) => {
             role: "SA"
         }
 
+        // Setting username
+        localStorage.setItem("username", response.data.data.userName)
+
         setSession(token)
 
         dispatch({
@@ -133,6 +136,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setSession(null)
+        localStorage.removeItem("username")
         dispatch({ type: 'LOGOUT' })
     }
 
@@ -144,7 +148,8 @@ export const AuthProvider = ({ children }) => {
                 if (accessToken && isValidToken(accessToken)) {
                     setSession(accessToken)
                     const user = {
-                        role: "SA"
+                        role: "SA",
+                        name: localStorage.getItem("username")
                     }
                     dispatch({
                         type: 'INIT',
