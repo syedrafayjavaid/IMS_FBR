@@ -16,37 +16,37 @@ export const navigations = [
     {
         name: 'Employee',
         icon: 'group',
-        path:'/user/UsersList'
+        path: '/user/UsersList'
     },
     {
         name: 'Categories',
         icon: 'category',
         path: '/categories/list',
-        
+
     },
     {
         name: 'Product List',
-        icon: 'shopping_cart_checkout',
+        icon: 'list_icon',
         path: '/productTypeList/list',
-        
+
     },
     {
-        name: 'Brand',
-        icon: 'shopping_cart_checkout',
+        name: 'Brands',
+        icon: 'dirty_lens_icon',
         path: '/brand/list',
-        
+
     },
     {
-        name: 'Office',
-        icon: 'shopping_cart_checkout',
+        name: 'Offices',
+        icon: 'work_icon',
         path: '/office/list',
-        
+
     },
     {
         name: 'Purchased Items',
-        icon: 'shopping_cart_checkout',
+        icon: 'paid_icon',
         path: 'items/PurchasedItems',
-        
+
     },
     {
         name: 'Products',
@@ -58,12 +58,12 @@ export const navigations = [
     //     icon: 'qr_code',
     //     path: '/qrCode/main'
     // },
-    
-    // {
-    //     name: 'QR with Scane',
-    //     icon: 'qr_code',
-    //     path: '/qrCode/list'
-    // },
+
+    {
+        name: 'QR Based Search',
+        icon: 'qr_code',
+        path: '/qrCode/list'
+    },
     // {
     //     name: 'Location',
     //     icon: 'gps_fixed',

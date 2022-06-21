@@ -403,7 +403,7 @@ const PurchasedItems = () => {
     getAlldata();
   }, []);
   const getAlldata = () => {
-    axios.get('http://192.168.18.117:5000/api/v1/products').then((res) => {
+    axios.get(`${config.base_url}/api/v1/products`).then((res) => {
       // console.log(res.data.data);
 
       setProduct1(res.data.data);
@@ -414,21 +414,21 @@ const PurchasedItems = () => {
 
     //product name fetch from the api
 
-    axios.get('http://192.168.18.117:5000/api/v1/productType').then((res) => {
+    axios.get(`${config.base_url}/api/v1/productType`).then((res) => {
       ;
       setProduct(res.data.data);
 
     }).catch((error) => {
 
     })
-    axios.get('http://192.168.18.117:5000/api/v1/office').then((res) => {
+    axios.get(`${config.base_url}/api/v1/office`).then((res) => {
       console.log(res.data.data);
       setOfficeDialog(res.data.data);
       console.log(model, 'model___model');
     }).catch((error) => {
       console.log(error, 'error');
     })
-    axios.get('http://192.168.18.117:5000/api/v1/auth/allUsers').then((res) => {
+    axios.get(`${config.base_url}/api/v1/auth/allUsers`).then((res) => {
       console.log(res.data.data);
       setCustodienId(res.data.data);
 
@@ -438,7 +438,7 @@ const PurchasedItems = () => {
     })
     //customker by name
 
-    axios.get('http://192.168.18.117:5000/api/v1/employee').then((res) => {
+    axios.get(`${config.base_url}/api/v1/employee`).then((res) => {
       const data = res.data.data;
       const canPurchase = [];
       var purcahedTrue = data.map((item) => {
@@ -452,7 +452,7 @@ const PurchasedItems = () => {
     }).catch((error) => {
       console.log(error, 'error');
     })
-    axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
+    axios.get(`${config.base_url}/api/v1/purchaseProduct`).then((res) => {
       console.log(res.data.data);
       setPurchasedItems(res.data.data);
       //  console.log(purchaseBy, 'Purchase of the data');
@@ -486,7 +486,7 @@ const PurchasedItems = () => {
     // console.log(scanResultFile);
 
 
-    axios.post('http://192.168.18.117:5000/api/v1/purchaseProduct', data).then((res) => {
+    axios.post(`${config.base_url}/api/v1/purchaseProduct`, data).then((res) => {
       console.log(res.data.data, "purchaseProduct ");
       if (res) {
         // handleCreateClose()
