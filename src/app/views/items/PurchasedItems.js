@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
 //////
-import { Container, Stack, Typography, Grid } from '@mui/material';
+import { Container, Stack, Typography, Grid, FormHelperText } from '@mui/material';
 import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
@@ -181,21 +181,29 @@ const PurchasedItems = () => {
   const [imageUrl, setImageUrl] = React.useState('');
   const [text, setText] = React.useState('');
 
-
+  const [editmodifyOnError, seteditModifyOnError] = React.useState(false);
   // Form validation errors State Setting 
-  const [nameError, setNameError] = React.useState(false);
+  const [priceError, setPriceError] = React.useState(false);
   const [productQuantityError, setProductQuantityError] = React.useState(false)
-  const [stockError, setstockError] = React.useState(false);
-  const [categoryError, setcategoryError] = React.useState(false);
-  const [subCategoryError, setsubCategoryError] = React.useState(false);
-  const [costError, setcostError] = React.useState(false);
-  const [saleError, setsaleError] = React.useState(false);
-  const [colourError, setColourError] = React.useState(false);
-  const [brandError, setBrandError] = React.useState(false);
-  const [descriptionError, setdescriptionError] = React.useState(false);
+  const [statusError, setStatusError] = React.useState(false);
+  const [officeError, setOfficeError] = React.useState(false);
+  const [createdByError, setCreatedByError] = React.useState(false);
+  const [createdAtError, setCreatedAtError] = React.useState(false);
+  const [modifyByError, setModifyByError] = React.useState(false);
+  const [modifyOnError, setModifyOnError] = React.useState(false);
+  const [ownerShipError, setOwnerShipError] = React.useState(false);
+  const [venderError, setVenderError] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
   const [modelError, setModelError] = React.useState(false);
-
+  const [dateOfPurchaseError, setDateOfPurchaseError] = React.useState(false);
+  const [custodienIdError, setCustodienIdError] = React.useState(false);
+  const [purchasedError, setPurchasedError] = React.useState(false);
+  const [officeNameError, setOfficeNameError] = React.useState(false);
+  const [imageUrl1Error, setImageUrl1Error] = React.useState(false);
+  const [UserError, setUserError] = React.useState(false);
+  const [purchasedOrderError, setPurchasedOrderError] = React.useState(false);
+  const [text1Error, setText1Error] = React.useState(false);
+  const [productIdError, setProductIdError] = React.useState(false);
   // Setting States 
   const [name, setName] = React.useState('');
   const [quantity, setQuantity] = React.useState([]);
@@ -230,6 +238,7 @@ const PurchasedItems = () => {
   const classes = useStyles();
   const qrRef = useRef(null);
 
+
   ///dialog 
   const [statusDialog, setStatusDialog] = React.useState([])
   const [statusValue, setStatusValue] = React.useState('')
@@ -245,7 +254,10 @@ const PurchasedItems = () => {
   const [purchasedItems, setPurchasedItems] = React.useState([])
   const [ownerShip, setOwnerShip] = React.useState('')
   const [vender, setVender] = React.useState('')
-  const [dataOfPurchase, setDateOfPurchase] = React.useState('')
+
+  const date = new Date().toISOString().split('T')[0]
+
+  const [dataOfPurchase, setDateOfPurchase] = React.useState(date);
   const [user, setUser] = React.useState('')
   const [purchaseId, setPurchaseId] = React.useState('')
   const [handleEditDialog, setHandleEditDialog] = React.useState(false);
@@ -337,19 +349,19 @@ const PurchasedItems = () => {
   };
 
   const handleCreatedByDialog = (event) => {
-    console.log(event.target.value,'CreatedBy');
+    console.log(event.target.value, 'CreatedBy');
     setCreatedBy(event.target.value);
   };
   const handleCreatedOnDialog = (event) => {
-    console.log(event.target.value,'CreatedAt');
+    console.log(event.target.value, 'CreatedAt');
     setCreatedAt(event.target.value);
   };
   const handleModifyByDialog = (event) => {
-    console.log(event.target,'rula');
+    console.log(event.target, 'rula');
     setModifyByDialog(event.target.value);
   };
   const handleModifyOnDialog = (event) => {
-    console.log(event.target,'rula');
+    console.log(event.target, 'rula');
     setModifyOnDialog(event.target.value);
   };
   const handleOwenerShipeDialog = (event) => {
@@ -454,7 +466,7 @@ const PurchasedItems = () => {
       console.log(error, 'error');
     })
     axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
-      console.log(res.data.data);
+      console.log(res.data.data,"image");
       setPurchasedItems(res.data.data);
       //  console.log(purchaseBy, 'Purchase of the data');
     }).catch((error) => {
@@ -494,8 +506,7 @@ const PurchasedItems = () => {
         getAlldata();
         setOpen(false);
       }
-      setStatusValue('')
-
+      setStatusValue('');
       setproductId('');
       setPrice('');
       setDateOfPurchase('');
@@ -508,8 +519,8 @@ const PurchasedItems = () => {
       setUser('');
       setModel('');
       setText1('');
-
-
+      setProductQuantity('');
+      setPurchaseOrder('');
     }).catch((error) => {
       console.log(error, 'error');
       // handleClick()
@@ -520,28 +531,107 @@ const PurchasedItems = () => {
 
   //////
   //error handling 
-  // const handleCreateClickOpen = () => {
-  //   if (createModel === '' || createOffice === '' || Price === '' || createVender === '' || createEmployeeId === '') {
-  //     if (createName === '') {
-  //       setCreateNameError(true)
-  //     }
-  //     if (createOffice === '') {
-  //       setCreateOfficeError(true)
-  //     }
-  //     if (createCnic === '') {
-  //       setCreateCnicError(true)
-  //     }
-  //     if (createDescription === '') {
-  //       setCreateDescriptionError(true)
-  //     }
-  //     if (createEmployeeId === '') {
-  //       setCreateEmployeeIdError(true)
-  //     }
-  //   } else {
-  //     createHandler()
-  //   }
-  // }
+  const handleCreateClickOpen = () => {
+    if (price === '' || dataOfPurchase === '' || officeNameList === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 ==='' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '') {
+      if (price === '') {
+        setPriceError(true)
+      }
 
+      if (dataOfPurchase === '') {
+        setDateOfPurchaseError(true)
+      }
+      if (ownerShip === '') {
+        setOwnerShipError(true)
+      }
+      if (officeNameList === '') {
+        setOfficeNameError(true)
+      }
+      if (statusValue === '') {
+        setStatusError(true)
+      }
+      if (PurchaseBy1 === '') {
+        setPurchasedError(true)
+      }
+      if (user === '') {
+        setUserError(true)
+      }
+      if (model === '') {
+        setModelError(true)
+      }
+      if (purchaseOrder === '') {
+     
+        setPurchasedOrderError(true)
+      }
+      if (productQuantity === '') {
+        setProductQuantityError(true)
+      }
+     
+      
+      
+      if (productId === '') {
+        setProductIdError(true)
+      }
+    } else {
+      createHandler();
+    }
+  }
+  ////edit handler dialog
+  const handleEdit = () => {
+    if (price === '' || dataOfPurchase === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 === '' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '' || createdAt === '' || createdBy === '' || modifyByDialog === '' || modifyOnDialog === '') {
+      if (price === '') {
+        setPriceError(true)
+      }
+
+      if (dataOfPurchase === '') {
+        setDateOfPurchaseError(true)
+      }
+      if (ownerShip === '') {
+        setOwnerShipError(true)
+      }
+      if (officeNameList === '') {
+        setOfficeNameError(true)
+      }
+      if (statusValue === '') {
+        setStatusError(true)
+      }
+      if (PurchaseBy1 === '') {
+        setPurchasedError(true)
+      }
+      if (user === '') {
+        setUserError(true)
+      }
+      if (model === '') {
+        setModelError(true)
+      }
+      if (purchaseOrder === '') {
+        setPurchasedOrderError(true)
+        console.log(purchaseOrder,"purchaseOrder oerder of thw value")
+      }
+      if (productQuantity === '') {
+        setProductQuantityError(true)
+      }
+  
+      if (productId === '') {
+        setProductIdError(true)
+      }
+      if (createdAt === '') {
+        setCreatedAtError(true)
+
+      }
+      if (createdBy === '') {
+        setCreatedByError(true)
+      }
+      if (modifyByDialog === '') {
+        setModifyByError(true)
+      }
+      if (modifyOnDialog === '') {
+        setModifyOnError(true)
+      }
+     
+    } else {
+      editHandler();
+    }
+  }
   //aboue the send the api data of the text fileds data
 
   const checking = () => {
@@ -595,7 +685,6 @@ const PurchasedItems = () => {
       console.log(error, 'error');
     })
   }
-
 
 
   const onEdithandler = (id, purchaseItem) => {
@@ -715,7 +804,7 @@ const PurchasedItems = () => {
       console.log(res.msg);
       if (res) {
         getAlldata();
-        // handleEditClose()
+        handleEditDialogClose();
       }
 
     }).catch((error) => {
@@ -917,7 +1006,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={productIdError}>
                       <InputLabel id="demo-simple-select-label">Product</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -941,6 +1030,14 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+
+                      <FormHelperText>
+                        {' '}
+                        {productIdError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -949,15 +1046,15 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField
-                    error={nameError}
+                    error={modelError}
                     id="name"
                     label="Model"
                     placeholder="Model"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={modelError === true ? "Field Required" : ''}
                     value={model}
                     size="small"
-                    onChange={(e) => handleModel(e, setModel, setNameError)}
+                    onChange={(e) => handleModel(e, setModel, setModelError)}
                     variant="outlined"
                     fullWidth
 
@@ -969,16 +1066,16 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField
-                    error={nameError}
+                    error={priceError}
                     type={`number`}
                     id="name"
                     label="Price"
                     placeholder="Price"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={priceError === true ? "Field Required" : ''}
                     value={price}
                     size="small"
-                    onChange={(e) => handlePrice(e, setPrice, setNameError)}
+                    onChange={(e) => handlePrice(e, setPrice, setPriceError)}
                     variant="outlined"
                     fullWidth
 
@@ -987,10 +1084,6 @@ const PurchasedItems = () => {
 
 
                 </Grid>
-
-
-
-
 
 
 
@@ -1002,15 +1095,15 @@ const PurchasedItems = () => {
 
 
                   <TextField
-                    error={nameError}
+                    error={purchasedOrderError}
                     id="name"
                     label="Purchase Order(PO)"
                     placeholder="Purchase Order(PO)"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={purchasedOrderError === true ? "Field Required" : ''}
                     value={purchaseOrder}
                     size="small"
-                    onChange={(e) => handleChange(e, setPurchaseOrder, setNameError)}
+                    onChange={(e) => handleChange(e, setPurchaseOrder, setPurchasedOrderError)}
                     variant="outlined"
                     fullWidth
 
@@ -1047,7 +1140,7 @@ const PurchasedItems = () => {
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
 
                     <label htmlFor="contained-button-file">
-                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handlePhoto} />
+                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={ handlePhoto}  />
                       <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />} style={{ width: '100%' }}>
                         Upload
                       </Button>
@@ -1061,7 +1154,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={statusError}>
                       <InputLabel id="demo-simple-select-label">Status</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1077,6 +1170,13 @@ const PurchasedItems = () => {
                         <MenuItem value={`scrap`}>Scrap</MenuItem>
 
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {statusError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1086,7 +1186,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={officeNameError}>
                       <InputLabel id="demo-simple-select-label">Office</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1110,6 +1210,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {officeNameError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1122,6 +1229,7 @@ const PurchasedItems = () => {
 
                   <form className={myclass.container} noValidate>
                     <TextField
+
                       id="date" size='small'
                       label="Date Of Purchase"
                       type="date"
@@ -1132,6 +1240,8 @@ const PurchasedItems = () => {
                         shrink: true,
 
                       }}
+                      error={dateOfPurchaseError}
+                      helperText={dateOfPurchaseError === true ? "Field Required" : ''}
                       onChange={handlePurchasedDate}
                     />
                   </form>
@@ -1144,7 +1254,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={purchasedError}>
                       <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1169,6 +1279,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {purchasedError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1178,7 +1295,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={UserError}>
                       <InputLabel id="demo-simple-select-label">Customer Emp ID</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1202,6 +1319,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {UserError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1211,7 +1335,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 145 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={ownerShipError}>
                       <InputLabel id="demo-simple-select-label">OwnerShip</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1225,6 +1349,13 @@ const PurchasedItems = () => {
                         <MenuItem value={`FBR`}>FBR</MenuItem>
 
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {ownerShipError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1258,7 +1389,7 @@ const PurchasedItems = () => {
 
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
+                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }}  />
                     <Button className={classes.btn} variant="contained"
                       color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
                     <br></br>
@@ -1297,15 +1428,15 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField style={{ "width": "514px" }}
-                    error={nameError}
+                    error={venderError}
                     id="name"
                     label="Vendor"
                     placeholder="Vendor"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={venderError === true ? "Field Required" : ''}
                     value={vender}
                     size="small"
-                    onChange={(e) => handleVender(e, setVender, setNameError)}
+                    onChange={(e) => handleVender(e, setVender, setVenderError)}
                     variant="outlined"
                     fullWidth
 
@@ -1326,13 +1457,14 @@ const PurchasedItems = () => {
           <Button onClick={handleClose}>Cancel</Button>
           <Button autoFocus onClick={() => {
 
-            createHandler();
+            handleCreateClickOpen();
           }}>
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-
+      {/* ////////
+edit dialog box */}
       <Dialog
         open={handleEditDialog}
         fullWidth={true}
@@ -1356,7 +1488,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={productIdError}>
                       <InputLabel id="demo-simple-select-label">Product</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1380,6 +1512,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {productIdError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1388,15 +1527,15 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField
-                    error={nameError}
+                    error={modelError}
                     id="name"
                     label="Model"
                     placeholder="Model"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={modelError === true ? "Field Required" : ''}
                     value={model}
                     size="small"
-                    onChange={(e) => handleModel(e, setModel, setNameError)}
+                    onChange={(e) => handleModel(e, setModel, setModelError)}
                     variant="outlined"
                     fullWidth
 
@@ -1408,15 +1547,15 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField
-                    error={nameError}
+                    error={priceError}
                     id="name"
                     label="Price"
                     placeholder="Price"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={priceError === true ? "Field Required" : ''}
                     value={price}
                     size="small"
-                    onChange={(e) => handlePrice(e, setPrice, setNameError)}
+                    onChange={(e) => handlePrice(e, setPrice, setPriceError)}
                     variant="outlined"
                     fullWidth
 
@@ -1440,15 +1579,15 @@ const PurchasedItems = () => {
 
 
                   <TextField
-                    error={nameError}
+                    error={purchasedOrderError}
                     id="name"
                     label="Purchase Order(PO)"
                     placeholder="Purchase Order(PO)"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={purchasedOrderError === true ? "Field Required" : ''}
                     value={purchaseOrder}
                     size="small"
-                    onChange={(e) => handleChange(e, setPurchaseOrder, setNameError)}
+                    onChange={(e) => handleChange(e, setPurchaseOrder, setPurchasedError)}
                     variant="outlined"
                     fullWidth
 
@@ -1499,7 +1638,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={statusError}>
                       <InputLabel id="demo-simple-select-label">Status</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1515,6 +1654,13 @@ const PurchasedItems = () => {
                         <MenuItem value={`scrap`}>Scrap</MenuItem>
 
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {statusError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1524,7 +1670,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={officeNameError}>
                       <InputLabel id="demo-simple-select-label">Office</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1548,6 +1694,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {officeNameError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1560,6 +1713,8 @@ const PurchasedItems = () => {
 
                   <form className={myclass.container} noValidate>
                     <TextField
+
+
                       id="date" size='small'
                       label="Date Of Purchase"
                       type="date"
@@ -1570,6 +1725,8 @@ const PurchasedItems = () => {
                         shrink: true,
 
                       }}
+                      error={dateOfPurchaseError}
+                      helperText={dateOfPurchaseError === true ? "Field Required" : ''}
                       onChange={handlePurchasedDate}
                     />
                   </form>
@@ -1582,7 +1739,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={purchasedError}>
                       <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1607,6 +1764,13 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {purchasedError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
 
@@ -1616,7 +1780,7 @@ const PurchasedItems = () => {
 
 
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={custodienIdError}>
                       <InputLabel id="demo-simple-select-label">Customer Emp ID</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1640,106 +1804,113 @@ const PurchasedItems = () => {
                           }
                         )}
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {custodienIdError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
                   </Box>
-                          
+
                 </Grid>
 
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
-<TextField style={{"width":"160px"}}
-  error={nameError}
-  disabled
-  id="name"
-  label="Created by"
-  placeholder="Created by"
-  autoComplete="off"
-  helperText={nameError === true ? "Field Required" : ''}
-  value={createdBy === undefined ? 'N/A' : createdBy}
-  size="small"
-  onChange={(e) => handleCreatedByDialog(e, setCreatedBy, setNameError)}
-  variant="outlined"
-  fullWidth
+                  <TextField style={{ "width": "160px" }}
+                    error={createdByError}
+                    disabled
+                    id="name"
+                    label="Created by"
+                    placeholder="Created by"
+                    autoComplete="off"
+                    helperText={createdByError === true ? "Field Required" : ''}
+                    value={createdBy === undefined ? 'N/A' : createdBy}
+                    size="small"
+                    onChange={(e) => handleCreatedByDialog(e, setCreatedBy, setCreatedByError)}
+                    variant="outlined"
+                    fullWidth
 
-/>
+                  />
 
-</Grid>
-
-
-<br></br>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
-
-<TextField style={{"width":"160px"}}
-  error={nameError}
-  disabled
-  id="name"
-  label="Created At"
-  placeholder="Created At"
-  autoComplete="off"
-  helperText={nameError === true ? "Field Required" : ''}
-  value={moment(
-    createdAt
-).format('LL')}
-  size="small"
-  onChange={(e) => handleCreatedOnDialog(e, setCreatedAt, setNameError)}
-  variant="outlined"
-  fullWidth
-
-/>
-
-</Grid>
+                </Grid>
 
 
+                <br></br>
+                <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+                  <TextField style={{ "width": "160px" }}
+                    error={createdAtError}
+                    disabled
+                    id="name"
+                    label="Created At"
+                    placeholder="Created At"
+                    autoComplete="off"
+                    helperText={createdAtError === true ? "Field Required" : ''}
+                    value={moment(
+                      createdAt
+                    ).format('LL')}
+                    size="small"
+                    onChange={(e) => handleCreatedOnDialog(e, setCreatedAt, setCreatedAtError)}
+                    variant="outlined"
+                    fullWidth
+
+                  />
+
+                </Grid>
 
 
-<br></br>
-<Grid item lg={4} md={4} sm={4} xs={6}  >
 
-<TextField style={{"width":"160px"}}
-  error={nameError}
-  disabled
-  id="name"
-  label="Modify by"
-  placeholder="Modify by"
-  autoComplete="off"
-  helperText={nameError === true ? "Field Required" : ''}
-  value={modifyByDialog === undefined ? 'N/A' : moment(modifyByDialog).format('LL')}
-  size="small"
-  onChange={(e) => handleModifyByDialog(e, setModifyByDialog, setNameError)}
-  variant="outlined"
-  fullWidth
 
-/>
+                <br></br>
+                <Grid item lg={4} md={4} sm={4} xs={6}  >
 
-</Grid>
-          <br></br>
+                  <TextField style={{ "width": "160px" }}
+                    error={modifyByError}
+                    disabled
+                    id="name"
+                    label="Modify by"
+                    placeholder="Modify by"
+                    autoComplete="off"
+                    helperText={modifyByError === true ? "Field Required" : ''}
+                    value={modifyByDialog === undefined ? 'N/A' : moment(modifyByDialog).format('LL')}
+                    size="small"
+                    onChange={(e) => handleModifyByDialog(e, setModifyByDialog, setModifyByError)}
+                    variant="outlined"
+                    fullWidth
 
-        
-<Grid item lg={4} md={4} sm={4} xs={6}  >
+                  />
 
-<TextField style={{"width":"160px"}}
-  error={nameError}
-  disabled
-  id="name"
-  label="Modify on"
-  placeholder="Modify on"
-  autoComplete="off"
-  helperText={nameError === true ? "Field Required" : ''}
-  value={modifyOnDialog === undefined ? 'N/A' : modifyOnDialog}
-  size="small"
-  onChange={(e) => handleModifyOnDialog(e, setModifyOnDialog, setNameError)}
-  variant="outlined"
-  fullWidth
+                </Grid>
+                <br></br>
 
-/>
 
-</Grid>
+                <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+                  <TextField style={{ "width": "160px" }}
+                    error={modifyOnError}
+                    disabled
+                    id="name"
+                    label="Modify on"
+                    placeholder="Modify on"
+                    autoComplete="off"
+                    helperText={editmodifyOnError === true ? "Field Required" : ''}
+                    value={modifyOnDialog === undefined ? 'N/A' : moment(modifyOnDialog).format('LL')}
+                    size="small"
+                    onChange={(e) => handleModifyOnDialog(e, setModifyOnDialog, setModifyOnError)}
+                    variant="outlined"
+                    fullWidth
+
+                  />
+
+                </Grid>
 
                 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
 
                   <Box sx={{ minWidth: 145 }}>
-                    <FormControl size="small" fullWidth>
+                    <FormControl size="small" fullWidth error={ownerShipError}>
                       <InputLabel id="demo-simple-select-label">OwnerShip</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -1753,7 +1924,15 @@ const PurchasedItems = () => {
                         <MenuItem value={`FBR`}>FBR</MenuItem>
 
                       </Select>
+                      <FormHelperText>
+                        {' '}
+                        {ownerShipError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
                     </FormControl>
+
                   </Box>
 
                 </Grid>
@@ -1785,7 +1964,7 @@ const PurchasedItems = () => {
 
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
+                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }}  />
                     <Button className={classes.btn} variant="contained"
                       color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
                     <br></br>
@@ -1824,15 +2003,15 @@ const PurchasedItems = () => {
                 <Grid item lg={4} md={4} sm={4} xs={6}  >
 
                   <TextField style={{ "width": "514px" }}
-                    error={nameError}
+                    error={venderError}
                     id="name"
                     label="Vendor"
                     placeholder="Vendor"
                     autoComplete="off"
-                    helperText={nameError === true ? "Field Required" : ''}
+                    helperText={venderError === true ? "Field Required" : ''}
                     value={vender}
                     size="small"
-                    onChange={(e) => handleVender(e, setVender, setNameError)}
+                    onChange={(e) => handleVender(e, setVender, setVenderError)}
                     variant="outlined"
                     fullWidth
 
@@ -1851,10 +2030,7 @@ const PurchasedItems = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditDialogClose}>Cancel</Button>
-          <Button autoFocus onClick={() => {
-
-            editHandler();
-          }}>
+          <Button autoFocus onClick={handleEdit}>
             Confirm
           </Button>
         </DialogActions>
