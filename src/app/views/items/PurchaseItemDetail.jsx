@@ -37,72 +37,86 @@ const PurchaseItemDetail = () => {
     }))
     const {state} = useLocation();
     const imgeBaseUrl='uploads/';
+
+    const date = new Date(state.purchaseItem.dataOfPurchase).toISOString().split('T')[0]
+
   return (
     <>
           <Card elevation={3} sx={{ pt: '20px', mb: 10 ,margin:"50px"}}>
                 <CardHeader>
-                <Title>PRODUCT DETAILS</Title>
+                <Title>PURCHASED ITEM DETAILS</Title>
                 </CardHeader>
                     <hr></hr>
                 <Grid container>
                 <Grid item lg={5} md={5} sm={12} xs={12}  >
                             <ContentBox >
                                 <IMG
-                                src={config.base_url + '/' + imgeBaseUrl+state.product.photo}
+                                src={config.base_url + '/' + imgeBaseUrl+state.purchaseItem?.attachment}
                                 alt=""
                                 />
                             </ContentBox>
                 </Grid>
                 <Grid item lg={7} md={7} sm={12} xs={12} style={{padding: "1rem 3rem"}}>
-                <h3>{state.product.name}</h3>
+                <h3>{state.purchase?.purchaseOrder}</h3>
                     <br></br>
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                            <span>Product Type: </span>
-                            <span style={{color: 'green'}}><b>{`productTypeName`}</b></span>
+                            <span>Price: </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.price}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Categoery Name: </span>
-                            <span style={{color: 'green'}}><b>{`categoryName`}</b></span>
+                        <span>Quantity: </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.quantity}</b></span>
                         </Grid>
                     </Grid>
                     <hr></hr>
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Avg Price:   </span>
-                            <span style={{color: 'green'}}><b>{state.product.avgPrice === undefined ? `notAvailable` : state.product.avgPrice}</b></span>
+                        <span>Ownership:   </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.ownership}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Quantity: </span>
-                            <span style={{color: 'green'}}><b>{state.product.productQuantity === undefined ? 'N/A' : state.product.productQuantity}</b></span>
+                        <span>Date Of Purchase: </span>
+                            <span style={{color: 'green'}}><b>{date}</b></span>
                         </Grid>
                     </Grid>
                     <hr></hr>
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
                         <span>Model:   </span>
-                            <span style={{color: 'green'}}><b>{state.product.model}</b></span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.model}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Brand: </span>
-                            <span style={{color: 'green'}}><b>{`brandName`}</b></span>
+                        <span>Status: </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.status}</b></span>
                         </Grid>
                     </Grid>
                     <hr></hr>
                     <Grid container >
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Created Date: </span>
-                            <span style={{color: 'green'}}><b>{ moment(state.product?.createdAt).format('LL') }</b></span>
+                        <span>Vender:   </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.vender}</b></span>
                         </Grid>
                         <Grid item  lg={6} md={6} sm={6} xs={6} >
-                        <span>Last Modified: </span>
-                            <span style={{color: 'green'}}><b>{state.product.modifiedAt === undefined ? moment(state.product.createdAt).format('LL') : moment(state.product.modifiedAt).format('LL')}</b></span>
+                        <span>Created At: </span>
+                            <span style={{color: 'green'}}><b>{moment(state.purchaseItem?.createdAt).format('LL')}</b></span>
+                        </Grid>
+                    </Grid>
+                    <hr></hr>
+                    <Grid container >
+                        <Grid item  lg={6} md={6} sm={6} xs={6} >
+                        <span>QR Code Text: </span>
+                            <span style={{color: 'green'}}><b>{state.purchaseItem?.QRCode}</b></span>
+                        </Grid>
+                        <Grid item  lg={6} md={6} sm={6} xs={6} >
+                        <span>Modified At:   </span>
+                        <span style={{color: 'green'}}><b>{state.purchaseItem?.modifiedAt === undefined ? 'N/A' : moment(state.purchaseItem?.modifiedAt).format('LL')}</b></span>
                         </Grid>
                     </Grid>
                     <hr></hr>
                     <Box>
-                    <h4>Detail: </h4>
-                    {`state.product.detail`}
+                    <h4>Qr Code: </h4>
+                    <img src={state.purchaseItem?.QRCodeImage} alt="" srcset="" />
                     </Box>
                     <br></br>
                 </Grid>

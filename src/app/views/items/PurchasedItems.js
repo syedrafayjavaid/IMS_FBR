@@ -41,6 +41,7 @@ import PurchaseItemCard from './PurchaseItemCard';
 import { number } from 'prop-types';
 import { Model } from 'echarts';
 import config from 'config';
+import moment from 'moment';
 
 /////
 
@@ -335,22 +336,22 @@ const PurchasedItems = () => {
     setUser(event.target.value);
   };
 
-  // const handleCreatedByDialog = (event) => {
-  //   console.log(event.target.value,'CreatedBy');
-  //   setCreatedBy(event.target.value);
-  // };
-  // const handleCreatedOnDialog = (event) => {
-  //   console.log(event.target.value,'CreatedAt');
-  //   setCreatedAt(event.target.value);
-  // };
-  // const handleModifyByDialog = (event) => {
-  //   console.log(event.target,'rula');
-  //   setModifyByDialog(event.target.value);
-  // };
-  // const handleModifyOnDialog = (event) => {
-  //   console.log(event.target,'rula');
-  //   setModifyOnDialog(event.target.value);
-  // };
+  const handleCreatedByDialog = (event) => {
+    console.log(event.target.value,'CreatedBy');
+    setCreatedBy(event.target.value);
+  };
+  const handleCreatedOnDialog = (event) => {
+    console.log(event.target.value,'CreatedAt');
+    setCreatedAt(event.target.value);
+  };
+  const handleModifyByDialog = (event) => {
+    console.log(event.target,'rula');
+    setModifyByDialog(event.target.value);
+  };
+  const handleModifyOnDialog = (event) => {
+    console.log(event.target,'rula');
+    setModifyOnDialog(event.target.value);
+  };
   const handleOwenerShipeDialog = (event) => {
     console.log(event.target.value, 'owenerShip');
     setOwnerShip(event.target.value);
@@ -369,7 +370,7 @@ const PurchasedItems = () => {
   // }
 
   const handlePhoto = (event) => {
-    console.log(event.target.files[0], 'handle the photo');
+    console.log(event.target.files, 'handle the photo');
     setImage(event.target.files);
   };
   const [open, setOpen] = React.useState(false);
@@ -474,7 +475,7 @@ const PurchasedItems = () => {
     data.append('ownership', ownerShip);
     data.append('officeId', officeNameList);
     data.append('status', statusValue);
-    data.append('PurchaseBy', PurchaseBy1);
+    data.append('purchasedBy', PurchaseBy1);
     data.append('vender', vender);
     data.append('attachment', image);
     data.append('QRCodeImage', imageUrl1);
@@ -482,9 +483,9 @@ const PurchasedItems = () => {
     data.append('model', model);
     data.append('purchaseOrder', purchaseOrder);
     data.append('quantity', productQuantity);
-    data.append('QRCode', text1)
-    // console.log(scanResultFile);
+    data.append('QRCode', text1);
 
+    // console.log(scanResultFile);
 
     axios.post('http://192.168.18.117:5000/api/v1/purchaseProduct', data).then((res) => {
       console.log(res.data.data, "purchaseProduct ");
@@ -606,10 +607,11 @@ const PurchasedItems = () => {
 
     setproductId(purchaseItem.productId);
     setPrice(purchaseItem.price);
-    setDateOfPurchase(purchaseItem.dataOfPurchase);
+    const date = new Date(purchaseItem.dataOfPurchase).toISOString().split('T')[0]
+    setDateOfPurchase(date);
     setOwnerShip(purchaseItem.ownership);
     setOfficeNameList(purchaseItem.officeId);
-    setPurchaseBy1(purchaseItem.PurchaseBy);
+    setPurchaseBy1(purchaseItem.purchasedBy);
     setVender(purchaseItem.vender);
     setImage(purchaseItem.image);
     setImageUrl1(purchaseItem.QRCodeImage);
@@ -617,9 +619,13 @@ const PurchasedItems = () => {
     setModel(purchaseItem.model);
     setPurchaseOrder(purchaseItem.purchaseOrder);
     setProductQuantity(purchaseItem.quantity);
-    setText1(purchaseItem.QRCode);
 
-    // setOpen(true)
+    setText1(purchaseItem.QRCode);
+    setCreatedBy(purchaseItem.createdBy);
+    setCreatedAt(purchaseItem.createdAt);
+    setModifyByDialog(purchaseItem.modifiedBy);
+    setModifyOnDialog(purchaseItem.modifiedAt);
+
     // console.log(editDataId, 'id');
     // console.log(editDataName,'editDataName');
     // setCategory(editDataName)
@@ -691,7 +697,7 @@ const PurchasedItems = () => {
     data.append('ownership', ownerShip);
     data.append('officeId', officeNameList);
     data.append('status', statusValue);
-    data.append('PurchaseBy', PurchaseBy1);
+    data.append('PurchasedBy', PurchaseBy1);
     data.append('vender', vender);
     data.append('attachment', image);
     data.append('QRCodeImage', imageUrl1);
@@ -700,6 +706,10 @@ const PurchasedItems = () => {
     data.append('model', model);
     data.append('quantity', productQuantity);
     data.append('QRCode', text1);
+    data.append('createdBy', createdBy);
+    data.append('createdAt', createdAt);
+    data.append('modifiedBy', modifyByDialog);
+    data.append('modifiedAt', modifyOnDialog);
 
     axios.put(`${config.base_url}/api/v1/purchaseProduct/${purchaseId}`, data).then((res) => {
       console.log(res.msg);
@@ -712,8 +722,6 @@ const PurchasedItems = () => {
       console.log(error, 'error');
     })
   }
-
-
 
   return (
     <>
@@ -962,6 +970,7 @@ const PurchasedItems = () => {
 
                   <TextField
                     error={nameError}
+                    type={`number`}
                     id="name"
                     label="Price"
                     placeholder="Price"
@@ -1140,7 +1149,7 @@ const PurchasedItems = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={PurchaseBy1}
+                        value={PurchaseBy1 === undefined ? 'N/A' : PurchaseBy1}
                         label="Purchased by"
 
                         onChange={handlePurchasedDialog}
@@ -1633,8 +1642,98 @@ const PurchasedItems = () => {
                       </Select>
                     </FormControl>
                   </Box>
-
+                          
                 </Grid>
+
+                <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  disabled
+  id="name"
+  label="Created by"
+  placeholder="Created by"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={createdBy === undefined ? 'N/A' : createdBy}
+  size="small"
+  onChange={(e) => handleCreatedByDialog(e, setCreatedBy, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
+
+
+<br></br>
+<Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  disabled
+  id="name"
+  label="Created At"
+  placeholder="Created At"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={moment(
+    createdAt
+).format('LL')}
+  size="small"
+  onChange={(e) => handleCreatedOnDialog(e, setCreatedAt, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
+
+
+
+
+<br></br>
+<Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  disabled
+  id="name"
+  label="Modify by"
+  placeholder="Modify by"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={modifyByDialog === undefined ? 'N/A' : moment(modifyByDialog).format('LL')}
+  size="small"
+  onChange={(e) => handleModifyByDialog(e, setModifyByDialog, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
+          <br></br>
+
+        
+<Grid item lg={4} md={4} sm={4} xs={6}  >
+
+<TextField style={{"width":"160px"}}
+  error={nameError}
+  disabled
+  id="name"
+  label="Modify on"
+  placeholder="Modify on"
+  autoComplete="off"
+  helperText={nameError === true ? "Field Required" : ''}
+  value={modifyOnDialog === undefined ? 'N/A' : modifyOnDialog}
+  size="small"
+  onChange={(e) => handleModifyOnDialog(e, setModifyOnDialog, setNameError)}
+  variant="outlined"
+  fullWidth
+
+/>
+
+</Grid>
 
                 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
@@ -1662,7 +1761,6 @@ const PurchasedItems = () => {
               </Grid>
               <br></br>
 
-
               {/* this is the qr code of the PRAL */}
 
               <Grid container spacing={3}>
@@ -1687,7 +1785,7 @@ const PurchasedItems = () => {
 
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
+                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
                     <Button className={classes.btn} variant="contained"
                       color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
                     <br></br>

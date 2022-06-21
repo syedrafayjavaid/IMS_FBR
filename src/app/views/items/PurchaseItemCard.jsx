@@ -18,9 +18,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
         position: 'absolute',
     })
     const imgeBaseUrl = 'uploads/'
-    // const onEditHandler = () => {
-    //     onEdit(purchaseItem._id, purchaseItem)
-    // }
+    
     const onDeleteHandler = () => {
         onDelete(purchaseItem._id)
     }
@@ -32,6 +30,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
     const navigateToDetailsPage = () => {
         navigate("/items/PurchasedItemsDetail", { state: { purchaseItem: purchaseItem } })
     }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
             <Box
@@ -40,20 +39,17 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
                         alt="No Image"
-                        src={config.base_url + '/' + imgeBaseUrl + purchaseItem.attachment}
+                        src={purchaseItem.QRCodeImage}
                     />
                 </CardMedia>
                 <CardContent>
-                    <Typography variant="subtitle2" noWrap>
-                        {purchaseItem.name}
-                    </Typography>
-                    <Stack
+                <Stack
                         direction="row"
                         alignItems="center"
                         justifyContent="space-between"
                         style={{ marginTop: '10px' }}
                     >
-                        {/* <Typography variant="subtitle1">
+                        <Typography variant="subtitle1">
                             <Typography
                                 component="span"
                                 variant="body1"
@@ -62,10 +58,30 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                                     textDecoration: '',
                                 }}
                             >
-                                Office: &nbsp;
-                                {user.office}
+                                Price: &nbsp;
+                                {purchaseItem.price}
                             </Typography>
-                        </Typography> */}
+                        </Typography>
+                    </Stack>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        style={{ marginTop: '10px' }}
+                    >
+                        <Typography variant="subtitle1">
+                            <Typography
+                                component="span"
+                                variant="body1"
+                                sx={{
+                                    color: 'text',
+                                    textDecoration: '',
+                                }}
+                            >
+                                Quantity: &nbsp;
+                                {purchaseItem.quantity}
+                            </Typography>
+                        </Typography>
                     </Stack>
                     {/* <Stack
                         direction="row"
