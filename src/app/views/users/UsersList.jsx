@@ -31,7 +31,7 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } }
 const UsersList = () => {
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
-    const [createSnackBar, setCreateSnakBar] = React.useState(false)
+    const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
 
@@ -95,7 +95,7 @@ const UsersList = () => {
     }
 
     const handleCreateSnackBarClose = () => {
-        setCreateSnakBar(false)
+        setCreateSnackBar(false)
     }
 
     const handleEditClose = () => {
@@ -200,7 +200,7 @@ const UsersList = () => {
         })
 
         if (userNameExist) {
-            setCreateSnakBar(true)
+            setCreateSnackBar(true)
             return
         }
 
@@ -269,12 +269,18 @@ const UsersList = () => {
             console.log('Edit Button Clicked')
             return
         }
+
+        setCreateSnackBar(false)
+
     }
 
     const handleEditClosed = (event, reason) => {
         if (reason === 'clickaway') {
             return
         }
+
+        setEditSnackBar(false);
+
     }
 
     const createAction = (
