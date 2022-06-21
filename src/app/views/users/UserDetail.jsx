@@ -4,7 +4,7 @@ import axios from 'axios'
 import config from 'config'
 import moment from 'moment'
 import React, { useEffect, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import AllUsersTable from './AllUserTable'
 
 const CardHeader = styled('div')(() => ({
@@ -45,8 +45,6 @@ const IMG = styled('img')(() => ({
 const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
 
 const UserDetail = () => {
-    const navigate = useNavigate()
-
     // States
     const [showTable, setShowTable] = React.useState(false)
 
@@ -98,6 +96,7 @@ const UserDetail = () => {
                             />
                         </ContentBox>
                     </Grid>
+
                     <Grid
                         item
                         lg={7}
@@ -111,21 +110,16 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Office:</span>
                                 <span style={{ color: 'green' }}>
-                                    <b>
-                                    {userData?.office}
-                                    </b>
+                                    <b>{userData?.office}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>CNIC:</span>
                                 <span style={{ color: 'green' }}>
-                                    <b>
-                                    {userData?.CNIC}
-                                    </b>
+                                    <b>{userData?.CNIC}</b>
                                 </span>
                             </Grid>
                         </Grid>
-
                         <hr></hr>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -138,6 +132,7 @@ const UserDetail = () => {
                                     </b>
                                 </span>
                             </Grid>
+                            
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Modification Date: </span>
                                 <span style={{ color: 'green' }}>

@@ -31,50 +31,36 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } }
 const UsersList = () => {
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
-    const [snackBar, setSnackBar] = React.useState(false)
+    const [createSnackBar, setCreateSnakBar] = React.useState(false)
+    const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
 
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
 
-    const [createName, setCreateName] = React.useState('')
-    const [createNameError, setCreateNameError] = React.useState(false)
-    const [createOffice, setCreateOffice] = React.useState('')
-    const [createOfficeError, setCreateOfficeError] = React.useState(false)
-    const [createDescription, setCreateDescription] = React.useState('')
-    const [createDescriptionError, setCreateDescriptionError] =
-        React.useState(false)
-    const [createCnic, setCreateCnic] = React.useState('')
-    const [createCnicError, setCreateCnicError] = React.useState(false)
-    const [createEmployeeId, setCreateEmployeeId] = React.useState('')
-    const [createEmployeeIdError, setCreateEmployeeIdError] =
-        React.useState(false)
-    const [createChecked, setCreateChecked] = React.useState(true)
-
-    const [editName, setEditName] = React.useState('')
-    const [editNameError, setEditNameError] = React.useState(false)
-    const [editOffice, setEditOffice] = React.useState('')
-    const [editOfficeError, setEditOfficeError] = React.useState(false)
-    const [editDescription, setEditDescription] = React.useState('')
-    const [editDescriptionError, setEditDescriptionError] =
-        React.useState(false)
-    const [editCnic, setEditCnic] = React.useState('')
-    const [editCnicError, setEditCnicError] = React.useState(false)
-    const [editEmployeeId, setEditEmployeeId] = React.useState('')
-    const [editEmployeeIdError, setEditEmployeeIdError] = React.useState(false)
-    const [editChecked, setEditChecked] = React.useState(true)
+    const [name, setName] = React.useState('')
+    const [nameError, setNameError] = React.useState(false)
+    const [office, setOffice] = React.useState('')
+    const [officeError, setOfficeError] = React.useState(false)
+    const [description, setDescription] = React.useState('')
+    const [descriptionError, setDescriptionError] = React.useState(false)
+    const [cnic, setCnic] = React.useState('')
+    const [cnicError, setCnicError] = React.useState(false)
+    const [employeeId, setEmployeeId] = React.useState('')
+    const [employeeIdError, setEmployeeIdError] = React.useState(false)
+    const [checked, setChecked] = React.useState(true)
 
     const Input = styled('input')({
         display: 'none',
     })
 
     const handleCreateChange = (event) => {
-        setCreateChecked(event.target.checked)
+        setChecked(event.target.checked)
     }
 
     const handleEditChange = (event) => {
-        setEditChecked(event.target.checked)
+        setChecked(event.target.checked)
     }
 
     useEffect(() => {
@@ -94,10 +80,42 @@ const UsersList = () => {
 
     const handleCreateClose = () => {
         setCreateEmployeeDialog(false)
+        setName('')
+        setOffice('')
+        setCnic('')
+        setEmployeeId('')
+        setDescription('')
+        setImage('')
+        setNameError(false)
+        setOfficeError(false)
+        setCnicError(false)
+        setEmployeeIdError(false)
+        setDescriptionError(false)
+        setChecked(true)
+    }
+
+    const handleCreateSnackBarClose = () => {
+        setCreateSnakBar(false)
     }
 
     const handleEditClose = () => {
         setEditEmployeeDialog(false)
+        setName('')
+        setOffice('')
+        setCnic('')
+        setEmployeeId('')
+        setDescription('')
+        setImage('')
+        setNameError(false)
+        setOfficeError(false)
+        setCnicError(false)
+        setEmployeeIdError(false)
+        setDescriptionError(false)
+        setChecked(true)
+    }
+
+    const handleEditSnackBarClose = () => {
+        setEditSnackBar(false)
     }
 
     const handleChange = (e, func, errorFunc) => {
@@ -113,26 +131,26 @@ const UsersList = () => {
 
     const handleCreateClickOpen = () => {
         if (
-            createName === '' ||
-            createOffice === '' ||
-            createCnic === '' ||
-            createDescription === '' ||
-            createEmployeeId === ''
+            name === '' ||
+            office === '' ||
+            cnic === '' ||
+            description === '' ||
+            employeeId === ''
         ) {
-            if (createName === '') {
-                setCreateNameError(true)
+            if (name === '') {
+                setNameError(true)
             }
-            if (createOffice === '') {
-                setCreateOfficeError(true)
+            if (office === '') {
+                setOfficeError(true)
             }
-            if (createCnic === '') {
-                setCreateCnicError(true)
+            if (cnic === '') {
+                setCnicError(true)
             }
-            if (createDescription === '') {
-                setCreateDescriptionError(true)
+            if (description === '') {
+                setDescriptionError(true)
             }
-            if (createEmployeeId === '') {
-                setCreateEmployeeIdError(true)
+            if (employeeId === '') {
+                setEmployeeIdError(true)
             }
         } else {
             createHandler()
@@ -141,26 +159,26 @@ const UsersList = () => {
 
     const handleEditClickOpen = () => {
         if (
-            editName === '' ||
-            editOffice === '' ||
-            editCnic === '' ||
-            editDescription === '' ||
-            editEmployeeId === ''
+            name === '' ||
+            office === '' ||
+            cnic === '' ||
+            description === '' ||
+            employeeId === ''
         ) {
-            if (editName === '') {
-                setEditNameError(true)
+            if (name === '') {
+                setNameError(true)
             }
-            if (editOffice === '') {
-                setEditOfficeError(true)
+            if (office === '') {
+                setOfficeError(true)
             }
-            if (editCnic === '') {
-                setEditCnicError(true)
+            if (cnic === '') {
+                setCnicError(true)
             }
-            if (editDescription === '') {
-                setEditDescriptionError(true)
+            if (description === '') {
+                setDescriptionError(true)
             }
-            if (editEmployeeId === '') {
-                setEditEmployeeIdError(true)
+            if (employeeId === '') {
+                setEmployeeIdError(true)
             }
         } else {
             editHandler()
@@ -169,38 +187,38 @@ const UsersList = () => {
 
     const createHandler = () => {
         let data = new FormData()
-        data.append('name', createName)
+        data.append('name', name)
         data.append('photo', image)
-        data.append('office', createOffice)
-        data.append('CNIC', createCnic)
-        data.append('detail', createDescription)
-        data.append('employeeId', createEmployeeId)
-        data.append('purchase', createChecked)
+        data.append('office', office)
+        data.append('CNIC', cnic)
+        data.append('detail', description)
+        data.append('employeeId', employeeId)
+        data.append('purchase', checked)
 
         const userNameExist = users.find((user) => {
-            return user.employeeId === createEmployeeId
+            return user.employeeId === employeeId
         })
 
         if (userNameExist) {
-            setSnackBar(true)
+            setCreateSnakBar(true)
             return
         }
 
         axios
             .post(`${config.base_url}/api/v1/employee`, data)
             .then((res) => {
-                console.log(res.data.data)
                 if (res) {
                     handleCreateClose()
                     getAlldata()
                 }
 
-                setCreateName('')
-                setCreateOffice('')
-                setCreateCnic('')
-                setCreateEmployeeId('')
-                setCreateDescription('')
+                setName('')
+                setOffice('')
+                setCnic('')
+                setEmployeeId('')
+                setDescription('')
                 setImage('')
+                setChecked(true)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -209,22 +227,13 @@ const UsersList = () => {
 
     const editHandler = () => {
         let data = new FormData()
-        data.append('name', editName)
+        data.append('name', name)
         data.append('photo', image)
-        data.append('office', editOffice)
-        data.append('CNIC', editCnic)
-        data.append('detail', editDescription)
-        data.append('employeeId', editEmployeeId)
-        data.append('purchase', editChecked)
-
-        // const userNameExist = users.find((user) => {
-        //     return user.name === editName
-        // })
-
-        // if (userNameExist) {
-        //     setSnackBar(true)
-        //     return;
-        // }
+        data.append('office', office)
+        data.append('CNIC', cnic)
+        data.append('detail', description)
+        data.append('employeeId', employeeId)
+        data.append('purchase', checked)
 
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
@@ -236,52 +245,52 @@ const UsersList = () => {
                 }
             })
             .catch((error) => {
-                if(error.message === "Request failed with status code 400")
-            {
-                setSnackBar(true);
-            }
+                if (error.message === 'Request failed with status code 400') {
+                    setEditSnackBar(true)
+                }
             })
     }
 
     const onEditHandler = (id, user) => {
         console.log(user.purchase)
         setEditEmployeeDialog(true)
-        setEditName(user.name)
-        setEditOffice(user.office)
-        setEditCnic(user.CNIC)
+        setName(user.name)
+        setOffice(user.office)
+        setCnic(user.CNIC)
         setImage(user.photo)
-        setEditEmployeeId(user.employeeId)
-        setEditDescription(user.detail)
-        setEditChecked(user.purchase)
+        setEmployeeId(user.employeeId)
+        setDescription(user.detail)
+        setChecked(user.purchase)
         setUserId(id)
     }
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
+            console.log('Edit Button Clicked')
             return
         }
-
-        setCreateEmployeeDialog(false)
     }
 
     const handleEditClosed = (event, reason) => {
         if (reason === 'clickaway') {
             return
         }
-
-        setEditEmployeeDialog(false)
     }
 
     const createAction = (
         <React.Fragment>
-            <Button color="secondary" size="small" onClick={handleCreateClose}>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleCreateSnackBarClose}
+            >
                 UNDO
             </Button>
             <IconButton
                 size="small"
                 aria-label="close"
                 color="inherit"
-                onClick={handleCreateClose}
+                onClick={handleCreateSnackBarClose}
             >
                 <CloseIcon fontSize="small" />
             </IconButton>
@@ -290,14 +299,18 @@ const UsersList = () => {
 
     const editAction = (
         <React.Fragment>
-            <Button color="secondary" size="small" onClick={handleEditClose}>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleEditSnackBarClose}
+            >
                 UNDO
             </Button>
             <IconButton
                 size="small"
                 aria-label="close"
                 color="inherit"
-                onClick={handleEditClose}
+                onClick={handleEditSnackBarClose}
             >
                 <CloseIcon fontSize="small" />
             </IconButton>
@@ -369,73 +382,45 @@ const UsersList = () => {
                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={createNameError}
+                                    error={nameError}
                                     id="category"
                                     label="Name"
                                     placeholder="Name"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        createNameError === true
+                                        nameError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={createName}
+                                    value={name}
                                     onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCreateName,
-                                            setCreateNameError
-                                        )
+                                        handleChange(e, setName, setNameError)
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
+
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={createOfficeError}
+                                    error={officeError}
                                     id="office"
                                     label="Office"
                                     placeholder="Enter Office"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        createOfficeError === true
+                                        officeError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={createOffice}
+                                    value={office}
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setCreateOffice,
-                                            setCreateOfficeError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <TextField
-                                    error={createCnicError}
-                                    id="cnic"
-                                    label="CNIC"
-                                    placeholder="Enter CNIC"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        createCnicError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={createCnic}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCreateCnic,
-                                            setCreateCnicError
+                                            setOffice,
+                                            setOfficeError
                                         )
                                     }
                                     variant="outlined"
@@ -445,23 +430,45 @@ const UsersList = () => {
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={createEmployeeIdError}
+                                    error={cnicError}
+                                    id="cnic"
+                                    label="CNIC"
+                                    placeholder="Enter CNIC"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        cnicError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={cnic}
+                                    onChange={(e) =>
+                                        handleChange(e, setCnic, setCnicError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <TextField
+                                    error={employeeIdError}
                                     id="employeeId"
                                     label="Employee ID"
                                     placeholder="Enter Employee ID"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        createEmployeeIdError === true
+                                        employeeIdError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={createEmployeeId}
+                                    value={employeeId}
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setCreateEmployeeId,
-                                            setCreateEmployeeIdError
+                                            setEmployeeId,
+                                            setEmployeeIdError
                                         )
                                     }
                                     variant="outlined"
@@ -492,19 +499,17 @@ const UsersList = () => {
                                 <Switch
                                     {...label}
                                     onChange={handleCreateChange}
-                                    checked={createChecked}
+                                    checked={checked}
                                     defaultChecked
                                 />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Grid>
-                            
 
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
-                                    error={createDescriptionError}
+                                    error={descriptionError}
                                     helperText={
-                                        createDescriptionError &&
-                                        'Field Required'
+                                        descriptionError && 'Field Required'
                                     }
                                     label="Detail"
                                     placeholder="Detail"
@@ -517,8 +522,8 @@ const UsersList = () => {
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setCreateDescription,
-                                            setCreateDescriptionError
+                                            setDescription,
+                                            setDescriptionError
                                         )
                                     }
                                 />
@@ -534,7 +539,7 @@ const UsersList = () => {
                 </DialogActions>
 
                 <Snackbar
-                    open={snackBar}
+                    open={createSnackBar}
                     autoHideDuration={5000}
                     onClose={handleCreateClosed}
                     message="Employee with same Id already exists"
@@ -548,7 +553,7 @@ const UsersList = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'ADD EMPLOYEE'}
+                    {'EDIT EMPLOYEE'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -556,98 +561,93 @@ const UsersList = () => {
                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={editNameError}
+                                    error={nameError}
                                     id="category"
                                     label="Name"
                                     placeholder="Name"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        editNameError === true
+                                        nameError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={editName}
+                                    value={name}
                                     onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEditName,
-                                            setEditNameError
-                                        )
+                                        handleChange(e, setName, setNameError)
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
+
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={editOfficeError}
+                                    error={officeError}
                                     id="office"
                                     label="Office"
                                     placeholder="Enter Office"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        editOfficeError === true
+                                        officeError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={editOffice}
+                                    value={office}
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setEditOffice,
-                                            setEditOfficeError
+                                            setOffice,
+                                            setOfficeError
                                         )
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
+
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={editCnicError}
+                                    error={cnicError}
                                     id="cnic"
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        editCnicError === true
+                                        cnicError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={editCnic}
+                                    value={cnic}
                                     onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEditCnic,
-                                            setEditCnicError
-                                        )
+                                        handleChange(e, setCnic, setCnicError)
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
+
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    error={editEmployeeIdError}
+                                    error={employeeIdError}
                                     id="employeeId"
                                     label="Employee ID"
                                     placeholder="Enter Employee ID"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
-                                        editEmployeeIdError === true
+                                        employeeIdError === true
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={editEmployeeId}
+                                    value={employeeId}
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setEditEmployeeId,
-                                            setEditEmployeeIdError
+                                            setEmployeeId,
+                                            setEmployeeIdError
                                         )
                                     }
                                     variant="outlined"
@@ -678,18 +678,17 @@ const UsersList = () => {
                                 <Switch
                                     {...label}
                                     onChange={handleEditChange}
-                                    checked={editChecked}
+                                    checked={checked}
                                     defaultChecked
                                 />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Grid>
-                            
 
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
-                                    error={editDescriptionError}
+                                    error={descriptionError}
                                     helperText={
-                                        editDescriptionError && 'Field Required'
+                                        descriptionError && 'Field Required'
                                     }
                                     label="Detail"
                                     placeholder="Detail"
@@ -699,12 +698,12 @@ const UsersList = () => {
                                     multiline
                                     fullWidth
                                     rows={3}
-                                    value={editDescription}
+                                    value={description}
                                     onChange={(e) =>
                                         handleChange(
                                             e,
-                                            setEditDescription,
-                                            setEditDescriptionError
+                                            setDescription,
+                                            setDescriptionError
                                         )
                                     }
                                 />
@@ -718,9 +717,8 @@ const UsersList = () => {
                         Confirm
                     </Button>
                 </DialogActions>
-
                 <Snackbar
-                    open={snackBar}
+                    open={editSnackBar}
                     autoHideDuration={5000}
                     onClose={handleEditClosed}
                     message="Employee with same Id already exists"
