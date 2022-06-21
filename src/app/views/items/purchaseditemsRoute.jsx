@@ -1,6 +1,7 @@
 import React, { lazy } from 'react'
 import Loadable from 'app/components/Loadable/Loadable';
 const PurchasedItems = Loadable(lazy(() => import("./PurchasedItems")));
+const PurchaseItemDetail = Loadable(lazy(() => import("./PurchaseItemDetail")));
 const purchaseditemsRoute = [
     {
         path: 'items/PurchasedItems',
@@ -8,7 +9,7 @@ const purchaseditemsRoute = [
     },
     {
         path: 'items/PurchasedItemsDetail',
-        element: <PurchasedItems/>,
+        element: <PurchaseItemDetail />,
     },
 ]
 export default purchaseditemsRoute;
