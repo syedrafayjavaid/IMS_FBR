@@ -26,6 +26,21 @@ import axios from 'axios'
 import config from 'config'
 import UsersCard from './UsersCard'
 
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
+import { set } from 'lodash'
+
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
 const UsersList = () => {
@@ -50,6 +65,51 @@ const UsersList = () => {
     const [employeeId, setEmployeeId] = React.useState('')
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     const [checked, setChecked] = React.useState(true)
+
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open1 = Boolean(anchorEl);
+    const [anchorEl1, setAnchorEl1] = React.useState(null);
+    const open2 = Boolean(anchorEl1);
+
+
+
+const [mobileNumber1,setMobileNumber1]= React.useState('')
+const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
+const [remarks1,setRemarks1]= React.useState('')
+const [remarks1Error,setRemarks1Error]= React.useState(false)
+const [emailAddress1,setEmailAddress1]= React.useState('')
+const [emailAddress1Error,setEmailAddress1Error]= React.useState('')
+const [placeOfPosting1,setPlaceOfPosting1]= React.useState('')
+const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
+const [pg1,setPg1]= React.useState('')
+const [pg1Error,setPg1Error]= React.useState(false)
+const [wing1,setWing1]= React.useState('')
+const [wing1Error,setWing1Error]= React.useState(false)
+const [department1,setDepartment1]= React.useState('')
+const [department1Error,setDepartment1Error]= React.useState('')
+const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState('')
+const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
+const [designation1,setDesignation1]= React.useState('')
+const [designation1Error,setDesignation1Error]= React.useState(false)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const Input = styled('input')({
         display: 'none',
@@ -92,6 +152,15 @@ const UsersList = () => {
         setEmployeeIdError(false)
         setDescriptionError(false)
         setChecked(true)
+        setMobileNumber(false)
+        setDateOfJoining(false)
+        setDepartment(false)
+        setWing(false)
+        setPg(false)
+        setDesgnation(false)
+        setEmailAdress(false)
+        setRemark(false)
+        setPlaceOfPoset(false)
     }
 
     const handleCreateSnackBarClose = () => {
@@ -335,6 +404,52 @@ const UsersList = () => {
             })
     }
 
+
+
+
+    
+
+    const iconeHandler = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+      const iconeHandler1 = (event) => {
+        setAnchorEl1(event.currentTarget);
+      };
+      const handleClose = () => {
+        setAnchorEl();
+      };
+      const handleClose1 = () => {
+        setAnchorEl1();
+      };
+
+
+      const [checkedBox1, setCheckedBox1] = React.useState(true);
+      const [emailAdress, setEmailAdress] = React.useState(false);
+      const [designation, setDesgnation] = React.useState(false);
+      const [remark, setRemark] = React.useState(false);
+      const [dateOfJoining, setDateOfJoining] = React.useState(false);
+      const [pg, setPg] = React.useState(false);
+      const [wing, setWing] = React.useState(false);
+      const [placeOfPoset, setPlaceOfPoset] = React.useState(false);
+      const [department, setDepartment] = React.useState(false);
+      const [mobileNumber, setMobileNumber] = React.useState(false);
+
+
+  const checkBoxHandler1 = (event) => {
+    setCheckedBox1(event.target.checked);
+    
+  };
+
+  const stateModifier= (state,func)=>{
+
+    func(!state)
+
+  }
+
+
+
+
+
     return (
         <>
             <Container>
@@ -381,12 +496,147 @@ const UsersList = () => {
             >
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
+                    <IconButton aria-label="settings" 
+                    sx={{ ml: 45}}
+                    onClick={iconeHandler}
+                    >
+            <MoreVertIcon /> 
+          </IconButton>
+
+
+
+
+         <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open1}
+        onClose={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+            <MenuItem >
+              <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(mobileNumber,setMobileNumber)}
+            defaultChecked = {mobileNumber === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Moible Number
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(remark,setRemark)}
+            defaultChecked = {remark === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+            Remarks
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(emailAdress,setEmailAdress)}
+            defaultChecked = {emailAdress === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Email Address
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(placeOfPoset,setPlaceOfPoset)}
+            defaultChecked = {placeOfPoset === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Place Of Posting 
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(pg,setPg)}
+            defaultChecked = {pg === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              PG
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(wing,setWing)}
+            defaultChecked = {wing === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Wing
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(department,setDepartment)}
+            defaultChecked = {department === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Department
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(dateOfJoining,setDateOfJoining)}
+            defaultChecked = {dateOfJoining === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Date Of Joining
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(designation,setDesgnation)}
+            defaultChecked = {designation === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Designation
+            </MenuItem>
+         
+      </Menu> 
+
+
+ 
+
+
                 </DialogTitle>
+            
+
+                
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={nameError}
                                     id="category"
@@ -408,7 +658,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={officeError}
                                     id="office"
@@ -434,7 +684,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={cnicError}
                                     id="cnic"
@@ -456,7 +706,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={employeeIdError}
                                     id="employeeId"
@@ -481,6 +731,234 @@ const UsersList = () => {
                                     fullWidth
                                 />
                             </Grid>
+
+
+
+
+
+{mobileNumber === true &&
+    <Grid item lg={4} md={4} sm={4} xs={6}>
+    <TextField
+        error={mobilenumber1Error}
+        id="category"
+        label="Mobile Number"
+        placeholder="Mobile Number"
+        size="small"
+        autoComplete="off"
+        helperText={
+            mobilenumber1Error === true
+                ? 'Field Required'
+                : ''
+        }
+        value={mobileNumber1}
+        onChange={(e) =>
+            handleChange(e, setMobileNumber1, setMobileNumber1Error)
+        }
+        variant="outlined"
+        fullWidth
+    />
+</Grid>
+}
+{remark===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={remarks1Error}
+     id="category"
+     label="Remarks"
+     placeholder="Remarks"
+     size="small"
+     autoComplete="off"
+     helperText={
+         remarks1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={remarks1}
+     onChange={(e) =>
+         handleChange(e, setRemarks1, setRemarks1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+}
+{emailAdress===true &&
+    <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={emailAddress1Error}
+                                    id="category"
+                                    label="Email Address"
+                                    placeholder="Email Address"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        emailAddress1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={emailAddress1}
+                                    onChange={(e) =>
+                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+}
+    {placeOfPoset===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={placeOfPosting1Error}
+     id="category"
+     label="Place Of Posting"
+     placeholder="Place Of Posting"
+     size="small"
+     autoComplete="off"
+     helperText={
+         placeOfPosting1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={placeOfPosting1}
+     onChange={(e) =>
+         handleChange(e, setPlaceOfPosting1, setPlaceOfPosting1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+
+    }   
+    {pg===true &&
+
+<Grid item lg={4} md={4} sm={4} xs={6}>
+<TextField
+    error={pg1Error}
+    id="category"
+    label="PG"
+    placeholder="PG"
+    size="small"
+    autoComplete="off"
+    helperText={
+        pg1Error === true
+            ? 'Field Required'
+            : ''
+    }
+    value={pg1}
+    onChange={(e) =>
+        handleChange(e, setPg1, setPg1Error)
+    }
+    variant="outlined"
+    fullWidth
+/>
+</Grid>
+    }  
+    {wing===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={wing1Error}
+     id="category"
+     label="wing"
+     placeholder="wing"
+     size="small"
+     autoComplete="off"
+     helperText={
+         wing1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={wing1}
+     onChange={(e) =>
+         handleChange(e, setWing1, setWing1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+    }               
+    {department===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={department1Error}
+     id="category"
+     label="Department"
+     placeholder="Department"
+     size="small"
+     autoComplete="off"
+     helperText={
+         department1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={department1}
+     onChange={(e) =>
+         handleChange(e, setDepartment1, setDepartment1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+    }   
+       
+    {dateOfJoining===true &&
+        <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={dateOfJoinnig1Error}
+                                    id="category"
+                                    label="Date Of Joinnig"
+                                    placeholder="Date Of Joinnig"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        dateOfJoinnig1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={dateOfJoinnig1}
+                                    onChange={(e) =>
+                                        handleChange(e, setDateOfJoinnig1, setDateOfJoinnig1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+    }             
+                            
+               {designation===true &&
+                    
+                    <Grid item lg={4} md={4} sm={4} xs={6}>
+                    <TextField
+                        error={designation1Error}
+                        id="category"
+                        label="Designation"
+                        placeholder="Designation"
+                        size="small"
+                        autoComplete="off"
+                        helperText={
+                            designation1Error === true
+                                ? 'Field Required'
+                                : ''
+                        }
+                        value={designation1}
+                        onChange={(e) =>
+                            handleChange(e, setDesignation1, setDesignation1Error)
+                        }
+                        variant="outlined"
+                        fullWidth
+                    />
+                </Grid>
+
+               }            
+                           
+                           
+                           
+                           
+
+
+
+
+
+
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -560,12 +1038,138 @@ const UsersList = () => {
             >
                 <DialogTitle id="alert-dialog-title">
                     {'EDIT EMPLOYEE'}
+                    <IconButton aria-label="settings" 
+                    sx={{ ml: 45}}
+                    onClick={iconeHandler1}
+                    >
+                          <MoreVertIcon /> 
+          </IconButton>
+
+<Menu
+        anchorEl1={anchorEl1}
+        id="account-menu"
+        open={open2}
+        onClose={handleClose1}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+            <MenuItem >
+              <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(mobileNumber,setMobileNumber)}
+            defaultChecked = {mobileNumber === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Moible Number
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(remark,setRemark)}
+            defaultChecked = {remark === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+            Remarks
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(emailAdress,setEmailAdress)}
+            defaultChecked = {emailAdress === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Email Address
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(placeOfPoset,setPlaceOfPoset)}
+            defaultChecked = {placeOfPoset === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Place Of Posting 
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(pg,setPg)}
+            defaultChecked = {pg === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              PG
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(wing,setWing)}
+            defaultChecked = {wing === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Wing
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(department,setDepartment)}
+            defaultChecked = {department === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Department
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(dateOfJoining,setDateOfJoining)}
+            defaultChecked = {dateOfJoining === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Date Of Joining
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(designation,setDesgnation)}
+            defaultChecked = {designation === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Designation
+            </MenuItem>
+         
+      </Menu> 
+          
+                    
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={nameError}
                                     id="category"
@@ -587,7 +1191,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={officeError}
                                     id="office"
@@ -613,7 +1217,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={cnicError}
                                     id="cnic"
@@ -634,8 +1238,9 @@ const UsersList = () => {
                                     fullWidth
                                 />
                             </Grid>
+                  
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={employeeIdError}
                                     id="employeeId"
@@ -660,6 +1265,431 @@ const UsersList = () => {
                                     fullWidth
                                 />
                             </Grid>
+
+
+
+
+
+
+
+
+
+{mobileNumber === true &&
+    <Grid item lg={4} md={4} sm={4} xs={6}>
+    <TextField
+        error={mobilenumber1Error}
+        id="category"
+        label="Mobile Number"
+        placeholder="Mobile Number"
+        size="small"
+        autoComplete="off"
+        helperText={
+            mobilenumber1Error === true
+                ? 'Field Required'
+                : ''
+        }
+        value={mobileNumber1}
+        onChange={(e) =>
+            handleChange(e, setMobileNumber1, setMobileNumber1Error)
+        }
+        variant="outlined"
+        fullWidth
+    />
+</Grid>
+}
+{remark===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={remarks1Error}
+     id="category"
+     label="Remarks"
+     placeholder="Remarks"
+     size="small"
+     autoComplete="off"
+     helperText={
+         remarks1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={remarks1}
+     onChange={(e) =>
+         handleChange(e, setRemarks1, setRemarks1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+}
+{emailAdress===true &&
+    <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={emailAddress1Error}
+                                    id="category"
+                                    label="Email Address"
+                                    placeholder="Email Address"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        emailAddress1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={emailAddress1}
+                                    onChange={(e) =>
+                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+}
+    {placeOfPoset===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={placeOfPosting1Error}
+     id="category"
+     label="Place Of Posting"
+     placeholder="Place Of Posting"
+     size="small"
+     autoComplete="off"
+     helperText={
+         placeOfPosting1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={placeOfPosting1}
+     onChange={(e) =>
+         handleChange(e, setPlaceOfPosting1, setPlaceOfPosting1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+
+    }   
+    {pg===true &&
+
+<Grid item lg={4} md={4} sm={4} xs={6}>
+<TextField
+    error={pg1Error}
+    id="category"
+    label="PG"
+    placeholder="PG"
+    size="small"
+    autoComplete="off"
+    helperText={
+        pg1Error === true
+            ? 'Field Required'
+            : ''
+    }
+    value={pg1}
+    onChange={(e) =>
+        handleChange(e, setPg1, setPg1Error)
+    }
+    variant="outlined"
+    fullWidth
+/>
+</Grid>
+    }  
+    {wing===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={wing1Error}
+     id="category"
+     label="wing"
+     placeholder="wing"
+     size="small"
+     autoComplete="off"
+     helperText={
+         wing1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={wing1}
+     onChange={(e) =>
+         handleChange(e, setWing1, setWing1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+    }               
+    {department===true &&
+ <Grid item lg={4} md={4} sm={4} xs={6}>
+ <TextField
+     error={department1Error}
+     id="category"
+     label="Department"
+     placeholder="Department"
+     size="small"
+     autoComplete="off"
+     helperText={
+         department1Error === true
+             ? 'Field Required'
+             : ''
+     }
+     value={department1}
+     onChange={(e) =>
+         handleChange(e, setDepartment1, setDepartment1Error)
+     }
+     variant="outlined"
+     fullWidth
+ />
+</Grid>
+    }   
+       
+    {dateOfJoining===true &&
+        <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={dateOfJoinnig1Error}
+                                    id="category"
+                                    label="Date Of Joinnig"
+                                    placeholder="Date Of Joinnig"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        dateOfJoinnig1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={dateOfJoinnig1}
+                                    onChange={(e) =>
+                                        handleChange(e, setDateOfJoinnig1, setDateOfJoinnig1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+    }             
+                            
+               {designation===true &&
+                    
+                    <Grid item lg={4} md={4} sm={4} xs={6}>
+                    <TextField
+                        error={designation1Error}
+                        id="category"
+                        label="Designation"
+                        placeholder="Designation"
+                        size="small"
+                        autoComplete="off"
+                        helperText={
+                            designation1Error === true
+                                ? 'Field Required'
+                                : ''
+                        }
+                        value={designation1}
+                        onChange={(e) =>
+                            handleChange(e, setDesignation1, setDesignation1Error)
+                        }
+                        variant="outlined"
+                        fullWidth
+                    />
+                </Grid>
+
+               }  
+
+
+{/* old colde start */}
+
+
+
+{/* 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name"
+                                    placeholder="Name"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={name}
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+
+ */}
+
+{/* old code end */}
+
+                           
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
