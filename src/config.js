@@ -8,7 +8,7 @@ let config = {
         base_url: 'http://localhost:5000'
     },
     office: {
-        base_url: 'http://192.168.18.117:5000'
+        base_url: 'http://192.168.18.146:5000'
     }
 }
 
