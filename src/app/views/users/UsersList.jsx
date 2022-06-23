@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react'
 
+import InputLabel from '@mui/material/InputLabel';
+
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 // material
 import AddIcon from '@mui/icons-material/Add'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
@@ -40,6 +44,8 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
 import { set } from 'lodash'
+import { date } from 'yup'
+import Box from '@mui/material/Box';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -56,15 +62,15 @@ const UsersList = () => {
 
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
-    const [office, setOffice] = React.useState('')
-    const [officeError, setOfficeError] = React.useState(false)
+    // const [office, setOffice] = React.useState('')
+    // const [officeError, setOfficeError] = React.useState(false)
     const [description, setDescription] = React.useState('')
     const [descriptionError, setDescriptionError] = React.useState(false)
     const [cnic, setCnic] = React.useState('')
     const [cnicError, setCnicError] = React.useState(false)
     const [employeeId, setEmployeeId] = React.useState('')
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
-    const [checked, setChecked] = React.useState(true)
+    //  const [checked, setChecked] = React.useState([])
 
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -74,21 +80,24 @@ const UsersList = () => {
 
 
 
+    const date = new Date().toISOString().split('T')[0]
+
 const [mobileNumber1,setMobileNumber1]= React.useState('')
 const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
 const [remarks1,setRemarks1]= React.useState('')
 const [remarks1Error,setRemarks1Error]= React.useState(false)
 const [emailAddress1,setEmailAddress1]= React.useState('')
 const [emailAddress1Error,setEmailAddress1Error]= React.useState('')
-const [placeOfPosting1,setPlaceOfPosting1]= React.useState('')
-const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
+const [placeOfPosting1,setPlaceOfPosting1]= React.useState([])
+const [placeOfPosting1Name,setPlaceOfPosting1Name]=React.useState('')
+// const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
 const [pg1,setPg1]= React.useState('')
 const [pg1Error,setPg1Error]= React.useState(false)
 const [wing1,setWing1]= React.useState('')
 const [wing1Error,setWing1Error]= React.useState(false)
 const [department1,setDepartment1]= React.useState('')
 const [department1Error,setDepartment1Error]= React.useState('')
-const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState('')
+const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState(date)
 const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
 const [designation1Error,setDesignation1Error]= React.useState(false)
@@ -97,7 +106,10 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
 
 
-
+const handlePlaceOfJoining = (event) => {
+    console.log(event.target.value, 'rula');
+    setPlaceOfPosting1Name(event.target.value);
+  };
 
 
 
@@ -115,13 +127,13 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         display: 'none',
     })
 
-    const handleCreateChange = (event) => {
-        setChecked(event.target.checked)
-    }
+    // const handleCreateChange = (event) => {
+    //     setChecked(event.target.checked)
+    // }
 
-    const handleEditChange = (event) => {
-        setChecked(event.target.checked)
-    }
+    // const handleEditChange = (event) => {
+    //     setChecked(event.target.checked)
+    // }
 
     useEffect(() => {
         getAlldata()
@@ -136,31 +148,57 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             .catch((error) => {
                 console.log(error, 'error')
             })
+
+    axios.get(`${config.base_url}/api/v1/office`).then((res) => {
+                console.log(res.data.data,'office data');
+                setPlaceOfPosting1(res.data.data)
+                
+              }).catch((error) => {
+                console.log(error, 'error');
+              })
     }
 
     const handleCreateClose = () => {
         setCreateEmployeeDialog(false)
         setName('')
-        setOffice('')
+        // setOffice('')
         setCnic('')
         setEmployeeId('')
         setDescription('')
         setImage('')
         setNameError(false)
-        setOfficeError(false)
+        // setOfficeError(false)
         setCnicError(false)
         setEmployeeIdError(false)
         setDescriptionError(false)
-        setChecked(true)
-        setMobileNumber(false)
-        setDateOfJoining(false)
-        setDepartment(false)
-        setWing(false)
-        setPg(false)
-        setDesgnation(false)
-        setEmailAdress(false)
-        setRemark(false)
-        setPlaceOfPoset(false)
+        // setChecked(true)
+        // setMobileNumber(false)
+        // setDateOfJoining(false)
+        // setDepartment(false)
+        // setWing(false)
+        // setPg(false)
+        // setDesgnation(false)
+        // setEmailAdress(false)
+        // setRemark(false)
+        // setPlaceOfPoset(false)
+        setMobileNumber1('')
+        setMobileNumber1Error(false)
+        setRemarks1('')
+        setRemarks1Error(false)
+        setEmailAddress1('')
+        setEmailAddress1Error(false)
+        setPlaceOfPosting1Name('')
+        // setPlaceOfPosting1('')
+        // setPlaceOfPosting1Error(false)
+        setPg1('')
+        setPg1Error(false)
+        setWing1('')
+        setWing1Error(false)
+        setDepartment1('')
+        setDepartment1Error(false)
+        setDesignation1('')
+        setDesignation1Error(false)
+        setDateOfJoinnig1(date)
     }
 
     const handleCreateSnackBarClose = () => {
@@ -170,17 +208,37 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     const handleEditClose = () => {
         setEditEmployeeDialog(false)
         setName('')
-        setOffice('')
+        // setOffice('')
         setCnic('')
         setEmployeeId('')
         setDescription('')
         setImage('')
         setNameError(false)
-        setOfficeError(false)
+        // setOfficeError(false)
         setCnicError(false)
         setEmployeeIdError(false)
         setDescriptionError(false)
-        setChecked(true)
+        // setChecked(true)
+
+        setPlaceOfPosting1Name('')
+        setMobileNumber1('')
+        setMobileNumber1Error(false)
+        setRemarks1('')
+        setRemarks1Error(false)
+        setEmailAddress1('')
+        setEmailAddress1Error(false)
+        // setPlaceOfPosting1('')
+        // setPlaceOfPosting1Error(false)
+        setPg1('')
+        setPg1Error(false)
+        setWing1('')
+        setWing1Error(false)
+        setDepartment1('')
+        setDepartment1Error(false)
+        setDesignation1('')
+        setDesignation1Error(false)
+        setDateOfJoinnig1(date)
+
     }
 
     const handleEditSnackBarClose = () => {
@@ -201,16 +259,19 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     const handleCreateClickOpen = () => {
         if (
             name === '' ||
-            office === '' ||
             cnic === '' ||
             description === '' ||
-            employeeId === ''
+            employeeId === '' ||
+            mobileNumber1===''||
+            remarks1==='' ||
+            emailAddress1===''||
+            pg1===''||
+            wing1===''||
+            department1===''||
+            designation1==''
         ) {
             if (name === '') {
                 setNameError(true)
-            }
-            if (office === '') {
-                setOfficeError(true)
             }
             if (cnic === '') {
                 setCnicError(true)
@@ -221,6 +282,29 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             if (employeeId === '') {
                 setEmployeeIdError(true)
             }
+            if(mobileNumber1===''){
+                setMobileNumber1Error(true)
+            }
+            if(remarks1===''){
+                setRemarks1Error(true)
+            }
+            if(emailAddress1===''){
+                setEmailAddress1Error(true)
+            }
+            if(pg1===''){
+                setPg1Error(true)
+            }
+            if(wing1===''){
+                setWing1Error(true)
+            }
+            if(department1===''){
+                setDepartment1Error(true)
+            }
+             if(designation1===''){
+                setDesignation1Error(true)
+            }
+
+
         } else {
             createHandler()
         }
@@ -229,16 +313,19 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     const handleEditClickOpen = () => {
         if (
             name === '' ||
-            office === '' ||
             cnic === '' ||
             description === '' ||
-            employeeId === ''
+            employeeId === '' ||
+            mobileNumber1===''||
+            remarks1==='' ||
+            emailAddress1===''||
+            pg1===''||
+            wing1===''||
+            department1===''||
+            designation1==''
         ) {
             if (name === '') {
                 setNameError(true)
-            }
-            if (office === '') {
-                setOfficeError(true)
             }
             if (cnic === '') {
                 setCnicError(true)
@@ -249,8 +336,31 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             if (employeeId === '') {
                 setEmployeeIdError(true)
             }
+            if(mobileNumber1===''){
+                setMobileNumber1Error(true)
+            }
+            if(remarks1===''){
+                setRemarks1Error(true)
+            }
+            if(emailAddress1===''){
+                setEmailAddress1Error(true)
+            }
+            if(pg1===''){
+                setPg1Error(true)
+            }
+            if(wing1===''){
+                setWing1Error(true)
+            }
+            if(department1===''){
+                setDepartment1Error(true)
+            }
+             if(designation1===''){
+                setDesignation1Error(true)
+            }
+
+
         } else {
-            editHandler()
+            createHandler()
         }
     }
 
@@ -258,11 +368,22 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         let data = new FormData()
         data.append('name', name)
         data.append('photo', image)
-        data.append('office', office)
-        data.append('CNIC', cnic)
-        data.append('detail', description)
+        // data.append('office', office)
+        data.append('cnic', cnic)
+        // data.append('detail', description)
         data.append('employeeId', employeeId)
-        data.append('purchase', checked)
+        // data.append('purchasedItems', checked)
+
+        data.append('mobileNumber', mobileNumber1)
+        data.append('placeOfPosting', placeOfPosting1Name)
+        data.append('remarks', remarks1)
+        data.append('dateOfJoining', dateOfJoinnig1)
+        data.append('wing', wing1)
+        data.append('pg', pg1)
+        data.append('department', department1)
+        data.append('designation', designation1)
+        data.append('emailAddress', emailAddress1)
+     
 
         const userNameExist = users.find((user) => {
             return user.employeeId === employeeId
@@ -282,12 +403,21 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 }
 
                 setName('')
-                setOffice('')
+                // setOffice('')
                 setCnic('')
                 setEmployeeId('')
                 setDescription('')
                 setImage('')
-                setChecked(true)
+                setMobileNumber1('')
+                setRemarks1('')
+                setEmailAddress1('')
+                // setPlaceOfPosting1('')
+                setPg1('')
+                setWing1('')
+                setDepartment1('')
+                setDesignation1('')
+                // setChecked(true)
+                setDateOfJoinnig1(date)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -298,11 +428,23 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         let data = new FormData()
         data.append('name', name)
         data.append('photo', image)
-        data.append('office', office)
+        // data.append('office', office)
         data.append('CNIC', cnic)
-        data.append('detail', description)
+        // data.append('detail', description)
         data.append('employeeId', employeeId)
-        data.append('purchase', checked)
+        // data.append('purchase', checked)
+
+        data.append('mobileNumber', mobileNumber1)
+        data.append('placeOfPosting', placeOfPosting1Name)
+        data.append('remarks', remarks1)
+        data.append('dateOfJoining', dateOfJoinnig1)
+        data.append('wing', wing1)
+        data.append('pg', pg1)
+        data.append('department', department1)
+        data.append('designation', designation1)
+        data.append('emailAddress', emailAddress1)
+        
+     
 
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
@@ -321,15 +463,16 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     }
 
     const onEditHandler = (id, user) => {
-        console.log(user.purchase)
+        console.log(user,'ya mudda')
         setEditEmployeeDialog(true)
         setName(user.name)
-        setOffice(user.office)
-        setCnic(user.CNIC)
+        // setOffice(user.office)
+        setCnic(user.cinc)
         setImage(user.photo)
         setEmployeeId(user.employeeId)
-        setDescription(user.detail)
-        setChecked(user.purchase)
+        // setDescription(user.detail)
+        setMobileNumber1(user.mobileNumber)
+        // setChecked(user.purchase)
         setUserId(id)
     }
 
@@ -409,42 +552,46 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
     
 
-    const iconeHandler = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
-      const iconeHandler1 = (event) => {
-        setAnchorEl1(event.currentTarget);
-      };
-      const handleClose = () => {
-        setAnchorEl();
-      };
-      const handleClose1 = () => {
-        setAnchorEl1();
-      };
+    // const iconeHandler = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    //   };
+    //   const iconeHandler1 = (event) => {
+    //     setAnchorEl1(event.currentTarget);
+    //   };
+    //   const handleClose = () => {
+    //     setAnchorEl();
+    //   };
+    //   const handleClose1 = () => {
+    //     setAnchorEl1();
+    //   };
 
 
-      const [checkedBox1, setCheckedBox1] = React.useState(true);
-      const [emailAdress, setEmailAdress] = React.useState(false);
-      const [designation, setDesgnation] = React.useState(false);
-      const [remark, setRemark] = React.useState(false);
-      const [dateOfJoining, setDateOfJoining] = React.useState(false);
-      const [pg, setPg] = React.useState(false);
-      const [wing, setWing] = React.useState(false);
-      const [placeOfPoset, setPlaceOfPoset] = React.useState(false);
-      const [department, setDepartment] = React.useState(false);
-      const [mobileNumber, setMobileNumber] = React.useState(false);
+    //   const [checkedBox1, setCheckedBox1] = React.useState(true);
+    //   const [emailAdress, setEmailAdress] = React.useState(false);
+    //   const [designation, setDesgnation] = React.useState(false);
+    //   const [remark, setRemark] = React.useState(false);
+    //   const [dateOfJoining, setDateOfJoining] = React.useState(false);
+    //   const [pg, setPg] = React.useState(false);
+    //   const [wing, setWing] = React.useState(false);
+    //   const [placeOfPoset, setPlaceOfPoset] = React.useState(false);
+    //   const [department, setDepartment] = React.useState(false);
+    //   const [mobileNumber, setMobileNumber] = React.useState(false);
 
 
-  const checkBoxHandler1 = (event) => {
-    setCheckedBox1(event.target.checked);
+//   const checkBoxHandler1 = (event) => {
+//     setCheckedBox1(event.target.checked);
     
+//   };
+
+//   const stateModifier= (state,func)=>{
+
+//     func(!state)
+
+//   }
+const dateOfjoinnignHandler=(event)=> {
+    console.log(event.target.value, 'vender text value');
+    setDateOfJoinnig1(event.target.value);
   };
-
-  const stateModifier= (state,func)=>{
-
-    func(!state)
-
-  }
 
 
 
@@ -498,14 +645,14 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     {'ADD EMPLOYEE'}
                     <IconButton aria-label="settings" 
                     sx={{ ml: 45}}
-                    onClick={iconeHandler}
+                    // onClick={iconeHandler}
                     >
             <MoreVertIcon /> 
           </IconButton>
 
 
 
-
+{/* 
          <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -622,7 +769,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
               Designation
             </MenuItem>
          
-      </Menu> 
+      </Menu>  */}
 
 
  
@@ -658,7 +805,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                 />
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={officeError}
                                     id="office"
@@ -682,7 +829,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     variant="outlined"
                                     fullWidth
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -736,7 +883,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
 
 
-{mobileNumber === true &&
+
     <Grid item lg={4} md={4} sm={4} xs={6}>
     <TextField
         error={mobilenumber1Error}
@@ -758,8 +905,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         fullWidth
     />
 </Grid>
-}
-{remark===true &&
+
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
@@ -781,8 +927,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-}
-{emailAdress===true &&
+
     <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={emailAddress1Error}
@@ -804,9 +949,8 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     fullWidth
                                 />
                             </Grid>
-}
-    {placeOfPoset===true &&
- <Grid item lg={4} md={4} sm={4} xs={6}>
+
+ {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={placeOfPosting1Error}
      id="category"
@@ -826,10 +970,46 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      variant="outlined"
      fullWidth
  />
+</Grid> */}
+
+
+
+
+<Grid item lg={4} md={4} sm={4} xs={6}>
+<FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+<InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        
+                        value={placeOfPosting1Name}
+                        label="Office"
+                        onChange={handlePlaceOfJoining} >
+                        {placeOfPosting1.map(
+                          (officeList) => {
+                            return (
+                              <MenuItem
+                                value={officeList._id}
+                              >
+                                {
+                                  officeList.name
+                                }
+                              </MenuItem>
+                            )
+                          }
+                        )}
+                      </Select>
+                      </FormControl>
+                    
 </Grid>
 
-    }   
-    {pg===true &&
+
+
+
+
+
+
+
 
 <Grid item lg={4} md={4} sm={4} xs={6}>
 <TextField
@@ -852,14 +1032,13 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     fullWidth
 />
 </Grid>
-    }  
-    {wing===true &&
+   
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={wing1Error}
      id="category"
-     label="wing"
-     placeholder="wing"
+     label="Wing"
+     placeholder="Wing"
      size="small"
      autoComplete="off"
      helperText={
@@ -875,8 +1054,8 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-    }               
-    {department===true &&
+                  
+ 
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={department1Error}
@@ -898,34 +1077,27 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-    }   
-       
-    {dateOfJoining===true &&
-        <Grid item lg={4} md={4} sm={4} xs={6}>
+<Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={dateOfJoinnig1Error}
                                     id="category"
                                     label="Date Of Joinnig"
                                     placeholder="Date Of Joinnig"
                                     size="small"
-                                    autoComplete="off"
+                                    type="date"
                                     helperText={
                                         dateOfJoinnig1Error === true
                                             ? 'Field Required'
                                             : ''
                                     }
                                     value={dateOfJoinnig1}
-                                    onChange={(e) =>
-                                        handleChange(e, setDateOfJoinnig1, setDateOfJoinnig1Error)
-                                    }
+                                    onChange={dateOfjoinnignHandler}
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
-    }             
-                            
-               {designation===true &&
-                    
+  
+
                     <Grid item lg={4} md={4} sm={4} xs={6}>
                     <TextField
                         error={designation1Error}
@@ -948,7 +1120,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     />
                 </Grid>
 
-               }            
+                          
                            
                            
                            
@@ -978,7 +1150,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     </Button>
                                 </label>
                             </Grid>
-                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            {/* <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <span>Purchase</span>
                                 <Switch
                                     {...label}
@@ -987,7 +1159,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     defaultChecked
                                 />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
@@ -1040,12 +1212,12 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     {'EDIT EMPLOYEE'}
                     <IconButton aria-label="settings" 
                     sx={{ ml: 45}}
-                    onClick={iconeHandler1}
+                    // onClick={iconeHandler1}
                     >
                           <MoreVertIcon /> 
           </IconButton>
 
-<Menu
+{/* <Menu
         anchorEl1={anchorEl1}
         id="account-menu"
         open={open2}
@@ -1161,7 +1333,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
               Designation
             </MenuItem>
          
-      </Menu> 
+      </Menu>  */}
           
                     
                 </DialogTitle>
@@ -1191,7 +1363,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                 />
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={officeError}
                                     id="office"
@@ -1215,7 +1387,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     variant="outlined"
                                     fullWidth
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1274,7 +1446,6 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
 
 
-{mobileNumber === true &&
     <Grid item lg={4} md={4} sm={4} xs={6}>
     <TextField
         error={mobilenumber1Error}
@@ -1296,8 +1467,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         fullWidth
     />
 </Grid>
-}
-{remark===true &&
+
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
@@ -1319,8 +1489,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-}
-{emailAdress===true &&
+
     <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={emailAddress1Error}
@@ -1342,9 +1511,8 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     fullWidth
                                 />
                             </Grid>
-}
-    {placeOfPoset===true &&
- <Grid item lg={4} md={4} sm={4} xs={6}>
+
+ {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={placeOfPosting1Error}
      id="category"
@@ -1364,10 +1532,38 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      variant="outlined"
      fullWidth
  />
+</Grid> */}
+
+
+<Grid item lg={4} md={4} sm={4} xs={6}>
+<FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+<InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        
+                        value={placeOfPosting1Name}
+                        label="Office"
+                        onChange={handlePlaceOfJoining} >
+                        {placeOfPosting1.map(
+                          (officeList) => {
+                            return (
+                              <MenuItem
+                                value={officeList._id}
+                              >
+                                {
+                                  officeList.name
+                                }
+                              </MenuItem>
+                            )
+                          }
+                        )}
+                      </Select>
+                      </FormControl>
+                    
 </Grid>
 
-    }   
-    {pg===true &&
+
 
 <Grid item lg={4} md={4} sm={4} xs={6}>
 <TextField
@@ -1390,8 +1586,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
     fullWidth
 />
 </Grid>
-    }  
-    {wing===true &&
+
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={wing1Error}
@@ -1413,8 +1608,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-    }               
-    {department===true &&
+
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={department1Error}
@@ -1436,33 +1630,27 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
      fullWidth
  />
 </Grid>
-    }   
-       
-    {dateOfJoining===true &&
+
         <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={dateOfJoinnig1Error}
-                                    id="category"
+                                    id="date"
                                     label="Date Of Joinnig"
                                     placeholder="Date Of Joinnig"
+                                    type="date"
                                     size="small"
-                                    autoComplete="off"
                                     helperText={
                                         dateOfJoinnig1Error === true
                                             ? 'Field Required'
                                             : ''
                                     }
                                     value={dateOfJoinnig1}
-                                    onChange={(e) =>
-                                        handleChange(e, setDateOfJoinnig1, setDateOfJoinnig1Error)
-                                    }
+                                    onChange={dateOfjoinnignHandler}
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
-    }             
-                            
-               {designation===true &&
+  
                     
                     <Grid item lg={4} md={4} sm={4} xs={6}>
                     <TextField
@@ -1486,7 +1674,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     />
                 </Grid>
 
-               }  
+                
 
 
 {/* old colde start */}
@@ -1709,7 +1897,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     </Button>
                                 </label>
                             </Grid>
-                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            {/* <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <span>Purchase</span>
                                 <Switch
                                     {...label}
@@ -1718,7 +1906,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                     defaultChecked
                                 />
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </Grid>
+                            </Grid> */}
 
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
