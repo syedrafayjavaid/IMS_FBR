@@ -465,13 +465,8 @@ const PurchasedItems = () => {
     }).catch((error) => {
       console.log(error, 'error');
     })
-<<<<<<< HEAD
     axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
-      console.log(res.data.data,"image");
-=======
-    axios.get(`${config.base_url}/api/v1/purchaseProduct`).then((res) => {
-      console.log(res.data.data);
->>>>>>> acccbee230b642fb2639ca5f46665975dc9af35e
+      console.log(res.data.data, "image");
       setPurchasedItems(res.data.data);
       //  console.log(purchaseBy, 'Purchase of the data');
     }).catch((error) => {
@@ -537,7 +532,7 @@ const PurchasedItems = () => {
   //////
   //error handling 
   const handleCreateClickOpen = () => {
-    if (price === '' || dataOfPurchase === '' || officeNameList === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 ==='' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '') {
+    if (price === '' || dataOfPurchase === '' || officeNameList === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 === '' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '') {
       if (price === '') {
         setPriceError(true)
       }
@@ -564,15 +559,15 @@ const PurchasedItems = () => {
         setModelError(true)
       }
       if (purchaseOrder === '') {
-     
+
         setPurchasedOrderError(true)
       }
       if (productQuantity === '') {
         setProductQuantityError(true)
       }
-     
-      
-      
+
+
+
       if (productId === '') {
         setProductIdError(true)
       }
@@ -610,12 +605,12 @@ const PurchasedItems = () => {
       }
       if (purchaseOrder === '') {
         setPurchasedOrderError(true)
-        console.log(purchaseOrder,"purchaseOrder oerder of thw value")
+        console.log(purchaseOrder, "purchaseOrder oerder of thw value")
       }
       if (productQuantity === '') {
         setProductQuantityError(true)
       }
-  
+
       if (productId === '') {
         setProductIdError(true)
       }
@@ -632,7 +627,7 @@ const PurchasedItems = () => {
       if (modifyOnDialog === '') {
         setModifyOnError(true)
       }
-     
+
     } else {
       editHandler();
     }
@@ -1145,7 +1140,7 @@ const PurchasedItems = () => {
                 <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
 
                     <label htmlFor="contained-button-file">
-                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={ handlePhoto}  />
+                      <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handlePhoto} />
                       <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />} style={{ width: '100%' }}>
                         Upload
                       </Button>
@@ -1394,7 +1389,7 @@ const PurchasedItems = () => {
 
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }}  />
+                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
                     <Button className={classes.btn} variant="contained"
                       color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
                     <br></br>
@@ -1969,7 +1964,7 @@ edit dialog box */}
 
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }}  />
+                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
                     <Button className={classes.btn} variant="contained"
                       color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
                     <br></br>
