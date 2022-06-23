@@ -64,6 +64,7 @@ const Title = styled('span')(() => ({
   fontWeight: '500',
   textTransform: 'capitalize',
   display: "flex",
+  
 
 }))
 
@@ -222,6 +223,7 @@ const PurchasedItems = () => {
   const [subcategoryData, setSubcategoryData] = React.useState({});
   const [product1, setProduct1] = React.useState([])
   const myclass = dateStyles();
+  
   ///
   //API For the dialogbox
   const [purchaseBy, setPurchaseBy] = React.useState([]);
@@ -261,7 +263,8 @@ const PurchasedItems = () => {
   const [user, setUser] = React.useState('')
   const [purchaseId, setPurchaseId] = React.useState('')
   const [handleEditDialog, setHandleEditDialog] = React.useState(false);
-
+  ///search items
+  const [searchItemsDialog, setSearchItemsDialog] = React.useState(false);
   const generateQrCode = async () => {
 
     try {
@@ -394,6 +397,12 @@ const PurchasedItems = () => {
   const handleEditDialogClose = () => {
     setHandleEditDialog(false);
   };
+
+
+
+  const handleSearchDialogClose = () => {
+    setSearchItemsDialog(false);
+  };
   //  const handleOpen = (id) => {
   //   console.log(id,'id');
   //   setOpen(true);
@@ -465,13 +474,8 @@ const PurchasedItems = () => {
     }).catch((error) => {
       console.log(error, 'error');
     })
-<<<<<<< HEAD
-    axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
-      console.log(res.data.data, "image");
-=======
     axios.get(`${config.base_url}/api/v1/purchaseProduct`).then((res) => {
       console.log(res.data.data);
->>>>>>> ba86b9cab6e0af8f62b8b0c8882adc6bdbb99608
       setPurchasedItems(res.data.data);
       //  console.log(purchaseBy, 'Purchase of the data');
     }).catch((error) => {
@@ -819,146 +823,23 @@ const PurchasedItems = () => {
 
   return (
     <>
-      <Card >
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          {/* Search Items */}
-        </Typography>
-        <Card style={{ marginTop: "4" }}>
-
-          {/* <FormControl sx={{ m: 1, width: 250 }}>
-       
-        <InputLabel id="demo-multiple-name-label">Category</InputLabel>
-      
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
-          value={personName}
-          onChange={handleChan}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-
-          {/* <FormControl sx={{ m: 1, width: 250 }}>
-       
-        <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
-      
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
-          value={brandName}
-          onChange={handleBrand}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
-        >
-          {brands.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getBrand(name, brandName, themes)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-
-          {/* <FormControl sx={{ m: 1, width: 250 }}>
-       
-        <InputLabel id="demo-multiple-name-label">Status</InputLabel>
-      
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
-          value={statuName}
-          onChange={handleStatus}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
-        >
-          {status.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStatu(name, statuName, themestatu)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-
-          {/* <FormControl sx={{ m: 1, width: 250 }}>
-        <InputLabel id="demo-multiple-name-label">Office</InputLabel>
-      
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          multiple
-          value={officeName}
-          onChange={offceChange}
-          input={<OutlinedInput label="Name" />}
-          MenuProps={MenuProps}
-        >
-          {offices.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, officeName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
+     
+    
+        <Tooltip title="Search Items">
+        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={() => setSearchItemsDialog(true)}>
+                <SearchIcon />
+            </Fab>
+        </Tooltip>
+   
 
 
-          {/* <FormControl sx={{ m: 1, width: 250 }}>
-     <InputLabel id="demo-multiple-name-label">Price</InputLabel>
-      <Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleBox}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-      />
-     </FormControl> */}
-          {/* <Box sx={{ width: 300 }}>
-      <Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleBox}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-      />
-    </Box> */}
 
-        </Card>
 
         <Tooltip title="Add Items">
           <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setOpen(true)} >
             <AddIcon />
           </Fab>
         </Tooltip>
-
-        {/* <Tooltip title="Search Items">
-        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw",bottom:"17vh",position:"fixed"}} onClick={() => setOpen(true)}>
-                <SearchIcon />
-            </Fab>
-        </Tooltip>
-    */}
 
         <Container>
           <br></br>
@@ -985,7 +866,7 @@ const PurchasedItems = () => {
 
 
 
-      </Card>
+     
 
 
       <Dialog
@@ -1714,8 +1595,6 @@ edit dialog box */}
 
                 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
-
-
                   <form className={myclass.container} noValidate>
                     <TextField
 
@@ -2035,6 +1914,166 @@ edit dialog box */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditDialogClose}>Cancel</Button>
+          <Button autoFocus onClick={handleEdit}>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+              
+              {/* Search Items Dialog */}
+
+
+              <Dialog
+        open={searchItemsDialog}
+        fullWidth={true}
+        onClose={handleSearchDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        {/* <DialogTitle id="alert-dialog-title">
+          {"Search Items"}
+        </DialogTitle> */}
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <br></br>
+
+            <CardContent>
+
+           
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Search Items
+        </Typography>
+       
+
+         <FormControl sx={{ m: 1, width: 240 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Category</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={personName}
+          onChange={handleChan}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, personName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+          <FormControl sx={{ m: 1, width: 240 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Brand</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={brandName}
+          onChange={handleBrand}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {brands.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getBrand(name, brandName, themes)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+          <FormControl sx={{ m: 1, width: 240 }}>
+       
+        <InputLabel id="demo-multiple-name-label">Status</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={statuName}
+          onChange={handleStatus}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {status.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStatu(name, statuName, themestatu)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+          <FormControl sx={{ m: 1, width: 240 }}>
+        <InputLabel id="demo-multiple-name-label">Office</InputLabel>
+      
+        <Select
+          labelId="demo-multiple-name-label"
+          id="demo-multiple-name"
+          multiple
+          value={officeName}
+          onChange={offceChange}
+          input={<OutlinedInput label="Name" />}
+          MenuProps={MenuProps}
+        >
+          {offices.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, officeName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+
+          <FormControl sx={{ m: 1, width: 500 }}>
+     <InputLabel id="demo-multiple-name-label">Price</InputLabel>
+      <Slider
+        getAriaLabel={() => 'Temperature range'}
+        value={value}
+        onChange={handleBox}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      />
+     </FormControl>
+          {/* <Box sx={{ width: 300 }}>
+      <Slider
+        getAriaLabel={() => 'Temperature range'}
+        value={value}
+        onChange={handleBox}
+        valueLabelDisplay="auto"
+        getAriaValueText={valuetext}
+      />
+    </Box> */}
+
+       
+        
+
+            </CardContent>
+
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSearchDialogClose}>Cancel</Button>
           <Button autoFocus onClick={handleEdit}>
             Confirm
           </Button>

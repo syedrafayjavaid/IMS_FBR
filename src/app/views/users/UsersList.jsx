@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react'
-
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import React, { useEffect } from 'react';
 // material
-import AddIcon from '@mui/icons-material/Add'
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import CloseIcon from '@mui/icons-material/Close'
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@mui/icons-material/Add';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
 import {
     Button,
     Container,
@@ -14,42 +18,58 @@ import {
     DialogTitle,
     Fab,
     Grid,
-    IconButton,
-    Snackbar,
+    IconButton, label, Snackbar,
     Switch,
     TextField,
-    Typography,
-} from '@mui/material'
-import { styled } from '@mui/material/styles'
-import Tooltip from '@mui/material/Tooltip'
-import axios from 'axios'
-import config from 'config'
-import UsersCard from './UsersCard'
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import Avatar from '@mui/material/Avatar';
+    Typography
+} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
-import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
-import { set } from 'lodash'
+import Select from '@mui/material/Select';
+import { styled, useTheme } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+import axios from 'axios';
+import config from 'config';
+import UsersCard from './UsersCard';
 
-const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
+
+
+
+
+
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  }));
 const UsersList = () => {
+    const classes = useStyles();
+    const theme = useTheme();
+    const themes = useTheme();
+    const themestatu = useTheme();
+    const themesoffice = useTheme();
+    const [personName, setPersonName] = React.useState([]);
+    const [brandName, setBrandName] = React.useState([]);
+    const [statuName, setStatuName] = React.useState([]);
+    const [value, setValue] = React.useState([20, 37]);
+    const [officeName, setOfficeName] = React.useState([]);
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-
+    const [statusError, setStatusError] = React.useState(false);
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
@@ -72,7 +92,10 @@ const UsersList = () => {
     const [anchorEl1, setAnchorEl1] = React.useState(null);
     const open2 = Boolean(anchorEl1);
 
-
+/////// employee dialoge
+const [employeeDialogs, setEmployeeDialogs]= React.useState(false)
+const label = { inputProps: { 'aria-label': 'Switch demo' } }
+///////
 
 const [mobileNumber1,setMobileNumber1]= React.useState('')
 const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
@@ -96,20 +119,124 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
 
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+const offices = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getStyles(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+  const status = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getStatu(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+
+  const names = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getBrand(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+
+  const brands = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
 
 
 
+  const handleChan = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const handleBrand = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setBrandName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
 
+  const handleStatus = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setStatuName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
+  ///office
 
-
-
-
-
-
-
-
+  const offceChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setOfficeName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+}
+  function getoffice(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
 
     const Input = styled('input')({
         display: 'none',
@@ -351,6 +478,13 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         setEditSnackBar(false);
 
     }
+///employee dialogs close
+
+    const handleEmployeeClose = () => {
+    
+        setEmployeeDialogs(false)
+
+    }
 
     const createAction = (
         <React.Fragment>
@@ -472,6 +606,17 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 <br></br>
                 <br></br>
             </Container>
+
+
+            {/* ////
+                this is the search dialods */}
+        
+        <Tooltip title="Search Employee">
+        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={()=>setEmployeeDialogs(true)}>
+                <SearchIcon />
+            </Fab>
+        </Tooltip>
+            {/* //// */}
             <Tooltip title="Add Employee">
                 <Fab
                     color="secondary"
@@ -497,7 +642,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
                     <IconButton aria-label="settings" 
-                    sx={{ ml: 45}}
+                    sx={{ ml: 40}}
                     onClick={iconeHandler}
                     >
             <MoreVertIcon /> 
@@ -953,12 +1098,6 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                            
                            
                            
-
-
-
-
-
-
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -1761,8 +1900,458 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     action={editAction}
                 />
             </Dialog>
+
+
+
+
+
+
+
+            {/* this is the dialogs of the employee search button */}
+            <Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'SEARCH EMPLOYEE'}
+                    <IconButton aria-label="settings" 
+                    sx={{ ml: 40}}
+                    onClick={iconeHandler}
+                    >
+            <MoreVertIcon /> 
+          </IconButton>
+
+
+
+
+         <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open1}
+        onClose={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+            <MenuItem >
+              <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(mobileNumber,setMobileNumber)}
+            defaultChecked = {mobileNumber === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Moible Number
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(remark,setRemark)}
+            defaultChecked = {remark === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+            Remarks
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(emailAdress,setEmailAdress)}
+            defaultChecked = {emailAdress === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Email Address
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(placeOfPoset,setPlaceOfPoset)}
+            defaultChecked = {placeOfPoset === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Place Of Posting 
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(pg,setPg)}
+            defaultChecked = {pg === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              PG
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(wing,setWing)}
+            defaultChecked = {wing === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Wing
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(department,setDepartment)}
+            defaultChecked = {department === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Department
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(dateOfJoining,setDateOfJoining)}
+            defaultChecked = {dateOfJoining === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Date Of Joining
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(designation,setDesgnation)}
+            defaultChecked = {designation === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Designation
+            </MenuItem>
+         
+      </Menu> 
+
+
+                </DialogTitle>
+       
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name of Employee"
+                                    placeholder="Name of Employee"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                   
+                                />
+                            </Grid>
+
+                            {/* <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={officeError}
+                                    id="code"
+                                    label=" Your code"
+                                    placeholder="Enter Your Code"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        officeError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setOffice,
+                                            setOfficeError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={cnicError}
+                                    id="cnic"
+                                    label="CNIC"
+                                    placeholder="Enter CNIC"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        cnicError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(e, setCnic, setCnicError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+
+
+
+
+
+
+         <Grid item lg={6} md={4} sm={4} xs={6}>
+          <TextField
+        error={mobilenumber1Error}
+        id="category"
+        label="Mobile Number"
+        placeholder="Mobile Number"
+        size="small"
+        autoComplete="off"
+        helperText={
+            mobilenumber1Error === true
+                ? 'Field Required'
+                : ''
+        }
+        value=" "
+        onChange={(e) =>
+            handleChange(e, setMobileNumber1, setMobileNumber1Error)
+        }
+        variant="outlined"
+        fullWidth
+    />
+</Grid> */}
+
+{/* <Grid item lg={6} md={4} sm={4} xs={6}  >
+     <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Status</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={statuName}
+         onChange={handleStatus}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {status.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStatu(name, statuName, themestatu)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+
+     </Grid> */}
+
+<Grid item lg={12} md={12} sm={12} xs={12}>
+     <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Designation</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={officeName}
+         onChange={offceChange}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {offices.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStyles(name, officeName, theme)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid>
+                          {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={emailAddress1Error}
+                                    id="category"
+                                    label="Email Address"
+                                    placeholder="Email Address"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        emailAddress1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={emailAddress1}
+                                    onChange={(e) =>
+                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid> */}
+
+                            
+<Grid item lg={12} md={12} sm={12} xs={12}>
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Report Manage</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={personName}
+         onChange={handleChan}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {names.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStyles(name, personName, theme)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+       </Grid>
+
+
+          {/* <Grid item lg={4} md={4} sm={4} xs={4}  >
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Management</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={brandName}
+         onChange={handleBrand}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {brands.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getBrand(name, brandName, themes)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid> */}
+     <Grid item lg={6} md={4} sm={4} xs={6}  >
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Department</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={brandName}
+         onChange={handleBrand}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {brands.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getBrand(name, brandName, themes)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid>
+ 
+
+            <Grid item lg={6} md={4} sm={4} xs={6}  >
+                <Box sx={{ minWidth: 200 }}>
+                <FormControl size="small" fullWidth error={statusError}>
+                <form className={classes.container} noValidate>
+                <TextField
+                id="date"
+                label="Date Of Joing"
+                type="date"
+                defaultValue="2017-05-24"
+                className={classes.textField}
+                InputLabelProps={{
+                shrink: true,
+                }}
+                size='small'
+               
+              />
+            </form>
+            </FormControl>
+            </Box>
+
+            </Grid>
+   
+                        </Grid>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleCreateClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+
+             
+            </Dialog>
         </>
     )
+  
+      
 }
 
 export default UsersList
