@@ -465,13 +465,8 @@ const PurchasedItems = () => {
     }).catch((error) => {
       console.log(error, 'error');
     })
-<<<<<<< HEAD
-    axios.get('http://192.168.18.117:5000/api/v1/purchaseProduct').then((res) => {
-      console.log(res.data.data,"image");
-=======
     axios.get(`${config.base_url}/api/v1/purchaseProduct`).then((res) => {
       console.log(res.data.data);
->>>>>>> acccbee230b642fb2639ca5f46665975dc9af35e
       setPurchasedItems(res.data.data);
       //  console.log(purchaseBy, 'Purchase of the data');
     }).catch((error) => {
