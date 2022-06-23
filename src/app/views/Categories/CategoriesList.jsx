@@ -2,10 +2,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import {
-  Container, Fab, Grid,
-  Switch, Typography
-} from '@mui/material'
+import { Container, Fab, Grid, Switch, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -20,6 +17,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import IconButton from '@mui/material/IconButton'
 import Snackbar from '@mui/material/Snackbar'
 import config from 'config'
+import { ConfirmationDialog } from 'app/components'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -27,132 +25,128 @@ const modifiedBy = 'noor'
 const createdBy = 'imad'
 
 const CategoriesList = () => {
+    const [categories, setCategories] = React.useState([])
+    const [open, setOpen] = React.useState(false)
 
-  const [categories, setCategories] = React.useState([])
+    const [imge, setImage] = React.useState('')
+    const [category, setCategory] = React.useState('')
+    const [categoryError, setCategoryError] = React.useState(false)
+    const [categoryId, setCategoryId] = React.useState('')
 
-  const [imge, setImage] = React.useState('')
-  const [category, setCategory] = React.useState('')
-  const [categoryError, setCategoryError] = React.useState(false)
-  const [categoryId, setCategoryId] = React.useState('')
+    const [createSnackBar, setCreateSnackBar] = React.useState(false)
+    const [editSnackBar, setEditSnackBar] = React.useState(false)
+    const [createCategoryDialog, setCreateCategoryDialog] =
+        React.useState(false)
+    const [editCategoryDialog, setEditCategoryDialog] = React.useState(false)
 
-  const [createSnackBar, setCreateSnackBar] = React.useState(false)
-  const [editSnackBar, setEditSnackBar] = React.useState(false)
-  const [createCategoryDialog, setCreateCategoryDialog] = React.useState(false);
-  const [editCategoryDialog, setEditCategoryDialog] = React.useState(false);
-  
+    const handleCreateClose = () => {
+        setCreateCategoryDialog(false)
+        setCategory('')
+        setCategoryError(false)
+    }
 
-  const handleCreateClose = () => {
-    setCreateCategoryDialog(false)
-    setCategory('')
-    setCategoryError(false)
-}
+    const handleCreateSnackBarClose = () => {
+        setCreateSnackBar(false)
+    }
 
-const handleCreateSnackBarClose = () => {
-    setCreateSnackBar(false)
-}
+    const handleEditClose = () => {
+        setEditCategoryDialog(false)
+        setCategory('')
+        setCategoryError(false)
+    }
 
-const handleEditClose = () => {
-    setEditCategoryDialog(false)
-    setCategory('')
-    setCategoryError(false)
-}
+    const handleEditSnackBarClose = () => {
+        setEditSnackBar(false)
+    }
 
-const handleEditSnackBarClose = () => {
-    setEditSnackBar(false)
-}
+    const handleChange = (e, func, errorFunc) => {
+        func(e.target.value)
+        console.log(e.target.name, e.target.value)
+        errorFunc(false)
+    }
 
-const handleChange = (e, func, errorFunc) => {
-    func(e.target.value)
-    console.log(e.target.name, e.target.value)
-    errorFunc(false)
-}
+    const handleImage = (e) => {
+        setImage(e.target.files[0])
+        console.log(e.target.files[0], 'e.target.files[0]')
+    }
 
-const handleImage = (e) => {
-    setImage(e.target.files[0])
-    console.log(e.target.files[0], 'e.target.files[0]')
-}
-
-const handleCreateClickOpen = () => {
-    
+    const handleCreateClickOpen = () => {
         if (category === '') {
             setCategoryError(true)
         } else {
-        createHandler()
+            createHandler()
+        }
     }
-}
 
-const handleEditClickOpen = () => {
-    if (category === '') {
+    const handleEditClickOpen = () => {
+        if (category === '') {
             setCategoryError(true)
         } else {
-        editHandler()
+            editHandler()
+        }
     }
-}
 
-const handleCreateClosed = (event, reason) => {
-  if (reason === 'clickaway') {
-      console.log('Edit Button Clicked')
-      return
-  }
+    const handleCreateClosed = (event, reason) => {
+        if (reason === 'clickaway') {
+            console.log('Edit Button Clicked')
+            return
+        }
 
-  setCreateSnackBar(false)
+        setCreateSnackBar(false)
+    }
 
-}
+    const handleEditClosed = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
 
-const handleEditClosed = (event, reason) => {
-  if (reason === 'clickaway') {
-      return
-  }
+        setEditSnackBar(false)
+    }
 
-  setEditSnackBar(false);
+    const createAction = (
+        <React.Fragment>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleCreateSnackBarClose}
+            >
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCreateSnackBarClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
 
-}
-
-const createAction = (
-  <React.Fragment>
-      <Button
-          color="secondary"
-          size="small"
-          onClick={handleCreateSnackBarClose}
-      >
-          UNDO
-      </Button>
-      <IconButton
-          size="small"
-          aria-label="close"
-          color="inherit"
-          onClick={handleCreateSnackBarClose}
-      >
-          <CloseIcon fontSize="small" />
-      </IconButton>
-  </React.Fragment>
-)
-
-const editAction = (
-  <React.Fragment>
-      <Button
-          color="secondary"
-          size="small"
-          onClick={handleEditSnackBarClose}
-      >
-          UNDO
-      </Button>
-      <IconButton
-          size="small"
-          aria-label="close"
-          color="inherit"
-          onClick={handleEditSnackBarClose}
-      >
-          <CloseIcon fontSize="small" />
-      </IconButton>
-  </React.Fragment>
-)
-
+    const editAction = (
+        <React.Fragment>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleEditSnackBarClose}
+            >
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleEditSnackBarClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
 
     const Input = styled('input')({
         display: 'none',
     })
-    
+
     useEffect(() => {
         getAlldata()
     }, [])
@@ -176,19 +170,19 @@ const editAction = (
         data.append('createdBy', createdBy)
 
         const categoryNameExist = categories.find((categoryData) => {
-          return categoryData.name === category;
-      })
+            return categoryData.name === category
+        })
 
-      if (categoryNameExist) {
-          setCreateSnackBar(true)
-          return;
-      }
+        if (categoryNameExist) {
+            setCreateSnackBar(true)
+            return
+        }
 
         axios
             .post(`${config.base_url}/api/v1/category`, data)
             .then((res) => {
                 if (res) {
-                  handleCreateClose()
+                    handleCreateClose()
                     getAlldata()
                 }
             })
@@ -197,12 +191,11 @@ const editAction = (
             })
     }
 
-
     const editHandler = () => {
         let data = new FormData()
         data.append('name', category)
         data.append('file', imge)
-        
+
         axios
             .put(`${config.base_url}/api/v1/category/${categoryId}`, data)
             .then((res) => {
@@ -219,28 +212,45 @@ const editAction = (
             })
     }
 
-    const onDelhandler = (editData) => {
-        axios
-            .delete(`${config.base_url}/api/v1/category/${editData}`)
-            .then((res) => {
-                console.log(res.msg)
-                getAlldata()
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+    const onDelhandler = (id) => {
+        setCategoryId(id)
+        setOpen(true)
+        if (open && categoryId) {
+
+            axios
+                .delete(`${config.base_url}/api/v1/category/${categoryId}`)
+                .then((res) => {
+                    console.log(res.msg)
+                    getAlldata()
+                    setOpen(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
     }
+
     const onEdithandler = (id, category) => {
-      console.log(category)
+        console.log(category)
         setEditCategoryDialog(true)
         setCategory(category)
         setImage(category.photo)
         setCategoryId(id)
     }
 
-
     return (
         <>
+            {open && (
+                <ConfirmationDialog
+                    open={open}
+                    onConfirmDialogClose={() => {
+                        setOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Category?`}
+                    onYesClick={onDelhandler}
+                />
+            )}
             <Tooltip title="Add Category">
                 <Fab
                     color="secondary"
@@ -345,10 +355,7 @@ const editAction = (
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
-                    <Button
-                        autoFocus
-                        onClick={handleCreateClickOpen}
-                    >
+                    <Button autoFocus onClick={handleCreateClickOpen}>
                         Confirm
                     </Button>
                 </DialogActions>

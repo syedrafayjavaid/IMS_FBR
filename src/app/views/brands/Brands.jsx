@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import BrandCard from './BrandCard';
 import CloseIcon from '@mui/icons-material/Close';
 import config from "../../../config"
+import { ConfirmationDialog } from 'app/components';
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -53,6 +54,7 @@ const Brands = () => {
     const [brandId,setBrandId]= React.useState('');
     const [image, setImage] = React.useState('');
     const [snackBar, setSnackBar] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
   
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
@@ -134,16 +136,20 @@ const Brands = () => {
       })
     }
   
-    const onDelhandler = (editData) => {
-      console.log(editData, 'id');
-      axios.delete(`${config.base_url}/api/v1/brand/${editData}`).then((res) => {
-        console.log(res.msg);
-        getAlldata();
-        
-        
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
+    const onDelhandler = (id) => {
+      setOpen(true)
+      setBrandId(id)
+      if (open && brandId) {
+
+        axios.delete(`${config.base_url}/api/v1/brand/${brandId}`).then((res) => {
+          getAlldata();
+          setOpen(false);
+          
+          
+        }).catch((error) => {
+          console.log(error, 'error');
+        })
+      }
     }
   
   
@@ -235,7 +241,17 @@ const Brands = () => {
       
     return (
         <>
-
+        {open && (
+                <ConfirmationDialog
+                    open={open}
+                    onConfirmDialogClose={() => {
+                        setOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Brand?`}
+                    onYesClick={onDelhandler}
+                />
+            )}
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
              
             <Box overflow="auto">

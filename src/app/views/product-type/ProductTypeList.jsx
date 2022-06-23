@@ -35,6 +35,7 @@ import {
 import ProductTypeCard from 'app/components/productType/ProductTypeCard';
 import axios from 'axios';
 import config from 'config';
+import { ConfirmationDialog } from 'app/components';
 
 
 const CardHeader = styled('div')(() => ({
@@ -214,6 +215,7 @@ const ProductTypeList = () => {
     const [demo,setDemo]=React.useState(false);
     const [categoryError, setcategoryError] = React.useState(false);
     const [catogoryId,setCatogoryId] = React.useState('');
+    const [confirmationDialogOpen, setConfirmationDialogOpen] = React.useState(false);
  
 
     const handleClose = () => {
@@ -271,23 +273,14 @@ const ProductTypeList = () => {
       display: 'none',
     });
 
-    const onDelhandler = (editData) => {
-      console.log(editData);
-      axios.delete(`${config.base_url}/api/v1/productType/${editData}`).then((res) => {
-        // console.log(res.msg);
-        // getAlldata();
-          // let arr = category
-          // console.log(arr);
-          // let indexOfObject = arr.findIndex(object => {
-          //   return object._id === editData;
-          // });
-  
-          // console.log(indexOfObject); // 👉️ 1
-  
-          // setSanakbar(true);
-          // setArryCatagory(arr.splice(indexOfObject, 1))
+    const onDelhandler = (id) => {
+      setConfirmationDialogOpen(true)
+      setCatogoryId(id)
+      if (confirmationDialogOpen && catogoryId) {
+        axios.delete(`${config.base_url}/api/v1/productType/${catogoryId}`).then((res) => {
           if(res){
             getAlldata();
+            setConfirmationDialogOpen(false);
           }
   
         
@@ -296,6 +289,8 @@ const ProductTypeList = () => {
       .catch((error) => {
         console.log(error, 'error');
       })
+      }
+      
   
     }
     const onEdithandler = (editIde ,name) => {
@@ -318,7 +313,17 @@ const ProductTypeList = () => {
   
     return (
       <>
-
+        {confirmationDialogOpen && (
+                <ConfirmationDialog
+                    open={confirmationDialogOpen}
+                    onConfirmDialogClose={() => {
+                        setConfirmationDialogOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Product Type?`}
+                    onYesClick={onDelhandler}
+                />
+            )}
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
              
             <Box overflow="auto">

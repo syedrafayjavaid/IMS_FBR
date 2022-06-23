@@ -66,8 +66,8 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                     textDecoration: '',
                                 }}
                             >
-                                Office: &nbsp;
-                                {user.office}
+                                Name: &nbsp;
+                                {user.name}
                             </Typography>
                         </Typography>
                     </Stack>
@@ -86,8 +86,8 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                     textDecoration: '',
                                 }}
                             >
-                                CNIC: &nbsp;
-                                {user.CNIC}
+                                Email: &nbsp;
+                                {user.emailAddress}
                             </Typography>
                         </Typography>
                     </Stack>

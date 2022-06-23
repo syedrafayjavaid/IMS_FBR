@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import OfficeCard from './OfficeCard';
 import CloseIcon from '@mui/icons-material/Close';
 import config from 'config';
+import { ConfirmationDialog } from 'app/components';
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -66,10 +67,8 @@ const Offices = () => {
   // const [latitudeError, setLatitudeError] = React.useState(false);
   const [officeId, setOfficeId] = React.useState("")
   const [snackBar, setSnackBar] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const [snackBarTrue, setSnackBarTrue] = React.useState(false);
-  
-  
     // const generateQrCode = async () => {
     //   try {
     //         const response = await QRCode.toDataURL(text1);
@@ -127,12 +126,18 @@ const Offices = () => {
       })
     }
   
-    const onDelhandler = (editData) => {
-      axios.delete(`${config.base_url}/api/v1/office/${editData}`).then((res) => {
-        getAlldata();
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
+    const onDelhandler = (id) => {
+      setOfficeId(id)
+      setOpen(true)
+      if (open && officeId) {
+
+        axios.delete(`${config.base_url}/api/v1/office/${officeId}`).then((res) => {
+          getAlldata();
+          setOpen(false);
+        }).catch((error) => {
+          console.log(error, 'error');
+        })
+      }
     }
   
   
@@ -296,7 +301,17 @@ const Offices = () => {
 
     return (
         <>
-
+        {open && (
+                <ConfirmationDialog
+                    open={open}
+                    onConfirmDialogClose={() => {
+                        setOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Office?`}
+                    onYesClick={onDelhandler}
+                />
+            )}
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
              
             <Box overflow="auto">
