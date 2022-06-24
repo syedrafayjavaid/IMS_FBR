@@ -12,6 +12,7 @@ import brandsRoute from './views/brands/BrandsRoute'
 import officesRoutes from './views/offices/OfficeRoutes'
 import purchaseditemsRoute from './views/items/purchaseditemsRoute'
 import categoriesRoutes from './views/Categories/categoriesRoutes'
+import DepartmentRouter from './views/department/DepartmentRouter'
 
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v<YOUR_MAPBOX_VERSION>/mapbox-gl.css' rel='stylesheet' />
 const redirectRoute = [
@@ -42,6 +43,7 @@ const routes = [
     ...usersRoute,
     ...brandsRoute,
     ...officesRoutes,
+    ...DepartmentRouter,
     ...purchaseditemsRoute
 ]
 
