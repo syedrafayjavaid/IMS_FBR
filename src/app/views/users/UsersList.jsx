@@ -46,6 +46,7 @@ import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material
 import { set } from 'lodash'
 import { date } from 'yup'
 import Box from '@mui/material/Box';
+import { ConfirmationDialog } from 'app/components';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -84,8 +85,8 @@ const UsersList = () => {
 
 const [mobileNumber1,setMobileNumber1]= React.useState('')
 const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
-const [remarks1,setRemarks1]= React.useState('')
-const [remarks1Error,setRemarks1Error]= React.useState(false)
+// const [remarks1,setRemarks1]= React.useState('')
+// const [remarks1Error,setRemarks1Error]= React.useState(false)
 const [emailAddress1,setEmailAddress1]= React.useState('')
 const [emailAddress1Error,setEmailAddress1Error]= React.useState('')
 const [placeOfPosting1,setPlaceOfPosting1]= React.useState([])
@@ -102,6 +103,7 @@ const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
 const [designation1Error,setDesignation1Error]= React.useState(false)
 
+const [open5, setOpen5] = React.useState(false);
 
 
 
@@ -183,8 +185,8 @@ const handlePlaceOfJoining = (event) => {
         // setPlaceOfPoset(false)
         setMobileNumber1('')
         setMobileNumber1Error(false)
-        setRemarks1('')
-        setRemarks1Error(false)
+        // setRemarks1('')
+        // setRemarks1Error(false)
         setEmailAddress1('')
         setEmailAddress1Error(false)
         setPlaceOfPosting1Name('')
@@ -223,8 +225,8 @@ const handlePlaceOfJoining = (event) => {
         setPlaceOfPosting1Name('')
         setMobileNumber1('')
         setMobileNumber1Error(false)
-        setRemarks1('')
-        setRemarks1Error(false)
+        // setRemarks1('')
+        // setRemarks1Error(false)
         setEmailAddress1('')
         setEmailAddress1Error(false)
         // setPlaceOfPosting1('')
@@ -263,7 +265,6 @@ const handlePlaceOfJoining = (event) => {
             description === '' ||
             employeeId === '' ||
             mobileNumber1===''||
-            remarks1==='' ||
             emailAddress1===''||
             pg1===''||
             wing1===''||
@@ -284,9 +285,6 @@ const handlePlaceOfJoining = (event) => {
             }
             if(mobileNumber1===''){
                 setMobileNumber1Error(true)
-            }
-            if(remarks1===''){
-                setRemarks1Error(true)
             }
             if(emailAddress1===''){
                 setEmailAddress1Error(true)
@@ -317,7 +315,6 @@ const handlePlaceOfJoining = (event) => {
             description === '' ||
             employeeId === '' ||
             mobileNumber1===''||
-            remarks1==='' ||
             emailAddress1===''||
             pg1===''||
             wing1===''||
@@ -339,9 +336,6 @@ const handlePlaceOfJoining = (event) => {
             if(mobileNumber1===''){
                 setMobileNumber1Error(true)
             }
-            if(remarks1===''){
-                setRemarks1Error(true)
-            }
             if(emailAddress1===''){
                 setEmailAddress1Error(true)
             }
@@ -360,7 +354,7 @@ const handlePlaceOfJoining = (event) => {
 
 
         } else {
-            createHandler()
+            editHandler()
         }
     }
 
@@ -370,13 +364,13 @@ const handlePlaceOfJoining = (event) => {
         data.append('photo', image)
         // data.append('office', office)
         data.append('cnic', cnic)
-        // data.append('detail', description)
+        data.append('remarks', description)
         data.append('employeeId', employeeId)
         // data.append('purchasedItems', checked)
 
         data.append('mobileNumber', mobileNumber1)
         data.append('placeOfPosting', placeOfPosting1Name)
-        data.append('remarks', remarks1)
+        // data.append('remarks', remarks1)
         data.append('dateOfJoining', dateOfJoinnig1)
         data.append('wing', wing1)
         data.append('pg', pg1)
@@ -386,8 +380,10 @@ const handlePlaceOfJoining = (event) => {
      
 
         const userNameExist = users.find((user) => {
+            
             return user.employeeId === employeeId
         })
+        console.log(userNameExist,'userNameExist');
 
         if (userNameExist) {
             setCreateSnackBar(true)
@@ -398,6 +394,7 @@ const handlePlaceOfJoining = (event) => {
             .post(`${config.base_url}/api/v1/employee`, data)
             .then((res) => {
                 if (res) {
+                    console.log(res.data.data,'jo jaraha ha');
                     handleCreateClose()
                     getAlldata()
                 }
@@ -409,7 +406,7 @@ const handlePlaceOfJoining = (event) => {
                 setDescription('')
                 setImage('')
                 setMobileNumber1('')
-                setRemarks1('')
+                // setRemarks1('')
                 setEmailAddress1('')
                 // setPlaceOfPosting1('')
                 setPg1('')
@@ -429,14 +426,14 @@ const handlePlaceOfJoining = (event) => {
         data.append('name', name)
         data.append('photo', image)
         // data.append('office', office)
-        data.append('CNIC', cnic)
-        // data.append('detail', description)
+        data.append('cnic', cnic)
+        data.append('remarks', description)
         data.append('employeeId', employeeId)
         // data.append('purchase', checked)
-
+   
         data.append('mobileNumber', mobileNumber1)
         data.append('placeOfPosting', placeOfPosting1Name)
-        data.append('remarks', remarks1)
+        // data.append('remarks', remarks1)
         data.append('dateOfJoining', dateOfJoinnig1)
         data.append('wing', wing1)
         data.append('pg', pg1)
@@ -467,11 +464,19 @@ const handlePlaceOfJoining = (event) => {
         setEditEmployeeDialog(true)
         setName(user.name)
         // setOffice(user.office)
-        setCnic(user.cinc)
+        setCnic(user.cnic)
+        setPlaceOfPosting1Name(user.placeOfPosting)
+        setEmailAddress1(user.emailAddress)
+        setPg1(user.pg)
         setImage(user.photo)
         setEmployeeId(user.employeeId)
-        // setDescription(user.detail)
+        setDescription(user.remarks)
         setMobileNumber1(user.mobileNumber)
+        setWing1(user.wing)
+        setDesignation1(user.designation)
+        setDepartment1(user.department)
+        const date = new Date(user.dateOfJoining).toISOString().split('T')[0]
+        setDateOfJoinnig1(date)
         // setChecked(user.purchase)
         setUserId(id)
     }
@@ -536,15 +541,21 @@ const handlePlaceOfJoining = (event) => {
     )
 
     const onDeleteHandler = (id) => {
-        axios
-            .delete(`${config.base_url}/api/v1/employee/${id}`)
-            .then((res) => {
-                console.log(res.msg)
-                getAlldata()
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+        setOpen5(true);
+        setUserId(id)
+        if (open5 && userId) {
+
+            axios
+                .delete(`${config.base_url}/api/v1/employee/${userId}`)
+                .then((res) => {
+                    console.log(res.msg)
+                    getAlldata()
+                    setOpen5(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
     }
 
 
@@ -597,8 +608,10 @@ const dateOfjoinnignHandler=(event)=> {
 
 
 
+
     return (
         <>
+        {open5 && <ConfirmationDialog open={open5} onConfirmDialogClose={() => {setOpen5(false)}} text={`Are You Sure Yoou Want To Delete This Employee?`} title={`Are You Sure?`} onYesClick={onDeleteHandler} />}
             <Container>
                 <br></br>
                 <Typography variant="h4" sx={{ mb: 5 }}>
@@ -838,6 +851,7 @@ const dateOfjoinnignHandler=(event)=> {
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
+                                    type='number'
                                     autoComplete="off"
                                     helperText={
                                         cnicError === true
@@ -892,6 +906,7 @@ const dateOfjoinnignHandler=(event)=> {
         placeholder="Mobile Number"
         size="small"
         autoComplete="off"
+        type='number'
         helperText={
             mobilenumber1Error === true
                 ? 'Field Required'
@@ -906,7 +921,7 @@ const dateOfjoinnignHandler=(event)=> {
     />
 </Grid>
 
- <Grid item lg={4} md={4} sm={4} xs={6}>
+ {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
      id="category"
@@ -926,7 +941,7 @@ const dateOfjoinnignHandler=(event)=> {
      variant="outlined"
      fullWidth
  />
-</Grid>
+</Grid> */}
 
     <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1016,6 +1031,7 @@ const dateOfjoinnignHandler=(event)=> {
     error={pg1Error}
     id="category"
     label="PG"
+    type='number'
     placeholder="PG"
     size="small"
     autoComplete="off"
@@ -1167,8 +1183,8 @@ const dateOfjoinnignHandler=(event)=> {
                                     helperText={
                                         descriptionError && 'Field Required'
                                     }
-                                    label="Detail"
-                                    placeholder="Detail"
+                                    label="Remarks"
+                                    placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
                                     hintText="Message Field"
                                     floatingLabelText="MultiLine and FloatingLabel"
@@ -1393,6 +1409,7 @@ const dateOfjoinnignHandler=(event)=> {
                                 <TextField
                                     error={cnicError}
                                     id="cnic"
+                                    type='number'
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
@@ -1450,6 +1467,7 @@ const dateOfjoinnignHandler=(event)=> {
     <TextField
         error={mobilenumber1Error}
         id="category"
+        type='number'
         label="Mobile Number"
         placeholder="Mobile Number"
         size="small"
@@ -1467,7 +1485,7 @@ const dateOfjoinnignHandler=(event)=> {
         fullWidth
     />
 </Grid>
-
+{/* 
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
@@ -1488,7 +1506,7 @@ const dateOfjoinnignHandler=(event)=> {
      variant="outlined"
      fullWidth
  />
-</Grid>
+</Grid> */}
 
     <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1573,6 +1591,7 @@ const dateOfjoinnignHandler=(event)=> {
     placeholder="PG"
     size="small"
     autoComplete="off"
+    type='number'
     helperText={
         pg1Error === true
             ? 'Field Required'
@@ -1914,8 +1933,8 @@ const dateOfjoinnignHandler=(event)=> {
                                     helperText={
                                         descriptionError && 'Field Required'
                                     }
-                                    label="Detail"
-                                    placeholder="Detail"
+                                    label="Remarks"
+                                    placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
                                     hintText="Message Field"
                                     floatingLabelText="MultiLine and FloatingLabel"

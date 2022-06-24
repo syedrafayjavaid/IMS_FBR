@@ -52,7 +52,7 @@ const ConfirmationDialog = ({
     open,
     onConfirmDialogClose,
     text,
-    title = 'confirm',
+    title,
     onYesClick,
 }) => {
     return (
