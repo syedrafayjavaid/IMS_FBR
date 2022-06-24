@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import DepartmentCard from './DepartmentCard';
 import CloseIcon from '@mui/icons-material/Close';
 import config from "../../../config"
+import { ConfirmationDialog } from 'app/components';
 
 const DepartmentTable = styled(Table)(() => ({
     minWidth: 400,
@@ -72,6 +73,8 @@ const Department = () => {
   
     const [createBrandDialog, setCreateBrandDialog] = React.useState(false);
     const [editBrandDialog, setEditBrandDialog] = React.useState(false);
+
+    const [open, setOpen] = React.useState(false)
   
     const handleCreateClose = () => {
       setCreateBrandDialog(false);
@@ -135,15 +138,19 @@ const Department = () => {
     }
   
     const onDelhandler = (editData) => {
-      console.log(editData, 'id');
-      axios.delete(`${config.base_url}/api/v1/department/${editData}`).then((res) => {
-        console.log(res.msg);
-        getAlldata();
-        
-        
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
+      setOpen(true);
+
+      if (open && brandId) {
+
+        axios.delete(`${config.base_url}/api/v1/department/${brandId}`).then((res) => {
+          getAlldata();
+          setOpen(false);
+          
+        }).catch((error) => {
+          console.log(error, 'error');
+        })
+      }
+
     }
   
   
@@ -232,7 +239,9 @@ const Department = () => {
       
     return (
         <>
-
+        <ConfirmationDialog open={open} onConfirmDialogClose = {() => {
+          setOpen(false);
+        }} text={`Are You Sure You Want To Delete This Department?`} title={`Are You Sure?`} onYesClick={onDelhandler} />
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
              
             <Box overflow="auto">
