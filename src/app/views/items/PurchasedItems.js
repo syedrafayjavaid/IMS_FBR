@@ -471,8 +471,146 @@ const PurchasedItems = () => {
 
           canPurchase.push(item);
         }
+<<<<<<< HEAD
       });
       setPurchaseBy(canPurchase);
+=======
+<<<<<<< HEAD
+      });
+      setPurchaseBy(canPurchase);
+
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
+    axios.get(`${config.base_url}/api/v1/purchaseProduct`).then((res) => {
+      console.log(res.data.data);
+      setPurchasedItems(res.data.data);
+      //  console.log(purchaseBy, 'Purchase of the data');
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
+  }
+
+
+  ///this is the  api of the text fileds data send to the next data
+  const createHandler = () => {
+    let data = new FormData();
+
+    data.append('productId', productId);
+    data.append('price', price);
+    data.append('dataOfPurchase', dataOfPurchase);
+    data.append('ownership', ownerShip);
+    data.append('officeId', officeNameList);
+    data.append('status', statusValue);
+    data.append('purchasedBy', PurchaseBy1);
+    data.append('vender', vender);
+    data.append('attachment', image);
+    data.append('QRCodeImage', imageUrl1);
+    data.append('custodian', user);
+    data.append('model', model);
+    data.append('purchaseOrder', purchaseOrder);
+    data.append('quantity', productQuantity);
+    data.append('QRCode', text1);
+
+    // console.log(scanResultFile);
+
+    axios.post(`${config.base_url}/api/v1/purchaseProduct`, data).then((res) => {
+      console.log(res.data.data, "purchaseProduct ");
+      if (res) {
+        // handleCreateClose()
+        getAlldata();
+        setOpen(false);
+      }
+      setStatusValue('');
+      setproductId('');
+      setPrice('');
+      setDateOfPurchase('');
+      setOwnerShip('');
+      setOfficeNameList('');
+      setPurchaseBy1('');
+      setVender('');
+      setImage('');
+      setImageUrl1('');
+      setUser('');
+      setModel('');
+      setText1('');
+      setProductQuantity('');
+      setPurchaseOrder('');
+    }).catch((error) => {
+      console.log(error, 'error');
+      // handleClick()
+    })
+  }
+
+
+
+  //////
+  //error handling 
+  const handleCreateClickOpen = () => {
+    if (price === '' || dataOfPurchase === '' || officeNameList === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 === '' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '') {
+      if (price === '') {
+        setPriceError(true)
+      }
+
+      if (dataOfPurchase === '') {
+        setDateOfPurchaseError(true)
+      }
+      if (ownerShip === '') {
+        setOwnerShipError(true)
+      }
+      if (officeNameList === '') {
+        setOfficeNameError(true)
+      }
+      if (statusValue === '') {
+        setStatusError(true)
+      }
+      if (PurchaseBy1 === '') {
+        setPurchasedError(true)
+      }
+      if (user === '') {
+        setUserError(true)
+      }
+      if (model === '') {
+        setModelError(true)
+      }
+      if (purchaseOrder === '') {
+
+        setPurchasedOrderError(true)
+      }
+      if (productQuantity === '') {
+        setProductQuantityError(true)
+      }
+
+
+
+      if (productId === '') {
+        setProductIdError(true)
+      }
+    } else {
+      createHandler();
+=======
+>>>>>>> 7e6a6f8f765d19141ee3c25aceb81658ec005d49
+    }
+    const handleErrorFile = (error) => {
+        console.log(error)
+    }
+    const handleScanFile = (result) => {
+        if (result) {
+            setScanResultFile(result)
+        }
+    }
+    const onScanFile = () => {
+        qrRef.current.openImageDialog()
+    }
+    const handleErrorWebCam = (error) => {
+        console.log(error)
+    }
+    const handleScanWebCam = (result) => {
+        if (result) {
+            setScanResultWebCam(result)
+        }
+    }
+>>>>>>> 0f31b510509a80dbf565a020ea6c7e962e5ed328
 
     }).catch((error) => {
       console.log(error, 'error');
