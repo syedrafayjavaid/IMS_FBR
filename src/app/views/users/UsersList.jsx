@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react'
-
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import React, { useEffect } from 'react';
 // material
-import AddIcon from '@mui/icons-material/Add'
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import CloseIcon from '@mui/icons-material/Close'
+import {  FormHelperText } from '@mui/material';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@mui/icons-material/Add';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
 import {
     Button,
     Container,
@@ -14,46 +19,66 @@ import {
     DialogTitle,
     Fab,
     Grid,
-    IconButton,
-    Snackbar,
+    IconButton, label, Snackbar,
     Switch,
     TextField,
-    Typography,
-} from '@mui/material'
-import { styled } from '@mui/material/styles'
-import Tooltip from '@mui/material/Tooltip'
-import axios from 'axios'
-import config from 'config'
-import UsersCard from './UsersCard'
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import Avatar from '@mui/material/Avatar';
+    Typography
+} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
-import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
-import { set } from 'lodash'
+import Select from '@mui/material/Select';
+import { styled, useTheme } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+import axios from 'axios';
+import config from 'config';
+import UsersCard from './UsersCard';
 
-const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
+
+
+
+
+
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  }));
 const UsersList = () => {
+    const classes = useStyles();
+    const theme = useTheme();
+    const themes = useTheme();
+    const themestatu = useTheme();
+    const themesoffice = useTheme();
+    const [personName, setPersonName] = React.useState([]);
+    const [brandName, setBrandName] = React.useState([]);
+    const [statuName, setStatuName] = React.useState([]);
+    const [value, setValue] = React.useState([20, 37]);
+    const [officeName, setOfficeName] = React.useState([]);
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
+    //const [designation, setDesignation] = React.useState('')
+    const [reportmanag, setReportManage] = React.useState('')
+    const [department2, setDepartment2] = React.useState('')
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-
+    const [statusError, setStatusError] = React.useState(false);
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
-
+    const date = new Date().toISOString().split('T')[0]
+    const [datejoin, setDatetejoin] = React.useState(date);
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
     const [office, setOffice] = React.useState('')
@@ -66,13 +91,15 @@ const UsersList = () => {
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     const [checked, setChecked] = React.useState(true)
 
-
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open1 = Boolean(anchorEl);
     const [anchorEl1, setAnchorEl1] = React.useState(null);
     const open2 = Boolean(anchorEl1);
 
-
+/////// employee dialoge
+const [employeeDialogs, setEmployeeDialogs]= React.useState(false)
+const label = { inputProps: { 'aria-label': 'Switch demo' } }
+///////
 
 const [mobileNumber1,setMobileNumber1]= React.useState('')
 const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
@@ -91,7 +118,132 @@ const [department1Error,setDepartment1Error]= React.useState('')
 const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState('')
 const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
+
+
+///error Handling
 const [designation1Error,setDesignation1Error]= React.useState(false)
+const [reportManagError,setReportManagError]= React.useState(false)
+const [departmentError,setDepartmentError]= React.useState(false)
+
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+const offices = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getStyles(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+  const status = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getStatu(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+
+  const names = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+  function getBrand(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
+
+  const brands = [
+    ' Hansen',
+    ' Henry',
+    'Tucker',
+    'Hubbard',
+  
+  ];
+
+
+
+  const handleChan = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const handleBrand = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setBrandName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+
+  const handleStatus = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setStatuName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  ///office
+
+  const offceChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setOfficeName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+}
+  function getoffice(office, officeName, themesoffice) {
+    return {
+      fontWeight:
+        officeName.indexOf(office) === -1
+          ? themesoffice.typography.fontWeightRegular
+          : themesoffice.typography.fontWeightMedium,
+    };
+  }
 
     const Input = styled('input')({
         display: 'none',
@@ -333,6 +485,13 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
         setEditSnackBar(false);
 
     }
+///employee dialogs close
+
+    const handleEmployeeClose = () => {
+    
+        setEmployeeDialogs(false)
+
+    }
 
     const createAction = (
         <React.Fragment>
@@ -391,23 +550,23 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
 
     
 
-    const iconeHandler = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
-      const iconeHandler1 = (event) => {
-        setAnchorEl1(event.currentTarget);
-      };
-      const handleClose = () => {
-        setAnchorEl();
-      };
-      const handleClose1 = () => {
-        setAnchorEl1();
-      };
+    // const iconeHandler = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    //   };
+    //   const iconeHandler1 = (event) => {
+    //     setAnchorEl1(event.currentTarget);
+    //   };
+    //   const handleClose = () => {
+    //     setAnchorEl();
+    //   };
+    //   const handleClose1 = () => {
+    //     setAnchorEl1();
+    //   };
 
 
       const [checkedBox1, setCheckedBox1] = React.useState(true);
       const [emailAdress, setEmailAdress] = React.useState(false);
-      const [designation, setDesgnation] = React.useState(false);
+    const [designation, setDesgnation] = React.useState(false);
       const [remark, setRemark] = React.useState(false);
       const [dateOfJoining, setDateOfJoining] = React.useState(false);
       const [pg, setPg] = React.useState(false);
@@ -415,7 +574,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
       const [placeOfPoset, setPlaceOfPoset] = React.useState(false);
       const [department, setDepartment] = React.useState(false);
       const [mobileNumber, setMobileNumber] = React.useState(false);
-
+      const [designationError, setDesignationError] = React.useState(false);
 
   const checkBoxHandler1 = (event) => {
     setCheckedBox1(event.target.checked);
@@ -429,8 +588,33 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
   }
 
 
+///errorhandling
+//   const handleErrorOpen = () => {
+//     if (
+//         designation === '' ||
+//         reportmanag === '' ||
+//         department2 === '' ||
+       
+//     ) {
+    
+//         console.log('Ran')
+//         if (designation === '') {
+//             setDesignationError(true)
+//         }
 
-
+    
+//         if (reportmanag === '') {
+//             setReportManagError(true)
+//         }
+//         if (department2 === '') {
+//             setDepartmentError(true)
+//         }
+        
+//     } else {
+//         console.log('else case')
+//         createHandler()
+//     }
+// }
 
     return (
         <>
@@ -454,6 +638,17 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 <br></br>
                 <br></br>
             </Container>
+
+
+            {/* ////
+                this is the search dialods */}
+        
+        <Tooltip title="Search Employee">
+        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={()=>setEmployeeDialogs(true)}>
+                <SearchIcon />
+            </Fab>
+        </Tooltip>
+            {/* //// */}
             <Tooltip title="Add Employee">
                 <Fab
                     color="secondary"
@@ -478,17 +673,17 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             >
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
-                    <IconButton aria-label="settings" 
-                    sx={{ ml: 45}}
+                    {/* <IconButton aria-label="settings" 
+                    sx={{ ml: 40}}
                     onClick={iconeHandler}
                     >
             <MoreVertIcon /> 
-          </IconButton>
+          </IconButton> */}
 
 
 
 
-         <Menu
+         {/* <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open1}
@@ -604,7 +799,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
               Designation
             </MenuItem>
          
-      </Menu> 
+      </Menu>  */}
 
 
  
@@ -936,12 +1131,6 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                            
                            
 
-
-
-
-
-
-
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
                                     <Input
@@ -1020,14 +1209,14 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             >
                 <DialogTitle id="alert-dialog-title">
                     {'EDIT EMPLOYEE'}
-                    <IconButton aria-label="settings" 
+                    {/* <IconButton aria-label="settings" 
                     sx={{ ml: 45}}
                     onClick={iconeHandler1}
                     >
                           <MoreVertIcon /> 
-          </IconButton>
+          </IconButton> */}
 
-<Menu
+{/* <Menu
         anchorEl1={anchorEl1}
         id="account-menu"
         open={open2}
@@ -1143,7 +1332,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
               Designation
             </MenuItem>
          
-      </Menu> 
+      </Menu>  */}
           
                     
                 </DialogTitle>
@@ -1758,17 +1947,17 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'SEARCH EMPLOYEE'}
-                    <IconButton aria-label="settings" 
+                    {'Search Filter'}
+                    {/* <IconButton aria-label="settings" 
                     sx={{ ml: 40}}
                     onClick={iconeHandler}
                     >
             <MoreVertIcon /> 
-          </IconButton>
+          </IconButton> */}
 
 
 
-
+{/* 
          <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -1885,7 +2074,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
               Designation
             </MenuItem>
          
-      </Menu> 
+      </Menu>  */}
 
 
                 </DialogTitle>
@@ -1898,8 +2087,8 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                                 <TextField
                                     error={nameError}
                                     id="category"
-                                    label="Name of Employee"
-                                    placeholder="Name of Employee"
+                                    label="Mobile/Email/CNIC/Code/Name Of Employee"
+                                    placeholder="Mobile/Email/CNIC/Code/Name Of Employee"
                                     size="small"
                                     autoComplete="off"
                                     helperText={
@@ -2028,6 +2217,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
        <InputLabel id="demo-multiple-name-label">Designation</InputLabel>
      
        <Select
+        error={designationError}
          labelId="demo-multiple-name-label"
          id="demo-multiple-name"
          multiple
@@ -2041,11 +2231,20 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
              key={name}
              value={name}
              style={getStyles(name, officeName, theme)}
+          
+           onChange={setDesignationError}
            >
              {name}
            </MenuItem>
          ))}
        </Select>
+       <FormHelperText>
+                        {' '}
+                        {designationError ===
+                          true
+                          ? 'Field Required'
+                          : ''}
+                      </FormHelperText>
        </FormControl>
          </Box>
      </Grid>
@@ -2162,6 +2361,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 <FormControl size="small" fullWidth error={statusError}>
                 <form className={classes.container} noValidate>
                 <TextField
+                value={datejoin}
                 id="date"
                 label="Date Of Joing"
                 type="date"
@@ -2171,7 +2371,7 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                 shrink: true,
                 }}
                 size='small'
-                sx={{ minWidth: 260 }}
+                sx={{ minWidth: 255 }}
               />
             </form>
             </FormControl>
@@ -2193,6 +2393,8 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
             </Dialog>
         </>
     )
+  
+      
 }
 
 export default UsersList

@@ -870,7 +870,21 @@ const PurchasedItems = () => {
       console.log(error, 'error');
     })
   }
-
+  const marks = [
+    {
+      value: 0,
+      label: '0',
+    },
+    {
+      value: 500,
+      label: '500',
+    },
+    {
+      value: 1000,
+      label: '1000',
+    },
+  ];
+  
   return (
     <>
      
@@ -2058,9 +2072,9 @@ edit dialog box */}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        {/* <DialogTitle id="alert-dialog-title">
-          {"Search Items"}
-        </DialogTitle> */}
+        <DialogTitle id="alert-dialog-title">
+          {"Search Filter"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <br></br>
@@ -2068,9 +2082,9 @@ edit dialog box */}
             <CardContent>
 
            
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Search Items
-        </Typography>
+        {/* <Typography variant="h4" sx={{ mb: 5 }}>
+          Search Filter
+        </Typography> */}
        
 
          <FormControl sx={{ m: 1, width: 240 }}>
@@ -2179,19 +2193,17 @@ edit dialog box */}
         getAriaLabel={() => 'Temperature range'}
         value={value}
         onChange={handleBox}
-        valueLabelDisplay="auto"
+      
         getAriaValueText={valuetext}
+        valueLabelDisplay="auto"
+        step={100}
+        marks={marks}
+        min={0}
+        max={1000}
       />
+      
      </FormControl>
-          {/* <Box sx={{ width: 300 }}>
-      <Slider
-        getAriaLabel={() => 'Temperature range'}
-        value={value}
-        onChange={handleBox}
-        valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
-      />
-    </Box> */}
+        
 
        
         
