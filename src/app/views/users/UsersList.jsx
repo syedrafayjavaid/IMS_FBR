@@ -2315,7 +2315,7 @@ const offices = [
  
 
             <Grid item lg={6} md={4} sm={4} xs={6}  >
-                <Box sx={{ minWidth: 200 }}>
+                <Box >
                 <FormControl size="small" fullWidth error={statusError}>
                 <form className={classes.container} noValidate>
                 <TextField
@@ -2328,7 +2328,7 @@ const offices = [
                 shrink: true,
                 }}
                 size='small'
-               
+                sx={{ minWidth: 260 }}
               />
             </form>
             </FormControl>
