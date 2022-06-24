@@ -253,9 +253,11 @@ const PurchasedItems = () => {
     const [handleEditDialog, setHandleEditDialog] = React.useState(false)
     ///search items
     const [searchItemsDialog, setSearchItemsDialog] = React.useState(false)
+    const [productData, setProductData] = React.useState('');
 
     const generateQrCode = async () => {
         try {
+
             const qrProduct = productId === '' ? 'N/A' : productId
 
             const qrModel = model === '' ? 'N/A' : model
@@ -494,7 +496,6 @@ const PurchasedItems = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
-        console.log(productId)
     }
 
     ///this is the  api of the text fileds data send to the next data
@@ -509,7 +510,7 @@ const PurchasedItems = () => {
         data.append('status', statusValue)
         data.append('venderName', venderName)
         data.append('venderEmail', venderEmail)
-        data.append('venderNumber', venderNumber)
+        data.append('venderContact', venderNumber)
         data.append('attachment', image)
         data.append('QRCodeImage', imageUrl1)
         data.append('custodian', user)
@@ -518,34 +519,28 @@ const PurchasedItems = () => {
         data.append('quantity', productQuantity)
         data.append('QRCode', text1)
 
-        console.log(price)
-
         axios
             .post(`${config.base_url}/api/v1/purchaseProduct`, data)
             .then((res) => {
-                console.log(res.data.data, 'purchaseProduct ')
                 if (res) {
                     // handleCreateClose()
                     getAlldata()
                     setOpen(false)
+                    setStatusValue('')
+                    setproductId('')
+                    setPrice('')
+                    setDateOfPurchase('')
+                    setOwnerShip('')
+                    setOfficeNameList('')
+                    setVenderName('')
+                    setVenderEmail('')
+                    setVenderNumber('')
+                    setImageUrl1('')
+                    setUser('')
+                    setModel('')
+                    setProductQuantity('')
+                    setPurchaseOrder('')
                 }
-                setStatusValue('')
-                setproductId('')
-                setPrice('')
-                setDateOfPurchase('')
-                setOwnerShip('')
-                setOfficeNameList('')
-                setPurchaseBy1('')
-                data.append('venderName', venderName)
-                data.append('venderEmail', venderEmail)
-                data.append('venderNumber', venderNumber)
-                setImage('')
-                setImageUrl1('')
-                setUser('')
-                setModel('')
-                setText1('')
-                setProductQuantity('')
-                setPurchaseOrder('')
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -753,9 +748,9 @@ const PurchasedItems = () => {
         setDateOfPurchase(date)
         setOwnerShip(purchaseItem.ownership)
         setOfficeNameList(purchaseItem.officeId)
-        setVenderName('venderName', venderName)
-        setVenderEmail('venderEmail', venderEmail)
-        setVenderNumber('venderNumber', venderNumber)
+        setVenderName(purchaseItem.venderName)
+        setVenderEmail(purchaseItem.venderEmail)
+        setVenderNumber(purchaseItem.venderContact)
         setImage(purchaseItem.image)
         setImageUrl1(purchaseItem.QRCodeImage)
         setUser(purchaseItem.custodian)
@@ -769,13 +764,17 @@ const PurchasedItems = () => {
         setModifyByDialog(purchaseItem.modifiedBy)
         setModifyOnDialog(purchaseItem.modifiedAt)
 
-        // console.log(editDataId, 'id');
-        // console.log(editDataName,'editDataName');
-        // setCategory(editDataName)
-        // setImage('');
-        // setIdCategory(editDataId)
-        // console.log(`http://192.168.18.117:5000/api/v1/products/${editDataId}`);
+        axios
+                    .get(`${config.base_url}/api/v1/products/${purchaseItem.productId}`)
+                    .then((res) => {
+                        setProductData(res.data.data.name)
+                        
+                    })
+                    .catch((error) => {
+                        console.log(error, 'error');
+                    })
     }
+    
 
     const navigate = useNavigate()
 
@@ -838,7 +837,7 @@ const PurchasedItems = () => {
         data.append('PurchasedBy', PurchaseBy1)
         data.append('venderName', venderName)
         data.append('venderEmail', venderEmail)
-        data.append('venderNumber', venderNumber)
+        data.append('venderContact', venderNumber)
         data.append('attachment', image)
         data.append('QRCodeImage', imageUrl1)
         data.append('custodian', user)
@@ -1327,7 +1326,7 @@ const PurchasedItems = () => {
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
                                                 value={ownerShip}
-                                                label="Customer Emp ID"
+                                                label="Ownership"
                                                 onChange={
                                                     handleOwenerShipeDialog
                                                 }
@@ -1830,13 +1829,13 @@ edit dialog box */}
                                             error={custodienIdError}
                                         >
                                             <InputLabel id="demo-simple-select-label">
-                                                Customer Emp ID
+                                                Custodian Id
                                             </InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
                                                 value={user}
-                                                label="Customer Emp ID"
+                                                label="Custodian Id"
                                                 onChange={handleCustomerDialog}
                                             >
                                                 {custodienId.map((employee) => {
@@ -1876,7 +1875,7 @@ edit dialog box */}
                                                 : ''
                                         }
                                         value={
-                                            createdBy === 'undefined'
+                                            createdBy === undefined
                                                 ? 'N/A'
                                                 : createdBy
                                         }
@@ -1938,7 +1937,7 @@ edit dialog box */}
                                                 : ''
                                         }
                                         value={
-                                            modifyByDialog === 'undefined' ? 'N/A' : modifyByDialog
+                                            modifyByDialog === undefined ? 'N/A' : modifyByDialog
                                         }
                                         size="small"
                                         onChange={(e) =>
@@ -2028,7 +2027,7 @@ edit dialog box */}
 
                             {/* this is the qr code of the PRAL */}
 
-                            <Grid container>
+                            <Grid container spacing={2}>
                                 <Grid item lg={4} md={4} sm={4} xs={6}>
                                     <TextField
                                         error={venderNameError}
