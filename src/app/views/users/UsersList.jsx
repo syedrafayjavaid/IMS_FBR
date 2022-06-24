@@ -93,24 +93,6 @@ const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
 const [designation1Error,setDesignation1Error]= React.useState(false)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const Input = styled('input')({
         display: 'none',
     })
@@ -1760,6 +1742,454 @@ const [designation1Error,setDesignation1Error]= React.useState(false)
                     message="Employee with same Id already exists"
                     action={editAction}
                 />
+            </Dialog>
+
+
+
+
+
+
+
+            {/* this is the dialogs of the employee search button */}
+            <Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'SEARCH EMPLOYEE'}
+                    <IconButton aria-label="settings" 
+                    sx={{ ml: 40}}
+                    onClick={iconeHandler}
+                    >
+            <MoreVertIcon /> 
+          </IconButton>
+
+
+
+
+         <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open1}
+        onClose={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+            <MenuItem >
+              <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(mobileNumber,setMobileNumber)}
+            defaultChecked = {mobileNumber === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Moible Number
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(remark,setRemark)}
+            defaultChecked = {remark === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+            Remarks
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(emailAdress,setEmailAdress)}
+            defaultChecked = {emailAdress === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Email Address
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(placeOfPoset,setPlaceOfPoset)}
+            defaultChecked = {placeOfPoset === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Place Of Posting 
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(pg,setPg)}
+            defaultChecked = {pg === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              PG
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(wing,setWing)}
+            defaultChecked = {wing === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Wing
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(department,setDepartment)}
+            defaultChecked = {department === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Department
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(dateOfJoining,setDateOfJoining)}
+            defaultChecked = {dateOfJoining === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Date Of Joining
+            </MenuItem>
+            <MenuItem >
+            <Checkbox check={checkedBox1}
+            //  {mobileNumber === "" ?"":defaultChecked} 
+            onClick={()=>stateModifier(designation,setDesgnation)}
+            defaultChecked = {designation === false ?false:true}
+                onChange={checkBoxHandler1}
+              />
+              Designation
+            </MenuItem>
+         
+      </Menu> 
+
+
+                </DialogTitle>
+       
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <TextField
+                                    error={nameError}
+                                    id="category"
+                                    label="Name of Employee"
+                                    placeholder="Name of Employee"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        nameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(e, setName, setNameError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                   
+                                />
+                            </Grid>
+
+                            {/* <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={officeError}
+                                    id="code"
+                                    label=" Your code"
+                                    placeholder="Enter Your Code"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        officeError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setOffice,
+                                            setOfficeError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={cnicError}
+                                    id="cnic"
+                                    label="CNIC"
+                                    placeholder="Enter CNIC"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        cnicError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value=" "
+                                    onChange={(e) =>
+                                        handleChange(e, setCnic, setCnicError)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+
+
+
+
+
+
+         <Grid item lg={6} md={4} sm={4} xs={6}>
+          <TextField
+        error={mobilenumber1Error}
+        id="category"
+        label="Mobile Number"
+        placeholder="Mobile Number"
+        size="small"
+        autoComplete="off"
+        helperText={
+            mobilenumber1Error === true
+                ? 'Field Required'
+                : ''
+        }
+        value=" "
+        onChange={(e) =>
+            handleChange(e, setMobileNumber1, setMobileNumber1Error)
+        }
+        variant="outlined"
+        fullWidth
+    />
+</Grid> */}
+
+{/* <Grid item lg={6} md={4} sm={4} xs={6}  >
+     <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Status</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={statuName}
+         onChange={handleStatus}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {status.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStatu(name, statuName, themestatu)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+
+     </Grid> */}
+
+<Grid item lg={12} md={12} sm={12} xs={12}>
+     <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Designation</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={officeName}
+         onChange={offceChange}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {offices.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStyles(name, officeName, theme)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid>
+                          {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={emailAddress1Error}
+                                    id="category"
+                                    label="Email Address"
+                                    placeholder="Email Address"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        emailAddress1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={emailAddress1}
+                                    onChange={(e) =>
+                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid> */}
+
+                            
+<Grid item lg={12} md={12} sm={12} xs={12}>
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Report Manage</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={personName}
+         onChange={handleChan}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {names.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getStyles(name, personName, theme)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+       </Grid>
+
+
+          {/* <Grid item lg={4} md={4} sm={4} xs={4}  >
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Management</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={brandName}
+         onChange={handleBrand}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {brands.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getBrand(name, brandName, themes)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid> */}
+     <Grid item lg={6} md={4} sm={4} xs={6}  >
+          <Box sx={{ minWidth: 120 }}>
+         <FormControl size="small" fullWidth error={statusError}>
+       <InputLabel id="demo-multiple-name-label">Department</InputLabel>
+     
+       <Select
+         labelId="demo-multiple-name-label"
+         id="demo-multiple-name"
+         multiple
+         value={brandName}
+         onChange={handleBrand}
+         input={<OutlinedInput label="Name" />}
+         MenuProps={MenuProps}
+       >
+         {brands.map((name) => (
+           <MenuItem
+             key={name}
+             value={name}
+             style={getBrand(name, brandName, themes)}
+           >
+             {name}
+           </MenuItem>
+         ))}
+       </Select>
+       </FormControl>
+         </Box>
+     </Grid>
+ 
+
+            <Grid item lg={6} md={4} sm={4} xs={6}  >
+                <Box >
+                <FormControl size="small" fullWidth error={statusError}>
+                <form className={classes.container} noValidate>
+                <TextField
+                id="date"
+                label="Date Of Joing"
+                type="date"
+                defaultValue="2017-05-24"
+                className={classes.textField}
+                InputLabelProps={{
+                shrink: true,
+                }}
+                size='small'
+                sx={{ minWidth: 260 }}
+              />
+            </form>
+            </FormControl>
+            </Box>
+
+            </Grid>
+   
+                        </Grid>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleCreateClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+
+             
             </Dialog>
         </>
     )

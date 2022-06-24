@@ -105,7 +105,7 @@ const AllUsersTable = () => {
       
     return (
         <>
-        <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
+        <Card elevation={3}  sx={{ pt: '20px', mAllUsersTableb: 10, margin: '50px' }}>
             <Box overflow="auto">
                 <ProductTable>
                     <TableHead>
