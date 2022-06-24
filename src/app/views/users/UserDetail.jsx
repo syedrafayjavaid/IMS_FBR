@@ -116,7 +116,7 @@ const UserDetail = () => {
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
-                    <Title>EMPLOYE DETAILS</Title>
+                    <Title>EMPLOYEE DETAILS</Title>
                 </CardHeader>
                 <hr></hr>
                 <Grid container>
