@@ -64,6 +64,7 @@ const Title = styled('span')(() => ({
   fontWeight: '500',
   textTransform: 'capitalize',
   display: "flex",
+
   
 
 }))
@@ -255,7 +256,12 @@ const PurchasedItems = () => {
   const [modifyOnDialog, setModifyOnDialog] = React.useState([])
   const [purchasedItems, setPurchasedItems] = React.useState([])
   const [ownerShip, setOwnerShip] = React.useState('')
-  const [vender, setVender] = React.useState('')
+  const [venderName, setVenderName] = React.useState('')
+      const [venderNameError, setVenderNameError] = React.useState(false)
+      const [venderEmail, setVenderEmail] = React.useState('N/A')
+      const [venderEmailError, setVenderEmailError] = React.useState(false)
+      const [venderNumber, setVenderNumber] = React.useState('')
+      const [venderNumberError, setVenderNumberError] = React.useState(false)
 
   const date = new Date().toISOString().split('T')[0]
 
@@ -371,10 +377,7 @@ const PurchasedItems = () => {
     console.log(event.target.value, 'owenerShip');
     setOwnerShip(event.target.value);
   };
-  const handleVender = (event) => {
-    console.log(event.target.value, 'vender text value');
-    setVender(event.target.value);
-  };
+  
   const handlePurchasedDate = (event) => {
     console.log(event.target.value, 'vender text value');
     setDateOfPurchase(event.target.value);
@@ -497,7 +500,9 @@ const PurchasedItems = () => {
     data.append('officeId', officeNameList);
     data.append('status', statusValue);
     data.append('purchasedBy', PurchaseBy1);
-    data.append('vender', vender);
+    data.append('venderName', venderName);
+    data.append('venderEmail', venderEmail);
+    data.append('venderNumber', venderNumber);
     data.append('attachment', image);
     data.append('QRCodeImage', imageUrl1);
     data.append('custodian', user);
@@ -522,7 +527,9 @@ const PurchasedItems = () => {
       setOwnerShip('');
       setOfficeNameList('');
       setPurchaseBy1('');
-      setVender('');
+      data.append('venderName', venderName)
+        data.append('venderEmail', venderEmail)
+        data.append('venderNumber', venderNumber)
       setImage('');
       setImageUrl1('');
       setUser('');
@@ -541,106 +548,145 @@ const PurchasedItems = () => {
   //////
   //error handling 
   const handleCreateClickOpen = () => {
-    if (price === '' || dataOfPurchase === '' || officeNameList === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 === '' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '') {
-      if (price === '') {
-        setPriceError(true)
-      }
-
-      if (dataOfPurchase === '') {
-        setDateOfPurchaseError(true)
-      }
-      if (ownerShip === '') {
-        setOwnerShipError(true)
-      }
-      if (officeNameList === '') {
-        setOfficeNameError(true)
-      }
-      if (statusValue === '') {
-        setStatusError(true)
-      }
-      if (PurchaseBy1 === '') {
-        setPurchasedError(true)
-      }
-      if (user === '') {
-        setUserError(true)
-      }
-      if (model === '') {
-        setModelError(true)
-      }
-      if (purchaseOrder === '') {
-
-        setPurchasedOrderError(true)
-      }
-      if (productQuantity === '') {
-        setProductQuantityError(true)
-      }
-
-
-
-      if (productId === '') {
-        setProductIdError(true)
-      }
-    } else {
-      createHandler();
-    }
-  }
-  ////edit handler dialog
-  const handleEdit = () => {
-    if (price === '' || dataOfPurchase === '' || ownerShip === '' || statusValue === '' || PurchaseBy1 === '' || user === '' || model === '' || purchaseOrder === '' || productQuantity === '' || productId === '' || createdAt === '' || createdBy === '' || modifyByDialog === '' || modifyOnDialog === '') {
-      if (price === '') {
-        setPriceError(true)
-      }
-
-      if (dataOfPurchase === '') {
-        setDateOfPurchaseError(true)
-      }
-      if (ownerShip === '') {
-        setOwnerShipError(true)
-      }
-      if (officeNameList === '') {
-        setOfficeNameError(true)
-      }
-      if (statusValue === '') {
-        setStatusError(true)
-      }
-      if (PurchaseBy1 === '') {
-        setPurchasedError(true)
-      }
-      if (user === '') {
-        setUserError(true)
-      }
-      if (model === '') {
-        setModelError(true)
-      }
-      if (purchaseOrder === '') {
-        setPurchasedOrderError(true)
-        console.log(purchaseOrder, "purchaseOrder oerder of thw value")
-      }
-      if (productQuantity === '') {
-        setProductQuantityError(true)
-      }
-
-      if (productId === '') {
-        setProductIdError(true)
-      }
-      if (createdAt === '') {
-        setCreatedAtError(true)
-
-      }
-      if (createdBy === '') {
-        setCreatedByError(true)
-      }
-      if (modifyByDialog === '') {
-        setModifyByError(true)
-      }
-      if (modifyOnDialog === '') {
-        setModifyOnError(true)
-      }
-
-    } else {
-      editHandler();
-    }
-  }
+            if (
+                price === '' ||
+                dataOfPurchase === '' ||
+                officeNameList === '' ||
+                ownerShip === '' ||
+                statusValue === '' ||
+                PurchaseBy1 === '' ||
+                user === '' ||
+                model === '' ||
+                purchaseOrder === '' ||
+                productQuantity === '' ||
+                productId === '' ||
+                venderName === '' ||
+                venderNumber === ''
+            ) {
+                console.log('Ran')
+                if (price === '') {
+                    setPriceError(true)
+                }
+    
+                if (dataOfPurchase === '') {
+                    setDateOfPurchaseError(true)
+                }
+                if (ownerShip === '') {
+                    setOwnerShipError(true)
+                }
+                if (officeNameList === '') {
+                    setOfficeNameError(true)
+                }
+                if (statusValue === '') {
+                    setStatusError(true)
+                }
+                if (PurchaseBy1 === '') {
+                    setPurchasedError(true)
+                }
+                if (user === '') {
+                    setUserError(true)
+                }
+                if (model === '') {
+                    setModelError(true)
+                }
+                if (purchaseOrder === '') {
+                    setPurchasedOrderError(true)
+                }
+                if (productQuantity === '') {
+                    setProductQuantityError(true)
+                }
+                if (venderName === '') {
+                    setVenderNameError(true)
+                }
+                if (venderNumber === '') {
+                    setVenderNumberError(true)
+                }
+                if (productId === '') {
+                    setProductIdError(true)
+                }
+            } else {
+                console.log('else case')
+                createHandler()
+            }
+        }
+        ////edit handler dialog
+        const handleEdit = () => {
+            if (
+                price === '' ||
+                dataOfPurchase === '' ||
+                ownerShip === '' ||
+                statusValue === '' ||
+                PurchaseBy1 === '' ||
+                user === '' ||
+                model === '' ||
+                purchaseOrder === '' ||
+                productQuantity === '' ||
+                productId === '' ||
+                createdAt === '' ||
+                createdBy === '' ||
+                modifyByDialog === '' ||
+                modifyOnDialog === '' ||
+                venderName === '' ||
+                venderNumber === ''
+            ) {
+                if (price === '') {
+                    setPriceError(true)
+                }
+    
+                if (dataOfPurchase === '') {
+                    setDateOfPurchaseError(true)
+                }
+                if (ownerShip === '') {
+                    setOwnerShipError(true)
+                }
+                if (officeNameList === '') {
+                    setOfficeNameError(true)
+                }
+                if (statusValue === '') {
+                    setStatusError(true)
+                }
+                if (PurchaseBy1 === '') {
+                    setPurchasedError(true)
+                }
+                if (user === '') {
+                    setUserError(true)
+                }
+                if (model === '') {
+                    setModelError(true)
+                }
+                if (purchaseOrder === '') {
+                    setPurchasedOrderError(true)
+                    console.log(purchaseOrder, 'purchaseOrder oerder of thw value')
+                }
+                if (productQuantity === '') {
+                    setProductQuantityError(true)
+                }
+    
+                if (productId === '') {
+                    setProductIdError(true)
+                }
+                if (createdAt === '') {
+                    setCreatedAtError(true)
+                }
+                if (createdBy === '') {
+                    setCreatedByError(true)
+                }
+                if (modifyByDialog === '') {
+                    setModifyByError(true)
+                }
+                if (modifyOnDialog === '') {
+                    setModifyOnError(true)
+                }
+                if (venderName === '') {
+                    setVenderNameError(true)
+                }
+                if (venderNumber === '') {
+                    setVenderNumberError(true)
+                }
+            } else {
+                editHandler()
+            }
+        }
   //aboue the send the api data of the text fileds data
 
   const checking = () => {
@@ -710,7 +756,9 @@ const PurchasedItems = () => {
     setOwnerShip(purchaseItem.ownership);
     setOfficeNameList(purchaseItem.officeId);
     setPurchaseBy1(purchaseItem.purchasedBy);
-    setVender(purchaseItem.vender);
+    setVenderName('venderName', venderName)
+        setVenderEmail('venderEmail', venderEmail)
+        setVenderNumber('venderNumber', venderNumber)
     setImage(purchaseItem.image);
     setImageUrl1(purchaseItem.QRCodeImage);
     setUser(purchaseItem.custodian);
@@ -796,7 +844,9 @@ const PurchasedItems = () => {
     data.append('officeId', officeNameList);
     data.append('status', statusValue);
     data.append('PurchasedBy', PurchaseBy1);
-    data.append('vender', vender);
+    data.append('venderName', venderName);
+    data.append('venderEmail', venderEmail);
+    data.append('venderNumber', venderNumber);
     data.append('attachment', image);
     data.append('QRCodeImage', imageUrl1);
     data.append('custodian', user);
@@ -1136,10 +1186,10 @@ const PurchasedItems = () => {
                 </Grid>
 
 
-                <Grid item lg={4} md={4} sm={4} xs={4}  >
+                {/* <Grid item lg={4} md={4} sm={4} xs={4}  > */}
 
 
-                  <Box sx={{ minWidth: 120 }}>
+                  {/* <Box sx={{ minWidth: 120 }}>
                     <FormControl size="small" fullWidth error={purchasedError}>
                       <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
                       <Select
@@ -1173,9 +1223,9 @@ const PurchasedItems = () => {
                           : ''}
                       </FormHelperText>
                     </FormControl>
-                  </Box>
+                  </Box> */}
 
-                </Grid>
+                {/* </Grid> */}
 
                 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
@@ -1253,83 +1303,120 @@ const PurchasedItems = () => {
 
               {/* this is the qr code of the PRAL */}
 
-              <Grid container spacing={3}>
-
-
-                {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-              <TextField label="Enter Text Here" onChange={(e) => setText(e.target.value)} />
-              <Button variant="contained"
-                color="primary" onClick={() => generateQrCode()}>Generate</Button>
-              <br />
-              <br />
-              <br />
-              {imageUrl ? (
-                <a href={imageUrl} download>
-                  <img src={imageUrl} alt="img" />
-                </a>) : null}
-            </Grid> */}
-
-                <Grid item lg={4} md={4} sm={4} xs={4}  >
-                </Grid>
-
-
-                <Grid container spacing={2}>
-                  <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
-                    <Button className={classes.btn} variant="contained"
-                      color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
-                    <br></br>
-                    {imageUrl1 ? (
-                      <a href={imageUrl1} download>
-                        <img src={imageUrl1} alt="img" style={{ marginLeft: '24px' }} />
-                      </a>) : null}
-                  </Grid>
-                  {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                      <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
-                      <QrReader
-                        ref={qrRef}
-                        delay={300}
-                        style={{width: '100%'}}
-                        onError={handleErrorFile}
-                        onScan={handleScanFile}
-                        legacyMode
-                      />
-                      <h3>Code: {scanResultFile}</h3>
-                    </Grid>
-                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                       <h3>Qr:</h3>
-                       <QrReader
-                       delay={300}
-                       style={{width: '100%'}}
-                       onError={handleErrorWebCam}
-                       onScan={handleScanWebCam}
-                       />
-                       <h3>Code: {scanResultWebCam}</h3>
-                    </Grid> */}
-                </Grid>
-
-
-
-
-                <Grid item lg={4} md={4} sm={4} xs={6}  >
-
-                  <TextField style={{ "width": "514px" }}
-                    error={venderError}
-                    id="name"
-                    label="Vendor"
-                    placeholder="Vendor"
-                    autoComplete="off"
-                    helperText={venderError === true ? "Field Required" : ''}
-                    value={vender}
-                    size="small"
-                    onChange={(e) => handleVender(e, setVender, setVenderError)}
-                    variant="outlined"
-                    fullWidth
-
-                  />
-
-                </Grid>
-              </Grid>
+              <Grid item lg={4} md={4} sm={4} xs={6}>
+                                     <TextField
+                                        error={venderNameError}
+                                        id="name"
+                                        label="Vendor Name"
+                                        placeholder="Enter Vendor Name"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderNameError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderName}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderName,
+                                                setVenderNameError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={6}>
+                                    <TextField
+                                        error={venderEmailError}
+                                        id="name"
+                                        label="Vendor Email"
+                                        placeholder="Enter Vendor Email"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderEmailError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderEmail}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderEmail,
+                                                setVenderEmailError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={6}>
+                                    <TextField
+                                        error={venderNumberError}
+                                        id="name"
+                                        label="Vendor Number"
+                                        placeholder="Enter Vendor Number"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderNumberError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderNumber}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderNumber,
+                                                setVenderNumberError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
+                                <Grid container spacing={2}>
+                                    <Grid
+                                        item
+                                        xl={4}
+                                        lg={4}
+                                        md={6}
+                                        sm={12}
+                                        xs={12}
+                                    >
+                                        {/* <TextField
+                                            label="Enter Text Here"
+                                            onChange={(e) =>
+                                                setText1(e.target.value)
+                                            }
+                                            style={{ marginLeft: '24px' }}
+                                        /> */}
+                                        <Button
+                                            className={classes.btn}
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => generateQrCode()}
+                                            style={{ marginLeft: '24px' }}
+                                        >
+                                            Generate
+                                        </Button>
+                                        <br></br>
+                                        {imageUrl1 ? (
+                                            <a href={imageUrl1} download>
+                                                <img
+                                                    src={imageUrl1}
+                                                    alt="img"
+                                                    style={{
+                                                        marginLeft: '24px',
+                                                    }}
+                                                />
+                                            </a>
+                                        ) : null}
+                                    </Grid> </Grid>
 
 
             </CardContent>
@@ -1619,10 +1706,10 @@ edit dialog box */}
                 </Grid>
 
 
-                <Grid item lg={4} md={4} sm={4} xs={4}  >
+                {/* <Grid item lg={4} md={4} sm={4} xs={4}  > */}
 
 
-                  <Box sx={{ minWidth: 120 }}>
+                  {/* <Box sx={{ minWidth: 120 }}>
                     <FormControl size="small" fullWidth error={purchasedError}>
                       <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
                       <Select
@@ -1656,9 +1743,9 @@ edit dialog box */}
                           : ''}
                       </FormHelperText>
                     </FormControl>
-                  </Box>
+                  </Box> */}
 
-                </Grid>
+                {/* </Grid> */}
 
                 <Grid item lg={4} md={4} sm={4} xs={4}  >
 
@@ -1826,83 +1913,124 @@ edit dialog box */}
 
               {/* this is the qr code of the PRAL */}
 
-              <Grid container spacing={3}>
+             
 
 
-                {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-              <TextField label="Enter Text Here" onChange={(e) => setText(e.target.value)} />
-              <Button variant="contained"
-                color="primary" onClick={() => generateQrCode()}>Generate</Button>
-              <br />
-              <br />
-              <br />
-              {imageUrl ? (
-                <a href={imageUrl} download>
-                  <img src={imageUrl} alt="img" />
-                </a>) : null}
-            </Grid> */}
-
-                <Grid item lg={4} md={4} sm={4} xs={4}  >
-                </Grid>
-
-
-                <Grid container spacing={2}>
-                  <Grid item xl={4} lg={4} md={6} sm={12} xs={12} >
-                    <TextField label="Enter Text Here" value={text1} onChange={(e) => setText1(e.target.value)} style={{ marginLeft: '24px' }} />
-                    <Button className={classes.btn} variant="contained"
-                      color="primary" onClick={() => generateQrCode()} style={{ marginLeft: '24px' }}>Generate</Button>
-                    <br></br>
-                    {imageUrl1 ? (
-                      <a href={imageUrl1} download>
-                        <img src={imageUrl1} alt="img" style={{ marginLeft: '24px' }} />
-                      </a>) : null}
-                  </Grid>
-                  {/* <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                      <Button className={classes.btn} variant="contained" color="secondary" onClick={onScanFile}>Upload QRCode</Button>
-                      <QrReader
-                        ref={qrRef}
-                        delay={300}
-                        style={{width: '100%'}}
-                        onError={handleErrorFile}
-                        onScan={handleScanFile}
-                        legacyMode
-                      />
-                      <h3>Code: {scanResultFile}</h3>
-                    </Grid>
-                    <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
-                       <h3>Qr:</h3>
-                       <QrReader
-                       delay={300}
-                       style={{width: '100%'}}
-                       onError={handleErrorWebCam}
-                       onScan={handleScanWebCam}
-                       />
-                       <h3>Code: {scanResultWebCam}</h3>
-                    </Grid> */}
-                </Grid>
-
-
-
-
-                <Grid item lg={4} md={4} sm={4} xs={6}  >
-
-                  <TextField style={{ "width": "514px" }}
-                    error={venderError}
-                    id="name"
-                    label="Vendor"
-                    placeholder="Vendor"
-                    autoComplete="off"
-                    helperText={venderError === true ? "Field Required" : ''}
-                    value={vender}
-                    size="small"
-                    onChange={(e) => handleVender(e, setVender, setVenderError)}
-                    variant="outlined"
-                    fullWidth
-
-                  />
-
-                </Grid>
-              </Grid>
+              <Grid item lg={4} md={4} sm={4} xs={6}>
+                                     <TextField
+                                        error={venderNameError}
+                                        id="name"
+                                        label="Vendor Name"
+                                        placeholder="Enter Vendor Name"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderNameError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderName}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderName,
+                                                setVenderNameError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={6}>
+                                    <TextField
+                                        error={venderEmailError}
+                                        id="name"
+                                        label="Vendor Email"
+                                        placeholder="Enter Vendor Email"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderEmailError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderEmail}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderEmail,
+                                                setVenderEmailError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={6}>
+                                    <TextField
+                                        error={venderNumberError}
+                                        id="name"
+                                        label="Vendor Number"
+                                        placeholder="Enter Vendor Number"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderNumberError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={venderNumber}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setVenderNumber,
+                                                setVenderNumberError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
+                                <Grid container spacing={2}>
+                                    <Grid
+                                        item
+                                        xl={4}
+                                        lg={4}
+                                        md={6}
+                                        sm={12}
+                                        xs={12}
+                                    >
+                                        {/* <TextField
+                                            label="Enter Text Here"
+                                            onChange={(e) =>
+                                                setText1(e.target.value)
+                                            }
+                                            style={{ marginLeft: '24px' }}
+                                        /> */}
+                                        <Button
+                                            className={classes.btn}
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => generateQrCode()}
+                                            style={{ marginLeft: '24px' }}
+                                        >
+                                            Generate
+                                        </Button>
+                                        <br></br>
+                                        {imageUrl1 ? (
+                                            <a href={imageUrl1} download>
+                                                <img
+                                                    src={imageUrl1}
+                                                    alt="img"
+                                                    style={{
+                                                        marginLeft: '24px',
+                                                    }}
+                                                />
+                                            </a>
+                                        ) : null}
+                                    </Grid> </Grid>
+                
 
 
             </CardContent>

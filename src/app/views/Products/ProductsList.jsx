@@ -37,6 +37,8 @@ import axios from 'axios'
 import QRCode from 'qrcode'
 import CloseIcon from '@mui/icons-material/Close'
 import config from "../../../config"
+import { identity } from 'lodash'
+import { ConfirmationDialog } from 'app/components'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -113,11 +115,10 @@ const ProductsList = () => {
     const [product1, setProduct1] = React.useState([])
     const [brands, setBrands] = React.useState([])
 
-    const [selectedBrandName, setSelectedBrandName] = React.useState('')
-
     // web came code
 
     const [text1, setText1] = useState('')
+    const [open, setOpen] = React.useState(false);
     const [imageUrl1, setImageUrl1] = useState('')
     const [scanResultFile, setScanResultFile] = useState('')
     const classes = useStyles()
@@ -388,16 +389,21 @@ const ProductsList = () => {
         })
     }
 
-    const onDelhandler = (editData) => {
-        console.log(editData, 'id')
-        axios
-            .delete(config.base_url + `/api/v1/products/${editData}`)
-            .then((res) => {
-                getAlldata()
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+    const onDelhandler = (id) => {
+        setProductId(id)
+        setOpen(true)
+        if (open && productId) {
+
+            axios
+                .delete(config.base_url + `/api/v1/products/${productId}`)
+                .then((res) => {
+                    getAlldata()
+                    setOpen(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
     }
 
     const handleClose = (event, reason) => {
@@ -426,6 +432,17 @@ const ProductsList = () => {
 
     return (
         <>
+        {open && (
+                <ConfirmationDialog
+                    open={open}
+                    onConfirmDialogClose={() => {
+                        setOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Product?`}
+                    onYesClick={onDelhandler}
+                />
+            )}
             <Tooltip title="Add Product">
                 <Fab
                     color="secondary"

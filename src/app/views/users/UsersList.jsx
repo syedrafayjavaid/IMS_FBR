@@ -1,13 +1,9 @@
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
+
 // material
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@mui/icons-material/Add';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
+import AddIcon from '@mui/icons-material/Add'
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
+import CloseIcon from '@mui/icons-material/Close'
 import {
     Button,
     Container,
@@ -18,58 +14,42 @@ import {
     DialogTitle,
     Fab,
     Grid,
-    IconButton, label, Snackbar,
+    IconButton,
+    Snackbar,
     Switch,
     TextField,
-    Typography
-} from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
+    Typography,
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
+import Tooltip from '@mui/material/Tooltip'
+import axios from 'axios'
+import config from 'config'
+import UsersCard from './UsersCard'
+
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
+import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import { styled, useTheme } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
-import axios from 'axios';
-import config from 'config';
-import UsersCard from './UsersCard';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
+import { set } from 'lodash'
 
+const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
-
-
-
-
-
-
-const useStyles = makeStyles((theme) => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 200,
-    },
-  }));
 const UsersList = () => {
-    const classes = useStyles();
-    const theme = useTheme();
-    const themes = useTheme();
-    const themestatu = useTheme();
-    const themesoffice = useTheme();
-    const [personName, setPersonName] = React.useState([]);
-    const [brandName, setBrandName] = React.useState([]);
-    const [statuName, setStatuName] = React.useState([]);
-    const [value, setValue] = React.useState([20, 37]);
-    const [officeName, setOfficeName] = React.useState([]);
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-    const [statusError, setStatusError] = React.useState(false);
+
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
@@ -92,10 +72,7 @@ const UsersList = () => {
     const [anchorEl1, setAnchorEl1] = React.useState(null);
     const open2 = Boolean(anchorEl1);
 
-/////// employee dialoge
-const [employeeDialogs, setEmployeeDialogs]= React.useState(false)
-const label = { inputProps: { 'aria-label': 'Switch demo' } }
-///////
+
 
 const [mobileNumber1,setMobileNumber1]= React.useState('')
 const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
@@ -115,128 +92,6 @@ const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState('')
 const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
 const [designation1Error,setDesignation1Error]= React.useState(false)
-
-
-
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-const offices = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getStyles(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
-  const status = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getStatu(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
-
-  const names = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getBrand(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
-
-  const brands = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-
-
-
-  const handleChan = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  const handleBrand = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setBrandName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-
-  const handleStatus = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setStatuName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  ///office
-
-  const offceChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setOfficeName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-}
-  function getoffice(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
 
     const Input = styled('input')({
         display: 'none',
@@ -478,13 +333,6 @@ const offices = [
         setEditSnackBar(false);
 
     }
-///employee dialogs close
-
-    const handleEmployeeClose = () => {
-    
-        setEmployeeDialogs(false)
-
-    }
 
     const createAction = (
         <React.Fragment>
@@ -606,17 +454,6 @@ const offices = [
                 <br></br>
                 <br></br>
             </Container>
-
-
-            {/* ////
-                this is the search dialods */}
-        
-        <Tooltip title="Search Employee">
-        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={()=>setEmployeeDialogs(true)}>
-                <SearchIcon />
-            </Fab>
-        </Tooltip>
-            {/* //// */}
             <Tooltip title="Add Employee">
                 <Fab
                     color="secondary"
@@ -642,7 +479,7 @@ const offices = [
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
                     <IconButton aria-label="settings" 
-                    sx={{ ml: 40}}
+                    sx={{ ml: 45}}
                     onClick={iconeHandler}
                     >
             <MoreVertIcon /> 
@@ -1098,6 +935,12 @@ const offices = [
                            
                            
                            
+
+
+
+
+
+
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -2350,8 +2193,6 @@ const offices = [
             </Dialog>
         </>
     )
-  
-      
 }
 
 export default UsersList
