@@ -37,6 +37,12 @@ export const navigations = [
 
     },
     {
+        name: 'Department',
+        icon: 'dirty_lens_icon',
+        path: '/department/list',
+
+    },
+    {
         name: 'Offices',
         icon: 'work_icon',
         path: '/office/list',
