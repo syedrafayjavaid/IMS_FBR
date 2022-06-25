@@ -27,17 +27,17 @@ const PurchaseItemDetail = () => {
 
     const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     const showTbl = () => {
         setShowTable(true)
@@ -70,36 +70,36 @@ const PurchaseItemDetail = () => {
         .toISOString()
         .split('T')[0]
 
-        const steps = [
-            {
-              label: 'Select campaign settings',
-              description: `For each ad campaign that you create, you can control how much
+    const steps = [
+        {
+            label: 'Select campaign settings',
+            description: `For each ad campaign that you create, you can control how much
                         you're willing to spend on clicks and conversions.`,
-            },
-            {
-              label: 'Create an ad group',
-              description:
+        },
+        {
+            label: 'Create an ad group',
+            description:
                 'An ad group contains one or more ads which target a shared set of keywords.',
-            },
-            {
-              label: 'Create an ad',
-              description: `Try out different ad text to see what brings in the most customers.`,
-            },
-            {
-              label: 'Step 3',
-              description: `Dummy Description.`,
-            },
-            {
-              label: 'Step 4',
-              description: `Dummy Name`,
-            },
-          ];
+        },
+        {
+            label: 'Create an ad',
+            description: `Try out different ad text to see what brings in the most customers.`,
+        },
+        {
+            label: 'Step 3',
+            description: `Dummy Description.`,
+        },
+        {
+            label: 'Step 4',
+            description: `Dummy Name`,
+        },
+    ];
 
     return (
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
-                    <Title>PURCHASED ITEM DETAILS</Title>
+                    <Title>ITEM DETAILS</Title>
                 </CardHeader>
                 <hr></hr>
                 <Grid container>
@@ -202,11 +202,11 @@ const PurchaseItemDetail = () => {
                                 <span style={{ color: 'green' }}>
                                     <b>
                                         {state.purchaseItem?.modifiedAt ===
-                                        undefined
+                                            undefined
                                             ? 'N/A'
                                             : moment(
-                                                  state.purchaseItem?.modifiedAt
-                                              ).format('LL')}
+                                                state.purchaseItem?.modifiedAt
+                                            ).format('LL')}
                                     </b>
                                 </span>
                             </Grid>
@@ -244,58 +244,58 @@ const PurchaseItemDetail = () => {
                 </Grid>
             </Card>
             {showTable && (
-                    <AllUsersTable></AllUsersTable>
+                <AllUsersTable></AllUsersTable>
             )}
             {showCard && (
                 <Card elevation={3} sx={{ p: '20px', mb: 10, margin: '50px' }}>
                     <Box sx={{ maxWidth: 400 }}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={step.label}>
-            <StepLabel
-            //   optional={
-            //     // index === 4 ? (
-            //     //   <Typography variant="caption">Last step</Typography>
-            //     // ) : null
-            //   }
-            >
-              {step.label}
-            </StepLabel>
-            <StepContent>
-              <Typography>{step.description}</Typography>
-              <Box sx={{ mb: 2 }}>
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                  </Button>
-                  <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </Box>
+                        <Stepper activeStep={activeStep} orientation="vertical">
+                            {steps.map((step, index) => (
+                                <Step key={step.label}>
+                                    <StepLabel
+                                    //   optional={
+                                    //     // index === 4 ? (
+                                    //     //   <Typography variant="caption">Last step</Typography>
+                                    //     // ) : null
+                                    //   }
+                                    >
+                                        {step.label}
+                                    </StepLabel>
+                                    <StepContent>
+                                        <Typography>{step.description}</Typography>
+                                        <Box sx={{ mb: 2 }}>
+                                            <div>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={handleNext}
+                                                    sx={{ mt: 1, mr: 1 }}
+                                                >
+                                                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                                                </Button>
+                                                <Button
+                                                    disabled={index === 0}
+                                                    onClick={handleBack}
+                                                    sx={{ mt: 1, mr: 1 }}
+                                                >
+                                                    Back
+                                                </Button>
+                                            </div>
+                                        </Box>
+                                    </StepContent>
+                                </Step>
+                            ))}
+                        </Stepper>
+                        {activeStep === steps.length && (
+                            <Paper square elevation={0} sx={{ p: 3 }}>
+                                <Typography>All steps completed - you&apos;re finished</Typography>
+                                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                                    Reset
+                                </Button>
+                            </Paper>
+                        )}
+                    </Box>
                 </Card>
-            )}                                   
+            )}
         </>
     )
 }

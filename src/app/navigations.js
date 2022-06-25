@@ -8,13 +8,13 @@ export const navigations = [
         label: 'ALL PAGES',
         type: 'label',
     },
-    // {
-    //     name: 'Users',
-    //     icon: 'group',
-    //     path:'/session/signin'
-    // },
     {
-        name: 'Employee',
+        name: 'App Users',
+        icon: 'group',
+        path: '/appUsers/list'
+    },
+    {
+        name: 'Employs',
         icon: 'group',
         path: '/user/UsersList'
     },
@@ -25,7 +25,7 @@ export const navigations = [
 
     },
     {
-        name: 'Product List',
+        name: 'Product Types',
         icon: 'list_icon',
         path: '/productTypeList/list',
 
@@ -37,7 +37,7 @@ export const navigations = [
 
     },
     {
-        name: 'Department',
+        name: 'Departments',
         icon: 'dirty_lens_icon',
         path: '/department/list',
 
@@ -49,7 +49,7 @@ export const navigations = [
 
     },
     {
-        name: 'Purchased Items',
+        name: 'Items Entry',
         icon: 'paid_icon',
         path: 'items/PurchasedItems',
 

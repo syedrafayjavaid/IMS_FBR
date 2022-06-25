@@ -1,4 +1,4 @@
-let env = 'office';
+let env = 'local';
 
 let config = {
     prod: {

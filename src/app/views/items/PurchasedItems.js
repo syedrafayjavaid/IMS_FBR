@@ -447,7 +447,7 @@ const PurchasedItems = () => {
             .then((res) => {
                 setProduct(res.data.data)
             })
-            .catch((error) => {})
+            .catch((error) => { })
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
@@ -765,16 +765,16 @@ const PurchasedItems = () => {
         setModifyOnDialog(purchaseItem.modifiedAt)
 
         axios
-                    .get(`${config.base_url}/api/v1/products/${purchaseItem.productId}`)
-                    .then((res) => {
-                        setProductData(res.data.data.name)
-                        
-                    })
-                    .catch((error) => {
-                        console.log(error, 'error');
-                    })
+            .get(`${config.base_url}/api/v1/products/${purchaseItem.productId}`)
+            .then((res) => {
+                setProductData(res.data.data.name)
+
+            })
+            .catch((error) => {
+                console.log(error, 'error');
+            })
     }
-    
+
 
     const navigate = useNavigate()
 
@@ -906,7 +906,7 @@ const PurchasedItems = () => {
             <Container>
                 <br></br>
                 <Typography variant="h4" sx={{ mb: 5 }}>
-                    PURCHASE ITEMS
+                    Store Items
                 </Typography>
                 <Grid container spacing={3}>
                     {/* <ProductTypeCard/>
@@ -936,7 +936,7 @@ const PurchasedItems = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'PURCHASE ITEMS'}
+                    {'ADD NEW ITEM'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -1429,7 +1429,7 @@ const PurchasedItems = () => {
                                 </Grid>
                             </Grid>
                             <Grid container spacing={2}>
-                            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}></Grid>
+                                <Grid item xl={12} lg={12} md={12} sm={12} xs={12}></Grid>
                                 <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
                                     {/* <TextField
                                             label="Enter Text Here"
@@ -1443,7 +1443,7 @@ const PurchasedItems = () => {
                                         variant="contained"
                                         color="primary"
                                         onClick={() => generateQrCode()}
-                                        // style={{ marginLeft: '24px' }}
+                                    // style={{ marginLeft: '24px' }}
                                     >
                                         Generate
                                     </Button>
@@ -1486,7 +1486,7 @@ edit dialog box */}
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'EDIT PURCHASE ITEMS'}
+                    {'EDIT ITEM'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -1971,8 +1971,8 @@ edit dialog box */}
                                             modifyOnDialog === undefined
                                                 ? 'N/A'
                                                 : moment(modifyOnDialog).format(
-                                                      'LL'
-                                                  )
+                                                    'LL'
+                                                )
                                         }
                                         size="small"
                                         onChange={(e) =>
