@@ -16,7 +16,7 @@ export const navigations = [
     {
         name: 'Employee',
         icon: 'group',
-        path: '/employee/list'
+        path: '/user/UsersList'
     },
     {
         name: 'Categories',

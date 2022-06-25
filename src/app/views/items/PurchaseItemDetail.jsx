@@ -5,10 +5,8 @@ import { Button, Grid, Paper, Step, StepContent, StepLabel, Stepper, Typography 
 import { Card } from '@mui/material'
 import moment from 'moment'
 import config from 'config'
-import AllEmployeesTable from "../employees/AllEmployeesTable"
-
+import AllUsersTable from '../users/AllUserTable'
 const Title = styled('span')(() => ({
-    
     fontSize: '1rem',
     fontWeight: '500',
     textTransform: 'capitalize',
@@ -246,7 +244,7 @@ const PurchaseItemDetail = () => {
                 </Grid>
             </Card>
             {showTable && (
-                    <AllEmployeesTable></AllEmployeesTable>
+                    <AllUsersTable></AllUsersTable>
             )}
             {showCard && (
                 <Card elevation={3} sx={{ p: '20px', mb: 10, margin: '50px' }}>
