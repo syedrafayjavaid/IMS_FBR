@@ -12,12 +12,12 @@ import qrcodeRoutes from 'app/views/QRcode/qrCodeRoutes'
 import mapRuotes from 'app/views/map/mapRoutes'
 import { Navigate } from 'react-router-dom'
 import MapRuotes from 'app/views/map/mapRoutes'
-import UsersListRoute from 'app/views/users/UsersRoute'
 import usersRoute from 'app/views/users/UsersRoute'
 import brandsRoute from 'app/views/brands/BrandsRoute'
 import officesRoutes from 'app/views/offices/OfficeRoutes'
 import purchaseditemsRoute from 'app/views/items/purchaseditemsRoute'
 import DepartmentRouter from 'app/views/department/DepartmentRouter'
+import employeesRoutes from 'app/views/employees/EmployeesRoute'
 
 export const AllPages = () => {
     const all_routes = [
@@ -37,6 +37,7 @@ export const AllPages = () => {
                 ...categoriesRoutes,
                 ...productTypeRoute,
                 ...usersRoute,
+                ...employeesRoutes,
                 ...brandsRoute,
                 ...officesRoutes,
                 ...DepartmentRouter,
