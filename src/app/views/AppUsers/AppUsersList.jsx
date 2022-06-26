@@ -1,32 +1,25 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
 import AddIcon from '@mui/icons-material/Add'
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import { Container, Fab, Grid, Switch, Typography } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { Container, Fab, FormHelperText, Grid, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import FormControl from '@mui/material/FormControl'
+import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import Snackbar from '@mui/material/Snackbar'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { styled } from '@mui/system'
-import CategoryCard from 'app/components/categories/CategoryCard'
-import CloseIcon from '@mui/icons-material/Close'
-import IconButton from '@mui/material/IconButton'
-import Snackbar from '@mui/material/Snackbar'
-import config from 'config'
+import { Box, styled } from '@mui/system'
 import { ConfirmationDialog } from 'app/components'
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
-import { Box } from '@mui/system'
-import { useNavigate } from 'react-router-dom'
-import { Span } from 'app/components/Typography'
-import { Card, Checkbox, FormControlLabel } from '@mui/material'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import CategoryCard from 'app/components/categories/CategoryCard'
+import axios from 'axios'
+import config from 'config'
+import React, { useEffect } from 'react'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -61,34 +54,36 @@ const JWTRegister = styled(JustifyBox)(() => ({
     },
 }))
 
-
-
 const AppUsersList = () => {
-    const [categories, setCategories] = React.useState([])
-    const [username, setUsername] = React.useState('')
+    const [users, setUsers] = React.useState([])
+    const [userName, setUserName] = React.useState('')
+    const [userNameError, setUserNameError] = React.useState(false)
 
-    const [email, setEmail] = React.useState([])
-    const [password, setPassword] = React.useState([])
-
-    const [agreement, setAgreement] = React.useState([])
-
+    const [emailAddress, setEmailAddress] = React.useState('')
+    const [emailAddressError, setEmailAddressError] = React.useState(false)
+    const [password, setPassword] = React.useState('')
+    const [passwordError, setPasswordError] = React.useState()
+    const [role, setRole] = React.useState('')
+    const [roleError, setRoleError] = React.useState(false)
 
     const [open, setOpen] = React.useState(false)
-    const [age, setAge] = React.useState(false)
-    const [imge, setImage] = React.useState('')
-    const [category, setCategory] = React.useState('')
-    const [categoryError, setCategoryError] = React.useState(false)
-    const [categoryId, setCategoryId] = React.useState('')
+    const [userId, setUserId] = React.useState('')
 
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
-    const [createCategoryDialog, setCreateCategoryDialog] = React.useState(false)
-    const [editCategoryDialog, setEditCategoryDialog] = React.useState(false)
+    const [createUserDialog, setCreateUserDialog] = React.useState(false)
+    const [editUserDialog, setEditUserDialog] = React.useState(false)
 
     const handleCreateClose = () => {
-        setCreateCategoryDialog(false)
-        setCategory('')
-        setCategoryError(false)
+        setCreateUserDialog(false)
+        setUserName('')
+        setEmailAddress('')
+        setPassword('')
+        setRole('')
+        setUserNameError(false)
+        setEmailAddressError(false)
+        setPasswordError(false)
+        setRoleError(false)
     }
 
     const handleCreateSnackBarClose = () => {
@@ -96,9 +91,15 @@ const AppUsersList = () => {
     }
 
     const handleEditClose = () => {
-        setEditCategoryDialog(false)
-        setCategory('')
-        setCategoryError(false)
+        setEditUserDialog(false)
+        setUserName('')
+        setEmailAddress('')
+        setPassword('')
+        setRole('')
+        setUserNameError(false)
+        setEmailAddressError(false)
+        setPasswordError(false)
+        setRoleError(false)
     }
 
     const handleEditSnackBarClose = () => {
@@ -111,22 +112,49 @@ const AppUsersList = () => {
         errorFunc(false)
     }
 
-    const handleImage = (e) => {
-        setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
-    }
-
     const handleCreateClickOpen = () => {
-        if (category === '') {
-            setCategoryError(true)
+        if (
+            userName === '' ||
+            emailAddress === '' ||
+            password === '' ||
+            role === ''
+        ) {
+            if (userName === '') {
+                setUserNameError(true)
+            }
+            if (emailAddress === '') {
+                setEmailAddressError(true)
+            }
+            if (password === '') {
+                setPasswordError(true)
+            }
+            if (role === '') {
+                setRoleError(true)
+            }
         } else {
             createHandler()
         }
     }
 
     const handleEditClickOpen = () => {
-        if (category === '') {
-            setCategoryError(true)
+        if (
+            userName === '' ||
+            emailAddress === '' ||
+            password === '' ||
+            role === ''
+        ) {
+            if (userName === '') {
+                setUserNameError(true)
+            }
+            if (emailAddress === '') {
+                setEmailAddressError(true)
+            }
+            if (password === '') {
+                setPasswordError(true)
+            }
+            if (role === '') {
+                setRole(true)
+            }
         } else {
             editHandler()
         }
@@ -149,19 +177,16 @@ const AppUsersList = () => {
         setEditSnackBar(false)
     }
 
-
     const handleFormSubmit = async (event) => {
         try {
             // await register(state.email, state.username, state.password)
             // navigate('/')
         } catch (e) {
-            if (e.error == "Duplicate field value entered") {
-                alert("Username Already exists, try different username")
-            }
-            else {
+            if (e.error == 'Duplicate field value entered') {
+                alert('Username Already exists, try different username')
+            } else {
                 alert(e.error)
             }
-
         }
     }
 
@@ -214,34 +239,31 @@ const AppUsersList = () => {
     }, [])
 
     const getAlldata = () => {
-        axios
-            .get(`${config.base_url}/api/v1/category`)
-            .then((res) => {
-                setCategories(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+        // axios
+        //     .get(`${config.base_url}/api/v1/category`)
+        //     .then((res) => {
+        //         setCategories(res.data.data)
+        //     })
+        //     .catch((error) => {
+        //         console.log(error, 'error')
+        //     })
     }
 
     const createHandler = () => {
         let data = new FormData()
-        data.append('file', imge)
-        data.append('name', category)
-        data.append('modifiedBy', modifiedBy)
-        data.append('createdBy', createdBy)
-
-        const categoryNameExist = categories.find((categoryData) => {
-            return categoryData.name === category
+        data.append('userName', userName)
+        data.append('email', emailAddress)
+        data.append('password', password)
+        data.append('role', role)
+        const userNameExit = users.find((userData) => {
+            return userData.userName === userName
         })
-
-        if (categoryNameExist) {
+        if (userNameExit) {
             setCreateSnackBar(true)
             return
         }
-
         axios
-            .post(`${config.base_url}/api/v1/category`, data)
+            .post(`${config.base_url}/api/v1/auth/register`, data)
             .then((res) => {
                 if (res) {
                     handleCreateClose()
@@ -255,11 +277,12 @@ const AppUsersList = () => {
 
     const editHandler = () => {
         let data = new FormData()
-        data.append('name', category)
-        data.append('file', imge)
-
+        data.append('userName', userName)
+        data.append('email', emailAddress)
+        data.append('password', password)
+        data.append('role', role)
         axios
-            .put(`${config.base_url}/api/v1/category/${categoryId}`, data)
+            .put(`${config.base_url}/api/v1/auth/${userId}`, data)
             .then((res) => {
                 console.log(res.msg)
                 if (res) {
@@ -275,12 +298,11 @@ const AppUsersList = () => {
     }
 
     const onDelhandler = (id) => {
-        setCategoryId(id)
+        setUserId(id)
         setOpen(true)
-        if (open && categoryId) {
-
+        if (open && userId) {
             axios
-                .delete(`${config.base_url}/api/v1/category/${categoryId}`)
+                .delete(`${config.base_url}/api/v1/auth/${userId}`)
                 .then((res) => {
                     console.log(res.msg)
                     getAlldata()
@@ -292,12 +314,13 @@ const AppUsersList = () => {
         }
     }
 
-    const onEdithandler = (id, category) => {
-        console.log(category)
-        setEditCategoryDialog(true)
-        setCategory(category)
-        setImage(category.photo)
-        setCategoryId(id)
+    const onEdithandler = (id, user) => {
+        setEditUserDialog(true)
+        setUserName(user.userName)
+        setEmailAddress(user.email)
+        setPassword(user.password)
+        setRole(user.role)
+        setUserId(id)
     }
 
     return (
@@ -309,7 +332,7 @@ const AppUsersList = () => {
                         setOpen(false)
                     }}
                     title={`Are You Sure?`}
-                    text={`Are You Sure You Want To Delete This Category?`}
+                    text={`Are You Sure You Want To Delete This User?`}
                     onYesClick={onDelhandler}
                 />
             )}
@@ -324,7 +347,7 @@ const AppUsersList = () => {
                         bottom: '8vh',
                         position: 'fixed',
                     }}
-                    onClick={() => setCreateCategoryDialog(true)}
+                    onClick={() => setCreateUserDialog(true)}
                 >
                     <AddIcon />
                 </Fab>
@@ -335,7 +358,7 @@ const AppUsersList = () => {
                     User's
                 </Typography>
                 <Grid container spacing={3}>
-                    {categories.map((category) => (
+                    {users.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>
                             <CategoryCard
                                 category={category}
@@ -345,13 +368,10 @@ const AppUsersList = () => {
                         </Grid>
                     ))}
                 </Grid>
-                <br></br>
-                <br></br>
-                <br></br>
             </Container>
 
             <Dialog
-                open={createCategoryDialog}
+                open={createUserDialog}
                 onClose={handleCreateClose}
                 maxWidth="xs"
                 aria-labelledby="alert-dialog-title"
@@ -361,9 +381,6 @@ const AppUsersList = () => {
                     {'ADD NEW APP USER'}
                 </DialogTitle>
                 <DialogContent>
-
-
-
                     {/* <ValidatorForm onSubmit={handleFormSubmit} style={{ marginTop: "12px" }}>
                         <TextValidator
                             sx={{ mb: 3, width: '100%' }}
@@ -442,108 +459,106 @@ const AppUsersList = () => {
                         </FlexBox>
                     </ValidatorForm> */}
 
-
-
-
-
                     <br></br>
                     <Grid container spacing={3}>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <TextField
-                                error={categoryError}
+                                error={userNameError}
                                 id="User Name"
                                 label="User Name"
-                                placeholder="User Name"
+                                placeholder="Enter User Name"
                                 size="small"
                                 autoComplete="off"
                                 helperText={
-                                    categoryError === true
+                                    userNameError === true
                                         ? 'Field Required'
                                         : ''
                                 }
-                                value={category}
+                                value={userName}
                                 onChange={(e) =>
                                     handleChange(
                                         e,
-                                        setCategory,
-                                        setCategoryError
+                                        setUserName,
+                                        setUserNameError
                                     )
                                 }
                                 variant="outlined"
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <TextField
-                                error={categoryError}
+                                error={emailAddressError}
                                 id="Email"
                                 label="Email Address"
                                 placeholder="Email Address"
                                 size="small"
                                 autoComplete="off"
                                 helperText={
-                                    categoryError === true
+                                    emailAddressError === true
                                         ? 'Field Required'
                                         : ''
                                 }
-                                value={category}
+                                value={emailAddress}
                                 onChange={(e) =>
                                     handleChange(
                                         e,
-                                        setCategory,
-                                        setCategoryError
+                                        setEmailAddress,
+                                        setEmailAddressError
                                     )
                                 }
                                 variant="outlined"
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <TextField
-                                error={categoryError}
+                                error={passwordError}
                                 id="Password"
                                 label="Password"
                                 placeholder="Password"
                                 size="small"
                                 autoComplete="off"
                                 helperText={
-                                    categoryError === true
+                                    passwordError === true
                                         ? 'Field Required'
                                         : ''
                                 }
-                                value={category}
+                                value={password}
                                 onChange={(e) =>
                                     handleChange(
                                         e,
-                                        setCategory,
-                                        setCategoryError
+                                        setPassword,
+                                        setPasswordError
                                     )
                                 }
                                 variant="outlined"
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                                <InputLabel id="demo-simple-select-label">
+                                    Role
+                                </InputLabel>
                                 <Select
                                     labelId="Role"
                                     id="Role"
-                                    value={age}
+                                    value={role}
                                     label="Role"
-                                    size='small'
+                                    size="small"
                                     onChange={handleChange}
                                 >
                                     <MenuItem value="Admin">Admin</MenuItem>
                                     <MenuItem value="Manager">Manager</MenuItem>
                                     <MenuItem value="HR">HR</MenuItem>
                                 </Select>
+                                <FormHelperText>
+                                    {roleError && 'Field Required'}
+                                </FormHelperText>
                             </FormControl>
                         </Grid>
-
-
                     </Grid>
-
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -561,7 +576,7 @@ const AppUsersList = () => {
             </Dialog>
 
             <Dialog
-                open={editCategoryDialog}
+                open={editUserDialog}
                 onClose={handleEditClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -570,68 +585,191 @@ const AppUsersList = () => {
                     {'Edit Category'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={7} md={7} sm={7} xs={7}>
-                                <TextField
-                                    error={categoryError}
-                                    id="category"
-                                    label="Category Name"
-                                    placeholder="Category Name"
+                    {/* <ValidatorForm onSubmit={handleFormSubmit} style={{ marginTop: "12px" }}>
+                        <TextValidator
+                            sx={{ mb: 3, width: '100%' }}
+                            variant="outlined"
+                            size="small"
+                            label="Username"
+                            onChange={handleChange}
+                            type="text"
+                            name="username"
+                            value={username || ''}
+                            validators={['required']}
+                            errorMessages={['this field is required']}
+                        />
+                        <TextValidator
+                            sx={{ mb: 3, width: '100%' }}
+                            variant="outlined"
+                            size="small"
+                            label="Email"
+                            onChange={handleChange}
+                            type="email"
+                            name="email"
+                            value={email || ''}
+                            validators={['required', 'isEmail']}
+                            errorMessages={[
+                                'this field is required',
+                                'email is not valid',
+                            ]}
+                        />
+                        <TextValidator
+                            sx={{ mb: '16px', width: '100%' }}
+                            label="Password"
+                            variant="outlined"
+                            size="small"
+                            onChange={handleChange}
+                            name="password"
+                            type="password"
+                            value={password || ''}
+                            validators={['required']}
+                            errorMessages={['this field is required']}
+                        />
+                        <FormControlLabel
+                            sx={{ mb: '16px' }}
+                            name="agreement"
+                            onChange={(e) =>
+                                handleChange({
+                                    target: {
+                                        name: 'agreement',
+                                        value: e.target.checked,
+                                    },
+                                })
+                            }
+                            control={
+                                <Checkbox
                                     size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        categoryError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={category}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCategory,
-                                            setCategoryError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
+                                    checked={agreement || false}
                                 />
-                            </Grid>
+                            }
+                            label="I have read and agree to the terms of service."
+                        />
+                        <FlexBox>
+                            <Button
+                                type="submit"
+                                color="primary"
+                                variant="contained"
+                                sx={{ textTransform: 'capitalize' }}
+                            >
+                                Sign up
+                            </Button>
+                            <Span sx={{ mr: 1, ml: '20px' }}>or</Span>
+                            <Button
+                                sx={{ textTransform: 'capitalize' }}
+                            // onClick={() => navigate("/session/signin")}
+                            >
+                                Sign in
+                            </Button>
+                        </FlexBox>
+                    </ValidatorForm> */}
 
-                            <Grid item lg={5} md={5} sm={5} xs={5}>
-                                <label htmlFor="contained-button-file">
-                                    <Input
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        onChange={handleImage}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        component="span"
-                                        startIcon={<AddAPhotoIcon />}
-                                    >
-                                        Upload
-                                    </Button>
-                                </label>
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={userNameError}
+                                id="User Name"
+                                label="User Name"
+                                placeholder="Enter User Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    userNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={userName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setUserName,
+                                        setUserNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
                         </Grid>
-                    </DialogContentText>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={emailAddressError}
+                                id="Email"
+                                label="Email Address"
+                                placeholder="Email Address"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    emailAddressError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={emailAddress}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setEmailAddress,
+                                        setEmailAddressError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={passwordError}
+                                id="Password"
+                                label="Password"
+                                placeholder="Password"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    passwordError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={password}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setPassword,
+                                        setPasswordError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <FormControl fullWidth error={roleError}>
+                                <InputLabel id="demo-simple-select-label">
+                                    Role
+                                </InputLabel>
+                                <Select
+                                    labelId="Role"
+                                    id="Role"
+                                    value={role}
+                                    label="Role"
+                                    size="small"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="Admin">Admin</MenuItem>
+                                    <MenuItem value="Manager">Manager</MenuItem>
+                                    <MenuItem value="HR">HR</MenuItem>
+                                </Select>
+                                <FormHelperText>
+                                    {roleError && 'Field Required'}
+                                </FormHelperText>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
-                    <Button
-                        autoFocus
-                        onClick={() => {
-                            handleEditClickOpen()
-                        }}
-                    >
-                        Confirm
+                    <Button autoFocus onClick={handleEditClickOpen}>
+                        Create User
                     </Button>
                 </DialogActions>
-
                 <Snackbar
                     open={editSnackBar}
                     autoHideDuration={2000}
