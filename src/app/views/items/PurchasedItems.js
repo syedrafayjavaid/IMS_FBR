@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
-
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
@@ -271,6 +271,15 @@ const PurchasedItems = () => {
   const [handleEditDialog, setHandleEditDialog] = React.useState(false);
   ///search items
   const [searchItemsDialog, setSearchItemsDialog] = React.useState(false);
+  const [vender, setVender] = React.useState('');
+  const [custodienIdName, setCustodienIdName] = React.useState([]);
+  const [productName, setProductName] = React.useState([]);
+  const [tagsearch, setTagSearch] = React.useState('');
+  const [srnosearch, setSrnoSearch] = React.useState('');
+
+  
+
+
   const generateQrCode = async () => {
 
     try {
@@ -330,7 +339,10 @@ const PurchasedItems = () => {
     console.log(event.target.value, 'rula');
     setModel(event.target.value);
   };
-
+  const handleVender = (event) => {
+  
+    setVender(event.target.value);
+  };
   const handlePrice = (event) => {
     console.log(event.target.value, 'rula');
     setPrice(event.target.value);
@@ -395,8 +407,12 @@ const PurchasedItems = () => {
 
   const handleClose = () => {
     setOpen(false);
+   
   };
-
+  const handleCloseClick = () => {
+   
+    setSearchItemsDialog(false);
+  };
   const handleEditDialogClose = () => {
     setHandleEditDialog(false);
   };
@@ -887,7 +903,12 @@ const PurchasedItems = () => {
   
   return (
     <>
-     
+        {/* {purchasedItems.length === 0 && <div>
+
+<frames style={{textAlign:"center", margin:"auto",marginTop:"400px" }}> <h1><h3>BACKEND DATA IS NOT CONNECTED <DisabledByDefaultIcon /></h3></h1></frames>
+
+</div> } */}
+{/* { purchasedItems.length > 0 && <div> */}
     
         <Tooltip title="Search Items">
         <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={() => setSearchItemsDialog(true)}>
@@ -2065,6 +2086,8 @@ edit dialog box */}
               {/* Search Items Dialog */}
 
 
+
+
               <Dialog
         open={searchItemsDialog}
         fullWidth={true}
@@ -2079,14 +2102,804 @@ edit dialog box */}
           <DialogContentText id="alert-dialog-description">
             <br></br>
 
+            {/* new search items fileds */}
+
             <CardContent>
+
+
+<Grid container spacing={3}>
+
+  <Grid item lg={6} md={6} sm={6} xs={6} >
+
+
+    <Box >
+      <FormControl size="medium" fullWidth error={productIdError}>
+        <InputLabel id="demo-simple-select-label">Product Name</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={productName}
+          label="Product Category"
+          onChange={handleProduct}
+
+        >
+          {product1.map(
+            (productList) => {
+              return (
+                <MenuItem
+                  value={productList._id}
+                >
+                  {
+                    productList.name
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+
+        <FormHelperText>
+          {' '}
+          {productIdError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+  <Grid item lg={6} md={6} sm={6} xs={6} >
+
+    <TextField
+      error={modelError}
+      id="name"
+      label="Vender Email/Name"
+      placeholder="Vender Email/Name"
+      autoComplete="off"
+      helperText={modelError === true ? "Field Required" : ''}
+      value={vender}
+      size="medium"
+      onChange={(e) => handleVender(e, setVender, setModelError)}
+      variant="outlined"
+      fullWidth
+     
+    />
+
+
+  </Grid>
+
+  
+
+
+</Grid>
+<br></br>
+<Grid container spacing={3}>
+
+<Grid item lg={6} md={6} sm={6} xs={6} >
+
+
+    <TextField
+      error={purchasedOrderError}
+      id="name"
+      label="Tag Search"
+      placeholder="Tag Search"
+      autoComplete="off"
+      helperText={purchasedOrderError === true ? "Field Required" : ''}
+      value={tagsearch}
+      size="medium"
+      onChange={(e) => handleChange(e, setTagSearch, setPurchasedOrderError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+
+  </Grid>
+
+  <Grid item lg={6} md={6} sm={6} xs={6} >
+
+
+    <TextField
+      error={productQuantityError}
+      id="name"
+      label="Sr No Search"
+      placeholder="Sr No Search"
+      autoComplete="off"
+      helperText={productQuantityError === true ? "Field Required" : ''}
+      value={srnosearch}
+      size="medium"
+      onChange={(e) => handleChange(e, setSrnoSearch, setProductQuantityError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+  </Grid>
+
+
+
+
+
+
+
+  <Grid item lg={12} md={12} sm={12} xs={12}  >
+
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl size="medium" fullWidth error={UserError}>
+        <InputLabel id="demo-simple-select-label">Custodian Id/Name</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={custodienIdName}
+          label="Custodian Id/Name"
+          onChange={handleCustomerDialog}
+
+        >
+          {custodienId.map(
+            (employee) => {
+              return (
+                <MenuItem
+                  value={employee._id}
+                >
+                  {
+                    employee.employeeId
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+        <FormHelperText>
+          {' '}
+          {UserError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+
+
+</Grid>
+               
+ 
+</CardContent>
+
+
+
+
+</DialogContentText>
+</DialogContent>
+<DialogActions>
+<Button onClick={handleCloseClick}>Cancel</Button>
+<Button autoFocus onClick={() => {
+
+handleCreateClickOpen();
+}}>
+Confirm
+</Button>
+</DialogActions>
+</Dialog>
+{/* ////////
+edit dialog box */}
+<Dialog
+open={handleEditDialog}
+fullWidth={true}
+onClose={handleEditDialogClose}
+aria-labelledby="alert-dialog-title"
+aria-describedby="alert-dialog-description"
+>
+<DialogTitle id="alert-dialog-title">
+{"EDIT PURCHASE ITEMS"}
+</DialogTitle>
+<DialogContent>
+<DialogContentText id="alert-dialog-description">
+<br></br>
+
+<CardContent>
+
+
+<Grid container spacing={3}>
+
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl size="small" fullWidth error={productIdError}>
+        <InputLabel id="demo-simple-select-label">Product</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={productId}
+          label="Product Category"
+          onChange={handleProduct}
+
+        >
+          {product1.map(
+            (productList) => {
+              return (
+                <MenuItem
+                  value={productList._id}
+                >
+                  {
+                    productList.name
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+        <FormHelperText>
+          {' '}
+          {productIdError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField
+      error={modelError}
+      id="name"
+      label="Model"
+      placeholder="Model"
+      autoComplete="off"
+      helperText={modelError === true ? "Field Required" : ''}
+      value={model}
+      size="small"
+      onChange={(e) => handleModel(e, setModel, setModelError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField
+      error={priceError}
+      id="name"
+      label="Price"
+      placeholder="Price"
+      autoComplete="off"
+      helperText={priceError === true ? "Field Required" : ''}
+      value={price}
+      size="small"
+      onChange={(e) => handlePrice(e, setPrice, setPriceError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+
+  </Grid>
+
+
+
+
+
+
+
+</Grid>
+<br></br>
+<Grid container spacing={3}>
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <TextField
+      error={purchasedOrderError}
+      id="name"
+      label="Purchase Order(PO)"
+      placeholder="Purchase Order(PO)"
+      autoComplete="off"
+      helperText={purchasedOrderError === true ? "Field Required" : ''}
+      value={purchaseOrder}
+      size="small"
+      onChange={(e) => handleChange(e, setPurchaseOrder, setPurchasedError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <TextField
+      error={productQuantityError}
+      id="name"
+      label="Product Quantity"
+      placeholder="Product Quantity"
+      autoComplete="off"
+      helperText={productQuantityError === true ? "Field Required" : ''}
+      value={productQuantity}
+      size="small"
+      onChange={(e) => handleChange(e, setProductQuantity, setProductQuantityError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={6} style={{ justifyContent: "center", marginLeft: "0px" }}  >
+    <Box>
+      {/* <span>Active</span>
+  <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+
+      <label htmlFor="contained-button-file">
+        <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handlePhoto} />
+        <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />} style={{ width: '100%' }}>
+          Upload
+        </Button>
+      </label>
+    </Box>
+
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl size="small" fullWidth error={statusError}>
+        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={statusValue}
+          label="Status"
+          onChange={handleStatusDialog}
+
+        >
+
+          <MenuItem value={`inuse`}>Inuse</MenuItem>
+          <MenuItem value={`replacement`}>Replacement</MenuItem>
+          <MenuItem value={`scrap`}>Scrap</MenuItem>
+
+        </Select>
+        <FormHelperText>
+          {' '}
+          {statusError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl size="small" fullWidth error={officeNameError}>
+        <InputLabel id="demo-simple-select-label">Office</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={officeNameList}
+          label="Office"
+          onChange={handleOfficeDialog}
+
+        >
+          {officeDialog.map(
+            (officeList) => {
+              return (
+                <MenuItem
+                  value={officeList._id}
+                >
+                  {
+                    officeList.name
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+        <FormHelperText>
+          {' '}
+          {officeNameError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+    <form className={myclass.container} noValidate>
+      <TextField
+
+
+        id="date" size='small'
+        label="Date Of Purchase"
+        type="date"
+        value={dataOfPurchase}
+        defaultValue="2017-05-24"
+        className={myclass.textField}
+        InputLabelProps={{
+          shrink: true,
+
+        }}
+        error={dateOfPurchaseError}
+        helperText={dateOfPurchaseError === true ? "Field Required" : ''}
+        onChange={handlePurchasedDate}
+      />
+    </form>
+
+
+  </Grid>
+
+
+  {/* <Grid item lg={4} md={4} sm={4} xs={4}  > */}
+
+
+    {/* <Box sx={{ minWidth: 120 }}>
+      <FormControl size="small" fullWidth error={purchasedError}>
+        <InputLabel id="demo-simple-select-label">Purchased by</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={PurchaseBy1}
+          label="Purchased by"
+
+          onChange={handlePurchasedDialog}
+
+        >
+          {purchaseBy.map(
+            (pur) => {
+              return (
+                <MenuItem
+                  value={pur._id}
+                >
+                  {
+                    pur.name
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+        <FormHelperText>
+          {' '}
+          {purchasedError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box> */}
+
+  {/* </Grid> */}
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl size="small" fullWidth error={custodienIdError}>
+        <InputLabel id="demo-simple-select-label">Customer Emp ID</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={user}
+          label="Customer Emp ID"
+          onChange={handleCustomerDialog}
+
+        >
+          {custodienId.map(
+            (employee) => {
+              return (
+                <MenuItem
+                  value={employee._id}
+                >
+                  {
+                    employee.employeeId
+                  }
+                </MenuItem>
+              )
+            }
+          )}
+        </Select>
+        <FormHelperText>
+          {' '}
+          {custodienIdError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+    </Box>
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField style={{ "width": "160px" }}
+      error={createdByError}
+      disabled
+      id="name"
+      label="Created by"
+      placeholder="Created by"
+      autoComplete="off"
+      helperText={createdByError === true ? "Field Required" : ''}
+      value={createdBy === undefined ? 'N/A' : createdBy}
+      size="small"
+      onChange={(e) => handleCreatedByDialog(e, setCreatedBy, setCreatedByError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+  </Grid>
+
+
+  <br></br>
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField style={{ "width": "160px" }}
+      error={createdAtError}
+      disabled
+      id="name"
+      label="Created At"
+      placeholder="Created At"
+      autoComplete="off"
+      helperText={createdAtError === true ? "Field Required" : ''}
+      value={moment(
+        createdAt
+      ).format('LL')}
+      size="small"
+      onChange={(e) => handleCreatedOnDialog(e, setCreatedAt, setCreatedAtError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+  </Grid>
+
+
+
+
+  <br></br>
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField style={{ "width": "160px" }}
+      error={modifyByError}
+      disabled
+      id="name"
+      label="Modify by"
+      placeholder="Modify by"
+      autoComplete="off"
+      helperText={modifyByError === true ? "Field Required" : ''}
+      value={modifyByDialog === undefined ? 'N/A' : moment(modifyByDialog).format('LL')}
+      size="small"
+      onChange={(e) => handleModifyByDialog(e, setModifyByDialog, setModifyByError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+  </Grid>
+  <br></br>
+
+
+  <Grid item lg={4} md={4} sm={4} xs={6}  >
+
+    <TextField style={{ "width": "160px" }}
+      error={modifyOnError}
+      disabled
+      id="name"
+      label="Modify on"
+      placeholder="Modify on"
+      autoComplete="off"
+      helperText={editmodifyOnError === true ? "Field Required" : ''}
+      value={modifyOnDialog === undefined ? 'N/A' : moment(modifyOnDialog).format('LL')}
+      size="small"
+      onChange={(e) => handleModifyOnDialog(e, setModifyOnDialog, setModifyOnError)}
+      variant="outlined"
+      fullWidth
+
+    />
+
+  </Grid>
+
+  <Grid item lg={4} md={4} sm={4} xs={4}  >
+
+
+    <Box sx={{ minWidth: 145 }}>
+      <FormControl size="small" fullWidth error={ownerShipError}>
+        <InputLabel id="demo-simple-select-label">OwnerShip</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={ownerShip}
+          label="Customer Emp ID"
+          onChange={handleOwenerShipeDialog}
+
+        >
+          <MenuItem value={`PRAL`}>PRAL</MenuItem>
+          <MenuItem value={`FBR`}>FBR</MenuItem>
+
+        </Select>
+        <FormHelperText>
+          {' '}
+          {ownerShipError ===
+            true
+            ? 'Field Required'
+            : ''}
+        </FormHelperText>
+      </FormControl>
+
+    </Box>
+
+  </Grid>
+
+</Grid>
+<br></br>
+
+{/* this is the qr code of the PRAL */}
+
+
+
+
+<Grid item lg={4} md={4} sm={4} xs={6}>
+                       <TextField
+                          error={venderNameError}
+                          id="name"
+                          label="Vendor Name"
+                          placeholder="Enter Vendor Name"
+                          autoComplete="off"
+                          helperText={
+                              venderNameError === true
+                                  ? 'Field Required'
+                                  : ''
+                          }
+                          value={venderName}
+                          size="small"
+                          onChange={(e) =>
+                              handleChange(
+                                  e,
+                                  setVenderName,
+                                  setVenderNameError
+                              )
+                          }
+                          variant="outlined"
+                          fullWidth
+                      />
+                  </Grid>
+                  <Grid item lg={4} md={4} sm={4} xs={6}>
+                      <TextField
+                          error={venderEmailError}
+                          id="name"
+                          label="Vendor Email"
+                          placeholder="Enter Vendor Email"
+                          autoComplete="off"
+                          helperText={
+                              venderEmailError === true
+                                  ? 'Field Required'
+                                  : ''
+                          }
+                          value={venderEmail}
+                          size="small"
+                          onChange={(e) =>
+                              handleChange(
+                                  e,
+                                  setVenderEmail,
+                                  setVenderEmailError
+                              )
+                          }
+                          variant="outlined"
+                          fullWidth
+                      />
+                  </Grid>
+                  <Grid item lg={4} md={4} sm={4} xs={6}>
+                      <TextField
+                          error={venderNumberError}
+                          id="name"
+                          label="Vendor Number"
+                          placeholder="Enter Vendor Number"
+                          autoComplete="off"
+                          helperText={
+                              venderNumberError === true
+                                  ? 'Field Required'
+                                  : ''
+                          }
+                          value={venderNumber}
+                          size="small"
+                          onChange={(e) =>
+                              handleChange(
+                                  e,
+                                  setVenderNumber,
+                                  setVenderNumberError
+                              )
+                          }
+                          variant="outlined"
+                          fullWidth
+                      />
+                  </Grid>
+                  <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
+                  <Grid container spacing={2}>
+                      <Grid
+                          item
+                          xl={4}
+                          lg={4}
+                          md={6}
+                          sm={12}
+                          xs={12}
+                      >
+                          {/* <TextField
+                              label="Enter Text Here"
+                              onChange={(e) =>
+                                  setText1(e.target.value)
+                              }
+                              style={{ marginLeft: '24px' }}
+                          /> */}
+                          <Button
+                              className={classes.btn}
+                              variant="contained"
+                              color="primary"
+                              onClick={() => generateQrCode()}
+                              style={{ marginLeft: '24px' }}
+                          >
+                              Generate
+                          </Button>
+                          <br></br>
+                          {imageUrl1 ? (
+                              <a href={imageUrl1} download>
+                                  <img
+                                      src={imageUrl1}
+                                      alt="img"
+                                      style={{
+                                          marginLeft: '24px',
+                                      }}
+                                  />
+                              </a>
+                          ) : null}
+                      </Grid> </Grid>
+  
+
+
+</CardContent>
+
+
+
+
+
+
+            {/* <CardContent> */}
 
            
         {/* <Typography variant="h4" sx={{ mb: 5 }}>
           Search Filter
         </Typography> */}
        
-
+{/* 
          <FormControl sx={{ m: 1, width: 240 }}>
        
         <InputLabel id="demo-multiple-name-label">Category</InputLabel>
@@ -2205,10 +3018,8 @@ edit dialog box */}
      </FormControl>
         
 
-       
-        
 
-            </CardContent>
+            </CardContent> */}
 
           </DialogContentText>
         </DialogContent>
@@ -2219,7 +3030,7 @@ edit dialog box */}
           </Button>
         </DialogActions>
       </Dialog>
-
+      {/* </div>} */}
     </>
 
 

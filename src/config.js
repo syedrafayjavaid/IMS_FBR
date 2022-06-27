@@ -1,5 +1,6 @@
 let env = 'local';
-
+// const apis='';
+// const api=(!apis=='http://192.168.18.146:5000')?"Api is not called":alert("API ");
 let config = {
     prod: {
         base_url: 'http://210.56.27.69:5000'
@@ -8,7 +9,7 @@ let config = {
         base_url: 'http://localhost:5000'
     },
     office: {
-        base_url: 'http://192.168.18.146:5000'
+        base_url: 'http://192.168.18.146:5001'
     }
 }
 
