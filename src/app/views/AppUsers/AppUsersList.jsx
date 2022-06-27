@@ -17,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { Box, styled } from '@mui/system'
 import { ConfirmationDialog } from 'app/components'
 import CategoryCard from 'app/components/categories/CategoryCard'
+import AppUserCaerd from 'app/views/AppUsers/AppUserCard'
 import axios from 'axios'
 import config from 'config'
 import React, { useEffect } from 'react'
@@ -61,12 +62,18 @@ const AppUsersList = () => {
 
     const [emailAddress, setEmailAddress] = React.useState('')
     const [emailAddressError, setEmailAddressError] = React.useState(false)
+    const [superEmailAddress, setSuperEmailAddress] = React.useState('')
+    const [superPassword, setSuperPassword] = React.useState('')
+    const [superEmailAddressError, setSuperEmailAddressError] = React.useState('')
+    const [superPasswordError, setSuperPasswordError] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [passwordError, setPasswordError] = React.useState()
     const [role, setRole] = React.useState('')
     const [roleError, setRoleError] = React.useState(false)
 
     const [open, setOpen] = React.useState(false)
+    const [open2, setOpen2] = React.useState(false)
+
     const [userId, setUserId] = React.useState('')
 
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
@@ -113,6 +120,9 @@ const AppUsersList = () => {
     }
 
     const handleCreateClickOpen = () => {
+
+
+
         if (
             userName === '' ||
             emailAddress === '' ||
@@ -132,7 +142,7 @@ const AppUsersList = () => {
                 setRoleError(true)
             }
         } else {
-            createHandler()
+            setOpen2(true)
         }
     }
 
@@ -239,14 +249,15 @@ const AppUsersList = () => {
     }, [])
 
     const getAlldata = () => {
-        // axios
-        //     .get(`${config.base_url}/api/v1/category`)
-        //     .then((res) => {
-        //         setCategories(res.data.data)
-        //     })
-        //     .catch((error) => {
-        //         console.log(error, 'error')
-        //     })
+        axios
+            .get(`${config.base_url}/api/v1/auth/users`)
+            .then((res) => {
+                console.log("All incoming Data is ", res.data.data);
+                setUsers(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const createHandler = () => {
@@ -271,6 +282,7 @@ const AppUsersList = () => {
                 }
             })
             .catch((error) => {
+                console.log("I am inside create user", error);
                 console.log(error, 'error')
             })
     }
@@ -323,6 +335,38 @@ const AppUsersList = () => {
         setUserId(id)
     }
 
+
+    const open2Close = () => {
+        setOpen2(false);
+    }
+    const handleSuperAdmin = () => {
+
+        let data = {};
+
+        data.email = superEmailAddress
+        data.password = superPassword
+
+        axios
+            .post(`${config.base_url}/api/v1/auth/SA`, data)
+            .then((res) => {
+                if (res.data.grantAccess) {
+                    console.log("inside grant Access");
+                    setOpen2(false);
+                    createHandler()
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+
+
+
+
+
+
+    }
+
+
     return (
         <>
             {open && (
@@ -360,8 +404,8 @@ const AppUsersList = () => {
                 <Grid container spacing={3}>
                     {users.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>
-                            <CategoryCard
-                                category={category}
+                            <AppUserCaerd
+                                user={category}
                                 onEdit={onEdithandler}
                                 onDelete={onDelhandler}
                             />
@@ -515,6 +559,7 @@ const AppUsersList = () => {
                             <TextField
                                 error={passwordError}
                                 id="Password"
+                                type="password"
                                 label="Password"
                                 placeholder="Password"
                                 size="small"
@@ -537,8 +582,9 @@ const AppUsersList = () => {
                             />
                         </Grid>
                         <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">
+                            <FormControl
+                                fullWidth>
+                                <InputLabel >
                                     Role
                                 </InputLabel>
                                 <Select
@@ -547,7 +593,11 @@ const AppUsersList = () => {
                                     value={role}
                                     label="Role"
                                     size="small"
-                                    onChange={handleChange}
+                                    onChange={(e) => handleChange(
+                                        e,
+                                        setRole,
+                                        setRoleError
+                                    )}
                                 >
                                     <MenuItem value="Admin">Admin</MenuItem>
                                     <MenuItem value="Manager">Manager</MenuItem>
@@ -564,6 +614,87 @@ const AppUsersList = () => {
                     <Button onClick={handleCreateClose}>Cancel</Button>
                     <Button autoFocus onClick={handleCreateClickOpen}>
                         Create User
+                    </Button>
+                </DialogActions>
+                <Snackbar
+                    open={createSnackBar}
+                    autoHideDuration={2000}
+                    onClose={handleCreateClosed}
+                    message="Name already exists"
+                    action={createAction}
+                />
+            </Dialog>
+
+            <Dialog
+                open={open2}
+                onClose={open2Close}
+                maxWidth="xs"
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'Super Admin Confirmation'}
+                </DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={superEmailAddressError}
+                                id="Email"
+                                label="Email Address"
+                                placeholder="Email Address"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    superEmailAddressError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={superEmailAddress}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setSuperEmailAddress,
+                                        setSuperEmailAddressError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={superPasswordError}
+                                id="Password"
+                                type="password"
+                                label="Password"
+                                placeholder="Password"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    superPasswordError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={superPassword}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setSuperPassword,
+                                        setSuperPasswordError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleSuperAdmin}>
+                        Confirm
                     </Button>
                 </DialogActions>
                 <Snackbar

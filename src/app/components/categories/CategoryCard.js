@@ -44,7 +44,7 @@ function CategoryCard({ category, onEdit, onDelete }) {
     }
 
     const navigateToDetailsPage = () => {
-        navigate('/categories/details', {state: {category: category}});
+        navigate('/categories/details', { state: { category: category } });
     }
 
     return (
