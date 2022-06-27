@@ -730,11 +730,11 @@ const handlePlaceOfJoining = (event) => {
     const ApplyFilters = () => {
 
         let data = {};
-        data.dynamic = sdynamic;
-        data.designation = sdesignation;
-        data.reportingManager = sreportingManager;
-        data.department = sdepartment;
-        data.date = sdate;
+        // data.dynamic = sdynamic;
+        // data.designation = sdesignation;
+        // data.reportingManager = sreportingManager;
+        // data.department = sdepartment;
+        // data.date = sdate;
 
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)

@@ -18,6 +18,7 @@ import brandsRoute from 'app/views/brands/BrandsRoute'
 import officesRoutes from 'app/views/offices/OfficeRoutes'
 import purchaseditemsRoute from 'app/views/items/purchaseditemsRoute'
 import DepartmentRouter from 'app/views/department/DepartmentRouter'
+import AppUsersRoutes from 'app/views/AppUsers/AppUsersRoutes'
 
 export const AllPages = () => {
     const all_routes = [
@@ -40,7 +41,8 @@ export const AllPages = () => {
                 ...brandsRoute,
                 ...officesRoutes,
                 ...DepartmentRouter,
-                ...purchaseditemsRoute
+                ...purchaseditemsRoute,
+                ...AppUsersRoutes
             ],
         },
         ...sessionRoutes,

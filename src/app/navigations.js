@@ -8,11 +8,11 @@ export const navigations = [
         label: 'ALL PAGES',
         type: 'label',
     },
-    // {
-    //     name: 'Users',
-    //     icon: 'group',
-    //     path:'/session/signin'
-    // },
+    {
+        name: 'App Users',
+        icon: 'group',
+        path:'/appUsers/list'
+    },
     {
         name: 'Employee',
         icon: 'group',
