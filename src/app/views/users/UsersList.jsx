@@ -269,20 +269,18 @@ const handlePlaceOfJoining = (event) => {
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
-                console.log(res)
                 setUsers(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
 
-    axios.get(`${config.base_url}/api/v1/office`).then((res) => {
-                console.log(res.data.data,'office data');
-                setPlaceOfPosting1(res.data.data)
-                
-              }).catch((error) => {
-                console.log(error, 'error');
-              })
+        axios.get(`${config.base_url}/api/v1/office`).then((res) => {
+            setPlaceOfPosting1(res.data.data)
+
+        }).catch((error) => {
+            console.log(error, 'error');
+        })
     }
 
     const handleCreateClose = () => {
@@ -374,13 +372,11 @@ const handlePlaceOfJoining = (event) => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
         errorFunc(false)
     }
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
     }
 
     const handleCreateClickOpen = () => {
@@ -508,7 +504,6 @@ const handlePlaceOfJoining = (event) => {
             
             return user.employeeId === employeeId
         })
-        console.log(userNameExist,'userNameExist');
 
         if (userNameExist) {
             setCreateSnackBar(true)
@@ -519,7 +514,6 @@ const handlePlaceOfJoining = (event) => {
             .post(`${config.base_url}/api/v1/employee`, data)
             .then((res) => {
                 if (res) {
-                    console.log(res.data.data,'jo jaraha ha');
                     handleCreateClose()
                     getAlldata()
                 }
@@ -571,7 +565,6 @@ const handlePlaceOfJoining = (event) => {
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
             .then((res) => {
-                console.log(res.msg)
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -585,7 +578,6 @@ const handlePlaceOfJoining = (event) => {
     }
 
     const onEditHandler = (id, user) => {
-        console.log(user,'ya mudda')
         setEditEmployeeDialog(true)
         setName(user.name)
         // setOffice(user.office)
@@ -608,7 +600,6 @@ const handlePlaceOfJoining = (event) => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-            console.log('Edit Button Clicked')
             return
         }
 
@@ -680,7 +671,6 @@ const handlePlaceOfJoining = (event) => {
             axios
                 .delete(`${config.base_url}/api/v1/employee/${userId}`)
                 .then((res) => {
-                    console.log(res.msg)
                     getAlldata()
                     setOpen5(false)
                 })
@@ -730,41 +720,39 @@ const handlePlaceOfJoining = (event) => {
 
 //     func(!state)
 
-//   }
-const dateOfjoinnignHandler=(event)=> {
-    console.log(event.target.value, 'vender text value');
-    setDateOfJoinnig1(event.target.value);
-  };
+    //     func(!state)
+
+    //   }
+    const dateOfjoinnignHandler = (event) => {
+        setDateOfJoinnig1(event.target.value);
+    };
+
+    const ApplyFilters = () => {
+
+        let data = {};
+        data.dynamic = sdynamic;
+        data.designation = sdesignation;
+        data.reportingManager = sreportingManager;
+        data.department = sdepartment;
+        data.date = sdate;
+
+        axios
+            .post(`${config.base_url}/api/v1/employee/search`, data)
+            .then((res) => {
+                if (res.data.data.length < 1) {
+                    alert("No record found")
+                }
+                else {
+                    setUsers(res.data.data);
+                    setEmployeeDialogs(false);
+                }
 
 
-
-///errorhandling
-//   const handleErrorOpen = () => {
-//     if (
-//         designation === '' ||
-//         reportmanag === '' ||
-//         department2 === '' ||
-       
-//     ) {
-    
-//         console.log('Ran')
-//         if (designation === '') {
-//             setDesignationError(true)
-//         }
-
-    
-//         if (reportmanag === '') {
-//             setReportManagError(true)
-//         }
-//         if (department2 === '') {
-//             setDepartmentError(true)
-//         }
-        
-//     } else {
-//         console.log('else case')
-//         createHandler()
-//     }
-// }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
 
     return (
         <>
