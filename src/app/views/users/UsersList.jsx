@@ -2,10 +2,9 @@ import React, { useEffect } from 'react'
 
 import InputLabel from '@mui/material/InputLabel';
 
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 // material
-import {  FormHelperText } from '@mui/material';
+import {  FormHelperText, OutlinedInput, Tooltip, useTheme } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@mui/icons-material/Add';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -27,9 +26,7 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
@@ -44,6 +41,10 @@ import { set } from 'lodash'
 import { date } from 'yup'
 import Box from '@mui/material/Box';
 import { ConfirmationDialog } from 'app/components';
+import { styled } from '@mui/styles';
+import config from 'config';
+import axios from 'axios';
+import UsersCard from './UsersCard';
 
 
 
@@ -127,6 +128,7 @@ const [department1Error,setDepartment1Error]= React.useState('')
 const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState(date)
 const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
 const [designation1,setDesignation1]= React.useState('')
+const [designationError,setDesignationError]= React.useState(false)
 
 
 ///error Handling
