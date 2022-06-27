@@ -243,7 +243,6 @@ const UsersList = () => {
 
 
     const handlePlaceOfJoining = (event) => {
-        console.log(event.target.value, 'rula');
         setPlaceOfPosting1Name(event.target.value);
     };
 
@@ -284,7 +283,6 @@ const UsersList = () => {
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
-                console.log(res)
                 setUsers(res.data.data)
             })
             .catch((error) => {
@@ -292,7 +290,6 @@ const UsersList = () => {
             })
 
         axios.get(`${config.base_url}/api/v1/office`).then((res) => {
-            console.log(res.data.data, 'office data');
             setPlaceOfPosting1(res.data.data)
 
         }).catch((error) => {
@@ -389,7 +386,6 @@ const UsersList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
         errorFunc(false)
     }
 
@@ -400,7 +396,6 @@ const UsersList = () => {
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
     }
 
     const handleCreateClickOpen = () => {
@@ -528,7 +523,6 @@ const UsersList = () => {
 
             return user.employeeId === employeeId
         })
-        console.log(userNameExist, 'userNameExist');
 
         if (userNameExist) {
             setCreateSnackBar(true)
@@ -539,7 +533,6 @@ const UsersList = () => {
             .post(`${config.base_url}/api/v1/employee`, data)
             .then((res) => {
                 if (res) {
-                    console.log(res.data.data, 'jo jaraha ha');
                     handleCreateClose()
                     getAlldata()
                 }
@@ -591,7 +584,6 @@ const UsersList = () => {
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
             .then((res) => {
-                console.log(res.msg)
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -605,7 +597,6 @@ const UsersList = () => {
     }
 
     const onEditHandler = (id, user) => {
-        console.log(user, 'ya mudda')
         setEditEmployeeDialog(true)
         setName(user.name)
         // setOffice(user.office)
@@ -628,7 +619,6 @@ const UsersList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-            console.log('Edit Button Clicked')
             return
         }
 
@@ -700,7 +690,6 @@ const UsersList = () => {
             axios
                 .delete(`${config.base_url}/api/v1/employee/${userId}`)
                 .then((res) => {
-                    console.log(res.msg)
                     getAlldata()
                     setOpen5(false)
                 })
@@ -752,7 +741,6 @@ const UsersList = () => {
 
     //   }
     const dateOfjoinnignHandler = (event) => {
-        console.log(event.target.value, 'vender text value');
         setDateOfJoinnig1(event.target.value);
     };
 
@@ -781,43 +769,7 @@ const UsersList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
-
-
-
-
-
-
     }
-
-
-
-    ///errorhandling
-    //   const handleErrorOpen = () => {
-    //     if (
-    //         designation === '' ||
-    //         reportmanag === '' ||
-    //         department2 === '' ||
-
-    //     ) {
-
-    //         console.log('Ran')
-    //         if (designation === '') {
-    //             setDesignationError(true)
-    //         }
-
-
-    //         if (reportmanag === '') {
-    //             setReportManagError(true)
-    //         }
-    //         if (department2 === '') {
-    //             setDepartmentError(true)
-    //         }
-
-    //     } else {
-    //         console.log('else case')
-    //         createHandler()
-    //     }
-    // }
 
     return (
         <>
