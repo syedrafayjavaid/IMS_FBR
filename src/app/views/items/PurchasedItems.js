@@ -276,9 +276,9 @@ const PurchasedItems = () => {
   const [productName, setProductName] = React.useState([]);
   const [tagsearch, setTagSearch] = React.useState('');
   const [srnosearch, setSrnoSearch] = React.useState('');
-
-  
-
+  const [allseachdata,  setAllsearchdata] = React.useState([]);
+  const [tagdata,  setTagdata] = React.useState('');
+  const [srno,  setSrNo] = React.useState('');
 
   const generateQrCode = async () => {
 
@@ -335,6 +335,10 @@ const PurchasedItems = () => {
     console.log(event.target, 'rula');
     setproductId(event.target.value);
   };
+  const handleProductName = (event) => {
+    console.log(event.target, 'rula');
+    setProductName(event.target.value);
+  };
   const handleModel = (event) => {
     console.log(event.target.value, 'rula');
     setModel(event.target.value);
@@ -368,6 +372,11 @@ const PurchasedItems = () => {
 
     setUser(event.target.value);
   };
+  const handleCustodianId = (event) => {
+
+    setCustodienId(event.target.value);
+  };
+
 
   const handleCreatedByDialog = (event) => {
     console.log(event.target.value, 'CreatedBy');
@@ -901,6 +910,28 @@ const PurchasedItems = () => {
     },
   ];
   
+
+
+
+
+  ///this the API OF THE Search filter 
+  useEffect(() => {
+    getSearchdata();
+  }, []);
+  const getSearchdata = () => {
+    axios.get(`${config.base_url} `).then((res) => {
+      // console.log(res.data.data);
+
+      setAllsearchdata(res.data.data);
+      console.log(allseachdata, 'setAllsearchdata');
+    }).catch((error) => {
+      // console.log(error, 'error');
+    })
+
+  }
+
+
+  
   return (
     <>
         {/* {purchasedItems.length === 0 && <div>
@@ -1331,14 +1362,7 @@ const PurchasedItems = () => {
                   </Box>
 
                 </Grid>
-
-              </Grid>
-              <br></br>
-
-
-              {/* this is the qr code of the PRAL */}
-
-              <Grid item lg={4} md={4} sm={4} xs={6}>
+                <Grid item lg={4} md={4} sm={4} xs={6}>
                                      <TextField
                                         error={venderNameError}
                                         id="name"
@@ -1363,6 +1387,13 @@ const PurchasedItems = () => {
                                         fullWidth
                                     />
                                 </Grid>
+            
+              <br></br>
+
+
+              {/* this is the qr code of the PRAL */}
+
+            
                                 <Grid item lg={4} md={4} sm={4} xs={6}>
                                     <TextField
                                         error={venderEmailError}
@@ -1413,6 +1444,57 @@ const PurchasedItems = () => {
                                         fullWidth
                                     />
                                 </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={6}>
+                                    <TextField
+                                        error={venderEmailError}
+                                        id="name"
+                                        label="Tag"
+                                        placeholder="Tag"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderEmailError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={tagdata}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setTagdata,
+                                                setVenderEmailError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item lg={12} md={12} sm={12} xs={12}>
+                                    <TextField
+                                        error={venderEmailError}
+                                        id="name"
+                                        label="SR NO"
+                                        placeholder="SR NO"
+                                        autoComplete="off"
+                                        helperText={
+                                            venderEmailError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={srno}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setSrNo,
+                                                setVenderEmailError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                </Grid>
+                                </Grid>
                                 <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
                                 <Grid container spacing={2}>
                                     <Grid
@@ -1451,7 +1533,10 @@ const PurchasedItems = () => {
                                                 />
                                             </a>
                                         ) : null}
-                                    </Grid> </Grid>
+                                    </Grid> 
+                                  
+                                  
+                                    </Grid>
 
 
             </CardContent>
@@ -2087,7 +2172,6 @@ edit dialog box */}
 
 
 
-
               <Dialog
         open={searchItemsDialog}
         fullWidth={true}
@@ -2101,7 +2185,7 @@ edit dialog box */}
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <br></br>
-
+            
             {/* new search items fileds */}
 
             <CardContent>
@@ -2120,10 +2204,10 @@ edit dialog box */}
           id="demo-simple-select"
           value={productName}
           label="Product Category"
-          onChange={handleProduct}
+          onChange={handleProductName}
 
         >
-          {product1.map(
+          {productName.map(
             (productList) => {
               return (
                 <MenuItem
@@ -2237,10 +2321,10 @@ edit dialog box */}
           id="demo-simple-select"
           value={custodienIdName}
           label="Custodian Id/Name"
-          onChange={handleCustomerDialog}
+          onChange={handleCustodianId}
 
         >
-          {custodienId.map(
+          {custodienIdName.map(
             (employee) => {
               return (
                 <MenuItem
