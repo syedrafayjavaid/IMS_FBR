@@ -1,4 +1,4 @@
-let env = 'local';
+let env = 'office';
 // const apis='';
 // const api=(!apis=='http://192.168.18.146:5000')?"Api is not called":alert("API ");
 let config = {
