@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import config from 'config'
+import avatar from '../AppUsers/a.png'
 
 const UsersCard = ({ user, onDelete, onEdit }) => {
     const navigate = useNavigate()
@@ -30,10 +31,8 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
         onDelete(user._id)
     }
 
-    const userId = user._id
-
     const navigateToDetailsPage = () => {
-        navigate("/user/details", { state: { id: userId } })
+        navigate("/user/details", { state: { user: user } })
     }
 
     return (
@@ -44,7 +43,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
                         alt="No Image"
-                        src={config.base_url + '/' + imgeBaseUrl + user.photo}
+                        src={user.photo !== 'no-image' ? config.base_url + '/' + imgeBaseUrl + user.photo : avatar}
                     />
                 </CardMedia>
                 <CardContent>
