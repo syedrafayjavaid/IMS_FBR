@@ -6,6 +6,7 @@ import moment from 'moment'
 import React, { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import AllUsersTable from './AllUserTable'
+import avatar from '../AppUsers/a.png'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -77,22 +78,6 @@ const UserDetail = () => {
 
     const { state } = useLocation()
 
-    const [userData, setUserData] = React.useState(null)
-
-    useEffect(() => {
-        getAlldata()
-    }, [])
-    const getAlldata = () => {
-        axios
-            .get(`${config.base_url}/api/v1/employee/${state.id}`)
-            .then((res) => {
-                setUserData(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
-    }
-
     const imgeBaseUrl = 'uploads/'
 
     const steps = [
@@ -124,10 +109,7 @@ const UserDetail = () => {
                         <ContentBox>
                             <IMG
                                 src={
-                                    config.base_url +
-                                    '/' +
-                                    imgeBaseUrl +
-                                    userData?.photo
+                                    state.user.photo !== 'no-image' ? config.base_url + '/' + imgeBaseUrl + state.user.photo : avatar
                                 }
                                 alt=""
                             />
@@ -142,18 +124,18 @@ const UserDetail = () => {
                         xs={12}
                         style={{ padding: '1rem 3rem' }}
                     >
-                        <h3>{userData?.name}</h3>
+                        <h3>{state.user.name}</h3>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Email Address: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.emailAddress}</b>
+                                    <b>{state.user.emailAddress}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Mobile Number: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.mobileNumber}</b>
+                                    <b>{state.user.mobileNumber}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -162,13 +144,13 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Department: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.department}</b>
+                                    <b>{state.user.department}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Designation: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.designation}</b>
+                                    <b>{state.user.designation}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -177,13 +159,13 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Pg: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.pg}</b>
+                                    <b>{state.user.pg}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Wing: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.wing}</b>
+                                    <b>{state.user.wing}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -192,13 +174,13 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Office: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.officeId === undefined ? 'N/A' : userData?.officeId}</b>
+                                    <b>{state.user.officeId === undefined ? 'N/A' : state.user.officeId}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>CNIC: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{userData?.cnic === undefined ? 'N/A' : userData?.cnic}</b>
+                                    <b>{state.user.cnic === undefined ? 'N/A' : state.user.cnic}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -208,7 +190,7 @@ const UserDetail = () => {
                                 <span>Created Date: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {moment(userData?.createdAt).format(
+                                        {moment(state.user.createdAt).format(
                                             'LL'
                                         )}
                                     </b>
@@ -219,12 +201,12 @@ const UserDetail = () => {
                                 <span>Modification Date: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {userData?.modifiedAt === undefined
+                                        {state.user.modifiedAt === undefined
                                             ? moment(
-                                                  userData?.createdAt
+                                                  state.user.createdAt
                                               ).format('LL')
                                             : moment(
-                                                  userData?.modifiedAt
+                                                  state.user.modifiedAt
                                               ).format('LL')}
                                     </b>
                                 </span>
@@ -236,7 +218,7 @@ const UserDetail = () => {
                                 <span>Date Of Joining: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {userData?.dateOfJoining}
+                                        {state.user.dateOfJoining}
                                     </b>
                                 </span>
                             </Grid>
@@ -244,7 +226,7 @@ const UserDetail = () => {
                                 <span>Reporting Manager: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {userData?.reportingManager === undefined ? 'N/A' : userData?.reportingManager}
+                                        {state.user.reportingManager === undefined ? 'N/A' : state.user.reportingManager}
                                     </b>
                                 </span>
                             </Grid>
@@ -255,7 +237,7 @@ const UserDetail = () => {
                         <hr></hr>
                         <Box>
                             <h4>Detail: </h4>
-                            {userData?.detail}
+                            {state.user.detail}
                         </Box>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={12}>

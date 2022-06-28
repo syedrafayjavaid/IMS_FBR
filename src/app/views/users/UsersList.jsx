@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react'
 
-import InputLabel from '@mui/material/InputLabel';
+import InputLabel from '@mui/material/InputLabel'
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select'
 // material
-import {  FormHelperText, OutlinedInput, Tooltip, useTheme } from '@mui/material';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@mui/icons-material/Add';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
+import { makeStyles } from '@material-ui/core/styles'
+import AddIcon from '@mui/icons-material/Add'
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
+import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import SearchIcon from '@mui/icons-material/Search'
 import {
     Button,
     Container,
@@ -20,61 +19,47 @@ import {
     DialogContentText,
     DialogTitle,
     Fab,
+    FormHelperText,
     Grid,
-    IconButton, label, Snackbar,
-    Switch,
+    IconButton,
+    OutlinedInput,
+    Snackbar,
     TextField,
-    Typography
-} from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
-import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
-import { set } from 'lodash'
-import { date } from 'yup'
-import Box from '@mui/material/Box';
-import { ConfirmationDialog } from 'app/components';
-import { styled } from '@mui/styles';
-import config from 'config';
-import axios from 'axios';
-import UsersCard from './UsersCard';
-
-
-
-
-
-
-
+    Tooltip,
+    Typography,
+    useTheme
+} from '@mui/material'
+import Box from '@mui/material/Box'
+import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
+import { styled } from '@mui/styles'
+import { ConfirmationDialog } from 'app/components'
+import axios from 'axios'
+import config from 'config'
+import UsersCard from './UsersCard'
 
 const useStyles = makeStyles((theme) => ({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap',
+        display: 'flex',
+        flexWrap: 'wrap',
     },
     textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 200,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
     },
-  }));
+}))
 const UsersList = () => {
-    const classes = useStyles();
-    const theme = useTheme();
-    const themes = useTheme();
-    const themestatu = useTheme();
-    const themesoffice = useTheme();
-    const [personName, setPersonName] = React.useState([]);
-    const [brandName, setBrandName] = React.useState([]);
-    const [statuName, setStatuName] = React.useState([]);
-    const [value, setValue] = React.useState([20, 37]);
-    const [officeName, setOfficeName] = React.useState([]);
+    const classes = useStyles()
+    const theme = useTheme()
+    const themes = useTheme()
+    const themestatu = useTheme()
+    const themesoffice = useTheme()
+    const [personName, setPersonName] = React.useState([])
+    const [brandName, setBrandName] = React.useState([])
+    const [statuName, setStatuName] = React.useState([])
+    const [value, setValue] = React.useState([20, 37])
+    const [officeName, setOfficeName] = React.useState([])
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
@@ -83,12 +68,12 @@ const UsersList = () => {
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-    const [statusError, setStatusError] = React.useState(false);
+    const [statusError, setStatusError] = React.useState(false)
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
     const date = new Date().toISOString().split('T')[0]
-    const [datejoin, setDatetejoin] = React.useState(date);
+    const [datejoin, setDatetejoin] = React.useState(date)
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
     // const [office, setOffice] = React.useState('')
@@ -101,154 +86,126 @@ const UsersList = () => {
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     //  const [checked, setChecked] = React.useState([])
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open1 = Boolean(anchorEl);
-    const [anchorEl1, setAnchorEl1] = React.useState(null);
-    const open2 = Boolean(anchorEl1);
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open1 = Boolean(anchorEl)
+    const [anchorEl1, setAnchorEl1] = React.useState(null)
+    const open2 = Boolean(anchorEl1)
 
-/////// employee dialoge
-const [employeeDialogs, setEmployeeDialogs]= React.useState(false)
-const label = { inputProps: { 'aria-label': 'Switch demo' } }
-///////
-const [mobileNumber1,setMobileNumber1]= React.useState('')
-const [mobilenumber1Error,setMobileNumber1Error]= React.useState(false)
-// const [remarks1,setRemarks1]= React.useState('')
-// const [remarks1Error,setRemarks1Error]= React.useState(false)
-const [emailAddress1,setEmailAddress1]= React.useState('')
-const [emailAddress1Error,setEmailAddress1Error]= React.useState('')
-const [placeOfPosting1,setPlaceOfPosting1]= React.useState([])
-const [placeOfPosting1Name,setPlaceOfPosting1Name]=React.useState('')
-// const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
-const [pg1,setPg1]= React.useState('')
-const [pg1Error,setPg1Error]= React.useState(false)
-const [wing1,setWing1]= React.useState('')
-const [wing1Error,setWing1Error]= React.useState(false)
-const [department1,setDepartment1]= React.useState('')
-const [department1Error,setDepartment1Error]= React.useState('')
-const [dateOfJoinnig1,setDateOfJoinnig1]= React.useState(date)
-const [dateOfJoinnig1Error,setDateOfJoinnig1Error]= React.useState(false)
-const [designation1,setDesignation1]= React.useState('')
-const [designationError,setDesignationError]= React.useState(false)
+    /////// employee dialoge
+    const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    const label = { inputProps: { 'aria-label': 'Switch demo' } }
+    ///////
+    const [mobileNumber1, setMobileNumber1] = React.useState('')
+    const [mobilenumber1Error, setMobileNumber1Error] = React.useState(false)
+    // const [remarks1,setRemarks1]= React.useState('')
+    // const [remarks1Error,setRemarks1Error]= React.useState(false)
+    const [emailAddress1, setEmailAddress1] = React.useState('')
+    const [emailAddress1Error, setEmailAddress1Error] = React.useState(false)
+    const [placeOfPosting1, setPlaceOfPosting1] = React.useState([])
+    const [placeOfPosting1Name, setPlaceOfPosting1Name] = React.useState('')
+    // const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
+    const [pg1, setPg1] = React.useState('')
+    const [pg1Error, setPg1Error] = React.useState(false)
+    const [wing1, setWing1] = React.useState('')
+    const [wing1Error, setWing1Error] = React.useState(false)
+    const [department1, setDepartment1] = React.useState('')
+    const [department1Error, setDepartment1Error] = React.useState(false)
+    const [dateOfJoinnig1, setDateOfJoinnig1] = React.useState(date)
+    const [dateOfJoinnig1Error, setDateOfJoinnig1Error] = React.useState(false)
+    const [designation1, setDesignation1] = React.useState('')
+    const [designationError, setDesignationError] = React.useState(false)
 
+    ///error Handling
+    const [designation1Error, setDesignation1Error] = React.useState(false)
+    const [reportManagError, setReportManagError] = React.useState(false)
+    const [departmentError, setDepartmentError] = React.useState(false)
 
-///error Handling
-const [designation1Error,setDesignation1Error]= React.useState(false)
-const [reportManagError,setReportManagError]= React.useState(false)
-const [departmentError,setDepartmentError]= React.useState(false)
+    const ITEM_HEIGHT = 48
+    const ITEM_PADDING_TOP = 8
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    }
 
+    const offices = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
+    function getStyles(office, officeName, themesoffice) {
+        return {
+            fontWeight:
+                officeName.indexOf(office) === -1
+                    ? themesoffice.typography.fontWeightRegular
+                    : themesoffice.typography.fontWeightMedium,
+        }
+    }
+    const status = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
+    function getStatu(office, officeName, themesoffice) {
+        return {
+            fontWeight:
+                officeName.indexOf(office) === -1
+                    ? themesoffice.typography.fontWeightRegular
+                    : themesoffice.typography.fontWeightMedium,
+        }
+    }
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+    const names = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
+    function getBrand(office, officeName, themesoffice) {
+        return {
+            fontWeight:
+                officeName.indexOf(office) === -1
+                    ? themesoffice.typography.fontWeightRegular
+                    : themesoffice.typography.fontWeightMedium,
+        }
+    }
 
-const offices = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getStyles(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
-  const status = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getStatu(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
+    const brands = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
 
-  const names = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
-  function getBrand(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
+    const [open5, setOpen5] = React.useState(false)
 
-  const brands = [
-    ' Hansen',
-    ' Henry',
-    'Tucker',
-    'Hubbard',
-  
-  ];
+    const handleChan = (event) => {
+        const {
+            target: { value },
+        } = event
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        )
+    }
 
-const [open5, setOpen5] = React.useState(false);
+    const handleBrand = (event) => {
+        const {
+            target: { value },
+        } = event
+        setBrandName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        )
+    }
 
+    const handlePlaceOfJoining = (event) => {
+        console.log(event.target.value, 'rula')
+        setPlaceOfPosting1Name(event.target.value)
+    }
 
-  const handleChan = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  const handleBrand = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setBrandName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-
-const handlePlaceOfJoining = (event) => {
-    console.log(event.target.value, 'rula');
-    setPlaceOfPosting1Name(event.target.value);
-  };
-
-  const offceChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setOfficeName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-}
-  function getoffice(office, officeName, themesoffice) {
-    return {
-      fontWeight:
-        officeName.indexOf(office) === -1
-          ? themesoffice.typography.fontWeightRegular
-          : themesoffice.typography.fontWeightMedium,
-    };
-  }
+    const offceChange = (event) => {
+        const {
+            target: { value },
+        } = event
+        setOfficeName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        )
+    }
+    function getoffice(office, officeName, themesoffice) {
+        return {
+            fontWeight:
+                officeName.indexOf(office) === -1
+                    ? themesoffice.typography.fontWeightRegular
+                    : themesoffice.typography.fontWeightMedium,
+        }
+    }
 
     const Input = styled('input')({
         display: 'none',
@@ -275,12 +232,14 @@ const handlePlaceOfJoining = (event) => {
                 console.log(error, 'error')
             })
 
-        axios.get(`${config.base_url}/api/v1/office`).then((res) => {
-            setPlaceOfPosting1(res.data.data)
-
-        }).catch((error) => {
-            console.log(error, 'error');
-        })
+        axios
+            .get(`${config.base_url}/api/v1/office`)
+            .then((res) => {
+                setPlaceOfPosting1(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const handleCreateClose = () => {
@@ -363,7 +322,6 @@ const handlePlaceOfJoining = (event) => {
         setDesignation1('')
         setDesignation1Error(false)
         setDateOfJoinnig1(date)
-
     }
 
     const handleEditSnackBarClose = () => {
@@ -385,12 +343,12 @@ const handlePlaceOfJoining = (event) => {
             cnic === '' ||
             description === '' ||
             employeeId === '' ||
-            mobileNumber1===''||
-            emailAddress1===''||
-            pg1===''||
-            wing1===''||
-            department1===''||
-            designation1==''
+            mobileNumber1 === '' ||
+            emailAddress1 === '' ||
+            pg1 === '' ||
+            wing1 === '' ||
+            department1 === '' ||
+            designation1 === ''
         ) {
             if (name === '') {
                 setNameError(true)
@@ -404,26 +362,24 @@ const handlePlaceOfJoining = (event) => {
             if (employeeId === '') {
                 setEmployeeIdError(true)
             }
-            if(mobileNumber1===''){
+            if (mobileNumber1 === '') {
                 setMobileNumber1Error(true)
             }
-            if(emailAddress1===''){
+            if (emailAddress1 === '') {
                 setEmailAddress1Error(true)
             }
-            if(pg1===''){
+            if (pg1 === '') {
                 setPg1Error(true)
             }
-            if(wing1===''){
+            if (wing1 === '') {
                 setWing1Error(true)
             }
-            if(department1===''){
+            if (department1 === '') {
                 setDepartment1Error(true)
             }
-             if(designation1===''){
+            if (designation1 === '') {
                 setDesignation1Error(true)
             }
-
-
         } else {
             createHandler()
         }
@@ -435,12 +391,12 @@ const handlePlaceOfJoining = (event) => {
             cnic === '' ||
             description === '' ||
             employeeId === '' ||
-            mobileNumber1===''||
-            emailAddress1===''||
-            pg1===''||
-            wing1===''||
-            department1===''||
-            designation1==''
+            mobileNumber1 === '' ||
+            emailAddress1 === '' ||
+            pg1 === '' ||
+            wing1 === '' ||
+            department1 === '' ||
+            designation1 === ''
         ) {
             if (name === '') {
                 setNameError(true)
@@ -454,26 +410,24 @@ const handlePlaceOfJoining = (event) => {
             if (employeeId === '') {
                 setEmployeeIdError(true)
             }
-            if(mobileNumber1===''){
+            if (mobileNumber1 === '') {
                 setMobileNumber1Error(true)
             }
-            if(emailAddress1===''){
+            if (emailAddress1 === '') {
                 setEmailAddress1Error(true)
             }
-            if(pg1===''){
+            if (pg1 === '') {
                 setPg1Error(true)
             }
-            if(wing1===''){
+            if (wing1 === '') {
                 setWing1Error(true)
             }
-            if(department1===''){
+            if (department1 === '') {
                 setDepartment1Error(true)
             }
-             if(designation1===''){
+            if (designation1 === '') {
                 setDesignation1Error(true)
             }
-
-
         } else {
             editHandler()
         }
@@ -498,10 +452,8 @@ const handlePlaceOfJoining = (event) => {
         data.append('department', department1)
         data.append('designation', designation1)
         data.append('emailAddress', emailAddress1)
-     
 
         const userNameExist = users.find((user) => {
-            
             return user.employeeId === employeeId
         })
 
@@ -549,7 +501,7 @@ const handlePlaceOfJoining = (event) => {
         data.append('remarks', description)
         data.append('employeeId', employeeId)
         // data.append('purchase', checked)
-   
+
         data.append('mobileNumber', mobileNumber1)
         data.append('placeOfPosting', placeOfPosting1Name)
         // data.append('remarks', remarks1)
@@ -559,8 +511,6 @@ const handlePlaceOfJoining = (event) => {
         data.append('department', department1)
         data.append('designation', designation1)
         data.append('emailAddress', emailAddress1)
-        
-     
 
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
@@ -604,7 +554,6 @@ const handlePlaceOfJoining = (event) => {
         }
 
         setCreateSnackBar(false)
-
     }
 
     const handleEditClosed = (event, reason) => {
@@ -612,15 +561,12 @@ const handlePlaceOfJoining = (event) => {
             return
         }
 
-        setEditSnackBar(false);
-
+        setEditSnackBar(false)
     }
-///employee dialogs close
+    ///employee dialogs close
 
     const handleEmployeeClose = () => {
-    
         setEmployeeDialogs(false)
-
     }
 
     const createAction = (
@@ -664,10 +610,9 @@ const handlePlaceOfJoining = (event) => {
     )
 
     const onDeleteHandler = (id) => {
-        setOpen5(true);
+        setOpen5(true)
         setUserId(id)
         if (open5 && userId) {
-
             axios
                 .delete(`${config.base_url}/api/v1/employee/${userId}`)
                 .then((res) => {
@@ -679,11 +624,6 @@ const handlePlaceOfJoining = (event) => {
                 })
         }
     }
-
-
-
-
-    
 
     // const iconeHandler = (event) => {
     //     setAnchorEl(event.currentTarget);
@@ -698,7 +638,6 @@ const handlePlaceOfJoining = (event) => {
     //     setAnchorEl1();
     //   };
 
-
     //   const [checkedBox1, setCheckedBox1] = React.useState(true);
     //   const [emailAdress, setEmailAdress] = React.useState(false);
     //   const [designation, setDesgnation] = React.useState(false);
@@ -710,26 +649,24 @@ const handlePlaceOfJoining = (event) => {
     //   const [department, setDepartment] = React.useState(false);
     //   const [mobileNumber, setMobileNumber] = React.useState(false);
 
+    //   const checkBoxHandler1 = (event) => {
+    //     setCheckedBox1(event.target.checked);
 
-//   const checkBoxHandler1 = (event) => {
-//     setCheckedBox1(event.target.checked);
-    
-//   };
+    //   };
 
-//   const stateModifier= (state,func)=>{
+    //   const stateModifier= (state,func)=>{
 
-//     func(!state)
+    //     func(!state)
 
     //     func(!state)
 
     //   }
     const dateOfjoinnignHandler = (event) => {
-        setDateOfJoinnig1(event.target.value);
-    };
+        setDateOfJoinnig1(event.target.value)
+    }
 
     const ApplyFilters = () => {
-
-        let data = {};
+        let data = {}
         // data.dynamic = sdynamic;
         // data.designation = sdesignation;
         // data.reportingManager = sreportingManager;
@@ -740,14 +677,11 @@ const handlePlaceOfJoining = (event) => {
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
                 if (res.data.data.length < 1) {
-                    alert("No record found")
+                    alert('No record found')
+                } else {
+                    setUsers(res.data.data)
+                    setEmployeeDialogs(false)
                 }
-                else {
-                    setUsers(res.data.data);
-                    setEmployeeDialogs(false);
-                }
-
-
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -756,15 +690,25 @@ const handlePlaceOfJoining = (event) => {
 
     return (
         <>
-        {open5 && <ConfirmationDialog open={open5} onConfirmDialogClose={() => {setOpen5(false)}} text={`Are You Sure Yoou Want To Delete This Employee?`} title={`Are You Sure?`} onYesClick={onDeleteHandler} />}
+            {open5 && (
+                <ConfirmationDialog
+                    open={open5}
+                    onConfirmDialogClose={() => {
+                        setOpen5(false)
+                    }}
+                    text={`Are You Sure Yoou Want To Delete This Employee?`}
+                    title={`Are You Sure?`}
+                    onYesClick={onDeleteHandler}
+                />
+            )}
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    Employes
+                <Typography component={'span'} variant="h4" sx={{ mb: 5 }}>
+                    Employees
                 </Typography>
                 <Grid container spacing={3}>
                     {users.map((user) => (
-                        <Grid key={user.id} item xs={12} sm={6} md={3}>
+                        <Grid key={user._id} item xs={12} sm={6} md={3}>
                             <UsersCard
                                 user={user}
                                 onDelete={onDeleteHandler}
@@ -778,16 +722,26 @@ const handlePlaceOfJoining = (event) => {
                 <br></br>
             </Container>
 
-
             {/* ////
                 this is the search dialods */}
-        
-        <Tooltip title="Search Employee">
-        <Fab color="primary" aria-label="Add" size="medium"   style={{zIndex:999,right:"4vw", top:"13vh",position:"fixed"}} onClick={()=>setEmployeeDialogs(true)}>
-                <SearchIcon />
-            </Fab>
-        </Tooltip>
-            {/* //// */}
+
+            <Tooltip title="Search Employee">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '13vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+            <div>
             <Tooltip title="Add Employee">
                 <Fab
                     color="secondary"
@@ -812,16 +766,15 @@ const handlePlaceOfJoining = (event) => {
             >
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
-                    <IconButton aria-label="settings" 
-                    sx={{ ml: 45}}
-                    // onClick={iconeHandler}
+                    <IconButton
+                        aria-label="settings"
+                        sx={{ ml: 45 }}
+                        // onClick={iconeHandler}
                     >
-            <MoreVertIcon /> 
-          </IconButton> 
+                        <MoreVertIcon />
+                    </IconButton>
 
-
-
-{/* 
+                    {/* 
          <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -939,17 +892,9 @@ const handlePlaceOfJoining = (event) => {
             </MenuItem>
          
       </Menu>  */}
-
-
- 
-
-
                 </DialogTitle>
-            
 
-                
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -1007,7 +952,7 @@ const handlePlaceOfJoining = (event) => {
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
-                                    type='number'
+                                    type="number"
                                     autoComplete="off"
                                     helperText={
                                         cnicError === true
@@ -1049,35 +994,34 @@ const handlePlaceOfJoining = (event) => {
                                 />
                             </Grid>
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={mobilenumber1Error}
+                                    id="category"
+                                    label="Mobile Number"
+                                    placeholder="Mobile Number"
+                                    size="small"
+                                    autoComplete="off"
+                                    type="number"
+                                    helperText={
+                                        mobilenumber1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={mobileNumber1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setMobileNumber1,
+                                            setMobileNumber1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
-
-
-
-
-    <Grid item lg={4} md={4} sm={4} xs={6}>
-    <TextField
-        error={mobilenumber1Error}
-        id="category"
-        label="Mobile Number"
-        placeholder="Mobile Number"
-        size="small"
-        autoComplete="off"
-        type='number'
-        helperText={
-            mobilenumber1Error === true
-                ? 'Field Required'
-                : ''
-        }
-        value={mobileNumber1}
-        onChange={(e) =>
-            handleChange(e, setMobileNumber1, setMobileNumber1Error)
-        }
-        variant="outlined"
-        fullWidth
-    />
-</Grid>
-
- {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
      id="category"
@@ -1099,7 +1043,7 @@ const handlePlaceOfJoining = (event) => {
  />
 </Grid> */}
 
-    <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={emailAddress1Error}
                                     id="category"
@@ -1114,14 +1058,18 @@ const handlePlaceOfJoining = (event) => {
                                     }
                                     value={emailAddress1}
                                     onChange={(e) =>
-                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                        handleChange(
+                                            e,
+                                            setEmailAddress1,
+                                            setEmailAddress1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
 
- {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={placeOfPosting1Error}
      id="category"
@@ -1143,113 +1091,106 @@ const handlePlaceOfJoining = (event) => {
  />
 </Grid> */}
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <FormControl
+                                    sx={{ m: 1, minWidth: 150 }}
+                                    size="small"
+                                >
+                                    <InputLabel id="demo-simple-select-label">
+                                        Place of Joining
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={placeOfPosting1Name}
+                                        label="Office"
+                                        onChange={handlePlaceOfJoining}
+                                    >
+                                        {placeOfPosting1.map((officeList) => {
+                                            return (
+                                                <MenuItem
+                                                    key={officeList._id}
+                                                    value={officeList._id}
+                                                >
+                                                    {officeList.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={pg1Error}
+                                    id="category"
+                                    label="PG"
+                                    type="number"
+                                    placeholder="PG"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        pg1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={pg1}
+                                    onChange={(e) =>
+                                        handleChange(e, setPg1, setPg1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={wing1Error}
+                                    id="category"
+                                    label="Wing"
+                                    placeholder="Wing"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        wing1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={wing1}
+                                    onChange={(e) =>
+                                        handleChange(e, setWing1, setWing1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
-<Grid item lg={4} md={4} sm={4} xs={6}>
-<FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-<InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        
-                        value={placeOfPosting1Name}
-                        label="Office"
-                        onChange={handlePlaceOfJoining} >
-                        {placeOfPosting1.map(
-                          (officeList) => {
-                            return (
-                              <MenuItem
-                                value={officeList._id}
-                              >
-                                {
-                                  officeList.name
-                                }
-                              </MenuItem>
-                            )
-                          }
-                        )}
-                      </Select>
-                      </FormControl>
-                    
-</Grid>
-
-
-
-
-
-
-
-
-
-<Grid item lg={4} md={4} sm={4} xs={6}>
-<TextField
-    error={pg1Error}
-    id="category"
-    label="PG"
-    type='number'
-    placeholder="PG"
-    size="small"
-    autoComplete="off"
-    helperText={
-        pg1Error === true
-            ? 'Field Required'
-            : ''
-    }
-    value={pg1}
-    onChange={(e) =>
-        handleChange(e, setPg1, setPg1Error)
-    }
-    variant="outlined"
-    fullWidth
-/>
-</Grid>
-   
- <Grid item lg={4} md={4} sm={4} xs={6}>
- <TextField
-     error={wing1Error}
-     id="category"
-     label="Wing"
-     placeholder="Wing"
-     size="small"
-     autoComplete="off"
-     helperText={
-         wing1Error === true
-             ? 'Field Required'
-             : ''
-     }
-     value={wing1}
-     onChange={(e) =>
-         handleChange(e, setWing1, setWing1Error)
-     }
-     variant="outlined"
-     fullWidth
- />
-</Grid>
-                  
- 
- <Grid item lg={4} md={4} sm={4} xs={6}>
- <TextField
-     error={department1Error}
-     id="category"
-     label="Department"
-     placeholder="Department"
-     size="small"
-     autoComplete="off"
-     helperText={
-         department1Error === true
-             ? 'Field Required'
-             : ''
-     }
-     value={department1}
-     onChange={(e) =>
-         handleChange(e, setDepartment1, setDepartment1Error)
-     }
-     variant="outlined"
-     fullWidth
- />
-</Grid>
-<Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={department1Error}
+                                    id="category"
+                                    label="Department"
+                                    placeholder="Department"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        department1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={department1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setDepartment1,
+                                            setDepartment1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={dateOfJoinnig1Error}
                                     id="category"
@@ -1268,35 +1209,32 @@ const handlePlaceOfJoining = (event) => {
                                     fullWidth
                                 />
                             </Grid>
-  
 
-                    <Grid item lg={4} md={4} sm={4} xs={6}>
-                    <TextField
-                        error={designation1Error}
-                        id="category"
-                        label="Designation"
-                        placeholder="Designation"
-                        size="small"
-                        autoComplete="off"
-                        helperText={
-                            designation1Error === true
-                                ? 'Field Required'
-                                : ''
-                        }
-                        value={designation1}
-                        onChange={(e) =>
-                            handleChange(e, setDesignation1, setDesignation1Error)
-                        }
-                        variant="outlined"
-                        fullWidth
-                    />
-                </Grid>
-
-                          
-                           
-                           
-                           
-                           
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={designation1Error}
+                                    id="category"
+                                    label="Designation"
+                                    placeholder="Designation"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        designation1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={designation1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setDesignation1,
+                                            setDesignation1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -1336,8 +1274,8 @@ const handlePlaceOfJoining = (event) => {
                                     label="Remarks"
                                     placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
-                                    hintText="Message Field"
-                                    floatingLabelText="MultiLine and FloatingLabel"
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
                                     multiline
                                     fullWidth
                                     rows={3}
@@ -1351,7 +1289,7 @@ const handlePlaceOfJoining = (event) => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                    
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -1368,6 +1306,7 @@ const handlePlaceOfJoining = (event) => {
                     action={createAction}
                 />
             </Dialog>
+            </div>
             <Dialog
                 open={editEmployeeDialog}
                 onClose={handleEditClose}
@@ -1383,7 +1322,7 @@ const handlePlaceOfJoining = (event) => {
                           <MoreVertIcon /> 
           </IconButton> */}
 
-{/* <Menu
+                    {/* <Menu
         anchorEl1={anchorEl1}
         id="account-menu"
         open={open2}
@@ -1500,11 +1439,8 @@ const handlePlaceOfJoining = (event) => {
             </MenuItem>
          
       </Menu>  */}
-          
-                    
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -1559,7 +1495,7 @@ const handlePlaceOfJoining = (event) => {
                                 <TextField
                                     error={cnicError}
                                     id="cnic"
-                                    type='number'
+                                    type="number"
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
@@ -1577,7 +1513,6 @@ const handlePlaceOfJoining = (event) => {
                                     fullWidth
                                 />
                             </Grid>
-                  
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1605,37 +1540,33 @@ const handlePlaceOfJoining = (event) => {
                                 />
                             </Grid>
 
-
-
-
-
-
-
-
-
-    <Grid item lg={4} md={4} sm={4} xs={6}>
-    <TextField
-        error={mobilenumber1Error}
-        id="category"
-        type='number'
-        label="Mobile Number"
-        placeholder="Mobile Number"
-        size="small"
-        autoComplete="off"
-        helperText={
-            mobilenumber1Error === true
-                ? 'Field Required'
-                : ''
-        }
-        value={mobileNumber1}
-        onChange={(e) =>
-            handleChange(e, setMobileNumber1, setMobileNumber1Error)
-        }
-        variant="outlined"
-        fullWidth
-    />
-</Grid>
-{/* 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={mobilenumber1Error}
+                                    id="category"
+                                    type="number"
+                                    label="Mobile Number"
+                                    placeholder="Mobile Number"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        mobilenumber1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={mobileNumber1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setMobileNumber1,
+                                            setMobileNumber1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            {/* 
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
@@ -1658,7 +1589,7 @@ const handlePlaceOfJoining = (event) => {
  />
 </Grid> */}
 
-    <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={emailAddress1Error}
                                     id="category"
@@ -1673,14 +1604,18 @@ const handlePlaceOfJoining = (event) => {
                                     }
                                     value={emailAddress1}
                                     onChange={(e) =>
-                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                        handleChange(
+                                            e,
+                                            setEmailAddress1,
+                                            setEmailAddress1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
 
- {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={placeOfPosting1Error}
      id="category"
@@ -1701,106 +1636,109 @@ const handlePlaceOfJoining = (event) => {
      fullWidth
  />
 </Grid> */}
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <div>
+                                <FormControl
+                                    sx={{ m: 1, minWidth: 150 }}
+                                    size="small"
+                                >
+                                    <InputLabel id="demo-simple-select-label">
+                                        Place of Joining
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={placeOfPosting1Name}
+                                        label="Office"
+                                        onChange={handlePlaceOfJoining}
+                                    >
+                                        {placeOfPosting1.map((officeList) => {
+                                            return (
+                                                <MenuItem
+                                                    key={officeList._id}
+                                                    value={officeList._id}
+                                                >
+                                                    {officeList.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            </Grid>
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={pg1Error}
+                                    id="category"
+                                    label="PG"
+                                    placeholder="PG"
+                                    size="small"
+                                    autoComplete="off"
+                                    type="number"
+                                    helperText={
+                                        pg1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={pg1}
+                                    onChange={(e) =>
+                                        handleChange(e, setPg1, setPg1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
-<Grid item lg={4} md={4} sm={4} xs={6}>
-<FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-<InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        
-                        value={placeOfPosting1Name}
-                        label="Office"
-                        onChange={handlePlaceOfJoining} >
-                        {placeOfPosting1.map(
-                          (officeList) => {
-                            return (
-                              <MenuItem
-                                value={officeList._id}
-                              >
-                                {
-                                  officeList.name
-                                }
-                              </MenuItem>
-                            )
-                          }
-                        )}
-                      </Select>
-                      </FormControl>
-                    
-</Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={wing1Error}
+                                    id="category"
+                                    label="wing"
+                                    placeholder="wing"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        wing1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={wing1}
+                                    onChange={(e) =>
+                                        handleChange(e, setWing1, setWing1Error)
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={department1Error}
+                                    id="category"
+                                    label="Department"
+                                    placeholder="Department"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        department1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={department1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setDepartment1,
+                                            setDepartment1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
-
-<Grid item lg={4} md={4} sm={4} xs={6}>
-<TextField
-    error={pg1Error}
-    id="category"
-    label="PG"
-    placeholder="PG"
-    size="small"
-    autoComplete="off"
-    type='number'
-    helperText={
-        pg1Error === true
-            ? 'Field Required'
-            : ''
-    }
-    value={pg1}
-    onChange={(e) =>
-        handleChange(e, setPg1, setPg1Error)
-    }
-    variant="outlined"
-    fullWidth
-/>
-</Grid>
-
- <Grid item lg={4} md={4} sm={4} xs={6}>
- <TextField
-     error={wing1Error}
-     id="category"
-     label="wing"
-     placeholder="wing"
-     size="small"
-     autoComplete="off"
-     helperText={
-         wing1Error === true
-             ? 'Field Required'
-             : ''
-     }
-     value={wing1}
-     onChange={(e) =>
-         handleChange(e, setWing1, setWing1Error)
-     }
-     variant="outlined"
-     fullWidth
- />
-</Grid>
-
- <Grid item lg={4} md={4} sm={4} xs={6}>
- <TextField
-     error={department1Error}
-     id="category"
-     label="Department"
-     placeholder="Department"
-     size="small"
-     autoComplete="off"
-     helperText={
-         department1Error === true
-             ? 'Field Required'
-             : ''
-     }
-     value={department1}
-     onChange={(e) =>
-         handleChange(e, setDepartment1, setDepartment1Error)
-     }
-     variant="outlined"
-     fullWidth
- />
-</Grid>
-
-        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={dateOfJoinnig1Error}
                                     id="date"
@@ -1819,38 +1757,36 @@ const handlePlaceOfJoining = (event) => {
                                     fullWidth
                                 />
                             </Grid>
-  
-                    
-                    <Grid item lg={4} md={4} sm={4} xs={6}>
-                    <TextField
-                        error={designation1Error}
-                        id="category"
-                        label="Designation"
-                        placeholder="Designation"
-                        size="small"
-                        autoComplete="off"
-                        helperText={
-                            designation1Error === true
-                                ? 'Field Required'
-                                : ''
-                        }
-                        value={designation1}
-                        onChange={(e) =>
-                            handleChange(e, setDesignation1, setDesignation1Error)
-                        }
-                        variant="outlined"
-                        fullWidth
-                    />
-                </Grid>
 
-                
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={designation1Error}
+                                    id="category"
+                                    label="Designation"
+                                    placeholder="Designation"
+                                    size="small"
+                                    autoComplete="off"
+                                    helperText={
+                                        designation1Error === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={designation1}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setDesignation1,
+                                            setDesignation1Error
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
 
+                            {/* old colde start */}
 
-{/* old colde start */}
-
-
-
-{/* 
+                            {/* 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={nameError}
@@ -2044,9 +1980,7 @@ const handlePlaceOfJoining = (event) => {
 
  */}
 
-{/* old code end */}
-
-                           
+                            {/* old code end */}
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -2086,8 +2020,8 @@ const handlePlaceOfJoining = (event) => {
                                     label="Remarks"
                                     placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
-                                    hintText="Message Field"
-                                    floatingLabelText="MultiLine and FloatingLabel"
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
                                     multiline
                                     fullWidth
                                     rows={3}
@@ -2102,7 +2036,6 @@ const handlePlaceOfJoining = (event) => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
@@ -2118,12 +2051,6 @@ const handlePlaceOfJoining = (event) => {
                     action={editAction}
                 />
             </Dialog>
-
-
-
-
-
-
 
             {/* this is the dialogs of the employee search button */}
             <Dialog
@@ -2141,9 +2068,7 @@ const handlePlaceOfJoining = (event) => {
             <MoreVertIcon /> 
           </IconButton> */}
 
-
-
-{/* 
+                    {/* 
          <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -2261,10 +2186,8 @@ const handlePlaceOfJoining = (event) => {
             </MenuItem>
          
       </Menu>  */}
-
-
                 </DialogTitle>
-       
+
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         <br></br>
@@ -2288,153 +2211,59 @@ const handlePlaceOfJoining = (event) => {
                                     }
                                     variant="outlined"
                                     fullWidth
-                                   
                                 />
                             </Grid>
 
-                            {/* <Grid item lg={6} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={officeError}
-                                    id="code"
-                                    label=" Your code"
-                                    placeholder="Enter Your Code"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        officeError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value=" "
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setOffice,
-                                            setOfficeError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={statusError}
+                                    >
+                                        <InputLabel id="demo-multiple-name-label">
+                                            Designation
+                                        </InputLabel>
+
+                                        <Select
+                                            error={designationError}
+                                            labelId="demo-multiple-name-label"
+                                            id="demo-multiple-name"
+                                            multiple
+                                            value={officeName}
+                                            onChange={offceChange}
+                                            input={
+                                                <OutlinedInput label="Name" />
+                                            }
+                                            MenuProps={MenuProps}
+                                        >
+                                            {offices.map((name) => (
+                                                <MenuItem
+                                                    key={name}
+                                                    value={name}
+                                                    style={getStyles(
+                                                        name,
+                                                        officeName,
+                                                        theme
+                                                    )}
+                                                    onChange={
+                                                        setDesignationError
+                                                    }
+                                                >
+                                                    {name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        <FormHelperText>
+                                            {' '}
+                                            {designationError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
                             </Grid>
-
-                            <Grid item lg={6} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={cnicError}
-                                    id="cnic"
-                                    label="CNIC"
-                                    placeholder="Enter CNIC"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        cnicError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value=" "
-                                    onChange={(e) =>
-                                        handleChange(e, setCnic, setCnicError)
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-
-
-
-
-
-
-
-         <Grid item lg={6} md={4} sm={4} xs={6}>
-          <TextField
-        error={mobilenumber1Error}
-        id="category"
-        label="Mobile Number"
-        placeholder="Mobile Number"
-        size="small"
-        autoComplete="off"
-        helperText={
-            mobilenumber1Error === true
-                ? 'Field Required'
-                : ''
-        }
-        value=" "
-        onChange={(e) =>
-            handleChange(e, setMobileNumber1, setMobileNumber1Error)
-        }
-        variant="outlined"
-        fullWidth
-    />
-</Grid> */}
-
-{/* <Grid item lg={6} md={4} sm={4} xs={6}  >
-     <Box sx={{ minWidth: 120 }}>
-         <FormControl size="small" fullWidth error={statusError}>
-       <InputLabel id="demo-multiple-name-label">Status</InputLabel>
-     
-       <Select
-         labelId="demo-multiple-name-label"
-         id="demo-multiple-name"
-         multiple
-         value={statuName}
-         onChange={handleStatus}
-         input={<OutlinedInput label="Name" />}
-         MenuProps={MenuProps}
-       >
-         {status.map((name) => (
-           <MenuItem
-             key={name}
-             value={name}
-             style={getStatu(name, statuName, themestatu)}
-           >
-             {name}
-           </MenuItem>
-         ))}
-       </Select>
-       </FormControl>
-         </Box>
-
-     </Grid> */}
-
-<Grid item lg={12} md={12} sm={12} xs={12}>
-     <Box sx={{ minWidth: 120 }}>
-         <FormControl size="small" fullWidth error={statusError}>
-       <InputLabel id="demo-multiple-name-label">Designation</InputLabel>
-     
-       <Select
-        error={designationError}
-         labelId="demo-multiple-name-label"
-         id="demo-multiple-name"
-         multiple
-         value={officeName}
-         onChange={offceChange}
-         input={<OutlinedInput label="Name" />}
-         MenuProps={MenuProps}
-       >
-         {offices.map((name) => (
-           <MenuItem
-             key={name}
-             value={name}
-             style={getStyles(name, officeName, theme)}
-          
-           onChange={setDesignationError}
-           >
-             {name}
-           </MenuItem>
-         ))}
-       </Select>
-       <FormHelperText>
-                        {' '}
-                        {designationError ===
-                          true
-                          ? 'Field Required'
-                          : ''}
-                      </FormHelperText>
-       </FormControl>
-         </Box>
-     </Grid>
-                          {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={emailAddress1Error}
                                     id="category"
@@ -2456,115 +2285,114 @@ const handlePlaceOfJoining = (event) => {
                                 />
                             </Grid> */}
 
-                            
-<Grid item lg={12} md={12} sm={12} xs={12}>
-          <Box sx={{ minWidth: 120 }}>
-         <FormControl size="small" fullWidth error={statusError}>
-       <InputLabel id="demo-multiple-name-label">Report Manage</InputLabel>
-     
-       <Select
-         labelId="demo-multiple-name-label"
-         id="demo-multiple-name"
-         multiple
-         value={personName}
-         onChange={handleChan}
-         input={<OutlinedInput label="Name" />}
-         MenuProps={MenuProps}
-       >
-         {names.map((name) => (
-           <MenuItem
-             key={name}
-             value={name}
-             style={getStyles(name, personName, theme)}
-           >
-             {name}
-           </MenuItem>
-         ))}
-       </Select>
-       </FormControl>
-         </Box>
-       </Grid>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={statusError}
+                                    >
+                                        <InputLabel id="demo-multiple-name-label">
+                                            Report Manage
+                                        </InputLabel>
 
+                                        <Select
+                                            labelId="demo-multiple-name-label"
+                                            id="demo-multiple-name"
+                                            multiple
+                                            value={personName}
+                                            onChange={handleChan}
+                                            input={
+                                                <OutlinedInput label="Name" />
+                                            }
+                                            MenuProps={MenuProps}
+                                        >
+                                            {names.map((name) => (
+                                                <MenuItem
+                                                    key={name}
+                                                    value={name}
+                                                    style={getStyles(
+                                                        name,
+                                                        personName,
+                                                        theme
+                                                    )}
+                                                >
+                                                    {name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
 
-          {/* <Grid item lg={4} md={4} sm={4} xs={4}  >
-          <Box sx={{ minWidth: 120 }}>
-         <FormControl size="small" fullWidth error={statusError}>
-       <InputLabel id="demo-multiple-name-label">Management</InputLabel>
-     
-       <Select
-         labelId="demo-multiple-name-label"
-         id="demo-multiple-name"
-         multiple
-         value={brandName}
-         onChange={handleBrand}
-         input={<OutlinedInput label="Name" />}
-         MenuProps={MenuProps}
-       >
-         {brands.map((name) => (
-           <MenuItem
-             key={name}
-             value={name}
-             style={getBrand(name, brandName, themes)}
-           >
-             {name}
-           </MenuItem>
-         ))}
-       </Select>
-       </FormControl>
-         </Box>
-     </Grid> */}
-     <Grid item lg={6} md={4} sm={4} xs={6}  >
-          <Box sx={{ minWidth: 120 }}>
-         <FormControl size="small" fullWidth error={statusError}>
-       <InputLabel id="demo-multiple-name-label">Department</InputLabel>
-     
-       <Select
-         labelId="demo-multiple-name-label"
-         id="demo-multiple-name"
-         multiple
-         value={brandName}
-         onChange={handleBrand}
-         input={<OutlinedInput label="Name" />}
-         MenuProps={MenuProps}
-       >
-         {brands.map((name) => (
-           <MenuItem
-             key={name}
-             value={name}
-             style={getBrand(name, brandName, themes)}
-           >
-             {name}
-           </MenuItem>
-         ))}
-       </Select>
-       </FormControl>
-         </Box>
-     </Grid>
- 
+                            <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={statusError}
+                                    >
+                                        <InputLabel id="demo-multiple-name-label">
+                                            Department
+                                        </InputLabel>
 
-            <Grid item lg={6} md={4} sm={4} xs={6}  >
-                <Box >
-                <FormControl size="small" fullWidth error={statusError}>
-                <form className={classes.container} noValidate>
-                <TextField
-                value={datejoin}
-                id="date"
-                label="Date Of Joing"
-                type="date"
-                defaultValue="2017-05-24"
-                className={classes.textField}
-                InputLabelProps={{
-                shrink: true,
-                }}
-                size='small'
-                sx={{ minWidth: 255 }}
-              />
-            </form>
-            </FormControl>
-            </Box>
+                                        <Select
+                                            labelId="demo-multiple-name-label"
+                                            id="demo-multiple-name"
+                                            multiple
+                                            value={brandName}
+                                            onChange={handleBrand}
+                                            input={
+                                                <OutlinedInput label="Name" />
+                                            }
+                                            MenuProps={MenuProps}
+                                        >
+                                            {brands.map((name) => (
+                                                <MenuItem
+                                                    key={name}
+                                                    value={name}
+                                                    style={getBrand(
+                                                        name,
+                                                        brandName,
+                                                        themes
+                                                    )}
+                                                >
+                                                    <div>{name}</div>
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
 
-            </Grid>
-   
+                            <Grid item lg={6} md={4} sm={4} xs={6}>
+                                <Box>
+                                    <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={statusError}
+                                    >
+                                        <form
+                                            className={classes.container}
+                                            noValidate
+                                        >
+                                            <TextField
+                                                value={datejoin}
+                                                id="date"
+                                                label="Date Of Joing"
+                                                type="date"
+                                                defaultValue="2017-05-24"
+                                                className={classes.textField}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                size="small"
+                                                sx={{ minWidth: 255 }}
+                                            />
+                                        </form>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
                         </Grid>
                     </DialogContentText>
                 </DialogContent>
@@ -2574,13 +2402,9 @@ const handlePlaceOfJoining = (event) => {
                         Confirm
                     </Button>
                 </DialogActions>
-
-             
             </Dialog>
         </>
     )
-  
-      
 }
 
 export default UsersList
