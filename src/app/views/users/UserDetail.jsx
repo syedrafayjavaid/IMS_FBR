@@ -49,6 +49,7 @@ const UserDetail = () => {
     // States
     const [showTable, setShowTable] = React.useState(false)
     const [showCard, setShowCard] = React.useState(false)
+    const [office, setOffice] = React.useState()
 
     const [activeStep, setActiveStep] = React.useState(0);
 
@@ -97,6 +98,21 @@ const UserDetail = () => {
         },
       ];
 
+      useEffect(() => {
+        getOffice()
+      }, [])
+
+      const getOffice = () => {
+        axios
+            .get(`${config.base_url}/api/v1/office/${state.user.placeOfPosting}`)
+            .then((res) => {
+                setOffice(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+      }
+
     return (
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
@@ -124,18 +140,18 @@ const UserDetail = () => {
                         xs={12}
                         style={{ padding: '1rem 3rem' }}
                     >
-                        <h3>{state.user.name}</h3>
+                        <h3>{state.user.name === undefined ? 'N/A' : state.user.name}</h3>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Email Address: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.emailAddress}</b>
+                                    <b>{state.user.emailAddress === undefined ? 'N/A' : state.user.emailAddress}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Mobile Number: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.mobileNumber}</b>
+                                    <b>{state.user.mobileNumber === undefined ? 'N/A' : state.user.mobileNumber}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -144,13 +160,13 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Department: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.department}</b>
+                                    <b>{state.user.department === undefined ? 'N/A' : state.user.department}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Designation: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.designation}</b>
+                                    <b>{state.user.designation === undefined ? 'N/A' : state.user.designation}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -159,13 +175,13 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Pg: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.pg}</b>
+                                    <b>{state.user.pg === undefined ? 'N/A' : state.user.pg}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Wing: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.wing}</b>
+                                    <b>{state.user.wing === undefined ? 'N/A' : state.user.wing}</b>
                                 </span>
                             </Grid>
                         </Grid>
@@ -174,7 +190,7 @@ const UserDetail = () => {
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Office: </span>
                                 <span style={{ color: 'green' }}>
-                                    <b>{state.user.officeId === undefined ? 'N/A' : state.user.officeId}</b>
+                                    <b>{office === undefined ? 'N/A' : office.name}</b>
                                 </span>
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
@@ -202,9 +218,7 @@ const UserDetail = () => {
                                 <span style={{ color: 'green' }}>
                                     <b>
                                         {state.user.modifiedAt === undefined
-                                            ? moment(
-                                                  state.user.createdAt
-                                              ).format('LL')
+                                            ? 'N/A'
                                             : moment(
                                                   state.user.modifiedAt
                                               ).format('LL')}
@@ -218,7 +232,7 @@ const UserDetail = () => {
                                 <span>Date Of Joining: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {state.user.dateOfJoining}
+                                        {state.user.dateOfJoining === undefined ? 'N/A' : state.user.dateOfJoining}
                                     </b>
                                 </span>
                             </Grid>
@@ -231,13 +245,21 @@ const UserDetail = () => {
                                 </span>
                             </Grid>
                         </Grid>
-                        {/* <Grid container>
-                            
-                        </Grid> */}
                         <hr></hr>
-                        <Box>
+                        <Grid container>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Employee Id: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {state.user.employeeId === undefined ? 'N/A' : state.user.employeeId}
+                                    </b>
+                                </span>
+                            </Grid>
+                        </Grid>
+                        <hr></hr>
+                        <Box sx={{marginBottom: '5px'}}>
                             <h4>Detail: </h4>
-                            {state.user.detail}
+                            {state.user.remarks === undefined ? 'N/A' : state.user.remarks}
                         </Box>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={12}>
