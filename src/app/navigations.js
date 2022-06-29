@@ -49,7 +49,7 @@ export const navigations = [
 
     },
     {
-        name: 'Purchased Items',
+        name: 'Items Entry',
         icon: 'paid_icon',
         path: 'items/PurchasedItems',
 

@@ -4,11 +4,15 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
     Box,
-    Card, CardActions, CardContent, CardMedia, Stack, Typography
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Stack,
+    Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import config from 'config'
-const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
+const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
     const navigate = useNavigate()
     const UserImgStyle = styled('img')({
         top: 0,
@@ -18,7 +22,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
         position: 'absolute',
     })
     const imgeBaseUrl = 'uploads/'
-    
+
     const onDeleteHandler = () => {
         onDelete(purchaseItem._id)
     }
@@ -28,14 +32,14 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
     }
 
     const navigateToDetailsPage = () => {
-        navigate("/items/PurchasedItemsDetail", { state: { purchaseItem: purchaseItem } })
+        navigate('/items/PurchasedItemsDetail', {
+            state: { purchaseItem: purchaseItem },
+        })
     }
 
-  return (
-    <Card sx={{ maxWidth: 345 }}>
-            <Box
-                onClick={navigateToDetailsPage}
-            >
+    return (
+        <Card sx={{ maxWidth: 345 }}>
+            <Box onClick={navigateToDetailsPage}>
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
                         alt="No Image"
@@ -43,7 +47,7 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                     />
                 </CardMedia>
                 <CardContent>
-                <Stack
+                    <Stack
                         direction="row"
                         alignItems="center"
                         justifyContent="space-between"
@@ -83,26 +87,6 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                             </Typography>
                         </Typography>
                     </Stack>
-                    {/* <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        style={{ marginTop: '10px' }}
-                    >
-                        <Typography variant="subtitle1">
-                            <Typography
-                                component="span"
-                                variant="body1"
-                                sx={{
-                                    color: 'text',
-                                    textDecoration: '',
-                                }}
-                            >
-                                CNIC: &nbsp;
-                                {user.CNIC}
-                            </Typography>
-                        </Typography>
-                    </Stack> */}
                 </CardContent>
             </Box>
             <CardActions>
@@ -118,13 +102,13 @@ const PurchaseItemCard = ({purchaseItem, onEdit, onDelete}) => {
                         <button onClick={onDeleteHandler}>
                             <DeleteIcon />
                         </button>
-                        <button  onClick={onEditHandler}>
+                        <button onClick={onEditHandler}>
                             <EditIcon />
                         </button>
                     </Typography>
                 </Typography>
             </CardActions>
         </Card>
-  )
+    )
 }
 export default PurchaseItemCard

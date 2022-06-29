@@ -36,7 +36,7 @@ import { styled } from '@mui/system'
 import axios from 'axios'
 import QRCode from 'qrcode'
 import CloseIcon from '@mui/icons-material/Close'
-import config from "../../../config"
+import config from '../../../config'
 import { identity } from 'lodash'
 import { ConfirmationDialog } from 'app/components'
 
@@ -60,6 +60,8 @@ const Input = styled('input')({
 })
 
 const ProductsList = () => {
+    const userName = localStorage.getItem('username')
+
     const [imageUrl, setImageUrl] = React.useState('')
     const [text, setText] = React.useState('')
 
@@ -88,9 +90,11 @@ const ProductsList = () => {
     const [editName, setEditName] = React.useState('')
     const [editNameError, setEditNameError] = React.useState(false)
     const [editProductTypeName, setEditProductTypeName] = React.useState('')
-    const [editProductTypeNameError, setEditProductTypeNameError] = React.useState('')
+    const [editProductTypeNameError, setEditProductTypeNameError] =
+        React.useState('')
     const [editProductCategory, setEditProductCategory] = React.useState('')
-    const [editProductCategoryError, setEditProductCategoryError] = React.useState('')
+    const [editProductCategoryError, setEditProductCategoryError] =
+        React.useState('')
     const [editModel, setEditModel] = React.useState('')
     const [editModelError, setEditModelError] = React.useState(false)
     const [editBrandName, setEditBrandName] = React.useState('')
@@ -101,9 +105,9 @@ const ProductsList = () => {
 
     const [image, setImage] = React.useState('')
     const [imageError, setImageError] = React.useState(false)
-    const [createdBy, setCreatedBy] = React.useState('')
+    const [createdBy, setCreatedBy] = React.useState(userName)
     const [createdByError, setCreatedByError] = React.useState(false)
-    const [modifiedBy, setModifiedBy] = React.useState('')
+    const [modifiedBy, setModifiedBy] = React.useState(userName)
     const [modifiedByError, setModifiedByError] = React.useState(false)
 
     const [createProductDialog, setCreateProductDialog] = React.useState(false)
@@ -118,7 +122,7 @@ const ProductsList = () => {
     // web came code
 
     const [text1, setText1] = useState('')
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
     const [imageUrl1, setImageUrl1] = useState('')
     const [scanResultFile, setScanResultFile] = useState('')
     const classes = useStyles()
@@ -305,40 +309,38 @@ const ProductsList = () => {
     }
 
     const checking = () => {
-            let data = new FormData()
+        let data = new FormData()
 
-            data.append('name', createName)
-            data.append('productTypeId', createProductTypeName)
-            data.append('categoryId', createProductCategory)
-            data.append('model', createModel)
-            data.append('brandId', createBrandName)
-            data.append('file', image)
-            data.append('createdBy', createdBy)
-            data.append('detail', createDescription)
+        data.append('name', createName)
+        data.append('productTypeId', createProductTypeName)
+        data.append('categoryId', createProductCategory)
+        data.append('model', createModel)
+        data.append('brandId', createBrandName)
+        data.append('file', image)
+        data.append('createdBy', createdBy)
+        data.append('detail', createDescription)
 
-            const productNameExist = product1.find((product) => {
-                return product.name === createName
+        const productNameExist = product1.find((product) => {
+            return product.name === createName
+        })
+
+        if (productNameExist) {
+            setSnackBar(true)
+            return
+        }
+
+        axios
+            .post(config.base_url + '/api/v1/products ', data)
+            .then((res) => {
+                console.log(res.data.data)
+                if (res) {
+                    handleCreateClose()
+                    getAlldata()
+                }
             })
-
-            if (productNameExist) {
-                setSnackBar(true)
-                return
-            }
-
-            axios
-                .post(config.base_url + '/api/v1/products ', data)
-                .then((res) => {
-                    console.log(res.data.data)
-                    if (res) {
-                        handleCreateClose()
-                        getAlldata()
-                    }
-                })
-                .catch((error) => {
-                    console.log(error, 'error')
-                })
-
-        
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const onEditHandler = (id, product) => {
@@ -355,15 +357,15 @@ const ProductsList = () => {
     }
 
     const editHandler = () => {
-        let data = new FormData();
-        data.append('name', editName);
-        data.append('productTypeId', editProductTypeName);
-        data.append('categoryId', editProductCategory);
-        data.append('model', editModel);
-        data.append('brandId', editBrandName);
-        data.append('photo', image);
-        data.append('modifiedBy', modifiedBy);
-        data.append('detail', editDescription);
+        let data = new FormData()
+        data.append('name', editName)
+        data.append('productTypeId', editProductTypeName)
+        data.append('categoryId', editProductCategory)
+        data.append('model', editModel)
+        data.append('brandId', editBrandName)
+        data.append('photo', image)
+        data.append('modifiedBy', modifiedBy)
+        data.append('detail', editDescription)
 
         // const productNameExist = product1.find((product) => {
         //     return product.name === editName
@@ -374,26 +376,26 @@ const ProductsList = () => {
         //     return
         // }
 
-        axios.put(config.base_url + `/api/v1/products/${productId}`, data).then((res) => {
-            console.log(res.msg);
-            if (res) {
-                getAlldata();
-                handleEditClose()
-            }
-
-        }).catch((error) => {
-            if(error.message === "Request failed with status code 400")
-            {
-                setSnackBar(true);
-            }
-        })
+        axios
+            .put(config.base_url + `/api/v1/products/${productId}`, data)
+            .then((res) => {
+                console.log(res.msg)
+                if (res) {
+                    getAlldata()
+                    handleEditClose()
+                }
+            })
+            .catch((error) => {
+                if (error.message === 'Request failed with status code 400') {
+                    setSnackBar(true)
+                }
+            })
     }
 
     const onDelhandler = (id) => {
         setProductId(id)
         setOpen(true)
         if (open && productId) {
-
             axios
                 .delete(config.base_url + `/api/v1/products/${productId}`)
                 .then((res) => {
@@ -432,7 +434,7 @@ const ProductsList = () => {
 
     return (
         <>
-        {open && (
+            {open && (
                 <ConfirmationDialog
                     open={open}
                     onConfirmDialogClose={() => {
@@ -550,7 +552,9 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType._id}
+                                                            value={
+                                                                productType._id
+                                                            }
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
@@ -560,7 +564,7 @@ const ProductsList = () => {
                                             <FormHelperText>
                                                 {' '}
                                                 {createProductTypeNameError ===
-                                                    true
+                                                true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
@@ -589,7 +593,9 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
-                                                                value={productCategory._id}
+                                                                value={
+                                                                    productCategory._id
+                                                                }
                                                             >
                                                                 {
                                                                     productCategory.name
@@ -601,7 +607,7 @@ const ProductsList = () => {
                                             </Select>
                                             <FormHelperText>
                                                 {createProductCategoryError ===
-                                                    true
+                                                true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
@@ -705,6 +711,7 @@ const ProductsList = () => {
                             <Grid container spacing={3}>
                                 <Grid item lg={7} md={7} sm={7} xs={7}>
                                     <TextField
+                                        disabled
                                         error={createdByError}
                                         id="name"
                                         label="Created By"
@@ -834,7 +841,9 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
-                                                            value={productType._id}
+                                                            value={
+                                                                productType._id
+                                                            }
                                                         >
                                                             {productType.name}
                                                         </MenuItem>
@@ -844,7 +853,7 @@ const ProductsList = () => {
                                             <FormHelperText>
                                                 {' '}
                                                 {editProductTypeNameError ===
-                                                    true
+                                                true
                                                     ? 'Field Required'
                                                     : ''}
                                             </FormHelperText>
@@ -873,7 +882,9 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
-                                                                value={productCategory._id}
+                                                                value={
+                                                                    productCategory._id
+                                                                }
                                                             >
                                                                 {
                                                                     productCategory.name
@@ -884,7 +895,8 @@ const ProductsList = () => {
                                                 )}
                                             </Select>
                                             <FormHelperText>
-                                                {editProductCategoryError && 'Field Required'}
+                                                {editProductCategoryError &&
+                                                    'Field Required'}
                                             </FormHelperText>
                                         </FormControl>
                                     </Box>
@@ -986,6 +998,7 @@ const ProductsList = () => {
                             <Grid container spacing={3}>
                                 <Grid item lg={7} md={7} sm={7} xs={7}>
                                     <TextField
+                                        disabled
                                         error={modifiedByError}
                                         id="name"
                                         label="Modified By"
