@@ -241,17 +241,7 @@ const CategoriesList = () => {
     return (
         <>
 
-        {
-            categories.length === 0 &&<div>
-                    code is here
-
-            </div>
-        }
-        {
-                    categories.length>0 && 
-          
-          <div>
-
+      
            
             {open && (
                 <ConfirmationDialog
@@ -461,8 +451,7 @@ const CategoriesList = () => {
                     action={editAction}
                 />
             </Dialog>
-            </div>
-        }
+           
         </>
     )
 }
