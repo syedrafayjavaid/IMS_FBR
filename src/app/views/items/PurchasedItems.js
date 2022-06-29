@@ -962,31 +962,59 @@ const PurchasedItems = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <TextField
-                                    disabled={!checked}
-                                    type={`number`}
-                                    error={productQuantityError}
-                                    id="name"
-                                    label="Product Quantity"
-                                    placeholder="Product Quantity"
-                                    autoComplete="off"
-                                    helperText={
-                                        productQuantityError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={productQuantity}
-                                    size="small"
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setProductQuantity,
-                                            setProductQuantityError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
+                                {checked ? (
+                                    <TextField
+                                        disabled={!checked}
+                                        type={`number`}
+                                        error={productQuantityError}
+                                        id="name"
+                                        label="Product Quantity"
+                                        placeholder="Product Quantity"
+                                        autoComplete="off"
+                                        helperText={
+                                            productQuantityError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={productQuantity}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setProductQuantity,
+                                                setProductQuantityError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                ) : (
+                                    <TextField
+                                        disabled={!checked}
+                                        type={`number`}
+                                        error={productQuantityError}
+                                        id="name"
+                                        label="Product Quantity"
+                                        placeholder="Product Quantity"
+                                        autoComplete="off"
+                                        helperText={
+                                            productQuantityError === true
+                                                ? 'Field Required'
+                                                : ''
+                                        }
+                                        value={`1`}
+                                        size="small"
+                                        onChange={(e) =>
+                                            handleChange(
+                                                e,
+                                                setProductQuantity,
+                                                setProductQuantityError
+                                            )
+                                        }
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
                             </Grid>
 
                             <Grid
