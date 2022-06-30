@@ -79,6 +79,7 @@ const AppUsersList = () => {
     const [userId, setUserId] = React.useState('')
 
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
+    const [emailSnackBar, setEmailSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [createUserDialog, setCreateUserDialog] = React.useState(false)
     const [editUserDialog, setEditUserDialog] = React.useState(false)
@@ -97,6 +98,12 @@ const AppUsersList = () => {
 
     const handleCreateSnackBarClose = () => {
         setCreateSnackBar(false)
+        
+    }
+
+    const handleEmailSnackBarClose = () => {
+        setEmailSnackBar(false)
+        
     }
 
     const handleEditClose = () => {
@@ -225,6 +232,26 @@ const AppUsersList = () => {
         </React.Fragment>
     )
 
+    const emailAction = (
+        <React.Fragment>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleEmailSnackBarClose}
+            >
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleEmailSnackBarClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
+
     const editAction = (
         <React.Fragment>
             <Button
@@ -271,13 +298,20 @@ const AppUsersList = () => {
         data.append('email', emailAddress)
         data.append('password', password)
         data.append('role', role)
-        const userNameExit = users.find((userData) => {
-            return userData.userName === userName
+        
+        users.find((userData) => {
+            if (userData.userName === userName) {
+
+                setCreateSnackBar(true)
+                // setEmailSnackBar(true)
+                return
+            } 
+            if (userData.email === emailAddress) {
+                setEmailSnackBar(true)
+                return
+            }
         })
-        if (userNameExit) {
-            setCreateSnackBar(true)
-            return
-        }
+      
         axios
             .post(`${config.base_url}/api/v1/auth/register`, data)
             .then((res) => {
@@ -656,6 +690,14 @@ const AppUsersList = () => {
                     onClose={handleCreateClosed}
                     message="Name already exists"
                     action={createAction}
+                />
+                
+                <Snackbar
+                    open={emailSnackBar}
+                    autoHideDuration={2000}
+                    onClose={handleCreateClosed}
+                    message="Email already exists"
+                    action={emailAction}
                 />
             </Dialog>
 

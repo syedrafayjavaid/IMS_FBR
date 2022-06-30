@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react'
 
-import InputLabel from '@mui/material/InputLabel';
+import InputLabel from '@mui/material/InputLabel'
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select'
 // material
-import { FormHelperText, OutlinedInput, Tooltip, useTheme } from '@mui/material';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@mui/icons-material/Add';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import CloseIcon from '@mui/icons-material/Close';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
+import { makeStyles } from '@material-ui/core/styles'
+import AddIcon from '@mui/icons-material/Add'
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
+import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import SearchIcon from '@mui/icons-material/Search'
 import {
     Button,
     Container,
@@ -20,38 +19,24 @@ import {
     DialogContentText,
     DialogTitle,
     Fab,
+    FormHelperText,
     Grid,
-    IconButton, label, Snackbar,
-    Switch,
+    IconButton,
+    OutlinedInput,
+    Snackbar,
     TextField,
-    Typography
-} from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
-import { CheckBox, NoEncryptionGmailerrorredOutlined } from '@mui/icons-material'
-import { set } from 'lodash'
-import { date } from 'yup'
-import Box from '@mui/material/Box';
-import { ConfirmationDialog } from 'app/components';
-import { styled } from '@mui/styles';
-import config from 'config';
-import axios from 'axios';
-import UsersCard from './UsersCard';
-
-
-
-
-
-
-
+    Tooltip,
+    Typography,
+    useTheme
+} from '@mui/material'
+import Box from '@mui/material/Box'
+import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
+import { styled } from '@mui/styles'
+import { ConfirmationDialog } from 'app/components'
+import axios from 'axios'
+import config from 'config'
+import UsersCard from './UsersCard'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -63,18 +48,18 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
-}));
+}))
 const UsersList = () => {
-    const classes = useStyles();
-    const theme = useTheme();
-    const themes = useTheme();
-    const themestatu = useTheme();
-    const themesoffice = useTheme();
-    const [personName, setPersonName] = React.useState([]);
-    const [brandName, setBrandName] = React.useState([]);
-    const [statuName, setStatuName] = React.useState([]);
-    const [value, setValue] = React.useState([20, 37]);
-    const [officeName, setOfficeName] = React.useState([]);
+    const classes = useStyles()
+    const theme = useTheme()
+    const themes = useTheme()
+    const themestatu = useTheme()
+    const themesoffice = useTheme()
+    const [personName, setPersonName] = React.useState([])
+    const [brandName, setBrandName] = React.useState([])
+    const [statuName, setStatuName] = React.useState([])
+    const [value, setValue] = React.useState([20, 37])
+    const [officeName, setOfficeName] = React.useState([])
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
@@ -83,16 +68,16 @@ const UsersList = () => {
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-    const [statusError, setStatusError] = React.useState(false);
+    const [statusError, setStatusError] = React.useState(false)
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
     const date = new Date().toISOString().split('T')[0]
-    const [datejoin, setDatetejoin] = React.useState(date);
+    const [datejoin, setDatetejoin] = React.useState(date)
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
-    // const [office, setOffice] = React.useState('')
-    // const [officeError, setOfficeError] = React.useState(false)
+    const [custodianIds, setCustodianIds] = React.useState([])
+    const [custodianId, setCustodianId] = React.useState('')
     const [description, setDescription] = React.useState('')
     const [descriptionError, setDescriptionError] = React.useState(false)
     const [cnic, setCnic] = React.useState('')
@@ -101,21 +86,22 @@ const UsersList = () => {
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     //  const [checked, setChecked] = React.useState([])
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open1 = Boolean(anchorEl);
-    const [anchorEl1, setAnchorEl1] = React.useState(null);
-    const open2 = Boolean(anchorEl1);
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open1 = Boolean(anchorEl)
+    const [anchorEl1, setAnchorEl1] = React.useState(null)
+    const open2 = Boolean(anchorEl1)
 
     /////// employee dialoge
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
     ///////
+    
     const [mobileNumber1, setMobileNumber1] = React.useState('')
     const [mobilenumber1Error, setMobileNumber1Error] = React.useState(false)
     // const [remarks1,setRemarks1]= React.useState('')
     // const [remarks1Error,setRemarks1Error]= React.useState(false)
     const [emailAddress1, setEmailAddress1] = React.useState('')
-    const [emailAddress1Error, setEmailAddress1Error] = React.useState('')
+    const [emailAddress1Error, setEmailAddress1Error] = React.useState(false)
     const [placeOfPosting1, setPlaceOfPosting1] = React.useState([])
     const [placeOfPosting1Name, setPlaceOfPosting1Name] = React.useState('')
     // const [placeOfPosting1Error,setPlaceOfPosting1Error]= React.useState(false)
@@ -124,12 +110,11 @@ const UsersList = () => {
     const [wing1, setWing1] = React.useState('')
     const [wing1Error, setWing1Error] = React.useState(false)
     const [department1, setDepartment1] = React.useState('')
-    const [department1Error, setDepartment1Error] = React.useState('')
+    const [department1Error, setDepartment1Error] = React.useState(false)
     const [dateOfJoinnig1, setDateOfJoinnig1] = React.useState(date)
     const [dateOfJoinnig1Error, setDateOfJoinnig1Error] = React.useState(false)
     const [designation1, setDesignation1] = React.useState('')
     const [designationError, setDesignationError] = React.useState(false)
-
 
     ///error Handling
     const [designation1Error, setDesignation1Error] = React.useState(false)
@@ -137,23 +122,17 @@ const UsersList = () => {
     const [departmentError, setDepartmentError] = React.useState(false)
 
 
-
-    ///Search filters state
-    const [sdynamic, setDynamic] = React.useState("");
-    const [sdesignation, setSdesignation] = React.useState("");
-    const [sreportingManager, setSreportingManager] = React.useState("");
-    const [sdepartment, setSdepartment] = React.useState("");
-    const currentDate = new Date().toISOString().split('T')[0]
-    const [sdate, setSdate] = React.useState("");
-
+      ///Search filters state
+      const [sdynamic, setDynamic] = React.useState("");
+      const [sdesignation, setSdesignation] = React.useState("");
+      const [sreportingManager, setSreportingManager] = React.useState("");
+      const [sdepartment, setSdepartment] = React.useState("");
+      const currentDate = new Date().toISOString().split('T')[0]
+      const [sdate, setSdate] = React.useState("");
 
 
-
-
-
-
-    const ITEM_HEIGHT = 48;
-    const ITEM_PADDING_TOP = 8;
+    const ITEM_HEIGHT = 48
+    const ITEM_PADDING_TOP = 8
     const MenuProps = {
         PaperProps: {
             style: {
@@ -161,100 +140,74 @@ const UsersList = () => {
                 width: 250,
             },
         },
-    };
+    }
 
-    const offices = [
-        ' Hansen',
-        ' Henry',
-        'Tucker',
-        'Hubbard',
-
-    ];
+    const offices = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
     function getStyles(office, officeName, themesoffice) {
         return {
             fontWeight:
                 officeName.indexOf(office) === -1
                     ? themesoffice.typography.fontWeightRegular
                     : themesoffice.typography.fontWeightMedium,
-        };
+        }
     }
-    const status = [
-        ' Hansen',
-        ' Henry',
-        'Tucker',
-        'Hubbard',
-
-    ];
+    const status = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
     function getStatu(office, officeName, themesoffice) {
         return {
             fontWeight:
                 officeName.indexOf(office) === -1
                     ? themesoffice.typography.fontWeightRegular
                     : themesoffice.typography.fontWeightMedium,
-        };
+        }
     }
 
-    const names = [
-        ' Hansen',
-        ' Henry',
-        'Tucker',
-        'Hubbard',
-
-    ];
+    const names = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
     function getBrand(office, officeName, themesoffice) {
         return {
             fontWeight:
                 officeName.indexOf(office) === -1
                     ? themesoffice.typography.fontWeightRegular
                     : themesoffice.typography.fontWeightMedium,
-        };
+        }
     }
 
-    const brands = [
-        ' Hansen',
-        ' Henry',
-        'Tucker',
-        'Hubbard',
+    const brands = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
 
-    ];
-
-    const [open5, setOpen5] = React.useState(false);
-
+    const [open5, setOpen5] = React.useState(false)
 
     const handleChan = (event) => {
         const {
             target: { value },
-        } = event;
+        } = event
         setPersonName(
             // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+            typeof value === 'string' ? value.split(',') : value
+        )
+    }
 
     const handleBrand = (event) => {
         const {
             target: { value },
-        } = event;
+        } = event
         setBrandName(
             // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
-
+            typeof value === 'string' ? value.split(',') : value
+        )
+    }
 
     const handlePlaceOfJoining = (event) => {
-        console.log(event.target.value, 'rula');
-        setPlaceOfPosting1Name(event.target.value);
-    };
+        console.log(event.target.value, 'rula')
+        setPlaceOfPosting1Name(event.target.value)
+    }
 
     const offceChange = (event) => {
         const {
             target: { value },
-        } = event;
+        } = event
         setOfficeName(
             // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+            typeof value === 'string' ? value.split(',') : value
+        )
     }
     function getoffice(office, officeName, themesoffice) {
         return {
@@ -262,7 +215,7 @@ const UsersList = () => {
                 officeName.indexOf(office) === -1
                     ? themesoffice.typography.fontWeightRegular
                     : themesoffice.typography.fontWeightMedium,
-        };
+        }
     }
 
     const Input = styled('input')({
@@ -284,20 +237,20 @@ const UsersList = () => {
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
-                console.log(res)
                 setUsers(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
 
-        axios.get(`${config.base_url}/api/v1/office`).then((res) => {
-            console.log(res.data.data, 'office data');
-            setPlaceOfPosting1(res.data.data)
-
-        }).catch((error) => {
-            console.log(error, 'error');
-        })
+        axios
+            .get(`${config.base_url}/api/v1/office`)
+            .then((res) => {
+                setPlaceOfPosting1(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const handleCreateClose = () => {
@@ -380,7 +333,6 @@ const UsersList = () => {
         setDesignation1('')
         setDesignation1Error(false)
         setDateOfJoinnig1(date)
-
     }
 
     const handleEditSnackBarClose = () => {
@@ -389,18 +341,11 @@ const UsersList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
         errorFunc(false)
     }
 
-    // const handleFilterChange = (e, func) => {
-    //     func(e.target.value)
-    //     console.log(e.target.name, e.target.value)
-    // }
-
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
     }
 
     const handleCreateClickOpen = () => {
@@ -414,7 +359,7 @@ const UsersList = () => {
             pg1 === '' ||
             wing1 === '' ||
             department1 === '' ||
-            designation1 == ''
+            designation1 === ''
         ) {
             if (name === '') {
                 setNameError(true)
@@ -446,8 +391,6 @@ const UsersList = () => {
             if (designation1 === '') {
                 setDesignation1Error(true)
             }
-
-
         } else {
             createHandler()
         }
@@ -464,7 +407,7 @@ const UsersList = () => {
             pg1 === '' ||
             wing1 === '' ||
             department1 === '' ||
-            designation1 == ''
+            designation1 === ''
         ) {
             if (name === '') {
                 setNameError(true)
@@ -496,8 +439,6 @@ const UsersList = () => {
             if (designation1 === '') {
                 setDesignation1Error(true)
             }
-
-
         } else {
             editHandler()
         }
@@ -523,12 +464,9 @@ const UsersList = () => {
         data.append('designation', designation1)
         data.append('emailAddress', emailAddress1)
 
-
         const userNameExist = users.find((user) => {
-
             return user.employeeId === employeeId
         })
-        console.log(userNameExist, 'userNameExist');
 
         if (userNameExist) {
             setCreateSnackBar(true)
@@ -539,7 +477,6 @@ const UsersList = () => {
             .post(`${config.base_url}/api/v1/employee`, data)
             .then((res) => {
                 if (res) {
-                    console.log(res.data.data, 'jo jaraha ha');
                     handleCreateClose()
                     getAlldata()
                 }
@@ -586,12 +523,9 @@ const UsersList = () => {
         data.append('designation', designation1)
         data.append('emailAddress', emailAddress1)
 
-
-
         axios
             .put(`${config.base_url}/api/v1/employee/${userId}`, data)
             .then((res) => {
-                console.log(res.msg)
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -605,7 +539,6 @@ const UsersList = () => {
     }
 
     const onEditHandler = (id, user) => {
-        console.log(user, 'ya mudda')
         setEditEmployeeDialog(true)
         setName(user.name)
         // setOffice(user.office)
@@ -628,12 +561,10 @@ const UsersList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-            console.log('Edit Button Clicked')
             return
         }
 
         setCreateSnackBar(false)
-
     }
 
     const handleEditClosed = (event, reason) => {
@@ -641,15 +572,12 @@ const UsersList = () => {
             return
         }
 
-        setEditSnackBar(false);
-
+        setEditSnackBar(false)
     }
     ///employee dialogs close
 
     const handleEmployeeClose = () => {
-
         setEmployeeDialogs(false)
-
     }
 
     const createAction = (
@@ -693,14 +621,12 @@ const UsersList = () => {
     )
 
     const onDeleteHandler = (id) => {
-        setOpen5(true);
+        setOpen5(true)
         setUserId(id)
         if (open5 && userId) {
-
             axios
                 .delete(`${config.base_url}/api/v1/employee/${userId}`)
                 .then((res) => {
-                    console.log(res.msg)
                     getAlldata()
                     setOpen5(false)
                 })
@@ -709,11 +635,6 @@ const UsersList = () => {
                 })
         }
     }
-
-
-
-
-
 
     // const iconeHandler = (event) => {
     //     setAnchorEl(event.currentTarget);
@@ -728,7 +649,6 @@ const UsersList = () => {
     //     setAnchorEl1();
     //   };
 
-
     //   const [checkedBox1, setCheckedBox1] = React.useState(true);
     //   const [emailAdress, setEmailAdress] = React.useState(false);
     //   const [designation, setDesgnation] = React.useState(false);
@@ -740,7 +660,6 @@ const UsersList = () => {
     //   const [department, setDepartment] = React.useState(false);
     //   const [mobileNumber, setMobileNumber] = React.useState(false);
 
-
     //   const checkBoxHandler1 = (event) => {
     //     setCheckedBox1(event.target.checked);
 
@@ -750,11 +669,12 @@ const UsersList = () => {
 
     //     func(!state)
 
+    //     func(!state)
+
     //   }
     const dateOfjoinnignHandler = (event) => {
-        console.log(event.target.value, 'vender text value');
-        setDateOfJoinnig1(event.target.value);
-    };
+        setDateOfJoinnig1(event.target.value)
+    }
 
     const ApplyFilters = () => {
 
@@ -764,7 +684,7 @@ const UsersList = () => {
         data.reportingManager = sreportingManager;
         data.department = sdepartment;
         data.date = sdate;
-
+        data.name = custodianId;
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
@@ -776,60 +696,55 @@ const UsersList = () => {
                     setEmployeeDialogs(false);
                 }
 
-
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
 
-
-
-
-
-
     }
 
 
+/////department nameid/employee
+useEffect(() => {
+    getEmployee()
+  //  getData()
+}, [])
 
-    ///errorhandling
-    //   const handleErrorOpen = () => {
-    //     if (
-    //         designation === '' ||
-    //         reportmanag === '' ||
-    //         department2 === '' ||
-
-    //     ) {
-
-    //         console.log('Ran')
-    //         if (designation === '') {
-    //             setDesignationError(true)
-    //         }
-
-
-    //         if (reportmanag === '') {
-    //             setReportManagError(true)
-    //         }
-    //         if (department2 === '') {
-    //             setDepartmentError(true)
-    //         }
-
-    //     } else {
-    //         console.log('else case')
-    //         createHandler()
-    //     }
-    // }
+const getEmployee = () => {
+    axios
+        .get(`${config.base_url}/api/v1/employee`)
+        .then((res) => {
+            setCustodianIds(res.data.data)
+           
+            console.log(res,"department name and id")
+        })
+        .catch((error) => {
+            console.log(error, 'error')
+        })
+       
+}
 
     return (
         <>
-            {open5 && <ConfirmationDialog open={open5} onConfirmDialogClose={() => { setOpen5(false) }} text={`Are You Sure Yoou Want To Delete This Employee?`} title={`Are You Sure?`} onYesClick={onDeleteHandler} />}
+            {open5 && (
+                <ConfirmationDialog
+                    open={open5}
+                    onConfirmDialogClose={() => {
+                        setOpen5(false)
+                    }}
+                    text={`Are You Sure Yoou Want To Delete This Employee?`}
+                    title={`Are You Sure?`}
+                    onYesClick={onDeleteHandler}
+                />
+            )}
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    Employes
+                <Typography component={'span'} variant="h4" sx={{ mb: 5 }}>
+                    Employees
                 </Typography>
                 <Grid container spacing={3}>
                     {users.map((user) => (
-                        <Grid key={user.id} item xs={12} sm={6} md={3}>
+                        <Grid key={user._id} item xs={12} sm={6} md={3}>
                             <UsersCard
                                 user={user}
                                 onDelete={onDeleteHandler}
@@ -843,16 +758,28 @@ const UsersList = () => {
                 <br></br>
             </Container>
 
-
             {/* ////
                 this is the search dialods */}
+                {
 
+                }
             <Tooltip title="Search Employee">
-                <Fab color="primary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", top: "13vh", position: "fixed" }} onClick={() => setEmployeeDialogs(true)}>
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '13vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
                     <SearchIcon />
                 </Fab>
             </Tooltip>
-            {/* //// */}
+            <div>
             <Tooltip title="Add Employee">
                 <Fab
                     color="secondary"
@@ -877,14 +804,13 @@ const UsersList = () => {
             >
                 <DialogTitle id="alert-dialog-title">
                     {'ADD EMPLOYEE'}
-                    <IconButton aria-label="settings"
+                    <IconButton
+                        aria-label="settings"
                         sx={{ ml: 45 }}
-                    // onClick={iconeHandler}
+                        // onClick={iconeHandler}
                     >
                         <MoreVertIcon />
                     </IconButton>
-
-
 
                     {/* 
          <Menu
@@ -1004,17 +930,9 @@ const UsersList = () => {
             </MenuItem>
          
       </Menu>  */}
-
-
-
-
-
                 </DialogTitle>
 
-
-
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -1072,6 +990,7 @@ const UsersList = () => {
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
+                                    type="number"
                                     autoComplete="off"
                                     helperText={
                                         cnicError === true
@@ -1113,11 +1032,6 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-
-
-
-
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={mobilenumber1Error}
@@ -1126,7 +1040,7 @@ const UsersList = () => {
                                     placeholder="Mobile Number"
                                     size="small"
                                     autoComplete="off"
-                                    type='number'
+                                    type="number"
                                     helperText={
                                         mobilenumber1Error === true
                                             ? 'Field Required'
@@ -1134,7 +1048,11 @@ const UsersList = () => {
                                     }
                                     value={mobileNumber1}
                                     onChange={(e) =>
-                                        handleChange(e, setMobileNumber1, setMobileNumber1Error)
+                                        handleChange(
+                                            e,
+                                            setMobileNumber1,
+                                            setMobileNumber1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1178,7 +1096,11 @@ const UsersList = () => {
                                     }
                                     value={emailAddress1}
                                     onChange={(e) =>
-                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                        handleChange(
+                                            e,
+                                            setEmailAddress1,
+                                            setEmailAddress1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1207,51 +1129,41 @@ const UsersList = () => {
  />
 </Grid> */}
 
-
-
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-                                    <InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
+                                <FormControl
+                                    sx={{ m: 1, minWidth: 150 }}
+                                    size="small"
+                                >
+                                    <InputLabel id="demo-simple-select-label">
+                                        Place of Joining
+                                    </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-
                                         value={placeOfPosting1Name}
                                         label="Office"
-                                        onChange={handlePlaceOfJoining} >
-                                        {placeOfPosting1.map(
-                                            (officeList) => {
-                                                return (
-                                                    <MenuItem
-                                                        value={officeList._id}
-                                                    >
-                                                        {
-                                                            officeList.name
-                                                        }
-                                                    </MenuItem>
-                                                )
-                                            }
-                                        )}
+                                        onChange={handlePlaceOfJoining}
+                                    >
+                                        {placeOfPosting1.map((officeList) => {
+                                            return (
+                                                <MenuItem
+                                                    key={officeList._id}
+                                                    value={officeList._id}
+                                                >
+                                                    {officeList.name}
+                                                </MenuItem>
+                                            )
+                                        })}
                                     </Select>
                                 </FormControl>
-
                             </Grid>
-
-
-
-
-
-
-
-
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={pg1Error}
                                     id="category"
                                     label="PG"
-                                    type='number'
+                                    type="number"
                                     placeholder="PG"
                                     size="small"
                                     autoComplete="off"
@@ -1291,7 +1203,6 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={department1Error}
@@ -1307,7 +1218,11 @@ const UsersList = () => {
                                     }
                                     value={department1}
                                     onChange={(e) =>
-                                        handleChange(e, setDepartment1, setDepartment1Error)
+                                        handleChange(
+                                            e,
+                                            setDepartment1,
+                                            setDepartment1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1333,7 +1248,6 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={designation1Error}
@@ -1349,18 +1263,16 @@ const UsersList = () => {
                                     }
                                     value={designation1}
                                     onChange={(e) =>
-                                        handleChange(e, setDesignation1, setDesignation1Error)
+                                        handleChange(
+                                            e,
+                                            setDesignation1,
+                                            setDesignation1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
-
-
-
-
-
-
 
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
@@ -1400,8 +1312,8 @@ const UsersList = () => {
                                     label="Remarks"
                                     placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
-                                    hintText="Message Field"
-                                    floatingLabelText="MultiLine and FloatingLabel"
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
                                     multiline
                                     fullWidth
                                     rows={3}
@@ -1415,7 +1327,7 @@ const UsersList = () => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                    
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -1432,6 +1344,7 @@ const UsersList = () => {
                     action={createAction}
                 />
             </Dialog>
+            </div>
             <Dialog
                 open={editEmployeeDialog}
                 onClose={handleEditClose}
@@ -1564,11 +1477,8 @@ const UsersList = () => {
             </MenuItem>
          
       </Menu>  */}
-
-
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -1623,7 +1533,7 @@ const UsersList = () => {
                                 <TextField
                                     error={cnicError}
                                     id="cnic"
-                                    type='number'
+                                    type="number"
                                     label="CNIC"
                                     placeholder="Enter CNIC"
                                     size="small"
@@ -1641,7 +1551,6 @@ const UsersList = () => {
                                     fullWidth
                                 />
                             </Grid>
-
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1669,19 +1578,11 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-
-
-
-
-
-
-
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={mobilenumber1Error}
                                     id="category"
-                                    type='number'
+                                    type="number"
                                     label="Mobile Number"
                                     placeholder="Mobile Number"
                                     size="small"
@@ -1693,7 +1594,11 @@ const UsersList = () => {
                                     }
                                     value={mobileNumber1}
                                     onChange={(e) =>
-                                        handleChange(e, setMobileNumber1, setMobileNumber1Error)
+                                        handleChange(
+                                            e,
+                                            setMobileNumber1,
+                                            setMobileNumber1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1737,7 +1642,11 @@ const UsersList = () => {
                                     }
                                     value={emailAddress1}
                                     onChange={(e) =>
-                                        handleChange(e, setEmailAddress1, setEmailAddress1Error)
+                                        handleChange(
+                                            e,
+                                            setEmailAddress1,
+                                            setEmailAddress1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1765,37 +1674,36 @@ const UsersList = () => {
      fullWidth
  />
 </Grid> */}
-
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-                                    <InputLabel id="demo-simple-select-label">Place of Joining</InputLabel>
+                            <div>
+                                <FormControl
+                                    sx={{ m: 1, minWidth: 150 }}
+                                    size="small"
+                                >
+                                    <InputLabel id="demo-simple-select-label">
+                                        Place of Joining
+                                    </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-
                                         value={placeOfPosting1Name}
                                         label="Office"
-                                        onChange={handlePlaceOfJoining} >
-                                        {placeOfPosting1.map(
-                                            (officeList) => {
-                                                return (
-                                                    <MenuItem
-                                                        value={officeList._id}
-                                                    >
-                                                        {
-                                                            officeList.name
-                                                        }
-                                                    </MenuItem>
-                                                )
-                                            }
-                                        )}
+                                        onChange={handlePlaceOfJoining}
+                                    >
+                                        {placeOfPosting1.map((officeList) => {
+                                            return (
+                                                <MenuItem
+                                                    key={officeList._id}
+                                                    value={officeList._id}
+                                                >
+                                                    {officeList.name}
+                                                </MenuItem>
+                                            )
+                                        })}
                                     </Select>
                                 </FormControl>
-
+                            </div>
                             </Grid>
-
-
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -1805,7 +1713,7 @@ const UsersList = () => {
                                     placeholder="PG"
                                     size="small"
                                     autoComplete="off"
-                                    type='number'
+                                    type="number"
                                     helperText={
                                         pg1Error === true
                                             ? 'Field Required'
@@ -1857,7 +1765,11 @@ const UsersList = () => {
                                     }
                                     value={department1}
                                     onChange={(e) =>
-                                        handleChange(e, setDepartment1, setDepartment1Error)
+                                        handleChange(
+                                            e,
+                                            setDepartment1,
+                                            setDepartment1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
@@ -1884,7 +1796,6 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={designation1Error}
@@ -1900,19 +1811,18 @@ const UsersList = () => {
                                     }
                                     value={designation1}
                                     onChange={(e) =>
-                                        handleChange(e, setDesignation1, setDesignation1Error)
+                                        handleChange(
+                                            e,
+                                            setDesignation1,
+                                            setDesignation1Error
+                                        )
                                     }
                                     variant="outlined"
                                     fullWidth
                                 />
                             </Grid>
 
-
-
-
                             {/* old colde start */}
-
-
 
                             {/* 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -2110,8 +2020,6 @@ const UsersList = () => {
 
                             {/* old code end */}
 
-
-
                             <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <label htmlFor="contained-button-file">
                                     <Input
@@ -2150,8 +2058,8 @@ const UsersList = () => {
                                     label="Remarks"
                                     placeholder="Remarks"
                                     style={{ textAlign: 'left' }}
-                                    hintText="Message Field"
-                                    floatingLabelText="MultiLine and FloatingLabel"
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
                                     multiline
                                     fullWidth
                                     rows={3}
@@ -2166,7 +2074,6 @@ const UsersList = () => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
@@ -2182,12 +2089,6 @@ const UsersList = () => {
                     action={editAction}
                 />
             </Dialog>
-
-
-
-
-
-
 
             {/* this is the dialogs of the employee search button */}
             <Dialog
@@ -2253,7 +2154,7 @@ const UsersList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     id="category"
                                     label="Department"
@@ -2268,9 +2169,39 @@ const UsersList = () => {
                                     fullWidth
 
                                 />
-                            </Grid>
-
-
+                            </Grid> */}
+                             <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth >
+                                <InputLabel 
+                                id="demo-simple-select-label">        
+                                Department
+                             </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={custodianId}
+                                        label="Department"
+                                        size="small"
+                                        onChange={(event) =>
+                                            setCustodianId(event.target.value)
+                                        }
+                                    >
+                                       {custodianIds.map((custodianId) => {
+                                            return (
+                                                <MenuItem
+                                                    key={custodianId._id}
+                                                    value={custodianId.name}
+                                                >
+                                                  
+                                                    {custodianId.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                    </FormControl>
+                                    </Box>
+                                    </Grid>
 
                             <Grid item lg={12} md={12} sm={12} xs={12}  >
 
@@ -2301,10 +2232,12 @@ const UsersList = () => {
 
 
             </Dialog>
+
+
+
+            
         </>
     )
-
-
 }
 
 export default UsersList
