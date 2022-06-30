@@ -69,11 +69,13 @@ const AppUsersList = () => {
     const [password, setPassword] = React.useState('')
     const [passwordError, setPasswordError] = React.useState()
     const [role, setRole] = React.useState('')
+    // const [userRole, setUserRole] = React.useState('')
     const [roleError, setRoleError] = React.useState(false)
 
     const [open, setOpen] = React.useState(false)
     const [open2, setOpen2] = React.useState(false)
-
+    const [open3, setOpen3] = React.useState(false)
+    const [open4, setOpen4] = React.useState(false)
     const [userId, setUserId] = React.useState('')
 
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
@@ -163,7 +165,7 @@ const AppUsersList = () => {
                 setPasswordError(true)
             }
             if (role === '') {
-                setRole(true)
+                setRoleError(true)
             }
         } else {
             editHandler()
@@ -200,6 +202,9 @@ const AppUsersList = () => {
         }
     }
 
+    const handleMessageClose = () => {
+       setOpen4(false);
+    }
     const createAction = (
         <React.Fragment>
             <Button
@@ -309,22 +314,50 @@ const AppUsersList = () => {
             })
     }
 
-    const onDelhandler = (id) => {
-        setUserId(id)
+    const onDelhandler = (user) => {
+        setUserId(user._id)
+
         setOpen(true)
-        if (open && userId) {
+        
+        if (open3 && user.role !== 'SA') {
+
             axios
                 .delete(`${config.base_url}/api/v1/auth/${userId}`)
                 .then((res) => {
                     console.log(res.msg)
                     getAlldata()
                     setOpen(false)
+                    setOpen3(false)
                 })
                 .catch((error) => {
                     console.log(error, 'error')
                 })
         }
+        else if (user.role === 'SA'){
+           setOpen4(true);
+            setOpen(false)
+            setOpen3(false)
+        }
     }
+
+
+    
+
+    // const onDelhandler1 = (id) => {
+    //     setUserId(id)
+    //     if ( userId) {
+    //         axios
+    //             .delete(`${config.base_url}/api/v1/auth/${userId}`)
+    //             .then((res) => {
+    //                 console.log(res.msg)
+    //                 getAlldata()
+    //                 setOpen3(false)
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error, 'error')
+    //             })
+    //     }
+    // }
 
     const onEdithandler = (id, user) => {
         setEditUserDialog(true)
@@ -338,6 +371,9 @@ const AppUsersList = () => {
 
     const open2Close = () => {
         setOpen2(false);
+    }
+    const open3Close = () => {
+        setOpen3(false);
     }
     const handleSuperAdmin = () => {
 
@@ -359,11 +395,6 @@ const AppUsersList = () => {
                 console.log(error, 'error')
             })
 
-
-
-
-
-
     }
 
 
@@ -374,10 +405,13 @@ const AppUsersList = () => {
                     open={open}
                     onConfirmDialogClose={() => {
                         setOpen(false)
+                        setOpen3(false)
                     }}
                     title={`Are You Sure?`}
                     text={`Are You Sure You Want To Delete This User?`}
-                    onYesClick={onDelhandler}
+                    onYesClick={() => {
+                        setOpen3(true);
+                    }}
                 />
             )}
             <Tooltip title="Create User">
@@ -692,7 +726,7 @@ const AppUsersList = () => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCreateClose}>Cancel</Button>
+                    <Button onClick={open2Close}>Cancel</Button>
                     <Button autoFocus onClick={handleSuperAdmin}>
                         Confirm
                     </Button>
@@ -908,6 +942,112 @@ const AppUsersList = () => {
                     message="Name already exists"
                     action={editAction}
                 />
+            </Dialog>
+
+
+            {/* Delete Confirmation Box */}
+            <Dialog
+                open={open3}
+                onClose={open3Close}
+                maxWidth="xs"
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'Delete User Confirmation'}
+                </DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={superEmailAddressError}
+                                id="Email"
+                                label="Email Address"
+                                placeholder="Email Address"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    superEmailAddressError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={superEmailAddress}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setSuperEmailAddress,
+                                        setSuperEmailAddressError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={superPasswordError}
+                                id="Password"
+                                type="password"
+                                label="Password"
+                                placeholder="Password"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    superPasswordError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={superPassword}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setSuperPassword,
+                                        setSuperPasswordError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={open3Close}>Cancel</Button>
+                    <Button autoFocus onClick={onDelhandler}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+                <Snackbar
+                    open={createSnackBar}
+                    autoHideDuration={2000}
+                    onClose={handleCreateClosed}
+                    message="Name already exists"
+                    action={createAction}
+                />
+            </Dialog>
+
+
+                                {/* Delete the SuperAdmin message */}
+
+                    <Dialog
+                open={open4}
+                onClose={handleMessageClose}
+                maxWidth="xs"
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'You Can Not Delete The SuperAdmin User'}
+                </DialogTitle>
+                <DialogContent>
+                  
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleMessageClose}>OK</Button>
+                    
+                </DialogActions>
+               
             </Dialog>
         </>
     )

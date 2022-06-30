@@ -36,7 +36,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
     }
 
     const onDeleteHandler = () => {
-        onDelete(user._id)
+        onDelete( user)
     }
 
     const userId = user._id
