@@ -185,8 +185,7 @@ const ProductsList = () => {
             createProductCategory === '' ||
             createBrandName === '' ||
             createDescription === '' ||
-            createModel === '' ||
-            createdBy === ''
+            createModel === ''
         ) {
             if (createName === '') {
                 setCreateNameError(true)
@@ -206,9 +205,6 @@ const ProductsList = () => {
             if (createModel === '') {
                 setCreateModelError(true)
             }
-            if (createdBy === '') {
-                setCreatedByError(true)
-            }
         } else {
             checking()
         }
@@ -222,8 +218,7 @@ const ProductsList = () => {
             editProductCategory === '' ||
             editBrandName === '' ||
             editDescription === '' ||
-            editModel === '' ||
-            modifiedBy === ''
+            editModel === ''
         ) {
             if (editName === '') {
                 setEditNameError(true)
@@ -242,9 +237,6 @@ const ProductsList = () => {
             }
             if (editModel === '') {
                 setEditModelError(true)
-            }
-            if (modifiedBy === '') {
-                setModifiedByError(true)
             }
         } else {
             editHandler()
