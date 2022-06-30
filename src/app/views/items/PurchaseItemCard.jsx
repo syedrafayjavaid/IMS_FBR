@@ -12,7 +12,12 @@ import {
     Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import React, { useEffect } from 'react'
+import axios from 'axios'
+import config from 'config'
 const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
+    const [product, setProduct] = React.useState()
+
     const navigate = useNavigate()
     const UserImgStyle = styled('img')({
         top: 0,
@@ -33,7 +38,7 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
 
     const navigateToDetailsPage = () => {
         navigate('/items/PurchasedItemsDetail', {
-            state: { purchaseItem: purchaseItem },
+            state: { purchaseItem: purchaseItem, productName: product },
         })
     }
 

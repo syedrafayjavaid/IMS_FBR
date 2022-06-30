@@ -298,6 +298,7 @@ const PurchasedItems = () => {
     }
 
     useEffect(() => {
+        getSearchdata()
         getAlldata()
         if (productId) {
             getProduct(productId)
@@ -309,6 +310,11 @@ const PurchasedItems = () => {
             getCustodianId(user)
         }
     }, [productId, officeNameList, user])
+
+    // const getAllData = React.useCallback(() => {
+    //     setOpen(true)
+    //   }, [])
+
     const getAlldata = () => {
         axios
             .get(`${config.base_url}/api/v1/products`)
@@ -750,9 +756,6 @@ const PurchasedItems = () => {
             })
     }
 
-    useEffect(() => {
-        getSearchdata()
-    }, [])
     const getSearchdata = () => {
         axios
             .get(`${config.base_url} `)

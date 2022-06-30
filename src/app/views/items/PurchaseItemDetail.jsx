@@ -10,26 +10,30 @@ import {
     FormControl,
     FormHelperText,
     Grid,
+    IconButton,
     InputLabel,
     MenuItem,
-    Paper,
     Select,
-    Step,
-    StepContent,
-    StepLabel,
-    Stepper,
+    Snackbar,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
     TextField,
-    Typography,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Box, styled } from '@mui/system'
+import { Paragraph } from 'app/components/Typography'
 import axios from 'axios'
 import config from 'config'
 import moment from 'moment'
 import QRCode from 'qrcode'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import AllUsersTable from '../users/AllUserTable'
+import EditIcon from '@mui/icons-material/Edit'
+import CloseIcon from '@mui/icons-material/Close'
+import { BiTransfer } from 'react-icons/bi'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -51,15 +55,19 @@ const CardHeader = styled('div')(() => ({
 const PurchaseItemDetail = () => {
     const { state } = useLocation()
 
-    console.log(state)
+    const userName = localStorage.getItem('username')
 
     const [showTable, setShowTable] = React.useState(false)
     const [showCard, setShowCard] = React.useState(false)
     const [open, setOpen] = React.useState(false)
+    const [editDialogOpen, setEditDialogOpen] = React.useState(false)
     const [duplicateDialogOpen, setDuplicateDialogOpen] = React.useState(false)
     const [quantity, setQuantity] = React.useState('')
     const [quantityError, setQuantityError] = React.useState(false)
+    const [snackBar, setSnackBar] = React.useState(false)
+
     const [custodianIds, setCustodianIds] = React.useState([])
+    const [employeeDetail, setEmployeeDetail] = React.useState()
     const [custodianId, setCustodianId] = React.useState('')
     const [custodianIdError, setCustodianIdError] = React.useState(false)
     const [statusError, setStatusError] = React.useState(false)
@@ -114,6 +122,9 @@ const PurchaseItemDetail = () => {
     const [product, setProduct] = React.useState()
     const [office, setOffice] = React.useState()
 
+    const [productTransferDetails, setProductTransferDetails] = React.useState()
+    const [productData, setProductData] = React.useState()
+
     const generateQrCode = async () => {
         try {
             const qrProduct = productId === '' ? 'N/A' : productId
@@ -158,28 +169,37 @@ const PurchaseItemDetail = () => {
         }
     }
 
-    const [activeStep, setActiveStep] = React.useState(0)
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    }
-
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1)
-    }
-
-    const handleReset = () => {
-        setActiveStep(0)
-    }
-
-    // const showTbl = () => {
-    //     setShowTable(true)
-    //     setShowCard(false)
+    // const handleClick = () => {
+    //     setSnackBar(true)
     // }
-    const showCrd = () => {
-        setShowCard(true)
-        setShowTable(false)
+
+    const handleSnackBarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setSnackBar(false)
     }
+
+    const action = (
+        <React.Fragment>
+            <Button
+                color="secondary"
+                size="small"
+                onClick={handleSnackBarClose}
+            >
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleSnackBarClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
 
     const FlexBox = styled(Box)(() => ({
         display: 'flex',
@@ -199,42 +219,69 @@ const PurchaseItemDetail = () => {
 
     const imgeBaseUrl = 'uploads/'
 
-    const steps = [
-        {
-            label: 'Select campaign settings',
-            description: `For each ad campaign that you create, you can control how much
-                        you're willing to spend on clicks and conversions.`,
-        },
-        {
-            label: 'Create an ad group',
-            description:
-                'An ad group contains one or more ads which target a shared set of keywords.',
-        },
-        {
-            label: 'Create an ad',
-            description: `Try out different ad text to see what brings in the most customers.`,
-        },
-        {
-            label: 'Step 3',
-            description: `Dummy Description.`,
-        },
-        {
-            label: 'Step 4',
-            description: `Dummy Name`,
-        },
-    ]
-
     const handleClose = () => {
         setOpen(false)
     }
 
+    const handleEditClose = () => {
+        setEditDialogOpen(false)
+    }
+
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
         errorFunc(false)
     }
 
-    const handleClickOpen = () => {}
+    const handleClickOpen = () => {
+        if (custodianId === '' || quantity === '') {
+            if (custodianId === '') {
+                setCustodianIdError(true)
+            }
+            if (quantity === '') {
+                setQuantityError(true)
+            }
+        } else {
+            productTransferHandler()
+        }
+    }
+
+    const productTransferHandler = () => {
+        let data = new FormData()
+
+        data.append('employId', custodianId)
+        // data.append('productId', state.purchaseItem.productId)
+        data.append('ItemId', state.purchaseItem._id)
+        data.append('quantity', quantity)
+        data.append('status', 'valid')
+        data.append('createdBy', userName)
+        data.append('transferedTo', 'N/A')
+        data.append('transferedFrom', 'N/A')
+        // data.append('employName')
+        // data.append('employName')
+        data.append('productTagNo', state.purchaseItem.tagNo)
+        data.append('productSrNo', state.purchaseItem.srNo)
+        data.append('productName', productData?.name)
+
+        if (quantity > state.purchaseItem.quantity) {
+            setSnackBar(true)
+            return
+        }
+
+        axios
+            .post(`${config.base_url}/api/v1/productTransfer`, data)
+            .then((res) => {
+                if (res) {
+                    // handleCreateClose()
+                    console.log(res.data.data)
+                    getData()
+                    setOpen(false)
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+                // handleClick()
+            })
+    }
 
     useEffect(() => {
         getEmployee()
@@ -258,20 +305,24 @@ const PurchaseItemDetail = () => {
                 `${config.base_url}/api/v1/products/${state.purchaseItem.productId}`
             )
             .then((res) => {
-                setProduct(res.data.data)
+                setProductData(res.data.data)
+                // setProduct1(res.data.data)
+                // console.log(product1, 'setProduct1')
             })
             .catch((error) => {
-                console.log(error, 'error')
+                // console.log(error, 'error');
             })
         axios
             .get(
-                `${config.base_url}/api/v1/office/${state.purchaseItem.officeId}`
+                `${config.base_url}/api/v1/productTransfer/${state.purchaseItem._id}`
             )
             .then((res) => {
-                setOffice(res.data.data)
+                setProductTransferDetails(res.data.data)
+                // setProduct1(res.data.data)
+                // console.log(product1, 'setProduct1')
             })
             .catch((error) => {
-                console.log(error, 'error')
+                // console.log(error, 'error');
             })
     }
 
@@ -286,6 +337,28 @@ const PurchaseItemDetail = () => {
     const dateOfPurchase = new Date(state.purchaseItem.dataOfPurchase)
         .toISOString()
         .split('T')[0]
+
+    const PurchaseItemTable = styled(Table)(() => ({
+        minWidth: 400,
+        whiteSpace: 'pre',
+        '& small': {
+            height: 15,
+            width: 50,
+            borderRadius: 500,
+            boxShadow:
+                '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
+        },
+        '& td': {
+            borderBottom: 'none',
+        },
+        '& td:first-of-type': {
+            paddingLeft: '16px !important',
+        },
+    }))
+
+    const editHandler = (id) => {
+        console.log(id)
+    }
 
     return (
         <>
@@ -464,7 +537,9 @@ const PurchaseItemDetail = () => {
                                 <Button
                                     variant="contained"
                                     type="button"
-                                    onClick={showCrd}
+                                    onClick={() => {
+                                        setShowTable(true)
+                                    }}
                                 >
                                     Track History
                                 </Button>
@@ -486,8 +561,228 @@ const PurchaseItemDetail = () => {
                     </Grid>
                 </Grid>
             </Card>
-            {showTable && <AllUsersTable></AllUsersTable>}
-            {showCard && (
+            {showTable && (
+                <Card
+                    elevation={3}
+                    sx={{ pt: '20px', mAllUsersTableb: 10, margin: '50px' }}
+                >
+                    <Box overflow="auto">
+                        <PurchaseItemTable>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Employee Id
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Employee Name
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Allocation Date
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Quantity
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Transferred From
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Edit
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 3 }}
+                                        colSpan={2}
+                                    >
+                                        Transfer
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {productTransferDetails &&
+                                    productTransferDetails.map(
+                                        (productTransfer) => (
+                                            <TableRow
+                                                key={productTransfer._id}
+                                                hover
+                                            >
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                >
+                                                    <Paragraph>
+                                                        {
+                                                            productTransfer.employID
+                                                        }
+                                                    </Paragraph>
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                    sx={{
+                                                        px: 0,
+                                                        textTransform:
+                                                            'capitalize',
+                                                    }}
+                                                >
+                                                    {productTransfer.employName}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                    sx={{
+                                                        px: 0,
+                                                        textTransform:
+                                                            'capitalize',
+                                                    }}
+                                                >
+                                                    {date}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                    sx={{
+                                                        px: 0,
+                                                        textTransform:
+                                                            'capitalize',
+                                                    }}
+                                                >
+                                                    {productTransfer.quantity}
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                    sx={{
+                                                        px: 0,
+                                                        textTransform:
+                                                            'capitalize',
+                                                    }}
+                                                >
+                                                    {
+                                                        productTransfer.transferedFrom
+                                                    }
+                                                </TableCell>
+                                                <TableCell
+                                                    align="center"
+                                                    colSpan={2}
+                                                    sx={{
+                                                        px: 0,
+                                                        textTransform:
+                                                            'capitalize',
+                                                    }}
+                                                >
+                                                    <Button
+                                                        onClick={() => {
+                                                            setEditDialogOpen(
+                                                                true
+                                                            )
+
+                                                            let data =
+                                                                new FormData()
+
+                                                            console.log(
+                                                                productTransfer.EmployId
+                                                            )
+
+                                                            data.append(
+                                                                'itemId',
+                                                                state
+                                                                    .purchaseItem
+                                                                    ._id
+                                                            )
+                                                            data.append(
+                                                                'productId',
+                                                                state
+                                                                    .purchaseItem
+                                                                    .productId
+                                                            )
+                                                            data.append(
+                                                                'EmployId',
+                                                                productTransfer.EmployId
+                                                            )
+                                                            data.append(
+                                                                'quantity',
+                                                                productTransfer.quantity
+                                                            )
+
+                                                            axios
+                                                                .put(
+                                                                    `${config.base_url}/api/v1/productTransfer/update`,
+                                                                    data
+                                                                )
+                                                                .then((res) => {
+                                                                    console.log(
+                                                                        res.msg
+                                                                    )
+                                                                    if (res) {
+                                                                        getData()
+                                                                        setEditDialogOpen(
+                                                                            false
+                                                                        )
+                                                                        setCustodianId(
+                                                                            ''
+                                                                        )
+                                                                        setQuantity(
+                                                                            ''
+                                                                        )
+                                                                        // handleEditDialogClose()
+                                                                    }
+                                                                })
+                                                                .catch(
+                                                                    (error) => {
+                                                                        console.log(
+                                                                            error,
+                                                                            'error'
+                                                                        )
+                                                                    }
+                                                                )
+                                                        }}
+                                                    >
+                                                        <EditIcon />
+                                                    </Button>
+                                                </TableCell>
+
+                                                <TableCell
+                                                    sx={{ px: 0 }}
+                                                    align="center"
+                                                    colSpan={2}
+                                                >
+                                                    <Button onClick={() => {}}>
+                                                        <BiTransfer size={22} />
+                                                    </Button>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    )}
+                            </TableBody>
+                        </PurchaseItemTable>
+                    </Box>
+                </Card>
+            )}
+            {/* {showCard && (
                 <Card elevation={3} sx={{ p: '20px', mb: 10, margin: '50px' }}>
                     <Box sx={{ maxWidth: 400 }}>
                         <Stepper activeStep={activeStep} orientation="vertical">
@@ -537,7 +832,7 @@ const PurchaseItemDetail = () => {
                         )}
                     </Box>
                 </Card>
-            )}
+            )} */}
 
             <Dialog
                 open={open}
@@ -560,7 +855,7 @@ const PurchaseItemDetail = () => {
                             sx={{ marginTop: '10px' }}
                         >
                             <Box sx={{ minWidth: 120 }}>
-                                <FormControl fullWidth>
+                                <FormControl fullWidth error={custodianIdError}>
                                     <InputLabel
                                         size="small"
                                         id="demo-simple-select-label"
@@ -573,9 +868,9 @@ const PurchaseItemDetail = () => {
                                         id="demo-simple-select"
                                         value={custodianId}
                                         label="Custodian Id"
-                                        onChange={(event) =>
+                                        onChange={(event) => {
                                             setCustodianId(event.target.value)
-                                        }
+                                        }}
                                     >
                                         {custodianIds.map((custodianId) => {
                                             return (
@@ -590,6 +885,9 @@ const PurchaseItemDetail = () => {
                                             )
                                         })}
                                     </Select>
+                                    <FormHelperText>
+                                        {custodianIdError && 'Field Required'}
+                                    </FormHelperText>
                                 </FormControl>
                             </Box>
                         </Grid>
@@ -634,6 +932,119 @@ const PurchaseItemDetail = () => {
                         Confirm
                     </Button>
                 </DialogActions>
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleSnackBarClose}
+                    message={`Quantity Must Be Smaller Than ${state.purchaseItem.quantity}`}
+                    action={action}
+                />
+            </Dialog>
+            <Dialog
+                open={editDialogOpen}
+                fullWidth={true}
+                onClose={handleEditClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'EDIT ALLOCATE ITEMS'}
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={4}>
+                        <Grid
+                            item
+                            lg={7}
+                            md={7}
+                            sm={7}
+                            xs={7}
+                            sx={{ marginTop: '10px' }}
+                        >
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth error={custodianIdError}>
+                                    <InputLabel
+                                        size="small"
+                                        id="demo-simple-select-label"
+                                    >
+                                        Employee Id / Name
+                                    </InputLabel>
+                                    <Select
+                                        size="small"
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={custodianId}
+                                        label="Custodian Id"
+                                        onChange={(event) =>
+                                            setCustodianId(event.target.value)
+                                        }
+                                    >
+                                        {custodianIds.map((custodianId) => {
+                                            return (
+                                                <MenuItem
+                                                    key={custodianId._id}
+                                                    value={custodianId._id}
+                                                >
+                                                    {custodianId.employeeId}
+                                                    &nbsp;/&nbsp;
+                                                    {custodianId.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                    <FormHelperText>
+                                        {custodianIdError && 'Field Required'}
+                                    </FormHelperText>
+                                </FormControl>
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            lg={5}
+                            md={5}
+                            sm={5}
+                            xs={5}
+                            sx={{ marginTop: '10px' }}
+                        >
+                            <TextField
+                                type={`number`}
+                                error={quantityError}
+                                id="quantity"
+                                label="Quantity"
+                                placeholder="Enter Quantity"
+                                autoComplete="off"
+                                helperText={
+                                    quantityError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={quantity}
+                                size="small"
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setQuantity,
+                                        setQuantityError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEditClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleSnackBarClose}
+                    message="Quantity Must Be Smaller Than 60"
+                    action={action}
+                />
             </Dialog>
 
             <Dialog
@@ -965,8 +1376,12 @@ const PurchaseItemDetail = () => {
                                             }
                                         >
                                             {custodianIds.map((employee) => {
+                                                // setEmployeeId(
+                                                //     employee.employeeId
+                                                // )
                                                 return (
                                                     <MenuItem
+                                                        key={employee._id}
                                                         value={employee._id}
                                                     >
                                                         {employee.employeeId}
