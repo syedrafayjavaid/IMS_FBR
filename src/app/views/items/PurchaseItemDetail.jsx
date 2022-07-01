@@ -67,7 +67,6 @@ const PurchaseItemDetail = () => {
     const [snackBar, setSnackBar] = React.useState(false)
 
     const [custodianIds, setCustodianIds] = React.useState([])
-    const [employeeDetail, setEmployeeDetail] = React.useState()
     const [custodianId, setCustodianId] = React.useState('')
     const [custodianIdError, setCustodianIdError] = React.useState(false)
     const [statusError, setStatusError] = React.useState(false)
@@ -124,6 +123,7 @@ const PurchaseItemDetail = () => {
 
     const [productTransferDetails, setProductTransferDetails] = React.useState()
     const [productData, setProductData] = React.useState()
+    const [currentData, setCurrentData] = React.useState()
 
     const generateQrCode = async () => {
         try {
@@ -358,6 +358,36 @@ const PurchaseItemDetail = () => {
 
     const editHandler = (id) => {
         console.log(id)
+    }
+
+    const editfunction = (item) => {
+        setCurrentData(item)
+        setEditDialogOpen(true)
+
+        setCustodianId(item.employId)
+
+        setQuantity(item.quantity)
+    }
+
+    const UpdateRecord = () => {
+        let data = {}
+        data = currentData
+        data.quantity = quantity
+
+        axios
+            .put(`${config.base_url}/api/v1/productTransfer/update`, data)
+            .then((res) => {
+                if (res) {
+                    getData()
+                    setEditDialogOpen(false)
+                    setCustodianId('')
+                    setQuantity('')
+                    // handleEditDialogClose()
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     return (
@@ -612,13 +642,13 @@ const PurchaseItemDetail = () => {
                                     >
                                         Edit
                                     </TableCell>
-                                    <TableCell
+                                    {/* <TableCell
                                         align="center"
                                         sx={{ px: 3 }}
                                         colSpan={2}
                                     >
                                         Transfer
-                                    </TableCell>
+                                    </TableCell> */}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -696,76 +726,16 @@ const PurchaseItemDetail = () => {
                                                 >
                                                     <Button
                                                         onClick={() => {
-                                                            setEditDialogOpen(
-                                                                true
+                                                            editfunction(
+                                                                productTransfer
                                                             )
-
-                                                            let data =
-                                                                new FormData()
-
-                                                            console.log(
-                                                                productTransfer.EmployId
-                                                            )
-
-                                                            data.append(
-                                                                'itemId',
-                                                                state
-                                                                    .purchaseItem
-                                                                    ._id
-                                                            )
-                                                            data.append(
-                                                                'productId',
-                                                                state
-                                                                    .purchaseItem
-                                                                    .productId
-                                                            )
-                                                            data.append(
-                                                                'EmployId',
-                                                                productTransfer.EmployId
-                                                            )
-                                                            data.append(
-                                                                'quantity',
-                                                                productTransfer.quantity
-                                                            )
-
-                                                            axios
-                                                                .put(
-                                                                    `${config.base_url}/api/v1/productTransfer/update`,
-                                                                    data
-                                                                )
-                                                                .then((res) => {
-                                                                    console.log(
-                                                                        res.msg
-                                                                    )
-                                                                    if (res) {
-                                                                        getData()
-                                                                        setEditDialogOpen(
-                                                                            false
-                                                                        )
-                                                                        setCustodianId(
-                                                                            ''
-                                                                        )
-                                                                        setQuantity(
-                                                                            ''
-                                                                        )
-                                                                        // handleEditDialogClose()
-                                                                    }
-                                                                })
-                                                                .catch(
-                                                                    (error) => {
-                                                                        console.log(
-                                                                            error,
-                                                                            'error'
-                                                                        )
-                                                                    }
-                                                                )
                                                         }}
                                                     >
                                                         <EditIcon />
                                                     </Button>
                                                 </TableCell>
 
-                                                <TableCell
+                                                {/* <TableCell
                                                     sx={{ px: 0 }}
                                                     align="center"
                                                     colSpan={2}
@@ -773,7 +743,7 @@ const PurchaseItemDetail = () => {
                                                     <Button onClick={() => {}}>
                                                         <BiTransfer size={22} />
                                                     </Button>
-                                                </TableCell>
+                                                </TableCell> */}
                                             </TableRow>
                                         )
                                     )}
@@ -952,7 +922,7 @@ const PurchaseItemDetail = () => {
                 </DialogTitle>
                 <DialogContent>
                     <Grid container spacing={4}>
-                        <Grid
+                        {/* <Grid
                             item
                             lg={7}
                             md={7}
@@ -996,13 +966,13 @@ const PurchaseItemDetail = () => {
                                     </FormHelperText>
                                 </FormControl>
                             </Box>
-                        </Grid>
+                        </Grid> */}
                         <Grid
                             item
-                            lg={5}
-                            md={5}
-                            sm={5}
-                            xs={5}
+                            lg={12}
+                            md={12}
+                            sm={12}
+                            xs={12}
                             sx={{ marginTop: '10px' }}
                         >
                             <TextField
@@ -1034,7 +1004,7 @@ const PurchaseItemDetail = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
-                    <Button autoFocus onClick={handleClickOpen}>
+                    <Button autoFocus onClick={UpdateRecord}>
                         Confirm
                     </Button>
                 </DialogActions>

@@ -135,7 +135,7 @@ const PurchasedItems = () => {
     ///search items
     const [searchItemsDialog, setSearchItemsDialog] = React.useState(false)
     const [vender, setVender] = React.useState('')
-    const [custodienIdName, setCustodienIdName] = React.useState([])
+    const [custodienIdName, setCustodienIdName] = React.useState('')
     const [productName, setProductName] = React.useState([])
     const [tagsearch, setTagSearch] = React.useState('')
     const [srnosearch, setSrnoSearch] = React.useState('')
@@ -149,6 +149,12 @@ const PurchasedItems = () => {
     const [custodianIdData, setCustodianIdData] = React.useState()
     const [openConfirmationDialog, setOpenConfirmationDialog] =
         React.useState(false)
+
+    const [searchProduct, setSearchProduct] = React.useState()
+    const [searchVender, setSearchVender] = React.useState()
+    const [searchTag, setSearchTag] = React.useState()
+    const [searchSr, setSearchSr] = React.useState()
+    const [searchCustodianId, setSearchCustodianId] = React.useState()
 
     const handleChecked = (event) => {
         setChecked(event.target.checked)
@@ -226,7 +232,7 @@ const PurchasedItems = () => {
         setUser(event.target.value)
     }
     const handleCustodianId = (event) => {
-        setCustodienId(event.target.value)
+        setCustodienIdName(event.target.value)
     }
 
     const handleCreatedByDialog = (event) => {
@@ -298,7 +304,6 @@ const PurchasedItems = () => {
     }
 
     useEffect(() => {
-        getSearchdata()
         getAlldata()
         if (productId) {
             getProduct(productId)
@@ -322,7 +327,7 @@ const PurchasedItems = () => {
                 // console.log(res.data.data);
 
                 setProduct1(res.data.data)
-                console.log(product1, 'setProduct1')
+                // console.log(product1, 'setProduct1')
             })
             .catch((error) => {
                 // console.log(error, 'error');
@@ -757,13 +762,23 @@ const PurchasedItems = () => {
     }
 
     const getSearchdata = () => {
-        axios
-            .get(`${config.base_url} `)
-            .then((res) => {
-                // console.log(res.data.data);
+        let data = {}
+        data.productId = searchProduct
+        data.venderEmail = searchVender
+        data.tagNo = searchTag
+        data.srNo = searchSr
+        data.custodian = searchCustodianId
 
-                setAllsearchdata(res.data.data)
-                console.log(allseachdata, 'setAllsearchdata')
+        axios
+            .post(
+                `${config.base_url}/api/v1/purchaseProduct/searchFilters`,
+                data
+            )
+            .then((res) => {
+                console.log(res.data.data)
+
+                // setAllsearchdata(res.data.data)
+                // console.log(allseachdata, 'setAllsearchdata')
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -1444,7 +1459,7 @@ const PurchasedItems = () => {
                                             label="Product Category"
                                             onChange={handleProductName}
                                         >
-                                            {productName.map((productList) => {
+                                            {product1.map((productList) => {
                                                 return (
                                                     <MenuItem
                                                         value={productList._id}
@@ -1466,6 +1481,30 @@ const PurchasedItems = () => {
                             </Grid>
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
+                                {/* <Box>
+                                    <FormControl size="medium" fullWidth>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Vender Name / Email
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={vender}
+                                            label="Vender Name / Email"
+                                            onChange={handleVender}
+                                        >
+                                            {product1.map((productList) => {
+                                                return (
+                                                    <MenuItem
+                                                        value={productList._id}
+                                                    >
+                                                        {productList.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </Box> */}
                                 <TextField
                                     error={modelError}
                                     id="name"
@@ -1521,7 +1560,6 @@ const PurchasedItems = () => {
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
-                                    type={`number`}
                                     error={productQuantityError}
                                     id="name"
                                     label="Sr No Search"
@@ -1563,7 +1601,7 @@ const PurchasedItems = () => {
                                             label="Custodian Id/Name"
                                             onChange={handleCustodianId}
                                         >
-                                            {custodienIdName.map((employee) => {
+                                            {custodienId.map((employee) => {
                                                 return (
                                                     <MenuItem
                                                         value={
@@ -1589,12 +1627,7 @@ const PurchasedItems = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseClick}>Cancel</Button>
-                    <Button
-                        autoFocus
-                        onClick={() => {
-                            handleCreateClickOpen()
-                        }}
-                    >
+                    <Button autoFocus onClick={getSearchdata}>
                         Confirm
                     </Button>
                 </DialogActions>
