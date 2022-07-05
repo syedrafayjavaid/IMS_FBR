@@ -6,22 +6,25 @@ import { Box } from '@mui/system'
 import { Paragraph } from 'app/components/Typography'
 import { useNavigate } from 'react-router-dom'
 
-const OfficeCard = ({office, onEdit, onDelete}) => {
-
+const OfficeCard = ({ office, onEdit, onDelete }) => {
     const navigate = useNavigate()
 
     const adiitHandler = (adit) => {
-        onEdit(office._id, office.name, office.address, office.city, office.longitude, office.latitude);
+        onEdit(
+            office._id,
+            office.name,
+            office.address,
+            office.city,
+            office.email,
+            office.contact
+        )
     }
     const delHandler = () => {
         onDelete(office._id)
     }
 
- 
-
-  return (
-    <TableRow
-            hover >
+    return (
+        <TableRow hover>
             <TableCell
                 colSpan={2}
                 align="left"
@@ -55,7 +58,9 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.longitude}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>
+                        {office.email === undefined ? 'N/A' : office.email}
+                    </Paragraph>
                 </Box>
             </TableCell>
             <TableCell
@@ -64,7 +69,9 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.latitude}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>
+                        {office.contact === undefined ? 'N/A' : office.contact}
+                    </Paragraph>
                 </Box>
             </TableCell>
             <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
@@ -78,7 +85,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
                 </Button>
             </TableCell>
         </TableRow>
-  )
+    )
 }
 
 export default OfficeCard
