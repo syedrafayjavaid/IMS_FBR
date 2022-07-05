@@ -255,7 +255,7 @@ const PurchaseItemDetail = () => {
         data.append('status', 'valid')
         data.append('createdBy', userName)
         data.append('transferedTo', 'N/A')
-        data.append('transferedFrom', 'N/A')
+        data.append('transferedFrom', 'store')
         // data.append('employName')
         // data.append('employName')
         data.append('productTagNo', state.purchaseItem.tagNo)
@@ -552,7 +552,7 @@ const PurchaseItemDetail = () => {
                             <img src={state.purchaseItem?.QRCodeImage} alt="" />
                         </Box>
                         <Grid container>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Button
                                     variant="contained"
                                     type="button"
@@ -563,7 +563,7 @@ const PurchaseItemDetail = () => {
                                     Allocate Items
                                 </Button>
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Button
                                     variant="contained"
                                     type="button"
@@ -575,8 +575,9 @@ const PurchaseItemDetail = () => {
                                 </Button>
                             </Grid>
                             {state.purchaseItem.quantity === 1 && (
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
                                     <Button
+                                        style={{ marginTop: '15px' }}
                                         variant="contained"
                                         type="button"
                                         onClick={() => {
@@ -587,6 +588,16 @@ const PurchaseItemDetail = () => {
                                     </Button>
                                 </Grid>
                             )}
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Button
+                                    style={{ marginTop: '15px' }}
+                                    variant="contained"
+                                    type="button"
+                                    onClick={() => {}}
+                                >
+                                    Print Qr Code
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

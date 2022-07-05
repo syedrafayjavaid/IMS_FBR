@@ -860,9 +860,7 @@ const PurchasedItems = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {'STORE ITEMS'}
-                </DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'ADD ITEMS'}</DialogTitle>
                 <DialogContent>
                     <br></br>
 
@@ -1641,7 +1639,7 @@ const PurchasedItems = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'EDIT STORE ITEMS'}
+                    {'EDIT ITEMS'}
                 </DialogTitle>
                 <DialogContent>
                     <br></br>
