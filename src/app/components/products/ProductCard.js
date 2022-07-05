@@ -55,7 +55,9 @@ function ProductCard({ product, onDelete, onEdit }) {
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <ProductImgStyle
                         alt="No Image"
-                        src={config.base_url + '/' + imgeBaseUrl + product.photo}
+                        src={
+                            config.base_url + '/' + imgeBaseUrl + product.photo
+                        }
                     />
                 </CardMedia>
                 <CardContent>
@@ -78,7 +80,9 @@ function ProductCard({ product, onDelete, onEdit }) {
                                 }}
                             >
                                 Quantitiy: &nbsp;
-                                {product.productQuantity}
+                                {product.productQuantity === undefined
+                                    ? 'N/A'
+                                    : product.productQuantity}
                             </Typography>
                         </Typography>
                     </Stack>
