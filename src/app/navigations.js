@@ -11,53 +11,47 @@ export const navigations = [
     {
         name: 'App Users',
         icon: 'group',
-        path:'/appUsers/list'
+        path: '/appUsers/list',
     },
     {
         name: 'Employee',
         icon: 'group',
-        path: '/user/UsersList'
+        path: '/user/UsersList',
     },
     {
         name: 'Categories',
         icon: 'category',
         path: '/categories/list',
-
     },
     {
         name: 'Product List',
         icon: 'list_icon',
         path: '/productTypeList/list',
-
     },
     {
         name: 'Brands',
         icon: 'dirty_lens_icon',
         path: '/brand/list',
-
     },
     {
         name: 'Department',
         icon: 'dirty_lens_icon',
         path: '/department/list',
-
     },
     {
         name: 'Offices',
         icon: 'work_icon',
         path: '/office/list',
-
     },
     {
         name: 'Items Entry',
         icon: 'paid_icon',
         path: 'items/PurchasedItems',
-
     },
     {
-        name: 'Products',
+        name: 'Assets / Items',
         icon: 'shopping_cart_checkout',
-        path: '/products/list'
+        path: '/products/list',
     },
     // {
     //     name: 'QR',
@@ -68,7 +62,7 @@ export const navigations = [
     {
         name: 'QR Based Search',
         icon: 'qr_code',
-        path: '/qrCode/list'
+        path: '/qrCode/list',
     },
     // {
     //     name: 'Location',

@@ -457,7 +457,7 @@ const ProductsList = () => {
             <Container>
                 <br></br>
                 <Typography variant="h4" sx={{ mb: 5 }}>
-                    Products
+                    Assets / Items
                 </Typography>
                 <Grid container spacing={3}>
                     {product1.map((product) => (
@@ -490,7 +490,7 @@ const ProductsList = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'ADD PRODUCT'}
+                    {'ADD ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -784,7 +784,7 @@ const ProductsList = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'EDIT PRODUCT'}
+                    {'EDIT ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
