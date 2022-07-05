@@ -59,7 +59,7 @@ const UsersList = () => {
     const [brandName, setBrandName] = React.useState([])
     const [statuName, setStatuName] = React.useState([])
     const [value, setValue] = React.useState([20, 37])
-    const [officeName, setOfficeName] = React.useState([])
+
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
@@ -85,7 +85,8 @@ const UsersList = () => {
     const [employeeId, setEmployeeId] = React.useState('')
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     //  const [checked, setChecked] = React.useState([])
-
+    const [office, setOffice] = React.useState([])
+    const [officeName, setOfficeName] = React.useState('')
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
@@ -200,15 +201,7 @@ const UsersList = () => {
         setPlaceOfPosting1Name(event.target.value)
     }
 
-    const offceChange = (event) => {
-        const {
-            target: { value },
-        } = event
-        setOfficeName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value
-        )
-    }
+   
     function getoffice(office, officeName, themesoffice) {
         return {
             fontWeight:
@@ -682,9 +675,10 @@ const UsersList = () => {
         data.dynamic = sdynamic;
         data.designation = sdesignation;
         data.reportingManager = sreportingManager;
-        data.department = sdepartment;
+        data.department = custodianId;
         data.date = sdate;
-        data.name = custodianId;
+        
+        data.name = officeName;
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
@@ -723,6 +717,27 @@ const getEmployee = () => {
         })
        
 }
+
+///offices get the name
+useEffect(() => {
+    getOfficedata()
+  //  getData()
+}, [])
+
+const getOfficedata = () => {
+    axios
+        .get(`${config.base_url}/api/v1/office`)
+        .then((res) => {
+            setOffice(res.data.data)
+           
+            console.log(res,"offices name and id")
+        })
+        .catch((error) => {
+            console.log(error, 'error')
+        })
+       
+}
+
 
     return (
         <>
@@ -2108,8 +2123,8 @@ const getEmployee = () => {
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     id="category"
-                                    label="Email/CNIC/Employ Code"
-                                    placeholder="Email/CNIC/Employ Code"
+                                    label="Name/Email/CNIC/Employ Code"
+                                    placeholder="Name/Email/CNIC/Employ Code"
                                     size="small"
                                     autoComplete="off"
                                     value={sdynamic}
@@ -2138,6 +2153,38 @@ const getEmployee = () => {
                                 />
                             </Grid>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth >
+                                <InputLabel 
+                                id="demo-simple-select-label">        
+                                Location
+                             </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={officeName}
+                                        label="Location"
+                                        size="small"
+                                        onChange={(event) =>
+                                            setOfficeName(event.target.value)
+                                        }
+                                    >
+                                       {office.map((officeId) => {
+                                            return (
+                                                <MenuItem
+                                                    key={officeId._id}
+                                                    value={officeId.name}
+                                                >
+                                                  
+                                                    {officeId.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                    </FormControl>
+                                    </Box>
+                                    </Grid>
+                            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     id="category"
                                     label="Reporting Manager"
@@ -2152,7 +2199,7 @@ const getEmployee = () => {
                                     fullWidth
 
                                 />
-                            </Grid>
+                            </Grid> */}
 
                             {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
@@ -2212,7 +2259,7 @@ const getEmployee = () => {
                                     label="Date Of Joing"
                                     type="date"
                                     onChange={(e) => setSdate(e.target.value)}
-                                    defaultValue="2017-05-24"
+                                
                                     size='small'
                                     fullWidth
                                 />
