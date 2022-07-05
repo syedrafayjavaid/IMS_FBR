@@ -149,7 +149,7 @@ const ProductsList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
+      
         errorFunc(false)
     }
 
@@ -253,7 +253,7 @@ const ProductsList = () => {
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
+      
     }
 
     useEffect(() => {
@@ -263,9 +263,9 @@ const ProductsList = () => {
         axios
             .get(`${config.base_url}/api/v1/products`)
             .then((res) => {
-                console.log(res.data.data)
+            
                 setProduct1(res.data.data)
-                console.log(product1, 'all')
+             
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -273,9 +273,9 @@ const ProductsList = () => {
         axios
             .get(config.base_url + '/api/v1/category')
             .then((res) => {
-                console.log(res.data.data)
+          
                 setCategory(res.data.data)
-                console.log(category, 'category')
+            
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -283,9 +283,9 @@ const ProductsList = () => {
         axios
             .get(config.base_url + '/api/v1/productType ')
             .then((res) => {
-                console.log(res.data.data)
+             
                 setQuantity(res.data.data)
-                console.log(quantity, 'quantity')
+              
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -324,7 +324,7 @@ const ProductsList = () => {
         axios
             .post(config.base_url + '/api/v1/products ', data)
             .then((res) => {
-                console.log(res.data.data)
+              
                 if (res) {
                     handleCreateClose()
                     getAlldata()
@@ -371,7 +371,7 @@ const ProductsList = () => {
         axios
             .put(config.base_url + `/api/v1/products/${productId}`, data)
             .then((res) => {
-                console.log(res.msg)
+              
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -493,7 +493,7 @@ const ProductsList = () => {
                     {'ADD ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                  
                         <br></br>
 
                         <CardContent>
@@ -658,7 +658,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
-                                                            key={brand.id}
+                                                            key={brand._id}
                                                             value={brand._id}
                                                         >
                                                             {brand.name}
@@ -738,8 +738,8 @@ const ProductsList = () => {
                                         label="Detail"
                                         placeholder="Detail"
                                         style={{ textAlign: 'left' }}
-                                        hintText="Message Field"
-                                        floatingLabelText="MultiLine and FloatingLabel"
+                                        hinttext="Message Field"
+                                        floatinglabeltext="MultiLine and FloatingLabel"
                                         multiline
                                         fullWidth
                                         rows={3}
@@ -760,7 +760,7 @@ const ProductsList = () => {
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </DialogContentText>
+                   
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -787,7 +787,7 @@ const ProductsList = () => {
                     {'EDIT ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                  
                         <br></br>
 
                         <CardContent>
@@ -1028,8 +1028,8 @@ const ProductsList = () => {
                                         label="Detail"
                                         placeholder="Detail"
                                         style={{ textAlign: 'left' }}
-                                        hintText="Message Field"
-                                        floatingLabelText="MultiLine and FloatingLabel"
+                                        hinttext="Message Field"
+                                        floatinglabeltext="MultiLine and FloatingLabel"
                                         multiline
                                         fullWidth
                                         rows={3}
@@ -1050,7 +1050,7 @@ const ProductsList = () => {
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </DialogContentText>
+                 
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>

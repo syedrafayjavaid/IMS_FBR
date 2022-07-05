@@ -190,13 +190,14 @@ function AddProduct() {
 
   const handleChange = (e, func, errorFunc) => {
     func(e.target.value);
-    console.log(e.target.name, e.target.value)
+  
+    
     errorFunc(false)
   }
 
   function postDataToServer() {
-    console.log("Image array", image)
-    console.log("ModelImage array", modelImage)
+  
+    
     let data = new FormData();
     for (var x = 0; x < image.length; x++) {
       data.append('file', image[x])
@@ -232,8 +233,8 @@ function AddProduct() {
     setModelImage('')
     handleClose();
 
-    console.log("Posting Product Data", data)
-    console.log("Based url that is beign used", "")
+
+    
     axios.post("" + '/new-product/add', data,
       {
         headers: {
@@ -242,7 +243,8 @@ function AddProduct() {
       }
     )
       .then(res => {
-        console.log(res);
+    
+        
         if (res.data.code === 0) {
 
 

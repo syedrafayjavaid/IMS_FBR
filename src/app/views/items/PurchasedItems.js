@@ -194,37 +194,37 @@ const PurchasedItems = () => {
     // }
 
     const handleType = (event) => {
-        console.log(quantity, 'event')
+     
         setQuantity(event.target.value)
     }
 
     const handleProduct = (event) => {
-        console.log(event.target, 'rula')
+      
         setproductId(event.target.value)
     }
     const handleProductName = (event) => {
-        console.log(event.target, 'rula')
+       
         setProductName(event.target.value)
     }
     const handleModel = (event) => {
-        console.log(event.target.value, 'rula')
+      
         setModel(event.target.value)
     }
     const handleVender = (event) => {
         setVender(event.target.value)
     }
     const handlePrice = (event) => {
-        console.log(event.target.value, 'rula')
+     
         setPrice(event.target.value)
     }
 
     const handleStatusDialog = (event) => {
-        console.log(event.target.value, 'rula')
+     
         setStatusValue(event.target.value)
     }
 
     const handleOfficeDialog = (event) => {
-        console.log(event.target.value, 'rula')
+       
         setOfficeNameList(event.target.value)
     }
 
@@ -236,28 +236,28 @@ const PurchasedItems = () => {
     }
 
     const handleCreatedByDialog = (event) => {
-        console.log(event.target.value, 'CreatedBy')
+      
         setCreatedBy(event.target.value)
     }
     const handleCreatedOnDialog = (event) => {
-        console.log(event.target.value, 'CreatedAt')
+   
         setCreatedAt(event.target.value)
     }
     const handleModifyByDialog = (event) => {
-        console.log(event.target, 'rula')
+     
         setModifyByDialog(event.target.value)
     }
     const handleModifyOnDialog = (event) => {
-        console.log(event.target, 'rula')
+       
         setModifyOnDialog(event.target.value)
     }
     const handleOwenerShipeDialog = (event) => {
-        console.log(event.target.value, 'owenerShip')
+      
         setOwnerShip(event.target.value)
     }
 
     const handlePurchasedDate = (event) => {
-        console.log(event.target.value, 'vender text value')
+      
         setDateOfPurchase(event.target.value)
     }
     //   const attachment = (e) => {
@@ -344,20 +344,20 @@ const PurchasedItems = () => {
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
-                console.log(res.data.data)
+             
                 setOfficeDialog(res.data.data)
-                console.log(model, 'model___model')
+             
             })
             .catch((error) => {
-                console.log(error, 'error')
+            
             })
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
-                console.log(res.data.data)
+             
                 setCustodienId(res.data.data)
 
-                console.log(res.data.data, 'res.data.data customer data')
+               
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -381,7 +381,7 @@ const PurchasedItems = () => {
         axios
             .get(`${config.base_url}/api/v1/purchaseProduct`)
             .then((res) => {
-                console.log(res.data.data)
+             
                 setPurchasedItems(res.data.data)
                 //  console.log(purchaseBy, 'Purchase of the data');
             })
@@ -502,7 +502,7 @@ const PurchasedItems = () => {
         axios
             .post(`${config.base_url}/api/v1/purchaseProduct`, data)
             .then((res) => {
-                console.log(res.data.data, 'purchaseProduct ')
+          
                 if (res) {
                     // handleCreateClose()
                     getAlldata()
@@ -667,7 +667,7 @@ const PurchasedItems = () => {
                     `${config.base_url}/api/v1/purchaseProduct/${purchaseId}`
                 )
                 .then((res) => {
-                    console.log(res.msg)
+                  
                     getAlldata()
                     setOpenConfirmationDialog(false)
                 })
@@ -750,7 +750,7 @@ const PurchasedItems = () => {
                 data
             )
             .then((res) => {
-                console.log(res.msg)
+            
                 if (res) {
                     getAlldata()
                     handleEditDialogClose()
@@ -775,7 +775,7 @@ const PurchasedItems = () => {
                 data
             )
             .then((res) => {
-                console.log(res.data.data)
+              
 
                 // setAllsearchdata(res.data.data)
                 // console.log(allseachdata, 'setAllsearchdata')
@@ -886,6 +886,7 @@ const PurchasedItems = () => {
                                             {product1.map((productList) => {
                                                 return (
                                                     <MenuItem
+                                                    key={productList._id}
                                                         value={productList._id}
                                                     >
                                                         {productList.name}
@@ -1096,6 +1097,7 @@ const PurchasedItems = () => {
                                             {officeDialog.map((officeList) => {
                                                 return (
                                                     <MenuItem
+                                                    key={officeList._id}
                                                         value={officeList._id}
                                                     >
                                                         {officeList.name}
@@ -1121,7 +1123,7 @@ const PurchasedItems = () => {
                                         label="Date Of Purchase"
                                         type="date"
                                         value={dataOfPurchase}
-                                        defaultValue="2017-05-24"
+                                        
                                         className={myclass.textField}
                                         InputLabelProps={{
                                             shrink: true,
@@ -1460,6 +1462,7 @@ const PurchasedItems = () => {
                                             {product1.map((productList) => {
                                                 return (
                                                     <MenuItem
+                                                    key={productList._id}
                                                         value={productList._id}
                                                     >
                                                         {productList.name}
@@ -1602,6 +1605,7 @@ const PurchasedItems = () => {
                                             {custodienId.map((employee) => {
                                                 return (
                                                     <MenuItem
+                                                    key={employee._id}
                                                         value={
                                                             employee.employeeId
                                                         }
@@ -1666,6 +1670,7 @@ const PurchasedItems = () => {
                                             {product1.map((productList) => {
                                                 return (
                                                     <MenuItem
+                                                    key={productList._id}
                                                         value={productList._id}
                                                     >
                                                         {productList.name}
@@ -1873,6 +1878,7 @@ const PurchasedItems = () => {
                                             {officeDialog.map((officeList) => {
                                                 return (
                                                     <MenuItem
+                                                    key={officeList._id}
                                                         value={officeList._id}
                                                     >
                                                         {officeList.name}
@@ -1898,7 +1904,7 @@ const PurchasedItems = () => {
                                         label="Date Of Purchase"
                                         type="date"
                                         value={dataOfPurchase}
-                                        defaultValue="2017-05-24"
+                                     
                                         className={myclass.textField}
                                         InputLabelProps={{
                                             shrink: true,

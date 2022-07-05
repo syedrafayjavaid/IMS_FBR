@@ -272,7 +272,7 @@ const PurchaseItemDetail = () => {
             .then((res) => {
                 if (res) {
                     // handleCreateClose()
-                    console.log(res.data.data)
+                
                     getData()
                     setOpen(false)
                 }
