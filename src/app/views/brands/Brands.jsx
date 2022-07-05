@@ -58,17 +58,17 @@ const Brands = () => {
   
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
-      console.log(e.target.name, e.target.value)
+     
       errorFunc(false)
     }
   
     const handleType = (event) => {
-      console.log(quantity,"event");
+    
       setQuantity(event.target.value);
     };
   
     const handleType2 = (event) => {
-      console.log(event.target,'rula');
+  
       setBrand(event.target.value);
     };
   
@@ -108,7 +108,7 @@ const Brands = () => {
     };
 
     const handleOpen = (id) => {
-      console.log(id,'id');
+     
       setCreateBrandDialog(true);
     };
     const handleClickOpen2 = () => {
@@ -119,7 +119,7 @@ const Brands = () => {
   
     const handleImage=(e)=>{
       setImage(e.target.files[0])
-      console.log(e.target.files[0],'e.target.files[0]');
+  
     }
   
   
@@ -128,9 +128,9 @@ const Brands = () => {
     }, []);
     const getAlldata = () => {
       axios.get(`${config.base_url}/api/v1/brand`).then((res) => {
-        console.log(res.data.data);
+    
         setBrand(res.data.data);
-        console.log(brand, 'brand');
+ 
       }).catch((error) => {
         console.log(error, 'error');
       })
@@ -156,8 +156,7 @@ const Brands = () => {
   
     const onEdithandler = (editDataId,editDataName) => {
       setEditBrandDialog(true)
-      console.log(editDataId, 'id');
-      console.log(editDataName,'editDataName');
+    
       setEditBrandName(editDataName)
       setBrandId(editDataId)
     }
@@ -209,7 +208,7 @@ const Brands = () => {
           }
       
           axios.put(`${config.base_url}/api/v1/brand/${brandId}`, data).then((res) => {
-            console.log(res.msg);
+          
             if (res) {
               getAlldata();
               handleEditClose()
@@ -288,7 +287,7 @@ const Brands = () => {
           {"ADD BRAND"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+       
             <br></br>
             <Grid container spacing={3}>
 
@@ -313,7 +312,7 @@ const Brands = () => {
 
             </Grid>
 
-          </DialogContentText>
+       
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCreateClose}>Cancel</Button>
@@ -341,7 +340,7 @@ const Brands = () => {
           {"EDIT BRAND"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+        
             <br></br>
             <Grid container spacing={3}>
 
@@ -366,7 +365,7 @@ const Brands = () => {
 
             </Grid>
 
-          </DialogContentText>
+        
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>

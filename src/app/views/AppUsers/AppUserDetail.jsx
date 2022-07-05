@@ -38,7 +38,8 @@ const AppUserDetail = () => {
 
     const imgeBaseUrl = 'uploads/';
 
-    console.log(moment(state.category.createdAt).format('LL'))
+  
+    
 
     return (
         <>

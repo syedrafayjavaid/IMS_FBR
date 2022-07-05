@@ -63,17 +63,17 @@ const Department = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
+   
         errorFunc(false)
     }
 
     const handleType = (event) => {
-        console.log(quantity, 'event')
+   
         setQuantity(event.target.value)
     }
 
     const handleType2 = (event) => {
-        console.log(event.target, 'rula')
+     
         setBrand(event.target.value)
     }
 
@@ -111,7 +111,7 @@ const Department = () => {
     }
 
     const handleOpen = (id) => {
-        console.log(id, 'id')
+     
         setCreateBrandDialog(true)
     }
     const handleClickOpen2 = () => {
@@ -120,7 +120,7 @@ const Department = () => {
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
+     
     }
 
     useEffect(() => {
@@ -130,9 +130,9 @@ const Department = () => {
         axios
             .get(`${config.base_url}/api/v1/department`)
             .then((res) => {
-                console.log(res.data.data)
+           
                 setBrand(res.data.data)
-                console.log(brand, 'brand')
+      
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -140,11 +140,11 @@ const Department = () => {
     }
 
     const onDelhandler = (editData) => {
-        console.log(editData, 'id')
+     
         axios
             .delete(`${config.base_url}/api/v1/department/${editData}`)
             .then((res) => {
-                console.log(res.msg)
+             
                 getAlldata()
             })
             .catch((error) => {
@@ -154,8 +154,7 @@ const Department = () => {
 
     const onEdithandler = (editDataId, editDataName) => {
         setEditBrandDialog(true)
-        console.log(editDataId, 'id')
-        console.log(editDataName, 'editDataName')
+    
         setEditBrandName(editDataName)
         setBrandId(editDataId)
     }
@@ -186,7 +185,7 @@ const Department = () => {
                 setCreateBrandName('')
             })
             .catch((error) => {
-                console.log(error, 'error')
+              
             })
     }
 
@@ -206,7 +205,7 @@ const Department = () => {
         axios
             .put(`${config.base_url}/api/v1/department/${brandId}`, data)
             .then((res) => {
-                console.log(res.msg)
+           
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -275,7 +274,7 @@ const Department = () => {
                     {'ADD DEPARTMENT'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                 
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -304,7 +303,7 @@ const Department = () => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                  
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -332,7 +331,7 @@ const Department = () => {
                     {'EDIT DEPARTMENT'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                 
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -361,7 +360,7 @@ const Department = () => {
                                 />
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                   
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>

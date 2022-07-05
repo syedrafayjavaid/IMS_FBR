@@ -99,7 +99,7 @@ const Offices = () => {
   
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
-      console.log(e.target.name, e.target.value)
+   
       errorFunc(false)
     }
   
@@ -119,7 +119,7 @@ const Offices = () => {
     }, []);
     const getAlldata = () => {
       axios.get(`${config.base_url}/api/v1/office`).then((res) => {
-        console.log(res)
+   
         setOffices(res.data.data);
       }).catch((error) => {
         console.log(error, 'error');
@@ -243,7 +243,7 @@ const Offices = () => {
 
 
         if (officeNameExist) {
-          console.log("Condition True")
+     
           setSnackBar(true);
           return;
         }
@@ -252,7 +252,7 @@ const Offices = () => {
             if (res) {
               getAlldata();
               handleEditClose()
-            //  console.log("hello console");
+        
             }
         
           }).catch((error) => {
@@ -271,9 +271,8 @@ const Offices = () => {
     
       const mapRef = React.useRef();
     
-      const onMapLoad = React.useCallback((map) => {
-        mapRef.current = map;
-      }, []);
+   
+      
 
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -360,7 +359,7 @@ const Offices = () => {
           {"ADD OFFICE"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+         
             <br></br>
             <Grid container spacing={3}>
 
@@ -410,27 +409,12 @@ const Offices = () => {
                   fullWidth
                 />
                 </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                <LoadScript googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`} libraries={libraries}>
-                <GoogleMap
-                id="map"
-                mapContainerStyle={{
-                  transformOrigin: 'left top',
-                  transform: mapTransform,
-                  width: `${mapContainerStyle.width}px`,
-                  height: `${mapContainerStyle.height}px`,
-                }}
-                zoom={mapZoom}
-                center={{lat: 33.738045, lng: 73.084488}}
-                onLoad={onMapLoad}
-                >
-                <Marker position = {{lat: 33.738045, lng: 73.084488}} />
-              </GoogleMap></LoadScript>
-                </Grid>
+           
+           
 
             </Grid>
 
-          </DialogContentText>
+        
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCreateClose}>Cancel</Button>
@@ -457,7 +441,7 @@ const Offices = () => {
           {"EDIT OFFICE"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+        
             <br></br>
             <Grid container spacing={3}>
 
@@ -507,27 +491,12 @@ const Offices = () => {
                   fullWidth
                 />
                 </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                <LoadScript googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`} libraries={libraries}>
-                <GoogleMap
-                id="map"
-                mapContainerStyle={{
-                  transformOrigin: 'left top',
-                  transform: mapTransform,
-                  width: `${mapContainerStyle.width}px`,
-                  height: `${mapContainerStyle.height}px`,
-                }}
-                zoom={mapZoom}
-                center={{lat: 33.738045, lng: 73.084488}}
-                onLoad={onMapLoad}
-                >
-                <Marker position = {{lat: 33.738045, lng: 73.084488}} />
-              </GoogleMap></LoadScript>
-                </Grid>
+             
+             
 
             </Grid>
 
-          </DialogContentText>
+        
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>

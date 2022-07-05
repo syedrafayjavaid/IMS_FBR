@@ -335,7 +335,8 @@ const AppUsersList = () => {
         axios
             .put(`${config.base_url}/api/v1/auth/${userId}`, data)
             .then((res) => {
-                console.log(res.msg)
+              
+                
                 if (res) {
                     getAlldata()
                     handleEditClose()

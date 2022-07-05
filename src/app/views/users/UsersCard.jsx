@@ -21,6 +21,8 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
         position: 'absolute',
     })
 
+
+      
     const imgeBaseUrl = 'uploads/'
 
     const onEditHandler = () => {

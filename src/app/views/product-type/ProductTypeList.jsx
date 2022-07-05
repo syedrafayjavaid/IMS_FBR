@@ -96,9 +96,9 @@ const ProductTypeList = () => {
 
   const getAlldata = () => {
     axios.get(`${config.base_url}/api/v1/productType`).then((res) => {
-      console.log(res.data.data);
+    
       setProductList(res.data.data);
-      console.log(productList, 'arry');
+  
     }).catch((error) => {
       console.log(error, 'error');
     })
@@ -123,7 +123,7 @@ const ProductTypeList = () => {
   
 
       axios.post(`${config.base_url}/api/v1/productType`, data).then((res) => {
-        console.log(res.data.data);
+     
         if(res){
           handleClose()
           getAlldata(); 
@@ -143,11 +143,11 @@ const ProductTypeList = () => {
       data.append('name', category);
   
       axios.put(`${config.base_url}/api/v1/productType/${catogoryId}`, data).then((res) => {
-        console.log(res.msg);
+    
         if (res) {
           getAlldata();
           handleClose()
-        //  console.log("hello console");
+    
         }
     
       }).catch((error) => {
@@ -225,7 +225,7 @@ const ProductTypeList = () => {
     }; 
     
     const handleOpen = (id) => {
-      console.log(id, 'id');
+      
       setOpen(true);
     };
   
@@ -263,7 +263,7 @@ const ProductTypeList = () => {
 
     const handleChange = (e, func, errorFunc) => {
       func(e.target.value);
-      console.log(e.target.name, e.target.value)
+    
       errorFunc(false)
     }
 
@@ -287,7 +287,7 @@ const ProductTypeList = () => {
       }
       )
       .catch((error) => {
-        console.log(error, 'error');
+     
       })
       }
       
@@ -298,7 +298,7 @@ const ProductTypeList = () => {
   setCategory(name);
       setOpen(true)
       
-      console.log(editIde,name);
+    
       setCatogoryId(editIde);
     }
 
@@ -363,7 +363,7 @@ const ProductTypeList = () => {
           {"ADD PRODUCT LIST"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+        
             <br></br>
             <Grid container spacing={3}>
 
@@ -413,7 +413,7 @@ const ProductTypeList = () => {
 
             </Grid>
 
-          </DialogContentText>
+        
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

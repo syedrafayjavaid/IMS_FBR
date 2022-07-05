@@ -61,13 +61,13 @@ const CategoriesList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
+     
         errorFunc(false)
     }
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]')
+     
     }
 
     const handleCreateClickOpen = () => {
@@ -88,7 +88,7 @@ const CategoriesList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-            console.log('Edit Button Clicked')
+          
             return
         }
 
@@ -199,7 +199,7 @@ const CategoriesList = () => {
         axios
             .put(`${config.base_url}/api/v1/category/${categoryId}`, data)
             .then((res) => {
-                console.log(res.msg)
+            
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -220,7 +220,7 @@ const CategoriesList = () => {
             axios
                 .delete(`${config.base_url}/api/v1/category/${categoryId}`)
                 .then((res) => {
-                    console.log(res.msg)
+               
                     getAlldata()
                     setOpen(false)
                 })
@@ -231,7 +231,7 @@ const CategoriesList = () => {
     }
 
     const onEdithandler = (id, category) => {
-        console.log(category)
+     
         setEditCategoryDialog(true)
         setCategory(category)
         setImage(category.photo)
@@ -301,7 +301,7 @@ const CategoriesList = () => {
                     {'ADD CATEGORY'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={5} md={5} sm={5} xs={5}>
@@ -354,7 +354,7 @@ const CategoriesList = () => {
                                 </label>
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                   
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -381,7 +381,7 @@ const CategoriesList = () => {
                     {'Edit Category'}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={7} md={7} sm={7} xs={7}>
@@ -429,7 +429,7 @@ const CategoriesList = () => {
                                 </label>
                             </Grid>
                         </Grid>
-                    </DialogContentText>
+                   
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>

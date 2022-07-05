@@ -17,7 +17,7 @@ const OfficeCard = ({office, onEdit, onDelete}) => {
         onDelete(office._id)
     }
 
-    console.log(office);
+ 
 
   return (
     <TableRow
