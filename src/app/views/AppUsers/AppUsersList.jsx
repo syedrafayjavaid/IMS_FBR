@@ -64,10 +64,10 @@ const AppUsersList = () => {
     const [emailAddressError, setEmailAddressError] = React.useState(false)
     const [superEmailAddress, setSuperEmailAddress] = React.useState('')
     const [superPassword, setSuperPassword] = React.useState('')
-    const [superEmailAddressError, setSuperEmailAddressError] = React.useState('')
-    const [superPasswordError, setSuperPasswordError] = React.useState('')
+    const [superEmailAddressError, setSuperEmailAddressError] = React.useState(false)
+    const [superPasswordError, setSuperPasswordError] = React.useState(false)
     const [password, setPassword] = React.useState('')
-    const [passwordError, setPasswordError] = React.useState()
+    const [passwordError, setPasswordError] = React.useState(false)
     const [role, setRole] = React.useState('')
     // const [userRole, setUserRole] = React.useState('')
     const [roleError, setRoleError] = React.useState(false)
@@ -124,7 +124,7 @@ const AppUsersList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.name, e.target.value)
+       
         errorFunc(false)
     }
 
@@ -181,7 +181,7 @@ const AppUsersList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-            console.log('Edit Button Clicked')
+         
             return
         }
 
@@ -284,7 +284,7 @@ const AppUsersList = () => {
         axios
             .get(`${config.base_url}/api/v1/auth/users`)
             .then((res) => {
-                console.log("All incoming Data is ", res.data.data);
+            
                 setUsers(res.data.data)
             })
             .catch((error) => {
@@ -321,7 +321,7 @@ const AppUsersList = () => {
                 }
             })
             .catch((error) => {
-                console.log("I am inside create user", error);
+         
                 console.log(error, 'error')
             })
     }
@@ -358,7 +358,7 @@ const AppUsersList = () => {
             axios
                 .delete(`${config.base_url}/api/v1/auth/${userId}`)
                 .then((res) => {
-                    console.log(res.msg)
+               
                     getAlldata()
                     setOpen(false)
                     setOpen3(false)
@@ -377,21 +377,7 @@ const AppUsersList = () => {
 
     
 
-    // const onDelhandler1 = (id) => {
-    //     setUserId(id)
-    //     if ( userId) {
-    //         axios
-    //             .delete(`${config.base_url}/api/v1/auth/${userId}`)
-    //             .then((res) => {
-    //                 console.log(res.msg)
-    //                 getAlldata()
-    //                 setOpen3(false)
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error, 'error')
-    //             })
-    //     }
-    // }
+  
 
     const onEdithandler = (id, user) => {
         setEditUserDialog(true)
@@ -420,7 +406,7 @@ const AppUsersList = () => {
             .post(`${config.base_url}/api/v1/auth/SA`, data)
             .then((res) => {
                 if (res.data.grantAccess) {
-                    console.log("inside grant Access");
+              
                     setOpen2(false);
                     createHandler()
                 }

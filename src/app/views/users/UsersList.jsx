@@ -196,7 +196,7 @@ const UsersList = () => {
     }
 
     const handlePlaceOfJoining = (event) => {
-        console.log(event.target.value, 'rula')
+       
         setPlaceOfPosting1Name(event.target.value)
     }
 
@@ -2102,7 +2102,7 @@ const getEmployee = () => {
                 </DialogTitle>
 
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -2221,7 +2221,6 @@ const getEmployee = () => {
                             </Grid>
 
                         </Grid>
-                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEmployeeClose}>Cancel</Button>

@@ -27,7 +27,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import FormControl from '@mui/material/FormControl'
+ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
@@ -91,14 +91,14 @@ const ProductsList = () => {
     const [editNameError, setEditNameError] = React.useState(false)
     const [editProductTypeName, setEditProductTypeName] = React.useState('')
     const [editProductTypeNameError, setEditProductTypeNameError] =
-        React.useState('')
+        React.useState(false)
     const [editProductCategory, setEditProductCategory] = React.useState('')
     const [editProductCategoryError, setEditProductCategoryError] =
-        React.useState('')
+        React.useState(false)
     const [editModel, setEditModel] = React.useState('')
     const [editModelError, setEditModelError] = React.useState(false)
     const [editBrandName, setEditBrandName] = React.useState('')
-    const [editBrandNameError, setEditBrandNameError] = React.useState('')
+    const [editBrandNameError, setEditBrandNameError] = React.useState(false)
     const [editDescription, setEditDescription] = React.useState('')
     const [editDescriptionError, setEditDescriptionError] =
         React.useState(false)
@@ -544,6 +544,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
+                                                        key={productType._id}
                                                             value={
                                                                 productType._id
                                                             }
@@ -585,6 +586,9 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
+                                                            key={productCategory._id}
+                                                                
+                                                           
                                                                 value={
                                                                     productCategory._id
                                                                 }
@@ -654,6 +658,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
+                                                            key={brand.id}
                                                             value={brand._id}
                                                         >
                                                             {brand.name}
@@ -833,6 +838,7 @@ const ProductsList = () => {
                                                 {quantity.map((productType) => {
                                                     return (
                                                         <MenuItem
+                                                        key={productType._id}
                                                             value={
                                                                 productType._id
                                                             }
@@ -874,6 +880,7 @@ const ProductsList = () => {
                                                     (productCategory) => {
                                                         return (
                                                             <MenuItem
+                                                            key={productCategory._id}
                                                                 value={
                                                                     productCategory._id
                                                                 }
@@ -941,6 +948,7 @@ const ProductsList = () => {
                                                 {brands.map((brand) => {
                                                     return (
                                                         <MenuItem
+                                                        key={brand._id}
                                                             value={brand._id}
                                                         >
                                                             {brand.name}
