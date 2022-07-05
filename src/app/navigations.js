@@ -24,7 +24,7 @@ export const navigations = [
         path: '/categories/list',
     },
     {
-        name: 'Product List',
+        name: 'Product Type',
         icon: 'list_icon',
         path: '/productTypeList/list',
     },
@@ -34,7 +34,7 @@ export const navigations = [
         path: '/brand/list',
     },
     {
-        name: 'Department',
+        name: 'Departments',
         icon: 'dirty_lens_icon',
         path: '/department/list',
     },
