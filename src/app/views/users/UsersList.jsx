@@ -40,6 +40,7 @@ import UsersCard from './UsersCard'
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 
+
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -93,7 +94,7 @@ const UsersList = () => {
     const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
     const open2 = Boolean(anchorEl1)
-
+   
     /////// employee dialoge
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
@@ -133,7 +134,7 @@ const UsersList = () => {
       const [sdepartment, setSdepartment] = React.useState("");
       const currentDate = new Date().toISOString().split('T')[0]
       const [sdate, setSdate] = React.useState("");
-
+      const [sdate1, setSdate1] = React.useState("");
 
     const ITEM_HEIGHT = 48
     const ITEM_PADDING_TOP = 8
@@ -680,7 +681,7 @@ const UsersList = () => {
         data.reportingManager = sreportingManager;
         data.department = custodianId;
         data.date = sdate;
-        
+        data.date = sdate1;
         data.name = officeName;
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
@@ -867,6 +868,9 @@ const top100Films = [
     { label: '3 Idiots', year: 2009 },
     { label: 'Monty Python and the Holy Grail', year: 1975 },
   ];
+
+
+
     return (
         <>
             {open5 && (
@@ -2465,23 +2469,38 @@ const top100Films = [
                                     </Box>
                                     </Grid>
 
-                            <Grid item lg={12} md={12} sm={12} xs={12}  >
+                                    <Grid item lg={6} md={6} sm={6} xs={6}  >
 
 
                                 <TextField
                                     value={sdate}
                                     id="date"
-                                    label="Date Of Joing"
+                                    label="Start Date"
                                     type="date"
                                     onChange={(e) => setSdate(e.target.value)}
                                 
                                     size='small'
                                     fullWidth
                                 />
-
+  
 
                             </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}  >
 
+
+                        <TextField
+                            value={sdate1}
+                            id="date"
+                            label="End Date"
+                            type="date"
+                            onChange={(e) => setSdate1(e.target.value)}
+
+                            size='small'
+                            fullWidth
+                        />
+
+
+</Grid>
                         </Grid>
                 </DialogContent>
                 <DialogActions>

@@ -56,7 +56,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                               imgeBaseUrl +
                               user.photo
                     }
-                        
+                     
                     />
                 </CardMedia>
                 <CardContent>
