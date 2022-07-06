@@ -459,6 +459,7 @@ const UsersList = () => {
         data.append('wing', wing1)
         data.append('pg', pg1)
         data.append('department', department1)
+        data.append('department', addDepartment)
         data.append('designation', designation1)
         data.append('emailAddress', emailAddress1)
 
@@ -492,6 +493,7 @@ const UsersList = () => {
                 setPg1('')
                 setWing1('')
                 setDepartment1('')
+                setAddDepartment('')
                 setDesignation1('')
                 // setChecked(true)
                 setDateOfJoinnig1(date)
