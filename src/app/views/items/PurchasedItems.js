@@ -13,6 +13,7 @@ import {
     FormControlLabel,
     FormHelperText,
     Grid,
+    IconButton,
     Typography,
 } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
@@ -39,6 +40,7 @@ import axios from 'axios'
 import config from 'config'
 import moment from 'moment'
 import PurchaseItemCard from './PurchaseItemCard'
+import QrReader from 'react-qr-reader'
 
 const dateStyles = makeStyles((theme) => ({
     container: {
@@ -156,6 +158,8 @@ const PurchasedItems = () => {
     const [searchVender, setSearchVender] = React.useState(null)
     const [searchCustodianId, setSearchCustodianId] = React.useState(null)
 
+    const [searchByQrCode, setSearchByQrCode] = React.useState(false)
+
     const handleChecked = (event) => {
         setChecked(event.target.checked)
     }
@@ -265,7 +269,6 @@ const PurchasedItems = () => {
     const handleCreateClose = () => {
         setOpen(false)
         setStatusValue('')
-        setproductId('')
         setPrice('')
         setDateOfPurchase('')
         setOwnerShip('')
@@ -286,7 +289,6 @@ const PurchasedItems = () => {
     const handleEditDialogClose = () => {
         setHandleEditDialog(false)
         setStatusValue('')
-        setproductId('')
         setPrice('')
         setDateOfPurchase('')
         setOwnerShip('')
@@ -433,7 +435,7 @@ const PurchasedItems = () => {
 
             const qrSrNo = srno === '' ? 'N/A' : srno
 
-            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVender Name: ${qrVenderName}\nVender Email: ${qrVenderEmail}\nVender Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}`
+            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVendor Name: ${qrVenderName}\nVendor Email: ${qrVenderEmail}\nVendor Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}`
 
             setQrCode(qrCode)
             const response = await QRCode.toDataURL(qrCode)
@@ -468,7 +470,7 @@ const PurchasedItems = () => {
     const createHandler = () => {
         let data = new FormData()
 
-        data.append('productId', 'productId')
+        data.append('productId', selectedProduct?._id)
         data.append('price', price)
         data.append('dataOfPurchase', dataOfPurchase)
         data.append('ownership', ownerShip)
@@ -500,7 +502,6 @@ const PurchasedItems = () => {
                     setOpen(false)
                 }
                 setStatusValue('')
-                setproductId('')
                 setPrice('')
                 setDateOfPurchase('')
                 setOwnerShip('')
@@ -520,7 +521,6 @@ const PurchasedItems = () => {
             })
             .catch((error) => {
                 console.log(error, 'error')
-                // handleClick()
             })
     }
 
@@ -535,7 +535,6 @@ const PurchasedItems = () => {
             model === '' ||
             purchaseOrder === '' ||
             productQuantity === '' ||
-            productId === '' ||
             venderName === '' ||
             venderNumber === '' ||
             tagdata === ''
@@ -570,9 +569,6 @@ const PurchasedItems = () => {
             }
             if (venderNumber === '') {
                 setVenderNumberError(true)
-            }
-            if (productId === '') {
-                setProductIdError(true)
             }
             if (tagdata === '') {
                 setTagdataError(true)
@@ -592,7 +588,6 @@ const PurchasedItems = () => {
             model === '' ||
             purchaseOrder === '' ||
             productQuantity === '' ||
-            productId === '' ||
             venderName === '' ||
             venderNumber === '' ||
             tagdata === ''
@@ -600,7 +595,6 @@ const PurchasedItems = () => {
             if (price === '') {
                 setPriceError(true)
             }
-
             if (dataOfPurchase === '') {
                 setDateOfPurchaseError(true)
             }
@@ -627,9 +621,6 @@ const PurchasedItems = () => {
             }
             if (venderNumber === '') {
                 setVenderNumberError(true)
-            }
-            if (productId === '') {
-                setProductIdError(true)
             }
             if (tagdata === '') {
                 setTagdataError(true)
@@ -665,7 +656,7 @@ const PurchasedItems = () => {
 
         setStatusValue(purchaseItem.status)
 
-        setproductId(purchaseItem.productId)
+        setSelectedProduct(selectedProduct)
         setPrice(purchaseItem.price)
         const date = new Date(purchaseItem.dataOfPurchase)
             .toISOString()
@@ -695,7 +686,7 @@ const PurchasedItems = () => {
 
     const editHandler = () => {
         let data = new FormData()
-        data.append('productId', productId)
+        data.append('productId', selectedProduct?._id)
         data.append('price', price)
         data.append('dataOfPurchase', dataOfPurchase)
         data.append('ownership', ownerShip)
@@ -1192,7 +1183,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={venderNumberError}
                                     id="name"
@@ -1217,7 +1208,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={tagdataError}
                                     id="name"
@@ -1360,8 +1351,33 @@ const PurchasedItems = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {'Search Filters'}
+                <DialogTitle
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                    id="alert-dialog-title"
+                >
+                    <div>{'Search Filters'}</div>
+                    <Tooltip title="Qr Search">
+                        <div
+                            style={{
+                                borderRadius: '50%',
+                            }}
+                            onClick={() => {
+                                setSearchByQrCode(true)
+                            }}
+                        >
+                            <IconButton aria-label="search" size="large">
+                                <SearchIcon />
+                            </IconButton>
+                        </div>
+                    </Tooltip>
+
+                    {/* <Button variant="contained" type="button">
+                        Qr Search
+                    </Button> */}
                 </DialogTitle>
                 <DialogContent style={{ height: '250px' }}>
                     <br></br>
@@ -1467,6 +1483,62 @@ const PurchasedItems = () => {
                 <DialogActions>
                     <Button onClick={handleCloseClick}>Cancel</Button>
                     <Button autoFocus onClick={getSearchdata}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={searchByQrCode}
+                fullWidth={true}
+                onClose={() => setSearchByQrCode(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                    id="alert-dialog-title"
+                >
+                    <div>{'Search By Qr Code'}</div>
+
+                    {/* <Button variant="contained" type="button">
+                        Qr Search
+                    </Button> */}
+                </DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <CardContent>
+                        <Grid container spacing={3}>
+                            <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                                <h3>Qr Code Scan by Web Cam</h3>
+                                <QrReader
+                                    delay={300}
+                                    style={{ width: '100%' }}
+                                    onError={handleErrorWebCam}
+                                    onScan={handleScanWebCam}
+                                />
+                                <h3>
+                                    Scanned By WebCam Code: {scanResultWebCam}
+                                </h3>
+                            </Grid>
+                        </Grid>
+                        <br></br>
+                    </CardContent>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => {
+                            setSearchByQrCode(false)
+                            setSearchItemsDialog(false)
+                        }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button autoFocus onClick={() => {}}>
                         Confirm
                     </Button>
                 </DialogActions>
@@ -1987,7 +2059,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={3} md={3} sm={3} xs={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     error={tagdataError}
                                     id="name"
@@ -2027,7 +2099,7 @@ const PurchasedItems = () => {
                                     label="Disable Serial Number"
                                 />
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={7} md={7} sm={7} xs={7}>
                                 <TextField
                                     disabled={checked}
                                     error={srnoError}
@@ -2059,7 +2131,6 @@ const PurchasedItems = () => {
                                     variant="contained"
                                     color="primary"
                                     onClick={() => generateQrCode()}
-                                    style={{ marginLeft: '24px' }}
                                 >
                                     Generate
                                 </Button>

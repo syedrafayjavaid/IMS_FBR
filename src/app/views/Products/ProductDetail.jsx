@@ -163,9 +163,12 @@ const ProductsList = () => {
                                 <span>Avg Price: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {state.product.avgPrice === undefined
+                                        {state.product.averagePrice ===
+                                        undefined
                                             ? notAvailable
-                                            : state.product.avgPrice}
+                                            : state.product.averagePrice.toFixed(
+                                                  2
+                                              )}
                                     </b>
                                 </span>
                             </Grid>
