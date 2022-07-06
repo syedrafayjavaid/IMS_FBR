@@ -94,7 +94,8 @@ const UsersList = () => {
     const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
     const open2 = Boolean(anchorEl1)
-   
+    const [addDepartment, setAddDepartment] = React.useState('')
+    const [addDepartmentarr, setAddDepartmentarr] = React.useState([])
     /////// employee dialoge
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
@@ -354,8 +355,8 @@ const UsersList = () => {
             mobileNumber1 === '' ||
             emailAddress1 === '' ||
             pg1 === '' ||
-            wing1 === '' ||
-            department1 === '' ||
+            // wing1 === '' ||
+            addDepartment === '' ||
             designation1 === ''
         ) {
             if (name === '') {
@@ -379,10 +380,10 @@ const UsersList = () => {
             if (pg1 === '') {
                 setPg1Error(true)
             }
-            if (wing1 === '') {
-                setWing1Error(true)
-            }
-            if (department1 === '') {
+            // if (wing1 === '') {
+            //     setWing1Error(true)
+            // }
+            if (addDepartment === '') {
                 setDepartment1Error(true)
             }
             if (designation1 === '') {
@@ -683,6 +684,8 @@ const UsersList = () => {
         data.date = sdate;
         data.date = sdate1;
         data.name = officeName;
+        data.name = addDepartment;
+     
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
@@ -741,6 +744,25 @@ const getOfficedata = () => {
        
 }
 
+////department
+useEffect(() => {
+    getDepartmentdata()
+  //  getData()
+}, [])
+
+const  getDepartmentdata = () => {
+    axios
+        .get(`${config.base_url}/api/v1/department`)
+        .then((res) => {
+            setAddDepartmentarr(res.data.data)
+          
+       
+        })
+        .catch((error) => {
+            console.log(error, 'error')
+        })
+       
+}
 //////demy data
 const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
@@ -1338,14 +1360,14 @@ const top100Films = [
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={custodianId}
+                                        value=''
                                         label="Department"
                                         size="small"
-                                        onChange={(event) =>
-                                            setCustodianId(event.target.value)
-                                        }
+                                        // onChange={(event) =>
+                                        //     setCustodianId(event.target.value)
+                                        // }
                                     >
-                                       {custodianIds.map((custodianId) => {
+                                       {/* {custodianIds.map((custodianId) => {
                                             return (
                                                 <MenuItem
                                                     key={custodianId._id}
@@ -1355,7 +1377,7 @@ const top100Films = [
                                                     {custodianId.name}
                                                 </MenuItem>
                                             )
-                                        })}
+                                        })} */}
                                     </Select>
                                     </FormControl>
                                     </Box>
@@ -1391,21 +1413,21 @@ const top100Films = [
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={custodianId}
+                                        value={addDepartment}
                                         label="Department"
                                         size="small"
                                         onChange={(event) =>
-                                            setCustodianId(event.target.value)
+                                            setAddDepartment(event.target.value)
                                         }
                                     >
-                                       {custodianIds.map((custodianId) => {
+                                       {addDepartmentarr.map((depart) => {
                                             return (
                                                 <MenuItem
-                                                    key={custodianId._id}
-                                                    value={custodianId.name}
+                                                    key={depart._id}
+                                                    value={depart.name}
                                                 >
                                                   
-                                                    {custodianId.name}
+                                                    {depart.name}
                                                 </MenuItem>
                                             )
                                         })}

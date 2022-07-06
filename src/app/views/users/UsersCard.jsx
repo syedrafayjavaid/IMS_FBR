@@ -44,11 +44,11 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
             >
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
-                        alt=''
+                        alt='No Image'
                         src={
                             // user.photo !== 'no-image' ? config.base_url + '/' + imgeBaseUrl + user.photo : avatar
                     
-                        user.photo === '' ||
+                        user.photo === 'No Image' ||
                         user.photo === 'undefined'
                             ? avatar
                             : config.base_url +
