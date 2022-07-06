@@ -9,8 +9,8 @@ let config = {
         base_url: 'http://localhost:5000',
     },
     office: {
-        base_url: 'http://192.168.18.146:5001'
-    }
+        base_url: 'http://192.168.18.146:5001',
+    },
 }
 
 if (env === 'prod') {

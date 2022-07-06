@@ -272,7 +272,7 @@ const PurchaseItemDetail = () => {
             .then((res) => {
                 if (res) {
                     // handleCreateClose()
-                
+
                     getData()
                     setOpen(false)
                 }
@@ -551,33 +551,74 @@ const PurchaseItemDetail = () => {
                             <h4>Qr Code: </h4>
                             <img src={state.purchaseItem?.QRCodeImage} alt="" />
                         </Box>
-                        <Grid container>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Button
-                                    variant="contained"
-                                    type="button"
-                                    onClick={() => {
-                                        setOpen(true)
-                                    }}
-                                >
-                                    Allocate Items
-                                </Button>
+                        {state.purchaseItem.quantity === 1 ? (
+                            <Grid container>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {
+                                            setOpen(true)
+                                        }}
+                                    >
+                                        Allocate Items
+                                    </Button>
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {
+                                            setShowTable(true)
+                                        }}
+                                    >
+                                        Track History
+                                    </Button>
+                                </Grid>
+
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {}}
+                                    >
+                                        Print Qr Code
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Button
-                                    variant="contained"
-                                    type="button"
-                                    onClick={() => {
-                                        setShowTable(true)
-                                    }}
-                                >
-                                    Track History
-                                </Button>
-                            </Grid>
-                            {state.purchaseItem.quantity === 1 && (
+                        ) : (
+                            <Grid container>
                                 <Grid item lg={6} md={6} sm={6} xs={6}>
                                     <Button
-                                        style={{ marginTop: '15px' }}
+                                        variant="contained"
+                                        type="button"
+                                        style={{ width: '200px' }}
+                                        onClick={() => {
+                                            setOpen(true)
+                                        }}
+                                    >
+                                        Allocate Items
+                                    </Button>
+                                </Grid>
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        style={{ width: '200px' }}
+                                        onClick={() => {
+                                            setShowTable(true)
+                                        }}
+                                    >
+                                        Track History
+                                    </Button>
+                                </Grid>
+
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                        style={{
+                                            marginTop: '15px',
+                                            width: '200px',
+                                        }}
                                         variant="contained"
                                         type="button"
                                         onClick={() => {
@@ -587,18 +628,22 @@ const PurchaseItemDetail = () => {
                                         Duplicate
                                     </Button>
                                 </Grid>
-                            )}
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Button
-                                    style={{ marginTop: '15px' }}
-                                    variant="contained"
-                                    type="button"
-                                    onClick={() => {}}
-                                >
-                                    Print Qr Code
-                                </Button>
+
+                                <Grid item lg={6} md={6} sm={6} xs={6}>
+                                    <Button
+                                        style={{
+                                            marginTop: '15px',
+                                            width: '200px',
+                                        }}
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {}}
+                                    >
+                                        Print Qr Code
+                                    </Button>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        )}
                     </Grid>
                 </Grid>
             </Card>

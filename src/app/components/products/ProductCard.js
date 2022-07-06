@@ -94,7 +94,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                         </Typography>
                     </Stack>
                     <Typography variant="subtitle1">
-                        {product?.avgPrice === undefined ? (
+                        {product?.averagePrice === undefined ? (
                             <Typography
                                 component="span"
                                 variant="body1"
@@ -115,7 +115,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                                 }}
                             >
                                 Avg Price: &nbsp;
-                                {product?.avgPrice}
+                                {product?.averagePrice.toFixed(2)}
                             </Typography>
                         )}
                     </Typography>
