@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import {
+    Autocomplete,
     Checkbox,
     Container,
     Fab,
@@ -149,12 +150,11 @@ const PurchasedItems = () => {
     const [custodianIdData, setCustodianIdData] = React.useState()
     const [openConfirmationDialog, setOpenConfirmationDialog] =
         React.useState(false)
+    const [selectedProduct, setSelectedProduct] = React.useState(null)
 
-    const [searchProduct, setSearchProduct] = React.useState()
-    const [searchVender, setSearchVender] = React.useState()
-    const [searchTag, setSearchTag] = React.useState()
-    const [searchSr, setSearchSr] = React.useState()
-    const [searchCustodianId, setSearchCustodianId] = React.useState()
+    const [searchProduct, setSearchProduct] = React.useState(null)
+    const [searchVender, setSearchVender] = React.useState(null)
+    const [searchCustodianId, setSearchCustodianId] = React.useState(null)
 
     const handleChecked = (event) => {
         setChecked(event.target.checked)
@@ -183,7 +183,6 @@ const PurchasedItems = () => {
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-        console.log(e.target.value)
         errorFunc(false)
     }
 
@@ -194,37 +193,30 @@ const PurchasedItems = () => {
     // }
 
     const handleType = (event) => {
-     
         setQuantity(event.target.value)
     }
 
     const handleProduct = (event) => {
-      
         setproductId(event.target.value)
     }
     const handleProductName = (event) => {
-       
         setProductName(event.target.value)
     }
     const handleModel = (event) => {
-      
         setModel(event.target.value)
     }
     const handleVender = (event) => {
         setVender(event.target.value)
     }
     const handlePrice = (event) => {
-     
         setPrice(event.target.value)
     }
 
     const handleStatusDialog = (event) => {
-     
         setStatusValue(event.target.value)
     }
 
     const handleOfficeDialog = (event) => {
-       
         setOfficeNameList(event.target.value)
     }
 
@@ -236,28 +228,22 @@ const PurchasedItems = () => {
     }
 
     const handleCreatedByDialog = (event) => {
-      
         setCreatedBy(event.target.value)
     }
     const handleCreatedOnDialog = (event) => {
-   
         setCreatedAt(event.target.value)
     }
     const handleModifyByDialog = (event) => {
-     
         setModifyByDialog(event.target.value)
     }
     const handleModifyOnDialog = (event) => {
-       
         setModifyOnDialog(event.target.value)
     }
     const handleOwenerShipeDialog = (event) => {
-      
         setOwnerShip(event.target.value)
     }
 
     const handlePurchasedDate = (event) => {
-      
         setDateOfPurchase(event.target.value)
     }
     //   const attachment = (e) => {
@@ -276,6 +262,27 @@ const PurchasedItems = () => {
     const handleCloseClick = () => {
         setSearchItemsDialog(false)
     }
+    const handleCreateClose = () => {
+        setOpen(false)
+        setStatusValue('')
+        setproductId('')
+        setPrice('')
+        setDateOfPurchase('')
+        setOwnerShip('')
+        setOfficeNameList('')
+        setVenderName('')
+        setVenderEmail('')
+        setVenderNumber('')
+        setImage('')
+        setImageUrl1('')
+        setModel('')
+        setQrCode('')
+        setProductQuantity('')
+        setPurchaseOrder('')
+        setSrNo('')
+        setTagdata('')
+        setChecked(false)
+    }
     const handleEditDialogClose = () => {
         setHandleEditDialog(false)
         setStatusValue('')
@@ -289,7 +296,6 @@ const PurchasedItems = () => {
         setVenderNumber('')
         setImage('')
         setImageUrl1('')
-        setUser('')
         setModel('')
         setQrCode('')
         setProductQuantity('')
@@ -311,10 +317,10 @@ const PurchasedItems = () => {
         if (officeNameList) {
             getoffice(officeNameList)
         }
-        if (user) {
-            getCustodianId(user)
-        }
-    }, [productId, officeNameList, user])
+        // if (user) {
+        //     getCustodianId(user)
+        // }
+    }, [productId, officeNameList])
 
     // const getAllData = React.useCallback(() => {
     //     setOpen(true)
@@ -324,13 +330,11 @@ const PurchasedItems = () => {
         axios
             .get(`${config.base_url}/api/v1/products`)
             .then((res) => {
-                // console.log(res.data.data);
-
                 setProduct1(res.data.data)
                 // console.log(product1, 'setProduct1')
             })
             .catch((error) => {
-                // console.log(error, 'error');
+                console.log(error, 'error')
             })
 
         //product name fetch from the api
@@ -344,20 +348,13 @@ const PurchasedItems = () => {
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
-             
                 setOfficeDialog(res.data.data)
-             
             })
-            .catch((error) => {
-            
-            })
+            .catch((error) => {})
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
-             
                 setCustodienId(res.data.data)
-
-               
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -381,7 +378,6 @@ const PurchasedItems = () => {
         axios
             .get(`${config.base_url}/api/v1/purchaseProduct`)
             .then((res) => {
-             
                 setPurchasedItems(res.data.data)
                 //  console.log(purchaseBy, 'Purchase of the data');
             })
@@ -404,7 +400,9 @@ const PurchasedItems = () => {
     const generateQrCode = async () => {
         try {
             const qrProduct =
-                productData?.name === undefined ? 'N/A' : productData?.name
+                selectedProduct?.name === undefined
+                    ? 'N/A'
+                    : selectedProduct?.name
 
             const qrModel = model === '' ? 'N/A' : model
 
@@ -423,11 +421,6 @@ const PurchasedItems = () => {
             const qrDateOfPurchase =
                 dataOfPurchase === '' ? 'N/A' : dataOfPurchase
 
-            const qrUser =
-                custodianIdData?.name === undefined
-                    ? 'N/A'
-                    : custodianIdData?.employeeId + '/' + custodianIdData?.name
-
             const qrOwnerShip = ownerShip === '' ? 'N/A' : ownerShip
 
             const qrVenderName = venderName === '' ? 'N/A' : venderName
@@ -440,7 +433,7 @@ const PurchasedItems = () => {
 
             const qrSrNo = srno === '' ? 'N/A' : srno
 
-            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nCustodian Id: ${qrUser}\nOwnership: ${qrOwnerShip}\nVender Name: ${qrVenderName}\nVender Email: ${qrVenderEmail}\nVender Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}`
+            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVender Name: ${qrVenderName}\nVender Email: ${qrVenderEmail}\nVender Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}`
 
             setQrCode(qrCode)
             const response = await QRCode.toDataURL(qrCode)
@@ -461,21 +454,21 @@ const PurchasedItems = () => {
             })
     }
 
-    const getCustodianId = (custodianId) => {
-        axios
-            .get(`${config.base_url}/api/v1/employee/${custodianId}`)
-            .then((res) => {
-                setCustodianIdData(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
-    }
+    // const getCustodianId = (custodianId) => {
+    //     axios
+    //         .get(`${config.base_url}/api/v1/employee/${custodianId}`)
+    //         .then((res) => {
+    //             setCustodianIdData(res.data.data)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error, 'error')
+    //         })
+    // }
 
     const createHandler = () => {
         let data = new FormData()
 
-        data.append('productId', productId)
+        data.append('productId', 'productId')
         data.append('price', price)
         data.append('dataOfPurchase', dataOfPurchase)
         data.append('ownership', ownerShip)
@@ -486,7 +479,6 @@ const PurchasedItems = () => {
         data.append('venderNumber', venderNumber)
         data.append('attachment', image)
         data.append('QRCodeImage', imageUrl1)
-        data.append('custodian', user)
         data.append('model', model)
         data.append('purchaseOrder', purchaseOrder)
         data.append('quantity', productQuantity)
@@ -502,9 +494,8 @@ const PurchasedItems = () => {
         axios
             .post(`${config.base_url}/api/v1/purchaseProduct`, data)
             .then((res) => {
-          
                 if (res) {
-                    // handleCreateClose()
+                    handleCreateClose()
                     getAlldata()
                     setOpen(false)
                 }
@@ -519,7 +510,6 @@ const PurchasedItems = () => {
                 setVenderNumber('')
                 setImage('')
                 setImageUrl1('')
-                setUser('')
                 setModel('')
                 setQrCode('')
                 setProductQuantity('')
@@ -542,7 +532,6 @@ const PurchasedItems = () => {
             officeNameList === '' ||
             ownerShip === '' ||
             statusValue === '' ||
-            user === '' ||
             model === '' ||
             purchaseOrder === '' ||
             productQuantity === '' ||
@@ -566,9 +555,6 @@ const PurchasedItems = () => {
             }
             if (statusValue === '') {
                 setStatusError(true)
-            }
-            if (user === '') {
-                setUserError(true)
             }
             if (model === '') {
                 setModelError(true)
@@ -603,7 +589,6 @@ const PurchasedItems = () => {
             officeNameList === '' ||
             ownerShip === '' ||
             statusValue === '' ||
-            user === '' ||
             model === '' ||
             purchaseOrder === '' ||
             productQuantity === '' ||
@@ -627,9 +612,6 @@ const PurchasedItems = () => {
             }
             if (statusValue === '') {
                 setStatusError(true)
-            }
-            if (user === '') {
-                setUserError(true)
             }
             if (model === '') {
                 setModelError(true)
@@ -667,7 +649,6 @@ const PurchasedItems = () => {
                     `${config.base_url}/api/v1/purchaseProduct/${purchaseId}`
                 )
                 .then((res) => {
-                  
                     getAlldata()
                     setOpenConfirmationDialog(false)
                 })
@@ -697,7 +678,6 @@ const PurchasedItems = () => {
         setVenderNumber(purchaseItem.venderContact)
         setImage(purchaseItem.image)
         setImageUrl1(purchaseItem.QRCodeImage)
-        setUser(purchaseItem.custodian)
         setModel(purchaseItem.model)
         setPurchaseOrder(purchaseItem.purchaseOrder)
         setProductQuantity(purchaseItem.quantity)
@@ -726,7 +706,6 @@ const PurchasedItems = () => {
         data.append('venderNumber', venderNumber)
         data.append('attachment', image)
         data.append('QRCodeImage', imageUrl1)
-        data.append('custodian', user)
         data.append('purchaseOrder', purchaseOrder)
         data.append('model', model)
         data.append('quantity', productQuantity)
@@ -750,7 +729,6 @@ const PurchasedItems = () => {
                 data
             )
             .then((res) => {
-            
                 if (res) {
                     getAlldata()
                     handleEditDialogClose()
@@ -765,8 +743,6 @@ const PurchasedItems = () => {
         let data = {}
         data.productId = searchProduct
         data.venderEmail = searchVender
-        data.tagNo = searchTag
-        data.srNo = searchSr
         data.custodian = searchCustodianId
 
         axios
@@ -775,8 +751,6 @@ const PurchasedItems = () => {
                 data
             )
             .then((res) => {
-              
-
                 // setAllsearchdata(res.data.data)
                 // console.log(allseachdata, 'setAllsearchdata')
             })
@@ -868,40 +842,33 @@ const PurchasedItems = () => {
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <Box sx={{ minWidth: 120 }}>
-                                    <FormControl
+                                    <Autocomplete
+                                        ListboxProps={{
+                                            style: { maxHeight: '13rem' },
+                                            position: 'bottom-start',
+                                        }}
                                         size="small"
-                                        fullWidth
-                                        error={productIdError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Product
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={productId}
-                                            label="Product Category"
-                                            onChange={handleProduct}
-                                        >
-                                            {product1.map((productList) => {
-                                                return (
-                                                    <MenuItem
-                                                    key={productList._id}
-                                                        value={productList._id}
-                                                    >
-                                                        {productList.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-
-                                        <FormHelperText>
-                                            {' '}
-                                            {productIdError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={product1}
+                                        filterSelectedOptions={true}
+                                        isOptionEqualToValue={(option, value) =>
+                                            option._id === value._id
+                                        }
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField
+                                                    {...params}
+                                                    label="Product"
+                                                />
+                                            )
+                                        }}
+                                        value={selectedProduct}
+                                        onChange={(_event, product) => {
+                                            setSelectedProduct(product)
+                                        }}
+                                    />
                                 </Box>
                             </Grid>
 
@@ -1097,7 +1064,7 @@ const PurchasedItems = () => {
                                             {officeDialog.map((officeList) => {
                                                 return (
                                                     <MenuItem
-                                                    key={officeList._id}
+                                                        key={officeList._id}
                                                         value={officeList._id}
                                                     >
                                                         {officeList.name}
@@ -1123,7 +1090,6 @@ const PurchasedItems = () => {
                                         label="Date Of Purchase"
                                         type="date"
                                         value={dataOfPurchase}
-                                        
                                         className={myclass.textField}
                                         InputLabelProps={{
                                             shrink: true,
@@ -1137,46 +1103,6 @@ const PurchasedItems = () => {
                                         onChange={handlePurchasedDate}
                                     />
                                 </form>
-                            </Grid>
-
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <Box sx={{ minWidth: 120 }}>
-                                    <FormControl
-                                        size="small"
-                                        fullWidth
-                                        error={UserError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Custodian Id
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={user}
-                                            label="Custodian Id"
-                                            onChange={handleCustomerDialog}
-                                        >
-                                            {custodienId.map((employee) => {
-                                                return (
-                                                    <MenuItem
-                                                        key={employee._id}
-                                                        value={employee._id}
-                                                    >
-                                                        {employee.employeeId}
-                                                        &nbsp;/&nbsp;
-                                                        {employee.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                        <FormHelperText>
-                                            {' '}
-                                            {UserError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
-                                </Box>
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={4}>
@@ -1393,7 +1319,6 @@ const PurchasedItems = () => {
                                     variant="contained"
                                     color="primary"
                                     onClick={() => generateQrCode()}
-                                    style={{ marginLeft: '24px' }}
                                 >
                                     Generate
                                 </Button>
@@ -1438,190 +1363,102 @@ const PurchasedItems = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'Search Filters'}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{ height: '250px' }}>
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Box>
-                                    <FormControl
-                                        size="medium"
-                                        fullWidth
-                                        error={productIdError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Product Name
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={productName}
-                                            label="Product Category"
-                                            onChange={handleProductName}
-                                        >
-                                            {product1.map((productList) => {
-                                                return (
-                                                    <MenuItem
-                                                    key={productList._id}
-                                                        value={productList._id}
-                                                    >
-                                                        {productList.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-
-                                        <FormHelperText>
-                                            {' '}
-                                            {productIdError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
-                                </Box>
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={product1}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Product"
+                                            />
+                                        )
+                                    }}
+                                    value={searchProduct}
+                                    onChange={(_event, product) => {
+                                        setSearchProduct(product)
+                                    }}
+                                />
                             </Grid>
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                {/* <Box>
-                                    <FormControl size="medium" fullWidth>
-                                        <InputLabel id="demo-simple-select-label">
-                                            Vender Name / Email
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={vender}
-                                            label="Vender Name / Email"
-                                            onChange={handleVender}
-                                        >
-                                            {product1.map((productList) => {
-                                                return (
-                                                    <MenuItem
-                                                        value={productList._id}
-                                                    >
-                                                        {productList.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                    </FormControl>
-                                </Box> */}
-                                <TextField
-                                    error={modelError}
-                                    id="name"
-                                    label="Vender Email/Name"
-                                    placeholder="Vender Email/Name"
-                                    autoComplete="off"
-                                    helperText={
-                                        modelError === true
-                                            ? 'Field Required'
-                                            : ''
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={product1}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
                                     }
-                                    value={vender}
-                                    size="medium"
-                                    onChange={(e) =>
-                                        handleVender(
-                                            e,
-                                            setVender,
-                                            setModelError
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Vender Name / Email"
+                                            />
                                         )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
+                                    }}
+                                    value={searchVender}
+                                    onChange={(_event, vender) => {
+                                        setSearchVender(vender)
+                                    }}
                                 />
                             </Grid>
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <TextField
-                                    error={purchasedOrderError}
-                                    id="name"
-                                    label="Tag Search"
-                                    placeholder="Tag Search"
-                                    autoComplete="off"
-                                    helperText={
-                                        purchasedOrderError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={tagsearch}
-                                    size="medium"
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setTagSearch,
-                                            setPurchasedOrderError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <TextField
-                                    error={productQuantityError}
-                                    id="name"
-                                    label="Sr No Search"
-                                    placeholder="Sr No Search"
-                                    autoComplete="off"
-                                    helperText={
-                                        productQuantityError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={srnosearch}
-                                    size="medium"
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setSrnoSearch,
-                                            setProductQuantityError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box sx={{ minWidth: 120 }}>
-                                    <FormControl
-                                        size="medium"
-                                        fullWidth
-                                        error={UserError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Custodian Id / Name
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={custodienIdName}
-                                            label="Custodian Id/Name"
-                                            onChange={handleCustodianId}
-                                        >
-                                            {custodienId.map((employee) => {
-                                                return (
-                                                    <MenuItem
-                                                    key={employee._id}
-                                                        value={
-                                                            employee.employeeId
-                                                        }
-                                                    >
-                                                        {employee.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                        <FormHelperText>
-                                            {' '}
-                                            {UserError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
+                                    <Autocomplete
+                                        ListboxProps={{
+                                            style: { maxHeight: '8rem' },
+                                            position: 'bottom-start',
+                                        }}
+                                        size="small"
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={custodienId}
+                                        filterSelectedOptions={true}
+                                        isOptionEqualToValue={(option, value) =>
+                                            option._id === value._id
+                                        }
+                                        getOptionLabel={(option) => {
+                                            return option.name
+                                        }}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField
+                                                    {...params}
+                                                    label="CustodianId / Name"
+                                                />
+                                            )
+                                        }}
+                                        value={searchCustodianId}
+                                        onChange={(_event, custodianId) => {
+                                            setSearchCustodianId(custodianId)
+                                        }}
+                                    />
                                 </Box>
                             </Grid>
                         </Grid>
@@ -1652,39 +1489,29 @@ const PurchasedItems = () => {
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <Box sx={{ minWidth: 120 }}>
-                                    <FormControl
+                                    <Autocomplete
                                         size="small"
-                                        fullWidth
-                                        error={productIdError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Product
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={productId}
-                                            label="Product Category"
-                                            onChange={handleProduct}
-                                        >
-                                            {product1.map((productList) => {
-                                                return (
-                                                    <MenuItem
-                                                    key={productList._id}
-                                                        value={productList._id}
-                                                    >
-                                                        {productList.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                        <FormHelperText>
-                                            {' '}
-                                            {productIdError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={product1}
+                                        filterSelectedOptions={true}
+                                        isOptionEqualToValue={(option, value) =>
+                                            option._id === value._id
+                                        }
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField
+                                                    {...params}
+                                                    label="Product"
+                                                />
+                                            )
+                                        }}
+                                        value={selectedProduct}
+                                        onChange={(_event, product) => {
+                                            setSelectedProduct(product)
+                                        }}
+                                    />
                                 </Box>
                             </Grid>
 
@@ -1878,7 +1705,7 @@ const PurchasedItems = () => {
                                             {officeDialog.map((officeList) => {
                                                 return (
                                                     <MenuItem
-                                                    key={officeList._id}
+                                                        key={officeList._id}
                                                         value={officeList._id}
                                                     >
                                                         {officeList.name}
@@ -1904,7 +1731,6 @@ const PurchasedItems = () => {
                                         label="Date Of Purchase"
                                         type="date"
                                         value={dataOfPurchase}
-                                     
                                         className={myclass.textField}
                                         InputLabelProps={{
                                             shrink: true,
@@ -1918,46 +1744,6 @@ const PurchasedItems = () => {
                                         onChange={handlePurchasedDate}
                                     />
                                 </form>
-                            </Grid>
-
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <Box sx={{ minWidth: 120 }}>
-                                    <FormControl
-                                        size="small"
-                                        fullWidth
-                                        error={custodienIdError}
-                                    >
-                                        <InputLabel id="demo-simple-select-label">
-                                            Custodian Id / Name
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={user}
-                                            label="Custodian Id"
-                                            onChange={handleCustomerDialog}
-                                        >
-                                            {custodienId.map((employee) => {
-                                                return (
-                                                    <MenuItem
-                                                        key={employee._id}
-                                                        value={employee._id}
-                                                    >
-                                                        {employee.employeeId}
-                                                        &nbsp;/&nbsp;
-                                                        {employee.name}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                        <FormHelperText>
-                                            {' '}
-                                            {custodienIdError === true
-                                                ? 'Field Required'
-                                                : ''}
-                                        </FormHelperText>
-                                    </FormControl>
-                                </Box>
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>

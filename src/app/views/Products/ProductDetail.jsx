@@ -12,6 +12,7 @@ import { styled } from '@mui/system'
 import axios from 'axios'
 import moment from 'moment'
 import config from 'config'
+import avatar from '../AppUsers/a.png'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -108,10 +109,13 @@ const ProductsList = () => {
                         <ContentBox>
                             <IMG
                                 src={
-                                    config.base_url +
-                                    '/' +
-                                    imgeBaseUrl +
-                                    state.product.photo
+                                    state.product.photo === 'no-image' ||
+                                    state.product.photo === 'undefined'
+                                        ? avatar
+                                        : config.base_url +
+                                          '/' +
+                                          imgeBaseUrl +
+                                          state.product.photo
                                 }
                                 alt=""
                             />

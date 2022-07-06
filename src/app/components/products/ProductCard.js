@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import config from 'config'
+import avatar from '../../views/AppUsers/a.png'
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +57,13 @@ function ProductCard({ product, onDelete, onEdit }) {
                     <ProductImgStyle
                         alt="No Image"
                         src={
-                            config.base_url + '/' + imgeBaseUrl + product.photo
+                            product.photo === 'no-image' ||
+                            product.photo === 'undefined'
+                                ? avatar
+                                : config.base_url +
+                                  '/' +
+                                  imgeBaseUrl +
+                                  product.photo
                         }
                     />
                 </CardMedia>
