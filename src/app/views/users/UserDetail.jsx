@@ -203,11 +203,10 @@ const UserDetail = () => {
         data.employId = custodianId
         data.employID = transferTo?.employeeId
 
-        console.log(quantity)
-        console.log(employeeProductDetail.quantity)
+    
 
         if (quantity > 200) {
-            console.log('Quality Exceeds')
+        
             alert('Quantity Exceeds')
             return
         }
@@ -216,7 +215,7 @@ const UserDetail = () => {
             .then((res) => {
                 if (res) {
                     // handleCreateClose()
-                    console.log(res.data.data)
+              
                     // getData()
                     setOpen(false)
                 }
@@ -291,7 +290,7 @@ const UserDetail = () => {
 
     const transferProduct = (item) => {
         setOpen(true)
-        console.log(item)
+    
         setEmployeeProductDetail(item)
     }
 

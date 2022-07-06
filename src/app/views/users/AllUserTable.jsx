@@ -79,12 +79,12 @@ const AllUsersTable = () => {
     
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value);
-        console.log(e.target.name, e.target.value)
+
         errorFunc(false)
       }
       const handleImage = (e) => {
         setImage(e.target.files[0])
-        console.log(e.target.files[0], 'e.target.files[0]');
+      
       }
 
       const Input = styled('input')({
