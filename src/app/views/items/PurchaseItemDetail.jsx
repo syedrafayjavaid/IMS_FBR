@@ -553,41 +553,6 @@ const PurchaseItemDetail = () => {
                         </Box>
                         {state.purchaseItem.quantity === 1 ? (
                             <Grid container>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <Button
-                                        variant="contained"
-                                        type="button"
-                                        onClick={() => {
-                                            setOpen(true)
-                                        }}
-                                    >
-                                        Allocate Items
-                                    </Button>
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <Button
-                                        variant="contained"
-                                        type="button"
-                                        onClick={() => {
-                                            setShowTable(true)
-                                        }}
-                                    >
-                                        Track History
-                                    </Button>
-                                </Grid>
-
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <Button
-                                        variant="contained"
-                                        type="button"
-                                        onClick={() => {}}
-                                    >
-                                        Print Qr Code
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        ) : (
-                            <Grid container>
                                 <Grid item lg={6} md={6} sm={6} xs={6}>
                                     <Button
                                         variant="contained"
@@ -635,6 +600,41 @@ const PurchaseItemDetail = () => {
                                             marginTop: '15px',
                                             width: '200px',
                                         }}
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {}}
+                                    >
+                                        Print Qr Code
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        ) : (
+                            <Grid container>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {
+                                            setOpen(true)
+                                        }}
+                                    >
+                                        Allocate Items
+                                    </Button>
+                                </Grid>
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
+                                        variant="contained"
+                                        type="button"
+                                        onClick={() => {
+                                            setShowTable(true)
+                                        }}
+                                    >
+                                        Track History
+                                    </Button>
+                                </Grid>
+
+                                <Grid item lg={4} md={4} sm={4} xs={4}>
+                                    <Button
                                         variant="contained"
                                         type="button"
                                         onClick={() => {}}
