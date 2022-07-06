@@ -156,6 +156,8 @@ const PurchasedItems = () => {
 
     const [searchProduct, setSearchProduct] = React.useState(null)
     const [searchVender, setSearchVender] = React.useState(null)
+    const [searchTag, setSearchTag] = React.useState('')
+    const [searchSrNo, setSearchSrNo] = React.useState('')
     const [searchCustodianId, setSearchCustodianId] = React.useState(null)
 
     const [searchByQrCode, setSearchByQrCode] = React.useState(false)
@@ -735,6 +737,8 @@ const PurchasedItems = () => {
         data.productId = searchProduct
         data.venderEmail = searchVender
         data.custodian = searchCustodianId
+        data.tag = searchTag
+        data.srNo = searchSrNo
 
         axios
             .post(
@@ -1421,12 +1425,14 @@ const PurchasedItems = () => {
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={product1}
+                                    options={purchasedItems}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) => option.name}
+                                    getOptionLabel={(option) =>
+                                        `${option.venderName} / ${option.venderEmail}`
+                                    }
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -1444,6 +1450,44 @@ const PurchasedItems = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <TextField
+                                    id="name"
+                                    label="Tag"
+                                    placeholder="Tag"
+                                    autoComplete="off"
+                                    value={searchTag}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setTagdata,
+                                            setTagdataError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <TextField
+                                    id="name"
+                                    label="Serial Number"
+                                    placeholder="Serial Number"
+                                    autoComplete="off"
+                                    value={searchSrNo}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setTagdata,
+                                            setTagdataError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box sx={{ minWidth: 120 }}>
                                     <Autocomplete
@@ -1459,9 +1503,9 @@ const PurchasedItems = () => {
                                         isOptionEqualToValue={(option, value) =>
                                             option._id === value._id
                                         }
-                                        getOptionLabel={(option) => {
-                                            return option.name
-                                        }}
+                                        getOptionLabel={(option) =>
+                                            `${option.employeeId} / ${option.name}`
+                                        }
                                         renderInput={(params) => {
                                             return (
                                                 <TextField
@@ -1504,16 +1548,12 @@ const PurchasedItems = () => {
                     id="alert-dialog-title"
                 >
                     <div>{'Search By Qr Code'}</div>
-
-                    {/* <Button variant="contained" type="button">
-                        Qr Search
-                    </Button> */}
                 </DialogTitle>
                 <DialogContent>
                     <br></br>
                     <CardContent>
-                        <Grid container spacing={3}>
-                            <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                        <Grid container>
+                            <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
                                 <h3>Qr Code Scan by Web Cam</h3>
                                 <QrReader
                                     delay={300}
