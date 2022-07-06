@@ -40,6 +40,7 @@ import UsersCard from './UsersCard'
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 
+
 const useStyles = makeStyles((theme) => ({
     container: {
         display: 'flex',
@@ -93,7 +94,8 @@ const UsersList = () => {
     const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
     const open2 = Boolean(anchorEl1)
-
+    const [addDepartment, setAddDepartment] = React.useState('')
+    const [addDepartmentarr, setAddDepartmentarr] = React.useState([])
     /////// employee dialoge
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
@@ -133,7 +135,7 @@ const UsersList = () => {
       const [sdepartment, setSdepartment] = React.useState("");
       const currentDate = new Date().toISOString().split('T')[0]
       const [sdate, setSdate] = React.useState("");
-
+      const [sdate1, setSdate1] = React.useState("");
 
     const ITEM_HEIGHT = 48
     const ITEM_PADDING_TOP = 8
@@ -353,8 +355,8 @@ const UsersList = () => {
             mobileNumber1 === '' ||
             emailAddress1 === '' ||
             pg1 === '' ||
-            wing1 === '' ||
-            department1 === '' ||
+            // wing1 === '' ||
+            addDepartment === '' ||
             designation1 === ''
         ) {
             if (name === '') {
@@ -378,10 +380,10 @@ const UsersList = () => {
             if (pg1 === '') {
                 setPg1Error(true)
             }
-            if (wing1 === '') {
-                setWing1Error(true)
-            }
-            if (department1 === '') {
+            // if (wing1 === '') {
+            //     setWing1Error(true)
+            // }
+            if (addDepartment === '') {
                 setDepartment1Error(true)
             }
             if (designation1 === '') {
@@ -680,8 +682,10 @@ const UsersList = () => {
         data.reportingManager = sreportingManager;
         data.department = custodianId;
         data.date = sdate;
-        
+        data.date = sdate1;
         data.name = officeName;
+        data.name = addDepartment;
+     
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
@@ -740,6 +744,25 @@ const getOfficedata = () => {
        
 }
 
+////department
+useEffect(() => {
+    getDepartmentdata()
+  //  getData()
+}, [])
+
+const  getDepartmentdata = () => {
+    axios
+        .get(`${config.base_url}/api/v1/department`)
+        .then((res) => {
+            setAddDepartmentarr(res.data.data)
+          
+       
+        })
+        .catch((error) => {
+            console.log(error, 'error')
+        })
+       
+}
 //////demy data
 const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
@@ -867,6 +890,9 @@ const top100Films = [
     { label: '3 Idiots', year: 2009 },
     { label: 'Monty Python and the Holy Grail', year: 1975 },
   ];
+
+
+
     return (
         <>
             {open5 && (
@@ -1334,14 +1360,14 @@ const top100Films = [
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={custodianId}
+                                        value=''
                                         label="Department"
                                         size="small"
-                                        onChange={(event) =>
-                                            setCustodianId(event.target.value)
-                                        }
+                                        // onChange={(event) =>
+                                        //     setCustodianId(event.target.value)
+                                        // }
                                     >
-                                       {custodianIds.map((custodianId) => {
+                                       {/* {custodianIds.map((custodianId) => {
                                             return (
                                                 <MenuItem
                                                     key={custodianId._id}
@@ -1351,7 +1377,7 @@ const top100Films = [
                                                     {custodianId.name}
                                                 </MenuItem>
                                             )
-                                        })}
+                                        })} */}
                                     </Select>
                                     </FormControl>
                                     </Box>
@@ -1387,21 +1413,21 @@ const top100Films = [
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={custodianId}
+                                        value={addDepartment}
                                         label="Department"
                                         size="small"
                                         onChange={(event) =>
-                                            setCustodianId(event.target.value)
+                                            setAddDepartment(event.target.value)
                                         }
                                     >
-                                       {custodianIds.map((custodianId) => {
+                                       {addDepartmentarr.map((depart) => {
                                             return (
                                                 <MenuItem
-                                                    key={custodianId._id}
-                                                    value={custodianId.name}
+                                                    key={depart._id}
+                                                    value={depart.name}
                                                 >
                                                   
-                                                    {custodianId.name}
+                                                    {depart.name}
                                                 </MenuItem>
                                             )
                                         })}
@@ -2465,23 +2491,38 @@ const top100Films = [
                                     </Box>
                                     </Grid>
 
-                            <Grid item lg={12} md={12} sm={12} xs={12}  >
+                                    <Grid item lg={6} md={6} sm={6} xs={6}  >
 
 
                                 <TextField
                                     value={sdate}
                                     id="date"
-                                    label="Date Of Joing"
+                                    label="Start Date"
                                     type="date"
                                     onChange={(e) => setSdate(e.target.value)}
                                 
                                     size='small'
                                     fullWidth
                                 />
-
+  
 
                             </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}  >
 
+
+                        <TextField
+                            value={sdate1}
+                            id="date"
+                            label="End Date"
+                            type="date"
+                            onChange={(e) => setSdate1(e.target.value)}
+
+                            size='small'
+                            fullWidth
+                        />
+
+
+</Grid>
                         </Grid>
                 </DialogContent>
                 <DialogActions>
