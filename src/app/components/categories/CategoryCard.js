@@ -4,15 +4,19 @@ import { useNavigate } from 'react-router-dom'
 // material
 import {
     Box,
-    Card, CardActions,
+    Card,
+    CardActions,
     CardContent,
-    CardMedia, Stack, Typography
+    CardMedia,
+    Stack,
+    Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import config from 'config'
+import avatar from '../../views/AppUsers/a.png'
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +48,7 @@ function CategoryCard({ category, onEdit, onDelete }) {
     }
 
     const navigateToDetailsPage = () => {
-        navigate('/categories/details', {state: {category: category}});
+        navigate('/categories/details', { state: { category: category } })
     }
 
     return (
@@ -54,7 +58,13 @@ function CategoryCard({ category, onEdit, onDelete }) {
                     <CategoryImgStyle
                         alt="No Image"
                         src={
-                            config.base_url + '/' + imgeBaseUrl + category.photo
+                            category.photo === 'no-image' ||
+                            category.photo === 'undefined'
+                                ? avatar
+                                : config.base_url +
+                                  '/' +
+                                  imgeBaseUrl +
+                                  category.photo
                         }
                     />
                 </CardMedia>
