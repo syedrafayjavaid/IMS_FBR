@@ -81,7 +81,7 @@ const UsersList = () => {
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
     const [custodianIds, setCustodianIds] = React.useState([])
-    const [custodianId, setCustodianId] = React.useState('')
+    const [custodianId, setCustodianId] = React.useState(null)
     const [description, setDescription] = React.useState('')
     const [descriptionError, setDescriptionError] = React.useState(false)
     const [cnic, setCnic] = React.useState('')
@@ -90,7 +90,7 @@ const UsersList = () => {
     const [employeeIdError, setEmployeeIdError] = React.useState(false)
     //  const [checked, setChecked] = React.useState([])
     const [office, setOffice] = React.useState([])
-    const [officeName, setOfficeName] = React.useState('')
+    const [officeName, setOfficeName] = React.useState(null)
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
@@ -2421,7 +2421,36 @@ const top100Films = [
                             </Grid>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Box sx={{ minWidth: 120 }}>
-                                <FormControl fullWidth >
+                            <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={office}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Location"
+                                            />
+                                        )
+                                    }}
+                                    value={officeName}
+                                    onChange={(_event, vender) => {
+                                        setOfficeName(vender)
+                                    }}
+                                />
+                                {/* <FormControl fullWidth >
                                 <InputLabel 
                                 id="demo-simple-select-label">        
                                 Location
@@ -2448,7 +2477,8 @@ const top100Films = [
                                             )
                                         })}
                                     </Select>
-                                    </FormControl>
+                                    </FormControl> */}
+               
                                     </Box>
                                     </Grid>
                             {/* <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -2486,34 +2516,37 @@ const top100Films = [
                             </Grid> */}
                              <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Box sx={{ minWidth: 120 }}>
-                                <FormControl fullWidth >
-                                <InputLabel 
-                                id="demo-simple-select-label">        
-                                Department
-                             </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={custodianId}
-                                        label="Department"
-                                        size="small"
-                                        onChange={(event) =>
-                                            setCustodianId(event.target.value)
-                                        }
-                                    >
-                                       {custodianIds.map((custodianId) => {
-                                            return (
-                                                <MenuItem
-                                                    key={custodianId._id}
-                                                    value={custodianId.name}
-                                                >
-                                                  
-                                                    {custodianId.name}
-                                                </MenuItem>
-                                            )
-                                        })}
-                                    </Select>
-                                    </FormControl>
+                               
+                                    <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={custodianIds}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Department"
+                                            />
+                                        )
+                                    }}
+                                    value={custodianId}
+                                    onChange={(_event, vender) => {
+                                        setCustodianId(vender)
+                                    }}
+                                />
+
                                     </Box>
                                     </Grid>
 
