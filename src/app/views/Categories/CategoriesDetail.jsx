@@ -49,7 +49,7 @@ const CategoriesDetail = () => {
                             <IMG
                                 src={
                                     state.category.photo === 'no-image' ||
-                                    state.category.photo === 'undefined'
+                                    state.category.photo === undefined
                                         ? avatar
                                         : config.base_url +
                                           '/' +

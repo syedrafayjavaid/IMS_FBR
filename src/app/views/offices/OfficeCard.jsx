@@ -70,7 +70,7 @@ const OfficeCard = ({ office, onEdit, onDelete }) => {
             >
                 <Box display="flex" alignItems="center">
                     <Paragraph sx={{ m: 0, ml: 4 }}>
-                        {office.contact === undefined ? 'N/A' : office.contact}
+                        {office.phone === undefined ? 'N/A' : office.phone}
                     </Paragraph>
                 </Box>
             </TableCell>
