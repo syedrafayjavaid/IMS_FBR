@@ -41,6 +41,7 @@ import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import './user.css'
+import { setDate } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -591,6 +592,11 @@ const UsersList = () => {
 
     const handleEmployeeClose = () => {
         setEmployeeDialogs(false)
+        setSdate('');
+        setSdate1('');
+        setOffice('');
+        setName('');
+        
     }
 
     const createAction = (
