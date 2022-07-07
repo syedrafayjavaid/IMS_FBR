@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 // material
+import TextTruncate from 'react-text-truncate';
+
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
@@ -61,26 +63,33 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                     />
                 </CardMedia>
                 <CardContent>
-                    <Typography variant="subtitle2" noWrap>
+                    {/* <Typography variant="subtitle2" noWrap>
                         {user.name}
-                    </Typography>
+                    </Typography> */}
                     <Stack
                         direction="row"
                         alignItems="center"
                         justifyContent="space-between"
                         style={{ marginTop: '10px' }}
                     >
-                        <Typography variant="subtitle1">
+                        <Typography variant="subtitle1" >
                             <Typography
                                 component="span"
                                 variant="body1"
                                 sx={{
                                     color: 'text',
-                                    textDecoration: '',
+                                   
                                 }}
                             >
-                                Name: &nbsp;
-                                {user.name}
+                                <TextTruncate
+                                line={1}
+                                element="span"
+                                truncateText="…"
+                                text={`Name: ${user.name}`}
+                                textTruncateChild={<a href="#"> 
+                                </a>}
+                            />
+                               
                             </Typography>
                         </Typography>
                     </Stack>
@@ -96,11 +105,21 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                 variant="body1"
                                 sx={{
                                     color: 'text',
-                                    textDecoration: '',
+                                    
+                                
                                 }}
                             >
-                                Email: &nbsp;
-                                {user.emailAddress}
+                                 <TextTruncate
+                                line={1}
+                                element="span"
+                                truncateText="…"
+                                text={`Email: ${user.emailAddress}`}
+                                textTruncateChild={<a href="#">
+                                </a>}
+                            />
+                               
+                                
+                              
                             </Typography>
                         </Typography>
                     </Stack>

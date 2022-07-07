@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-
+import ReactPaginate from 'react-paginate';
 import InputLabel from '@mui/material/InputLabel'
-
+import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select'
 // material
 import { makeStyles } from '@material-ui/core/styles'
@@ -40,6 +40,7 @@ import UsersCard from './UsersCard'
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 
+import './user.css'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -62,7 +63,7 @@ const UsersList = () => {
     const [brandName, setBrandName] = React.useState([])
     const [statuName, setStatuName] = React.useState([])
     const [value, setValue] = React.useState([20, 37])
-
+  
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
@@ -137,6 +138,18 @@ const UsersList = () => {
       const [sdate, setSdate] = React.useState("");
       const [sdate1, setSdate1] = React.useState("");
 
+        ////pagination code set here
+
+        const [pageNumber, setPageNumber] = React.useState(0);
+        const usersPerPage = 8;
+        const pagesVisited = pageNumber * usersPerPage;
+        const pageCount = Math.ceil(users.length / usersPerPage);
+        const changePage = ({ selected }) => {
+          setPageNumber(selected);
+        };
+
+
+
     const ITEM_HEIGHT = 48
     const ITEM_PADDING_TOP = 8
     const MenuProps = {
@@ -147,7 +160,7 @@ const UsersList = () => {
             },
         },
     }
-
+ 
     const offices = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
     function getStyles(office, officeName, themesoffice) {
         return {
@@ -679,14 +692,12 @@ const UsersList = () => {
     const ApplyFilters = () => {
 
         let data = {};
-        data.dynamic = sdynamic;
-        data.designation = sdesignation;
-        data.reportingManager = sreportingManager;
-        data.department = custodianId;
-        data.date = sdate;
-        data.date = sdate1;
-        data.name = officeName;
-        data.name = addDepartment;
+        data.dynamic = sdynamic
+        data.designation = sdesignation
+        data.startDate = sdate
+        data.endDate = sdate1
+        data.location = officeName
+        data.department = addDepartment
      
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
@@ -914,7 +925,7 @@ const top100Films = [
                     Employees
                 </Typography>
                 <Grid container spacing={3}>
-                    {users.map((user) => (
+                    {users .slice(pagesVisited, pagesVisited + usersPerPage).map((user) => (
                         <Grid key={user._id} item xs={12} sm={6} md={3}>
                             <UsersCard
                                 user={user}
@@ -927,7 +938,19 @@ const top100Films = [
                 <br></br>
                 <br></br>
                 <br></br>
-                
+             
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        pageCount={pageCount}
+        onPageChange={changePage}
+        containerClassName={"paginationBttns"}
+        previousLinkClassName={"previousBttn"}
+        nextLinkClassName={"nextBttn"}
+        disabledClassName={"paginationDisabled"}
+        activeClassName={"paginationActive"}
+      />
+   
             </Container>
 
             {/* ////
@@ -2494,38 +2517,30 @@ const top100Films = [
                                     </Box>
                                     </Grid>
 
-                                    <Grid item lg={6} md={6} sm={6} xs={6}  >
-
-
-                                <TextField
-                                    value={sdate}
-                                    id="date"
-                                    label="Start Date"
-                                    type="date"
-                                    onChange={(e) => setSdate(e.target.value)}
-                                
-                                    size='small'
-                                    fullWidth
-                                />
-  
-
-                            </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}  >
-
-
-                        <TextField
-                            value={sdate1}
-                            id="date"
-                            label="End Date"
-                            type="date"
-                            onChange={(e) => setSdate1(e.target.value)}
-
-                            size='small'
-                            fullWidth
-                        />
-
-
-</Grid>
+                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Typography gutterBottom>Start Date</Typography>
+                            <TextField
+                                value={sdate}
+                                id="date"
+                                label="Start Date"
+                                type="date"
+                                onChange={(e) => setSdate(e.target.value)}
+                                size="small"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Typography gutterBottom>End Date</Typography>
+                            <TextField
+                                value={sdate1}
+                                id="date"
+                                label="End Date"
+                                type="date"
+                                onChange={(e) => setSdate1(e.target.value)}
+                                size="small"
+                                fullWidth
+                            />
+                        </Grid>
                         </Grid>
                 </DialogContent>
                 <DialogActions>
