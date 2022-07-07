@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
+import QrCodeIcon from '@mui/icons-material/QrCode'
 import {
     Autocomplete,
     Checkbox,
@@ -59,6 +60,8 @@ const Input = styled('input')({
 })
 
 const PurchasedItems = () => {
+    const userName = localStorage.getItem('username')
+
     const [editmodifyOnError, seteditModifyOnError] = React.useState(false)
     // Form validation errors State Setting
     const [priceError, setPriceError] = React.useState(false)
@@ -86,7 +89,6 @@ const PurchasedItems = () => {
     const [checked, setChecked] = React.useState(false)
     const [productQuantity, setProductQuantity] = React.useState('1')
     const [price, setPrice] = React.useState('')
-    const [productId, setproductId] = React.useState('')
     const [product, setProduct] = React.useState([])
     const [purchaseOrder, setPurchaseOrder] = React.useState('')
     const [image, setImage] = React.useState('')
@@ -153,6 +155,7 @@ const PurchasedItems = () => {
     const [openConfirmationDialog, setOpenConfirmationDialog] =
         React.useState(false)
     const [selectedProduct, setSelectedProduct] = React.useState(null)
+    const [productId, setProductId] = React.useState('')
 
     const [searchProduct, setSearchProduct] = React.useState(null)
     const [searchVender, setSearchVender] = React.useState(null)
@@ -202,9 +205,6 @@ const PurchasedItems = () => {
         setQuantity(event.target.value)
     }
 
-    const handleProduct = (event) => {
-        setproductId(event.target.value)
-    }
     const handleProductName = (event) => {
         setProductName(event.target.value)
     }
@@ -286,6 +286,7 @@ const PurchasedItems = () => {
         setPurchaseOrder('')
         setSrNo('')
         setTagdata('')
+        setSelectedProduct(null)
         setChecked(false)
     }
     const handleEditDialogClose = () => {
@@ -306,6 +307,7 @@ const PurchasedItems = () => {
         setPurchaseOrder('')
         setSrNo('')
         setTagdata('')
+        setSelectedProduct(null)
         setChecked(false)
     }
 
@@ -480,7 +482,7 @@ const PurchasedItems = () => {
         data.append('status', statusValue)
         data.append('venderName', venderName)
         data.append('venderEmail', venderEmail)
-        data.append('venderNumber', venderNumber)
+        data.append('venderContact', venderNumber)
         data.append('attachment', image)
         data.append('QRCodeImage', imageUrl1)
         data.append('model', model)
@@ -490,6 +492,8 @@ const PurchasedItems = () => {
         data.append('srNo', srno)
         data.append('tagNo', tagdata)
         data.append('active', checked)
+
+        setProductId(selectedProduct?._id)
 
         if (imageUrl1 === '') {
             return
@@ -519,6 +523,7 @@ const PurchasedItems = () => {
                 setPurchaseOrder('')
                 setSrNo('')
                 setTagdata('')
+                setSelectedProduct(null)
                 setChecked(false)
             })
             .catch((error) => {
@@ -636,10 +641,15 @@ const PurchasedItems = () => {
         setOpenConfirmationDialog(true)
         setPurchaseId(id)
 
+        let data = new FormData()
+
+        data.append('productId', productId)
+
         if (openConfirmationDialog && purchaseId) {
             axios
                 .delete(
-                    `${config.base_url}/api/v1/purchaseProduct/${purchaseId}`
+                    `${config.base_url}/api/v1/purchaseProduct/${purchaseId}`,
+                    data
                 )
                 .then((res) => {
                     getAlldata()
@@ -654,11 +664,23 @@ const PurchasedItems = () => {
     const onEdithandler = (id, purchaseItem) => {
         setPurchaseId(id)
 
+        axios
+            .get(`${config.base_url}/api/v1/products/${purchaseItem.productId}`)
+            .then((res) => {
+                setProductData(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+
+        // setProductId(purchaseItem.productId)
+
+        setSelectedProduct(productData)
+
         setHandleEditDialog(true)
 
         setStatusValue(purchaseItem.status)
 
-        setSelectedProduct(selectedProduct)
         setPrice(purchaseItem.price)
         const date = new Date(purchaseItem.dataOfPurchase)
             .toISOString()
@@ -846,7 +868,6 @@ const PurchasedItems = () => {
                                         disablePortal
                                         id="combo-box-demo"
                                         options={product1}
-                                        filterSelectedOptions={true}
                                         isOptionEqualToValue={(option, value) =>
                                             option._id === value._id
                                         }
@@ -1373,15 +1394,15 @@ const PurchasedItems = () => {
                                 setSearchByQrCode(true)
                             }}
                         >
-                            <IconButton aria-label="search" size="large">
-                                <SearchIcon />
+                            <IconButton
+                                color="primary"
+                                aria-label="search"
+                                size="large"
+                            >
+                                <QrCodeIcon />
                             </IconButton>
                         </div>
                     </Tooltip>
-
-                    {/* <Button variant="contained" type="button">
-                        Qr Search
-                    </Button> */}
                 </DialogTitle>
                 <DialogContent style={{ height: '250px' }}>
                     <br></br>
@@ -1553,7 +1574,7 @@ const PurchasedItems = () => {
                     <br></br>
                     <CardContent>
                         <Grid container>
-                            <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
+                            <Grid item xl={11} lg={11} md={11} sm={11} xs={11}>
                                 <h3>Qr Code Scan by Web Cam</h3>
                                 <QrReader
                                     delay={300}
@@ -1606,7 +1627,6 @@ const PurchasedItems = () => {
                                         disablePortal
                                         id="combo-box-demo"
                                         options={product1}
-                                        filterSelectedOptions={true}
                                         isOptionEqualToValue={(option, value) =>
                                             option._id === value._id
                                         }
@@ -1872,11 +1892,7 @@ const PurchasedItems = () => {
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={
-                                        createdBy === undefined
-                                            ? 'N/A'
-                                            : createdBy
-                                    }
+                                    value={userName}
                                     size="small"
                                     onChange={(e) =>
                                         handleCreatedByDialog(
@@ -1937,9 +1953,7 @@ const PurchasedItems = () => {
                                     value={
                                         modifyByDialog === undefined
                                             ? 'N/A'
-                                            : moment(modifyByDialog).format(
-                                                  'LL'
-                                              )
+                                            : userName
                                     }
                                     size="small"
                                     onChange={(e) =>

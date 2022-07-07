@@ -204,7 +204,7 @@ const Offices = () => {
         data.append('name', createName)
         data.append('address', createAddress)
         data.append('city', createCity)
-        data.append('contact', createContact)
+        data.append('phone', createContact)
         data.append('email', createEmail)
 
         const officeNameExist = offices.find((office) => {
@@ -242,7 +242,7 @@ const Offices = () => {
         data.append('name', editName)
         data.append('address', editAddress)
         data.append('city', editCity)
-        data.append('contact', editContact)
+        data.append('phone', editContact)
         data.append('email', editEmail)
 
         // const officeNameExist = offices.find((office) => {

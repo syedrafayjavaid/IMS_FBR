@@ -110,7 +110,7 @@ const ProductsList = () => {
                             <IMG
                                 src={
                                     state.product.photo === 'no-image' ||
-                                    state.product.photo === 'undefined'
+                                    state.product.photo === undefined
                                         ? avatar
                                         : config.base_url +
                                           '/' +

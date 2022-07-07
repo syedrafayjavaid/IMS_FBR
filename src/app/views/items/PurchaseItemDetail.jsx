@@ -602,7 +602,9 @@ const PurchaseItemDetail = () => {
                                         }}
                                         variant="contained"
                                         type="button"
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                            window.print()
+                                        }}
                                     >
                                         Print Qr Code
                                     </Button>
@@ -637,7 +639,9 @@ const PurchaseItemDetail = () => {
                                     <Button
                                         variant="contained"
                                         type="button"
-                                        onClick={() => {}}
+                                        onClick={() => {
+                                            window.print()
+                                        }}
                                     >
                                         Print Qr Code
                                     </Button>

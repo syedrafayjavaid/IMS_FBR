@@ -58,7 +58,7 @@ function ProductCard({ product, onDelete, onEdit }) {
                         alt="No Image"
                         src={
                             product.photo === 'no-image' ||
-                            product.photo === 'undefined'
+                            product.photo === undefined
                                 ? avatar
                                 : config.base_url +
                                   '/' +

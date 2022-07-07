@@ -59,7 +59,7 @@ function CategoryCard({ category, onEdit, onDelete }) {
                         alt="No Image"
                         src={
                             category.photo === 'no-image' ||
-                            category.photo === 'undefined'
+                            category.photo === undefined
                                 ? avatar
                                 : config.base_url +
                                   '/' +
