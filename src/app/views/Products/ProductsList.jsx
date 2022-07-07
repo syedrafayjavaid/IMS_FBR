@@ -27,7 +27,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
- import FormControl from '@mui/material/FormControl'
+import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
@@ -39,6 +39,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import config from '../../../config'
 import { identity } from 'lodash'
 import { ConfirmationDialog } from 'app/components'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import { CSVLink } from 'react-csv'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -149,7 +151,7 @@ const ProductsList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-      
+
         errorFunc(false)
     }
 
@@ -253,7 +255,6 @@ const ProductsList = () => {
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-      
     }
 
     useEffect(() => {
@@ -263,9 +264,7 @@ const ProductsList = () => {
         axios
             .get(`${config.base_url}/api/v1/products`)
             .then((res) => {
-            
                 setProduct1(res.data.data)
-             
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -273,9 +272,7 @@ const ProductsList = () => {
         axios
             .get(config.base_url + '/api/v1/category')
             .then((res) => {
-          
                 setCategory(res.data.data)
-            
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -283,9 +280,7 @@ const ProductsList = () => {
         axios
             .get(config.base_url + '/api/v1/productType ')
             .then((res) => {
-             
                 setQuantity(res.data.data)
-              
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -324,7 +319,6 @@ const ProductsList = () => {
         axios
             .post(config.base_url + '/api/v1/products ', data)
             .then((res) => {
-              
                 if (res) {
                     handleCreateClose()
                     getAlldata()
@@ -371,7 +365,6 @@ const ProductsList = () => {
         axios
             .put(config.base_url + `/api/v1/products/${productId}`, data)
             .then((res) => {
-              
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -424,6 +417,19 @@ const ProductsList = () => {
         </React.Fragment>
     )
 
+    const headers = [
+        { label: 'Product Name', key: 'name' },
+        { label: 'Product Id', key: 'productId' },
+        { label: 'Model', key: 'model' },
+        { label: 'Detail', key: 'detail' },
+        { label: 'Quantity', key: 'quantity' },
+        { label: 'Average Price', key: 'averagePrice' },
+        { label: 'Modification Date', key: 'modifiedAt' },
+        { label: 'Modified By', key: 'modifiedBy' },
+        { label: 'Created By', key: 'createdBy' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
             {open && (
@@ -456,9 +462,37 @@ const ProductsList = () => {
 
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    Assets / Items
-                </Typography>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                        Assets / Items
+                    </Typography>
+                    <CSVLink
+                        separator=","
+                        filename={'all-assets-items.csv'}
+                        data={product1}
+                        headers={headers}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#1976d2',
+                                borderRadius: '50%',
+                            }}
+                        >
+                            <IconButton
+                                style={{ color: '#FFFFFF' }}
+                                size="medium"
+                            >
+                                <SummarizeIcon />
+                            </IconButton>
+                        </div>
+                    </CSVLink>
+                </div>
                 <Grid container spacing={3}>
                     {product1.map((product) => (
                         <Grid
@@ -493,274 +527,264 @@ const ProductsList = () => {
                     {'ADD ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
-                  
+                    <br></br>
+
+                    <CardContent>
+                        <Grid container spacing={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={createNameError}
+                                    id="name"
+                                    label="Product Name"
+                                    placeholder="Product Name"
+                                    autoComplete="off"
+                                    helperText={
+                                        createNameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={createName}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setCreateName,
+                                            setCreateNameError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={createProductTypeNameError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Product Type
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={createProductTypeName}
+                                            label="Product Type"
+                                            onChange={handleCreateType}
+                                        >
+                                            {quantity.map((productType) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={productType._id}
+                                                        value={productType._id}
+                                                    >
+                                                        {productType.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {' '}
+                                            {createProductTypeNameError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={createProductCategoryError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Product Category
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={createProductCategory}
+                                            label="Product Category"
+                                            onChange={handleCreateType2}
+                                        >
+                                            {category.map((productCategory) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={
+                                                            productCategory._id
+                                                        }
+                                                        value={
+                                                            productCategory._id
+                                                        }
+                                                    >
+                                                        {productCategory.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {createProductCategoryError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <TextField
+                                    error={createModelError}
+                                    id="name"
+                                    label="Model"
+                                    placeholder="Model"
+                                    autoComplete="off"
+                                    helperText={
+                                        createModelError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={createModel}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setCreateModel,
+                                            setCreateModelError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={createBrandNameError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Brand
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={createBrandName}
+                                            label="Brand"
+                                            onChange={handleCreateType3}
+                                        >
+                                            {brands.map((brand) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={brand._id}
+                                                        value={brand._id}
+                                                    >
+                                                        {brand.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {createBrandNameError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+
+                            <Grid
+                                item
+                                lg={4}
+                                md={4}
+                                sm={4}
+                                xs={4}
+                                style={{ justifyContent: 'center' }}
+                            >
+                                <Box>
+                                    <label htmlFor="contained-button-file">
+                                        <Input
+                                            accept="image/*"
+                                            id="contained-button-file"
+                                            multiple
+                                            type="file"
+                                            onChange={handleImage}
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            component="span"
+                                            startIcon={<AddAPhotoIcon />}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </label>
+                                </Box>
+                            </Grid>
+                        </Grid>
                         <br></br>
 
-                        <CardContent>
-                            <Grid container spacing={3}>
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <TextField
-                                        error={createNameError}
-                                        id="name"
-                                        label="Product Name"
-                                        placeholder="Product Name"
-                                        autoComplete="off"
-                                        helperText={
-                                            createNameError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={createName}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setCreateName,
-                                                setCreateNameError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={createProductTypeNameError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Product Type
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={createProductTypeName}
-                                                label="Product Type"
-                                                onChange={handleCreateType}
-                                            >
-                                                {quantity.map((productType) => {
-                                                    return (
-                                                        <MenuItem
-                                                        key={productType._id}
-                                                            value={
-                                                                productType._id
-                                                            }
-                                                        >
-                                                            {productType.name}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                            <FormHelperText>
-                                                {' '}
-                                                {createProductTypeNameError ===
-                                                true
-                                                    ? 'Field Required'
-                                                    : ''}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
-
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={createProductCategoryError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Product Category
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={createProductCategory}
-                                                label="Product Category"
-                                                onChange={handleCreateType2}
-                                            >
-                                                {category.map(
-                                                    (productCategory) => {
-                                                        return (
-                                                            <MenuItem
-                                                            key={productCategory._id}
-                                                                
-                                                           
-                                                                value={
-                                                                    productCategory._id
-                                                                }
-                                                            >
-                                                                {
-                                                                    productCategory.name
-                                                                }
-                                                            </MenuItem>
-                                                        )
-                                                    }
-                                                )}
-                                            </Select>
-                                            <FormHelperText>
-                                                {createProductCategoryError ===
-                                                true
-                                                    ? 'Field Required'
-                                                    : ''}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item lg={7} md={7} sm={7} xs={7}>
+                                <TextField
+                                    disabled
+                                    error={createdByError}
+                                    id="name"
+                                    label="Created By"
+                                    placeholder="Created By"
+                                    autoComplete="off"
+                                    helperText={
+                                        setCreatedByError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={userName}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setCreatedBy,
+                                            setCreatedByError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
                             </Grid>
-                            <br></br>
-                            <Grid container spacing={3}>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <TextField
-                                        error={createModelError}
-                                        id="name"
-                                        label="Model"
-                                        placeholder="Model"
-                                        autoComplete="off"
-                                        helperText={
-                                            createModelError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={createModel}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setCreateModel,
-                                                setCreateModelError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={createBrandNameError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Brand
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={createBrandName}
-                                                label="Brand"
-                                                onChange={handleCreateType3}
-                                            >
-                                                {brands.map((brand) => {
-                                                    return (
-                                                        <MenuItem
-                                                            key={brand._id}
-                                                            value={brand._id}
-                                                        >
-                                                            {brand.name}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                            <FormHelperText>
-                                                {createBrandNameError === true
-                                                    ? 'Field Required'
-                                                    : ''}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
 
-                                <Grid
-                                    item
-                                    lg={4}
-                                    md={4}
-                                    sm={4}
-                                    xs={4}
-                                    style={{ justifyContent: 'center' }}
-                                >
-                                    <Box>
-                                        <label htmlFor="contained-button-file">
-                                            <Input
-                                                accept="image/*"
-                                                id="contained-button-file"
-                                                multiple
-                                                type="file"
-                                                onChange={handleImage}
-                                            />
-                                            <Button
-                                                variant="contained"
-                                                component="span"
-                                                startIcon={<AddAPhotoIcon />}
-                                            >
-                                                Upload
-                                            </Button>
-                                        </label>
-                                    </Box>
-                                </Grid>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <TextField
+                                    label="Detail"
+                                    placeholder="Detail"
+                                    style={{ textAlign: 'left' }}
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
+                                    multiline
+                                    fullWidth
+                                    rows={3}
+                                    value={createDescription}
+                                    error={createDescriptionError}
+                                    helperText={
+                                        createDescriptionError &&
+                                        'Field Required'
+                                    }
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setCreateDescription,
+                                            setCreateDescriptionError
+                                        )
+                                    }
+                                />
                             </Grid>
-                            <br></br>
-
-                            <Grid container spacing={3}>
-                                <Grid item lg={7} md={7} sm={7} xs={7}>
-                                    <TextField
-                                        disabled
-                                        error={createdByError}
-                                        id="name"
-                                        label="Created By"
-                                        placeholder="Created By"
-                                        autoComplete="off"
-                                        helperText={
-                                            setCreatedByError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={userName}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setCreatedBy,
-                                                setCreatedByError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-
-                                <Grid item lg={12} md={12} sm={12} xs={12}>
-                                    <TextField
-                                        label="Detail"
-                                        placeholder="Detail"
-                                        style={{ textAlign: 'left' }}
-                                        hinttext="Message Field"
-                                        floatinglabeltext="MultiLine and FloatingLabel"
-                                        multiline
-                                        fullWidth
-                                        rows={3}
-                                        value={createDescription}
-                                        error={createDescriptionError}
-                                        helperText={
-                                            createDescriptionError &&
-                                            'Field Required'
-                                        }
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setCreateDescription,
-                                                setCreateDescriptionError
-                                            )
-                                        }
-                                    />
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                   
+                        </Grid>
+                    </CardContent>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -787,270 +811,262 @@ const ProductsList = () => {
                     {'EDIT ASSETS / ITEMS'}
                 </DialogTitle>
                 <DialogContent>
-                  
+                    <br></br>
+
+                    <CardContent>
+                        <Grid container spacing={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <TextField
+                                    error={editNameError}
+                                    id="name"
+                                    label="Product Name"
+                                    placeholder="Product Name"
+                                    autoComplete="off"
+                                    helperText={
+                                        editNameError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={editName}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setEditName,
+                                            setEditNameError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={editProductTypeNameError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Product Type
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={editProductTypeName}
+                                            label="Product Type"
+                                            onChange={handleEditType}
+                                        >
+                                            {quantity.map((productType) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={productType._id}
+                                                        value={productType._id}
+                                                    >
+                                                        {productType.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {' '}
+                                            {editProductTypeNameError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={editProductCategoryError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Product Category
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={editProductCategory}
+                                            label="Product Category"
+                                            onChange={handleEditType2}
+                                        >
+                                            {category.map((productCategory) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={
+                                                            productCategory._id
+                                                        }
+                                                        value={
+                                                            productCategory._id
+                                                        }
+                                                    >
+                                                        {productCategory.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {editProductCategoryError &&
+                                                'Field Required'}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <TextField
+                                    error={editModelError}
+                                    id="name"
+                                    label="Model"
+                                    placeholder="Model"
+                                    autoComplete="off"
+                                    helperText={
+                                        editModelError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={editModel}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setEditModel,
+                                            setEditModelError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl
+                                        size="small"
+                                        error={editBrandNameError}
+                                        fullWidth
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Brand
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={editBrandName}
+                                            label="Brand"
+                                            onChange={handleEditType3}
+                                        >
+                                            {brands.map((brand) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={brand._id}
+                                                        value={brand._id}
+                                                    >
+                                                        {brand.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
+                                        <FormHelperText>
+                                            {editBrandNameError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+
+                            <Grid
+                                item
+                                lg={4}
+                                md={4}
+                                sm={4}
+                                xs={4}
+                                style={{ justifyContent: 'center' }}
+                            >
+                                <Box>
+                                    <label htmlFor="contained-button-file">
+                                        <Input
+                                            accept="image/*"
+                                            id="contained-button-file"
+                                            multiple
+                                            type="file"
+                                            onChange={handleImage}
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            component="span"
+                                            startIcon={<AddAPhotoIcon />}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </label>
+                                </Box>
+                            </Grid>
+                        </Grid>
                         <br></br>
 
-                        <CardContent>
-                            <Grid container spacing={3}>
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <TextField
-                                        error={editNameError}
-                                        id="name"
-                                        label="Product Name"
-                                        placeholder="Product Name"
-                                        autoComplete="off"
-                                        helperText={
-                                            editNameError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={editName}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setEditName,
-                                                setEditNameError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={editProductTypeNameError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Product Type
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={editProductTypeName}
-                                                label="Product Type"
-                                                onChange={handleEditType}
-                                            >
-                                                {quantity.map((productType) => {
-                                                    return (
-                                                        <MenuItem
-                                                        key={productType._id}
-                                                            value={
-                                                                productType._id
-                                                            }
-                                                        >
-                                                            {productType.name}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                            <FormHelperText>
-                                                {' '}
-                                                {editProductTypeNameError ===
-                                                true
-                                                    ? 'Field Required'
-                                                    : ''}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
-
-                                <Grid item lg={4} md={4} sm={4} xs={6}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={editProductCategoryError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Product Category
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={editProductCategory}
-                                                label="Product Category"
-                                                onChange={handleEditType2}
-                                            >
-                                                {category.map(
-                                                    (productCategory) => {
-                                                        return (
-                                                            <MenuItem
-                                                            key={productCategory._id}
-                                                                value={
-                                                                    productCategory._id
-                                                                }
-                                                            >
-                                                                {
-                                                                    productCategory.name
-                                                                }
-                                                            </MenuItem>
-                                                        )
-                                                    }
-                                                )}
-                                            </Select>
-                                            <FormHelperText>
-                                                {editProductCategoryError &&
-                                                    'Field Required'}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item lg={7} md={7} sm={7} xs={7}>
+                                <TextField
+                                    disabled
+                                    error={modifiedByError}
+                                    id="name"
+                                    label="Modified By"
+                                    placeholder="Modified By"
+                                    autoComplete="off"
+                                    helperText={
+                                        modifiedByError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={userName}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setModifiedBy,
+                                            setModifiedByError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
                             </Grid>
-                            <br></br>
-                            <Grid container spacing={3}>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <TextField
-                                        error={editModelError}
-                                        id="name"
-                                        label="Model"
-                                        placeholder="Model"
-                                        autoComplete="off"
-                                        helperText={
-                                            editModelError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={editModel}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setEditModel,
-                                                setEditModelError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item lg={4} md={4} sm={4} xs={4}>
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl
-                                            size="small"
-                                            error={editBrandNameError}
-                                            fullWidth
-                                        >
-                                            <InputLabel id="demo-simple-select-label">
-                                                Brand
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={editBrandName}
-                                                label="Brand"
-                                                onChange={handleEditType3}
-                                            >
-                                                {brands.map((brand) => {
-                                                    return (
-                                                        <MenuItem
-                                                        key={brand._id}
-                                                            value={brand._id}
-                                                        >
-                                                            {brand.name}
-                                                        </MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                            <FormHelperText>
-                                                {editBrandNameError === true
-                                                    ? 'Field Required'
-                                                    : ''}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
 
-                                <Grid
-                                    item
-                                    lg={4}
-                                    md={4}
-                                    sm={4}
-                                    xs={4}
-                                    style={{ justifyContent: 'center' }}
-                                >
-                                    <Box>
-                                        <label htmlFor="contained-button-file">
-                                            <Input
-                                                accept="image/*"
-                                                id="contained-button-file"
-                                                multiple
-                                                type="file"
-                                                onChange={handleImage}
-                                            />
-                                            <Button
-                                                variant="contained"
-                                                component="span"
-                                                startIcon={<AddAPhotoIcon />}
-                                            >
-                                                Upload
-                                            </Button>
-                                        </label>
-                                    </Box>
-                                </Grid>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <TextField
+                                    label="Detail"
+                                    placeholder="Detail"
+                                    style={{ textAlign: 'left' }}
+                                    hinttext="Message Field"
+                                    floatinglabeltext="MultiLine and FloatingLabel"
+                                    multiline
+                                    fullWidth
+                                    rows={3}
+                                    value={editDescription}
+                                    error={editDescriptionError}
+                                    helperText={
+                                        editDescriptionError && 'Field Required'
+                                    }
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            setEditDescription,
+                                            setEditDescriptionError
+                                        )
+                                    }
+                                />
                             </Grid>
-                            <br></br>
-
-                            <Grid container spacing={3}>
-                                <Grid item lg={7} md={7} sm={7} xs={7}>
-                                    <TextField
-                                        disabled
-                                        error={modifiedByError}
-                                        id="name"
-                                        label="Modified By"
-                                        placeholder="Modified By"
-                                        autoComplete="off"
-                                        helperText={
-                                            modifiedByError === true
-                                                ? 'Field Required'
-                                                : ''
-                                        }
-                                        value={userName}
-                                        size="small"
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setModifiedBy,
-                                                setModifiedByError
-                                            )
-                                        }
-                                        variant="outlined"
-                                        fullWidth
-                                    />
-                                </Grid>
-
-                                <Grid item lg={12} md={12} sm={12} xs={12}>
-                                    <TextField
-                                        label="Detail"
-                                        placeholder="Detail"
-                                        style={{ textAlign: 'left' }}
-                                        hinttext="Message Field"
-                                        floatinglabeltext="MultiLine and FloatingLabel"
-                                        multiline
-                                        fullWidth
-                                        rows={3}
-                                        value={editDescription}
-                                        error={editDescriptionError}
-                                        helperText={
-                                            editDescriptionError &&
-                                            'Field Required'
-                                        }
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setEditDescription,
-                                                setEditDescriptionError
-                                            )
-                                        }
-                                    />
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                 
+                        </Grid>
+                    </CardContent>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>

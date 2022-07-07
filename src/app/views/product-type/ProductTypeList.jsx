@@ -1,29 +1,28 @@
-
 // material
-import React, { useEffect ,useState} from 'react'
-import AddIcon from '@mui/icons-material/Add';
+import React, { useEffect, useState } from 'react'
+import AddIcon from '@mui/icons-material/Add'
 
-import Tooltip from '@mui/material/Tooltip';
-import { Fab } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip'
+import { Fab, Typography } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 
 import { Paragraph } from 'app/components/Typography'
 import { Box, styled, useTheme } from '@mui/system'
 import { useNavigate } from 'react-router-dom'
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Button from '@mui/material/Button'
+import Snackbar from '@mui/material/Snackbar'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
+import TextField from '@mui/material/TextField'
 import {
-  Switch,
-  Grid,
+    Switch,
+    Grid,
     Card,
     Table,
     TableHead,
@@ -32,11 +31,12 @@ import {
     TableBody,
     Avatar,
 } from '@mui/material'
-import ProductTypeCard from 'app/components/productType/ProductTypeCard';
-import axios from 'axios';
-import config from 'config';
-import { ConfirmationDialog } from 'app/components';
-
+import ProductTypeCard from 'app/components/productType/ProductTypeCard'
+import axios from 'axios'
+import config from 'config'
+import { ConfirmationDialog } from 'app/components'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -83,237 +83,215 @@ const Small = styled('small')(({ bgcolor }) => ({
 }))
 
 const ProductTypeList = () => {
+    const [productList, setProductList] = React.useState([])
+    const [snackBar, setSnackBar] = React.useState(false)
 
+    useEffect(() => {
+        getAlldata()
+    }, [])
 
-
-  const [productList,setProductList]=React.useState([])
-  const [snackBar, setSnackBar] = React.useState(false);
-
-  useEffect(() => {
-    getAlldata();
-  }, []);
-
-
-  const getAlldata = () => {
-    axios.get(`${config.base_url}/api/v1/productType`).then((res) => {
-    
-      setProductList(res.data.data);
-  
-    }).catch((error) => {
-      console.log(error, 'error');
-    })
-  }
-
-
-  const createHandler = () => {
-    setSnackBar(false);
-    if(catogoryId===''){
-      let data = new FormData();
-      data.append('name', category );
-      data.append('demo', demo);
-
-      const producst = productList.find((index) => {
-        return index.name === category;
-      })
-      if (producst) {
-       setSnackBar(true)
-      
-        return;
-      }
-  
-
-      axios.post(`${config.base_url}/api/v1/productType`, data).then((res) => {
-     
-        if(res){
-          handleClose()
-          getAlldata(); 
-        }
-        setCatogoryId('')
-       
-      }).catch((error) => {
-        if(error.message === "Request failed with status code 400")
-            {
-                setSnackBar(true);
-            }
-      })
-    }
-    else{
-
-      let data = new FormData();
-      data.append('name', category);
-  
-      axios.put(`${config.base_url}/api/v1/productType/${catogoryId}`, data).then((res) => {
-    
-        if (res) {
-          getAlldata();
-          handleClose()
-    
-        }
-    
-      }).catch((error) => {
-        if(error.message === "Request failed with status code 400")
-            {
-                setSnackBar(true);
-            }
-
-      })
-      // const brandNameExist = productType.find((productType) => {
-      //   return productType.name === createBrandName;
-      // })
-      // if (brandNameExist) {
-      //   setSnackBar(true);
-      //   return;
-      // }
-      
+    const getAlldata = () => {
+        axios
+            .get(`${config.base_url}/api/v1/productType`)
+            .then((res) => {
+                setProductList(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
+    const createHandler = () => {
+        setSnackBar(false)
+        if (catogoryId === '') {
+            let data = new FormData()
+            data.append('name', category)
+            data.append('demo', demo)
 
+            const producst = productList.find((index) => {
+                return index.name === category
+            })
+            if (producst) {
+                setSnackBar(true)
 
+                return
+            }
 
-    // else{
+            axios
+                .post(`${config.base_url}/api/v1/productType`, data)
+                .then((res) => {
+                    if (res) {
+                        handleClose()
+                        getAlldata()
+                    }
+                    setCatogoryId('')
+                })
+                .catch((error) => {
+                    if (
+                        error.message === 'Request failed with status code 400'
+                    ) {
+                        setSnackBar(true)
+                    }
+                })
+        } else {
+            let data = new FormData()
+            data.append('name', category)
 
-    //   let data = new FormData();
-    //   data.append('name', category);
-  
-    //   axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
-    //     console.log(res.msg);
-    //     if (res) {
-    //       getAlldata();
-    //       handleClose()
-    //     //  console.log("hello console");
-    //     }
-    
-    //   }).catch((error) => {
-    //     console.log(error, 'error');
-    //     console.log("hello console");
-    //     handleClick()
+            axios
+                .put(
+                    `${config.base_url}/api/v1/productType/${catogoryId}`,
+                    data
+                )
+                .then((res) => {
+                    if (res) {
+                        getAlldata()
+                        handleClose()
+                    }
+                })
+                .catch((error) => {
+                    if (
+                        error.message === 'Request failed with status code 400'
+                    ) {
+                        setSnackBar(true)
+                    }
+                })
+            // const brandNameExist = productType.find((productType) => {
+            //   return productType.name === createBrandName;
+            // })
+            // if (brandNameExist) {
+            //   setSnackBar(true);
+            //   return;
+            // }
+        }
 
-    //   })
-      
-    // }
-   
-  }
+        // else{
 
+        //   let data = new FormData();
+        //   data.append('name', category);
 
+        //   axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
+        //     console.log(res.msg);
+        //     if (res) {
+        //       getAlldata();
+        //       handleClose()
+        //     //  console.log("hello console");
+        //     }
 
+        //   }).catch((error) => {
+        //     console.log(error, 'error');
+        //     console.log("hello console");
+        //     handleClick()
 
+        //   })
 
-
-
-
-
+        // }
+    }
 
     const { palette } = useTheme()
     const bgError = palette.error.main
     const bgPrimary = palette.primary.main
     const bgSecondary = palette.secondary.main
     const navigate = useNavigate()
-    const [open, setOpen] = React.useState(false);
-    const [mopen, setMopen] = React.useState(false);
-    const [category, setCategory] = React.useState("");
+    const [open, setOpen] = React.useState(false)
+    const [mopen, setMopen] = React.useState(false)
+    const [category, setCategory] = React.useState('')
     // const [prodectTypeName,setProdectTypeName]=React.useState("");
-    const [demo,setDemo]=React.useState(false);
-    const [categoryError, setcategoryError] = React.useState(false);
-    const [catogoryId,setCatogoryId] = React.useState('');
-    const [confirmationDialogOpen, setConfirmationDialogOpen] = React.useState(false);
- 
+    const [demo, setDemo] = React.useState(false)
+    const [categoryError, setcategoryError] = React.useState(false)
+    const [catogoryId, setCatogoryId] = React.useState('')
+    const [confirmationDialogOpen, setConfirmationDialogOpen] =
+        React.useState(false)
 
     const handleClose = () => {
-      setCategory('')
-      setCatogoryId('')
-      setOpen(false);
-    }; 
-    
-    const handleOpen = (id) => {
-      
-      setOpen(true);
-    };
-  
-    const handleButton=()=>{
-      
-  
-     
+        setCategory('')
+        setCatogoryId('')
+        setOpen(false)
     }
-   // snackbar 
+
+    const handleOpen = (id) => {
+        setOpen(true)
+    }
+
+    const handleButton = () => {}
+    // snackbar
     const handleMopen = () => {
-      setMopen(true);
-    };
+        setMopen(true)
+    }
     const handleClosed = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-  
-      setMopen(false);
-    };
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setMopen(false)
+    }
     const action = (
-      <React.Fragment>
-        <Button color="secondary" size="small" onClick={handleClosed}>
-          UNDO
-        </Button>
-        <IconButton
-          size="small"
-          aria-label="close"
-          color="inherit"
-          onClick={handleClosed}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </React.Fragment>
-    );
+        <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClosed}>
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClosed}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
 
     const handleChange = (e, func, errorFunc) => {
-      func(e.target.value);
-    
-      errorFunc(false)
+        func(e.target.value)
+
+        errorFunc(false)
     }
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
-  
+    const label = { inputProps: { 'aria-label': 'Switch demo' } }
+
     const Input = styled('input')({
-      display: 'none',
-    });
+        display: 'none',
+    })
 
     const onDelhandler = (id) => {
-      setConfirmationDialogOpen(true)
-      setCatogoryId(id)
-      if (confirmationDialogOpen && catogoryId) {
-        axios.delete(`${config.base_url}/api/v1/productType/${catogoryId}`).then((res) => {
-          if(res){
-            getAlldata();
-            setConfirmationDialogOpen(false);
-          }
-  
-        
-      }
-      )
-      .catch((error) => {
-     
-      })
-      }
-      
-  
+        setConfirmationDialogOpen(true)
+        setCatogoryId(id)
+        if (confirmationDialogOpen && catogoryId) {
+            axios
+                .delete(`${config.base_url}/api/v1/productType/${catogoryId}`)
+                .then((res) => {
+                    if (res) {
+                        getAlldata()
+                        setConfirmationDialogOpen(false)
+                    }
+                })
+                .catch((error) => {})
+        }
     }
-    const onEdithandler = (editIde ,name) => {
+    const onEdithandler = (editIde, name) => {
+        setCategory(name)
+        setOpen(true)
 
-  setCategory(name);
-      setOpen(true)
-      
-    
-      setCatogoryId(editIde);
+        setCatogoryId(editIde)
     }
 
     const handleOpenClick = () => {
-      if (category === '') {
-        setcategoryError(true)
-      } else {
-        createHandler();
-      }
+        if (category === '') {
+            setcategoryError(true)
+        } else {
+            createHandler()
+        }
     }
 
-  
+    const headers = [
+        { label: 'Product Type Name', key: 'name' },
+        { label: 'Product Type Id', key: 'productTypeId' },
+        { label: 'Demo', key: 'demo' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
-      <>
-        {confirmationDialogOpen && (
+        <>
+            {confirmationDialogOpen && (
                 <ConfirmationDialog
                     open={confirmationDialogOpen}
                     onConfirmDialogClose={() => {
@@ -324,107 +302,132 @@ const ProductTypeList = () => {
                     onYesClick={onDelhandler}
                 />
             )}
-        <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-             
-            <Box overflow="auto">
-                <ProductTable>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ px: 3 }} colSpan={4}>
-                                 Name
-                            </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={2}>
-                               Demo
-                            </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Edit
-                            </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={1}>
-                                Delete
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {productList.map((product, index) => (
-                            <ProductTypeCard key={index} product={product} onEdit={onEdithandler} onDelete={onDelhandler} />
-                        ))}
-                    </TableBody>
-                </ProductTable>
-            </Box>
-        </Card>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" sx={{ m: 5 }}>
+                    Product Type
+                </Typography>
+                <CSVLink
+                    separator=","
+                    filename={'all-product-types.csv'}
+                    data={productList}
+                    headers={headers}
+                >
+                    <div
+                        style={{
+                            backgroundColor: '#1976d2',
+                            borderRadius: '50%',
+                            marginRight: '20px',
+                        }}
+                    >
+                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
+                            <SummarizeIcon />
+                        </IconButton>
+                    </div>
+                </CSVLink>
+            </div>
+            <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
+                <Box overflow="auto">
+                    <ProductTable>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ px: 3 }} colSpan={4}>
+                                    Name
+                                </TableCell>
+                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                    Demo
+                                </TableCell>
+                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                    Edit
+                                </TableCell>
+                                <TableCell sx={{ px: 0 }} colSpan={1}>
+                                    Delete
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {productList.map((product, index) => (
+                                <ProductTypeCard
+                                    key={index}
+                                    product={product}
+                                    onEdit={onEdithandler}
+                                    onDelete={onDelhandler}
+                                />
+                            ))}
+                        </TableBody>
+                    </ProductTable>
+                </Box>
+            </Card>
 
-        <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"ADD PRODUCT LIST"}
-        </DialogTitle>
-        <DialogContent>
-        
-            <br></br>
-            <Grid container spacing={3}>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'ADD PRODUCT LIST'}
+                </DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={5} md={5} sm={5} xs={5}>
+                            <TextField
+                                required
+                                error={categoryError}
+                                id="producttype"
+                                label="Product Type Name"
+                                placeholder="Type Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    categoryError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={category}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setCategory,
+                                        setcategoryError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-              <Grid item lg={5} md={5} sm={5} xs={5}  >
-                <TextField required
-                  error={categoryError}
-                  id="producttype"
-                  label="Product Type Name"
-                  placeholder="Type Name"
-                  size="small"
-                  autoComplete="off"
-                  helperText={categoryError === true ? "Field Required" : ''}
-                  value={category}
-                  onChange={(e) => handleChange(e, setCategory, setcategoryError)}
-                  variant="outlined"
-                  fullWidth
-
-                />
-
-              </Grid>
-
-
-              <Grid item lg={3} md={3} sm={3} xs={3}>
-
-                <span>Demo</span>
-                <Switch {...label} defaultChecked />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-              </Grid>
-              <Grid item lg={4} md={4} sm={4} xs={4}   >
-
-
-
-                {/* <label htmlFor="contained-button-file">
+                        <Grid item lg={3} md={3} sm={3} xs={3}>
+                            <span>Demo</span>
+                            <Switch {...label} defaultChecked />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                            {/* <label htmlFor="contained-button-file">
                   <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleImage} />
                   <Button variant="contained" component="span" startIcon={<AddAPhotoIcon />}>
                     Upload
                   </Button>
                 </label> */}
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleOpenClick}>
+                        Confirm
+                    </Button>
+                </DialogActions>
 
-
-
-              </Grid>
-
-
-
-
-            </Grid>
-
-        
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={handleOpenClick}>
-            Confirm
-          </Button>
-        </DialogActions>
-
-{/* snackbar */}
-        {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
-      {/* <Snackbar
+                {/* snackbar */}
+                {/* <Button onClick={handleClick}>Open simple snackbar</Button> */}
+                {/* <Snackbar
         open={sopen}
         autoHideDuration={5000}
         onClose={handleClosed}
@@ -432,29 +435,41 @@ const ProductTypeList = () => {
         action={action}
       /> */}
 
+                <Snackbar
+                    open={mopen}
+                    autoHideDuration={2000}
+                    onClose={handleClosed}
+                    message="CREATE PRODUCT"
+                    action={action}
+                />
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={2000}
+                    onClose={handleClosed}
+                    message="Name already exists"
+                    action={action}
+                />
+            </Dialog>
 
-        <Snackbar
-          open={mopen}
-          autoHideDuration={2000}
-          onClose={handleClosed}
-          message="CREATE PRODUCT"
-          action={action}
-        />
-        <Snackbar
-          open={snackBar}
-          autoHideDuration={2000}
-          onClose={handleClosed}
-          message="Name already exists"
-          action={action}
-        />
-      </Dialog>
-
-        <Tooltip title="ADD PRODUCT LIST">
-        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => {setOpen(true);
-        handleMopen();}}>
-          <AddIcon />
-        </Fab>
-      </Tooltip>
+            <Tooltip title="ADD PRODUCT LIST">
+                <Fab
+                    color="secondary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        bottom: '8vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => {
+                        setOpen(true)
+                        handleMopen()
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
+            </Tooltip>
         </>
     )
 }
@@ -470,7 +485,6 @@ const ProductTypeList = () => {
 //     priceSale:"1200",
 //     quantity:"80"
 
-
 //   },{
 //     id:2,
 //     name:"Pure Wood Table",
@@ -482,7 +496,6 @@ const ProductTypeList = () => {
 //     category:"Table",
 //     priceSale:"1200",
 //     quantity:"120"
-
 
 //   },{
 //     id:3,
@@ -496,7 +509,6 @@ const ProductTypeList = () => {
 //     priceSale:"1200",
 //     quantity:"10"
 
-
 //   },{
 //     id:4,
 //     name:"Pure Leather Sofa",
@@ -509,19 +521,17 @@ const ProductTypeList = () => {
 //     priceSale:"1200",
 //     quantity:"50"
 
-
 //   },{
 //     id:5,
 //     name:"Nordic Upholstered Velvet Sofa ",
 //     cover:"coverimage",
 //     price:"1200",
-//     colors:"black",    
+//     colors:"black",
 //     coverImage:'https://sc04.alicdn.com/kf/H5aecfcc540de4edcbe4c4974ef5148bd1.jpg',
 //     status:"active",
 //     category:"Sofa",
 //     priceSale:"1200",
 //     quantity:"40"
-
 
 //   },{
 //     id:6,
@@ -535,7 +545,6 @@ const ProductTypeList = () => {
 //     priceSale:"1200",
 //     quantity:"30"
 
-
 //   },{
 //     id:7,
 //     name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
@@ -548,7 +557,6 @@ const ProductTypeList = () => {
 //     priceSale:"1200",
 //     quantity:"20"
 
-
 //   },{
 //     id:8,
 //     name:"Wooden Wardrobe Cabinet Clothes Closet",
@@ -560,7 +568,6 @@ const ProductTypeList = () => {
 //     category:"Cabinet",
 //     priceSale:"1200",
 //     quantity:"20"
-
 
 //   }]
 

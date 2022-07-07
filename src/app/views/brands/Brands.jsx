@@ -1,25 +1,36 @@
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
 import {
-    Card, Fab, Grid, IconButton, Snackbar, Table, TableBody, TableCell, TableHead,
-    TableRow
-} from '@mui/material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import { makeStyles } from "@mui/styles";
-import { Box, styled } from '@mui/system';
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BrandCard from './BrandCard';
-import CloseIcon from '@mui/icons-material/Close';
-import config from "../../../config"
-import { ConfirmationDialog } from 'app/components';
+    Card,
+    Fab,
+    Grid,
+    IconButton,
+    Snackbar,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+} from '@mui/material'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
+import { makeStyles } from '@mui/styles'
+import { Box, styled } from '@mui/system'
+import axios from 'axios'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import BrandCard from './BrandCard'
+import CloseIcon from '@mui/icons-material/Close'
+import config from '../../../config'
+import { ConfirmationDialog } from 'app/components'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -40,207 +51,197 @@ const BrandTable = styled(Table)(() => ({
 }))
 
 const Brands = () => {
-  
-  
-    // Form validation errors State Setting 
-    const [createBrandName,setCreateBrandName]= React.useState('')
-    const [createBrandNameError, setCreateBrandNameError] = React.useState(false);
-    const [editBrandName,setEditBrandName]= React.useState('')
-    const [editBrandNameError, setEditBrandNameError] = React.useState(false);
-  
-    // Setting States 
-    const [quantity, setQuantity] = React.useState([]);
-    const [brand, setBrand] = React.useState([]);
-    const [brandId,setBrandId]= React.useState('');
-    const [image, setImage] = React.useState('');
-    const [snackBar, setSnackBar] = React.useState(false);
-    const [open, setOpen] = React.useState(false);
-  
+    // Form validation errors State Setting
+    const [createBrandName, setCreateBrandName] = React.useState('')
+    const [createBrandNameError, setCreateBrandNameError] =
+        React.useState(false)
+    const [editBrandName, setEditBrandName] = React.useState('')
+    const [editBrandNameError, setEditBrandNameError] = React.useState(false)
+
+    // Setting States
+    const [quantity, setQuantity] = React.useState([])
+    const [brand, setBrand] = React.useState([])
+    const [brandId, setBrandId] = React.useState('')
+    const [image, setImage] = React.useState('')
+    const [snackBar, setSnackBar] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
+
     const handleChange = (e, func, errorFunc) => {
-      func(e.target.value);
-     
-      errorFunc(false)
+        func(e.target.value)
+
+        errorFunc(false)
     }
-  
+
     const handleType = (event) => {
-    
-      setQuantity(event.target.value);
-    };
-  
+        setQuantity(event.target.value)
+    }
+
     const handleType2 = (event) => {
-  
-      setBrand(event.target.value);
-    };
-  
-    const [createBrandDialog, setCreateBrandDialog] = React.useState(false);
-    const [editBrandDialog, setEditBrandDialog] = React.useState(false);
-  
+        setBrand(event.target.value)
+    }
+
+    const [createBrandDialog, setCreateBrandDialog] = React.useState(false)
+    const [editBrandDialog, setEditBrandDialog] = React.useState(false)
+
     const handleCreateClose = () => {
-      setCreateBrandDialog(false);
-      setCreateBrandNameError(false);
-    }; 
+        setCreateBrandDialog(false)
+        setCreateBrandNameError(false)
+    }
     const handleEditClose = () => {
-      setEditBrandDialog(false);
-      setEditBrandNameError(false);
-    }; 
+        setEditBrandDialog(false)
+        setEditBrandNameError(false)
+    }
     const handleClosed = () => {
-      setSnackBar(false);
-    }; 
+        setSnackBar(false)
+    }
 
     const handleCreateClickOpen = () => {
-      // Check if any field of Form is Empty
+        // Check if any field of Form is Empty
         if (createBrandName === '') {
-          setCreateBrandNameError(true)
-      }
-      else {
-          createHandler();
-      }
-    };
+            setCreateBrandNameError(true)
+        } else {
+            createHandler()
+        }
+    }
 
     const handleEditClickOpen = () => {
-      // Check if any field of Form is Empty
+        // Check if any field of Form is Empty
         if (editBrandName === '') {
-          setEditBrandName(true)
-      }
-      else {
-          editHandler();
-      }
-    };
+            setEditBrandName(true)
+        } else {
+            editHandler()
+        }
+    }
 
     const handleOpen = (id) => {
-     
-      setCreateBrandDialog(true);
-    };
+        setCreateBrandDialog(true)
+    }
     const handleClickOpen2 = () => {
-      setCreateBrandDialog(true);
-    };
-  
-  
-  
-    const handleImage=(e)=>{
-      setImage(e.target.files[0])
-  
+        setCreateBrandDialog(true)
     }
-  
-  
+
+    const handleImage = (e) => {
+        setImage(e.target.files[0])
+    }
+
     useEffect(() => {
-      getAlldata();
-    }, []);
+        getAlldata()
+    }, [])
     const getAlldata = () => {
-      axios.get(`${config.base_url}/api/v1/brand`).then((res) => {
-    
-        setBrand(res.data.data);
- 
-      }).catch((error) => {
-        console.log(error, 'error');
-      })
+        axios
+            .get(`${config.base_url}/api/v1/brand`)
+            .then((res) => {
+                setBrand(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
-  
+
     const onDelhandler = (id) => {
-      setOpen(true)
-      setBrandId(id)
-      if (open && brandId) {
+        setOpen(true)
+        setBrandId(id)
+        if (open && brandId) {
+            axios
+                .delete(`${config.base_url}/api/v1/brand/${brandId}`)
+                .then((res) => {
+                    getAlldata()
+                    setOpen(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
+    }
 
-        axios.delete(`${config.base_url}/api/v1/brand/${brandId}`).then((res) => {
-          getAlldata();
-          setOpen(false);
-          
-          
-        }).catch((error) => {
-          console.log(error, 'error');
-        })
-      }
+    const onEdithandler = (editDataId, editDataName) => {
+        setEditBrandDialog(true)
+
+        setEditBrandName(editDataName)
+        setBrandId(editDataId)
     }
-  
-  
-  
-    const onEdithandler = (editDataId,editDataName) => {
-      setEditBrandDialog(true)
-    
-      setEditBrandName(editDataName)
-      setBrandId(editDataId)
-    }
-  
-  
-  
+
     const navigate = useNavigate()
-  
+
     const createHandler = () => {
-          let data = new FormData();
-          data.append('name', createBrandName );
+        let data = new FormData()
+        data.append('name', createBrandName)
 
-          const brandNameExist = brand.find((brand) => {
-            return brand.name === createBrandName;
-          })
-  
-          if (brandNameExist) {
-            setSnackBar(true);
-            return;
-          }
+        const brandNameExist = brand.find((brand) => {
+            return brand.name === createBrandName
+        })
 
-          axios.post(`${config.base_url}/api/v1/brand`, data).then((res) => {
-            if (res) {
-              getAlldata();
-              handleCreateClose()
+        if (brandNameExist) {
+            setSnackBar(true)
+            return
+        }
 
-            }
-              
-              setCreateBrandName('')
-          }).catch((error) => {
-            console.log(error, 'error');
-          })
-    
-          
-        
-      }
+        axios
+            .post(`${config.base_url}/api/v1/brand`, data)
+            .then((res) => {
+                if (res) {
+                    getAlldata()
+                    handleCreateClose()
+                }
 
-      const editHandler = () => {
-        let data = new FormData();
-          data.append('name', editBrandName);
+                setCreateBrandName('')
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
 
-          const brandNameExist = brand.find((brand) => {
-            return brand.name === editBrandName;
-          })
-  
-          if (brandNameExist) {
-            setSnackBar(true);
-            return;
-          }
-      
-          axios.put(`${config.base_url}/api/v1/brand/${brandId}`, data).then((res) => {
-          
-            if (res) {
-              getAlldata();
-              handleEditClose()
-            }
-        
-          }).catch((error) => {
-            console.log(error, 'error');
-          })
-      }
+    const editHandler = () => {
+        let data = new FormData()
+        data.append('name', editBrandName)
 
-      const action = (
+        const brandNameExist = brand.find((brand) => {
+            return brand.name === editBrandName
+        })
+
+        if (brandNameExist) {
+            setSnackBar(true)
+            return
+        }
+
+        axios
+            .put(`${config.base_url}/api/v1/brand/${brandId}`, data)
+            .then((res) => {
+                if (res) {
+                    getAlldata()
+                    handleEditClose()
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
+    const action = (
         <React.Fragment>
-          <Button color="secondary" size="small" onClick={handleClosed}>
-            UNDO
-          </Button>
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={handleClosed}
-          >
-            <CloseIcon fontSize="small" />
-          </IconButton>
+            <Button color="secondary" size="small" onClick={handleClosed}>
+                UNDO
+            </Button>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClosed}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
         </React.Fragment>
-      );
-  
-  
-  
-      
+    )
+
+    const headers = [
+        { label: 'Brand Name', key: 'name' },
+        { label: 'Brand Id', key: 'brandId' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
-        {open && (
+            {open && (
                 <ConfirmationDialog
                     open={open}
                     onConfirmDialogClose={() => {
@@ -251,165 +252,209 @@ const Brands = () => {
                     onYesClick={onDelhandler}
                 />
             )}
-        <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-             
-            <Box overflow="auto">
-                <BrandTable>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ px: 3 }} colSpan={4}>
-                                 Name
-                            </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Edit
-                            </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={1}>
-                                Delete
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {brand.map((brand, index) => (
-                            <BrandCard key={index} brand={brand} onEdit={onEdithandler} onDelete={onDelhandler} />
-                        ))}
-                    </TableBody>
-                </BrandTable>
-            </Box>
-        </Card>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" sx={{ m: 5 }}>
+                    Brands
+                </Typography>
+                <CSVLink
+                    separator=","
+                    filename={'all-brands.csv'}
+                    data={brand}
+                    headers={headers}
+                >
+                    <div
+                        style={{
+                            backgroundColor: '#1976d2',
+                            borderRadius: '50%',
+                            marginRight: '20px',
+                        }}
+                    >
+                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
+                            <SummarizeIcon />
+                        </IconButton>
+                    </div>
+                </CSVLink>
+            </div>
+            <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
+                <Box overflow="auto">
+                    <BrandTable>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ px: 3 }} colSpan={4}>
+                                    Name
+                                </TableCell>
+                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                    Edit
+                                </TableCell>
+                                <TableCell sx={{ px: 0 }} colSpan={1}>
+                                    Delete
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {brand.map((brand, index) => (
+                                <BrandCard
+                                    key={index}
+                                    brand={brand}
+                                    onEdit={onEdithandler}
+                                    onDelete={onDelhandler}
+                                />
+                            ))}
+                        </TableBody>
+                    </BrandTable>
+                </Box>
+            </Card>
 
-        <Dialog
-        open={createBrandDialog}
-        onClose={handleCreateClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"ADD BRAND"}
-        </DialogTitle>
-        <DialogContent>
-       
-            <br></br>
-            <Grid container spacing={3}>
+            <Dialog
+                open={createBrandDialog}
+                onClose={handleCreateClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{'ADD BRAND'}</DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={createBrandNameError}
+                                id="brandname"
+                                label="Brand Name"
+                                placeholder="Enter Brand Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    createBrandNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={createBrandName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setCreateBrandName,
+                                        setCreateBrandNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleCreateClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
 
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <TextField
-                  error={createBrandNameError}
-                  id="brandname"
-                  label="Brand Name"
-                  placeholder="Enter Brand Name"
-                  size="small"
-                  autoComplete="off"
-                  helperText={createBrandNameError === true ? "Field Required" : ''}
-                  value={createBrandName}
-                  onChange={(e) => handleChange(e, setCreateBrandName, setCreateBrandNameError)}
-                  variant="outlined"
-                  fullWidth
-
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleClosed}
+                    message="Name already exists"
+                    action={action}
                 />
+            </Dialog>
 
-              </Grid>
+            <Dialog
+                open={editBrandDialog}
+                onClose={handleEditClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'EDIT BRAND'}
+                </DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={editBrandNameError}
+                                id="brandname"
+                                label="Brand Name"
+                                placeholder="Enter Brand Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    editBrandNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={editBrandName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setEditBrandName,
+                                        setEditBrandNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEditClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleEditClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
 
-
-            </Grid>
-
-       
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCreateClose}>Cancel</Button>
-          <Button autoFocus onClick={handleCreateClickOpen}>
-            Confirm
-          </Button>
-        </DialogActions>
-
-        <Snackbar
-          open={snackBar}
-          autoHideDuration={6000}
-          onClose={handleClosed}
-          message="Name already exists"
-          action={action}
-        />
-      </Dialog>
-
-        <Dialog
-        open={editBrandDialog}
-        onClose={handleEditClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"EDIT BRAND"}
-        </DialogTitle>
-        <DialogContent>
-        
-            <br></br>
-            <Grid container spacing={3}>
-
-              <Grid item lg={12} md={12} sm={12} xs={12}>
-                <TextField
-                  error={editBrandNameError}
-                  id="brandname"
-                  label="Brand Name"
-                  placeholder="Enter Brand Name"
-                  size="small"
-                  autoComplete="off"
-                  helperText={editBrandNameError === true ? "Field Required" : ''}
-                  value={editBrandName}
-                  onChange={(e) => handleChange(e, setEditBrandName, setEditBrandNameError)}
-                  variant="outlined"
-                  fullWidth
-
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleClosed}
+                    message="Name already exists"
+                    action={action}
                 />
+            </Dialog>
 
-              </Grid>
-
-
-            </Grid>
-
-        
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditClose}>Cancel</Button>
-          <Button autoFocus onClick={handleEditClickOpen}>
-            Confirm
-          </Button>
-        </DialogActions>
-
-        <Snackbar
-          open={snackBar}
-          autoHideDuration={6000}
-          onClose={handleClosed}
-          message="Name already exists"
-          action={action}
-        />
-      </Dialog>
-
-        <Tooltip title="Add Brand">
-        <Fab color="secondary" aria-label="Add" size="medium" style={{ zIndex: 999, right: "4vw", bottom: "8vh", position: "fixed" }} onClick={() => setCreateBrandDialog(true)}>
-          <AddIcon />
-        </Fab>
-      </Tooltip>
+            <Tooltip title="Add Brand">
+                <Fab
+                    color="secondary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        bottom: '8vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setCreateBrandDialog(true)}
+                >
+                    <AddIcon />
+                </Fab>
+            </Tooltip>
         </>
-       
-  
     )
 }
 
 const useStyles = makeStyles((theme) => ({
     conatiner: {
-      marginTop: 10
+        marginTop: 10,
     },
     title: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems:  'center',
-      background: '#3f51b5',
-      color: '#fff',
-      padding: 20
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#3f51b5',
+        color: '#fff',
+        padding: 20,
     },
-    btn : {
-      marginTop: 10,
-      marginBottom: 20
-    }
-  }));
+    btn: {
+        marginTop: 10,
+        marginBottom: 20,
+    },
+}))
 
 export default Brands

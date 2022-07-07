@@ -21,6 +21,8 @@ import AppUserCaerd from 'app/views/AppUsers/AppUserCard'
 import axios from 'axios'
 import config from 'config'
 import React, { useEffect } from 'react'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -64,7 +66,8 @@ const AppUsersList = () => {
     const [emailAddressError, setEmailAddressError] = React.useState(false)
     const [superEmailAddress, setSuperEmailAddress] = React.useState('')
     const [superPassword, setSuperPassword] = React.useState('')
-    const [superEmailAddressError, setSuperEmailAddressError] = React.useState(false)
+    const [superEmailAddressError, setSuperEmailAddressError] =
+        React.useState(false)
     const [superPasswordError, setSuperPasswordError] = React.useState(false)
     const [password, setPassword] = React.useState('')
     const [passwordError, setPasswordError] = React.useState(false)
@@ -98,12 +101,10 @@ const AppUsersList = () => {
 
     const handleCreateSnackBarClose = () => {
         setCreateSnackBar(false)
-        
     }
 
     const handleEmailSnackBarClose = () => {
         setEmailSnackBar(false)
-        
     }
 
     const handleEditClose = () => {
@@ -124,14 +125,11 @@ const AppUsersList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-       
+
         errorFunc(false)
     }
 
     const handleCreateClickOpen = () => {
-
-
-
         if (
             userName === '' ||
             emailAddress === '' ||
@@ -181,7 +179,6 @@ const AppUsersList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-         
             return
         }
 
@@ -210,7 +207,7 @@ const AppUsersList = () => {
     }
 
     const handleMessageClose = () => {
-       setOpen4(false);
+        setOpen4(false)
     }
     const createAction = (
         <React.Fragment>
@@ -284,7 +281,6 @@ const AppUsersList = () => {
         axios
             .get(`${config.base_url}/api/v1/auth/users`)
             .then((res) => {
-            
                 setUsers(res.data.data)
             })
             .catch((error) => {
@@ -298,20 +294,19 @@ const AppUsersList = () => {
         data.append('email', emailAddress)
         data.append('password', password)
         data.append('role', role)
-        
+
         users.find((userData) => {
             if (userData.userName === userName) {
-
                 setCreateSnackBar(true)
                 // setEmailSnackBar(true)
                 return
-            } 
+            }
             if (userData.email === emailAddress) {
                 setEmailSnackBar(true)
                 return
             }
         })
-      
+
         axios
             .post(`${config.base_url}/api/v1/auth/register`, data)
             .then((res) => {
@@ -321,7 +316,6 @@ const AppUsersList = () => {
                 }
             })
             .catch((error) => {
-         
                 console.log(error, 'error')
             })
     }
@@ -335,8 +329,6 @@ const AppUsersList = () => {
         axios
             .put(`${config.base_url}/api/v1/auth/${userId}`, data)
             .then((res) => {
-              
-                
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -353,13 +345,11 @@ const AppUsersList = () => {
         setUserId(user._id)
 
         setOpen(true)
-        
-        if (open3 && user.role !== 'SA') {
 
+        if (open3 && user.role !== 'SA') {
             axios
                 .delete(`${config.base_url}/api/v1/auth/${userId}`)
                 .then((res) => {
-               
                     getAlldata()
                     setOpen(false)
                     setOpen3(false)
@@ -367,18 +357,12 @@ const AppUsersList = () => {
                 .catch((error) => {
                     console.log(error, 'error')
                 })
-        }
-        else if (user.role === 'SA'){
-           setOpen4(true);
+        } else if (user.role === 'SA') {
+            setOpen4(true)
             setOpen(false)
             setOpen3(false)
         }
     }
-
-
-    
-
-  
 
     const onEdithandler = (id, user) => {
         setEditUserDialog(true)
@@ -389,16 +373,14 @@ const AppUsersList = () => {
         setUserId(id)
     }
 
-
     const open2Close = () => {
-        setOpen2(false);
+        setOpen2(false)
     }
     const open3Close = () => {
-        setOpen3(false);
+        setOpen3(false)
     }
     const handleSuperAdmin = () => {
-
-        let data = {};
+        let data = {}
 
         data.email = superEmailAddress
         data.password = superPassword
@@ -407,17 +389,22 @@ const AppUsersList = () => {
             .post(`${config.base_url}/api/v1/auth/SA`, data)
             .then((res) => {
                 if (res.data.grantAccess) {
-              
-                    setOpen2(false);
+                    setOpen2(false)
                     createHandler()
                 }
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
-
     }
 
+    const headers = [
+        { label: 'User Name', key: 'userName' },
+        { label: 'Email', key: 'email' },
+        { label: 'Employee Id', key: 'employeeId' },
+        { label: 'Role', key: 'role' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
 
     return (
         <>
@@ -431,7 +418,7 @@ const AppUsersList = () => {
                     title={`Are You Sure?`}
                     text={`Are You Sure You Want To Delete This User?`}
                     onYesClick={() => {
-                        setOpen3(true);
+                        setOpen3(true)
                     }}
                 />
             )}
@@ -453,9 +440,37 @@ const AppUsersList = () => {
             </Tooltip>
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    User's
-                </Typography>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                        Users
+                    </Typography>
+                    <CSVLink
+                        separator=","
+                        filename={'all-users.csv'}
+                        data={users}
+                        headers={headers}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#1976d2',
+                                borderRadius: '50%',
+                            }}
+                        >
+                            <IconButton
+                                style={{ color: '#FFFFFF' }}
+                                size="medium"
+                            >
+                                <SummarizeIcon />
+                            </IconButton>
+                        </div>
+                    </CSVLink>
+                </div>
                 <Grid container spacing={3}>
                     {users.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>
@@ -637,22 +652,17 @@ const AppUsersList = () => {
                             />
                         </Grid>
                         <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <FormControl
-                                fullWidth>
-                                <InputLabel >
-                                    Role
-                                </InputLabel>
+                            <FormControl fullWidth>
+                                <InputLabel>Role</InputLabel>
                                 <Select
                                     labelId="Role"
                                     id="Role"
                                     value={role}
                                     label="Role"
                                     size="small"
-                                    onChange={(e) => handleChange(
-                                        e,
-                                        setRole,
-                                        setRoleError
-                                    )}
+                                    onChange={(e) =>
+                                        handleChange(e, setRole, setRoleError)
+                                    }
                                 >
                                     <MenuItem value="Admin">Admin</MenuItem>
                                     <MenuItem value="Manager">Manager</MenuItem>
@@ -678,7 +688,7 @@ const AppUsersList = () => {
                     message="Name already exists"
                     action={createAction}
                 />
-                
+
                 <Snackbar
                     open={emailSnackBar}
                     autoHideDuration={2000}
@@ -973,7 +983,6 @@ const AppUsersList = () => {
                 />
             </Dialog>
 
-
             {/* Delete Confirmation Box */}
             <Dialog
                 open={open3}
@@ -1056,10 +1065,9 @@ const AppUsersList = () => {
                 />
             </Dialog>
 
+            {/* Delete the SuperAdmin message */}
 
-                                {/* Delete the SuperAdmin message */}
-
-                    <Dialog
+            <Dialog
                 open={open4}
                 onClose={handleMessageClose}
                 maxWidth="xs"
@@ -1069,14 +1077,10 @@ const AppUsersList = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'You Can Not Delete The SuperAdmin User'}
                 </DialogTitle>
-                <DialogContent>
-                  
-                </DialogContent>
+                <DialogContent></DialogContent>
                 <DialogActions>
                     <Button onClick={handleMessageClose}>OK</Button>
-                    
                 </DialogActions>
-               
             </Dialog>
         </>
     )

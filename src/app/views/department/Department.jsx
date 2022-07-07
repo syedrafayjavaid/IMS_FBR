@@ -10,6 +10,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Typography,
 } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -27,6 +28,8 @@ import { useNavigate } from 'react-router-dom'
 import DepartmentCard from './DepartmentCard'
 import CloseIcon from '@mui/icons-material/Close'
 import config from '../../../config'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import { CSVLink } from 'react-csv'
 
 const DepartmentTable = styled(Table)(() => ({
     minWidth: 400,
@@ -63,17 +66,15 @@ const Department = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-   
+
         errorFunc(false)
     }
 
     const handleType = (event) => {
-   
         setQuantity(event.target.value)
     }
 
     const handleType2 = (event) => {
-     
         setBrand(event.target.value)
     }
 
@@ -111,7 +112,6 @@ const Department = () => {
     }
 
     const handleOpen = (id) => {
-     
         setCreateBrandDialog(true)
     }
     const handleClickOpen2 = () => {
@@ -120,7 +120,6 @@ const Department = () => {
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-     
     }
 
     useEffect(() => {
@@ -130,9 +129,7 @@ const Department = () => {
         axios
             .get(`${config.base_url}/api/v1/department`)
             .then((res) => {
-           
                 setBrand(res.data.data)
-      
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -140,11 +137,9 @@ const Department = () => {
     }
 
     const onDelhandler = (editData) => {
-     
         axios
             .delete(`${config.base_url}/api/v1/department/${editData}`)
             .then((res) => {
-             
                 getAlldata()
             })
             .catch((error) => {
@@ -154,7 +149,7 @@ const Department = () => {
 
     const onEdithandler = (editDataId, editDataName) => {
         setEditBrandDialog(true)
-    
+
         setEditBrandName(editDataName)
         setBrandId(editDataId)
     }
@@ -184,9 +179,7 @@ const Department = () => {
 
                 setCreateBrandName('')
             })
-            .catch((error) => {
-              
-            })
+            .catch((error) => {})
     }
 
     const editHandler = () => {
@@ -205,7 +198,6 @@ const Department = () => {
         axios
             .put(`${config.base_url}/api/v1/department/${brandId}`, data)
             .then((res) => {
-           
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -232,8 +224,42 @@ const Department = () => {
         </React.Fragment>
     )
 
+    const headers = [
+        { label: 'Department Name', key: 'name' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" sx={{ m: 5 }}>
+                    Departments
+                </Typography>
+                <CSVLink
+                    separator=","
+                    filename={'all-departments.csv'}
+                    data={brand}
+                    headers={headers}
+                >
+                    <div
+                        style={{
+                            backgroundColor: '#1976d2',
+                            borderRadius: '50%',
+                            marginRight: '20px',
+                        }}
+                    >
+                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
+                            <SummarizeIcon />
+                        </IconButton>
+                    </div>
+                </CSVLink>
+            </div>
             <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
                 <Box overflow="auto">
                     <DepartmentTable>
@@ -274,36 +300,34 @@ const Department = () => {
                     {'ADD DEPARTMENT'}
                 </DialogTitle>
                 <DialogContent>
-                 
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <TextField
-                                    error={createBrandNameError}
-                                    id="brandname"
-                                    label="Department Name"
-                                    placeholder="Enter Department Name"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        createBrandNameError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={createBrandName}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCreateBrandName,
-                                            setCreateBrandNameError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={createBrandNameError}
+                                id="brandname"
+                                label="Department Name"
+                                placeholder="Enter Department Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    createBrandNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={createBrandName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setCreateBrandName,
+                                        setCreateBrandNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
                         </Grid>
-                  
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -331,36 +355,34 @@ const Department = () => {
                     {'EDIT DEPARTMENT'}
                 </DialogTitle>
                 <DialogContent>
-                 
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <TextField
-                                    error={editBrandNameError}
-                                    id="brandname"
-                                    label="Department Name"
-                                    placeholder="Enter Department Name"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        editBrandNameError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={editBrandName}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEditBrandName,
-                                            setEditBrandNameError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={editBrandNameError}
+                                id="brandname"
+                                label="Department Name"
+                                placeholder="Enter Department Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    editBrandNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={editBrandName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setEditBrandName,
+                                        setEditBrandNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
                         </Grid>
-                   
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>

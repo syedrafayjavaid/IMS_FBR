@@ -42,6 +42,8 @@ import config from 'config'
 import moment from 'moment'
 import PurchaseItemCard from './PurchaseItemCard'
 import QrReader from 'react-qr-reader'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const dateStyles = makeStyles((theme) => ({
     container: {
@@ -776,6 +778,29 @@ const PurchasedItems = () => {
             })
     }
 
+    const headers = [
+        { label: 'Product Id', key: 'productId' },
+        { label: 'Price', key: 'price' },
+        { label: 'Quantity', key: 'quantity' },
+        { label: 'Model', key: 'model' },
+        { label: 'Office Id', key: 'officeId' },
+        { label: 'Purchase Product Id', key: 'purchaseProductId' },
+        { label: 'Purchase Order', key: 'purchaseOrder' },
+        { label: 'Ownership', key: 'ownership' },
+        { label: 'Date Of Purchase', key: 'dataOfPurchase' },
+        { label: 'Vender Name', key: 'venderName' },
+        { label: 'Vender Email', key: 'venderEmail' },
+        { label: 'Vender Contact', key: 'venderContact' },
+        { label: 'Sr No', key: 'srNo' },
+        { label: 'Tag', key: 'tagNo' },
+        { label: 'Active', key: 'active' },
+        { label: 'Status', key: 'status' },
+        { label: 'Modification Date', key: 'modifiedAt' },
+        { label: 'Modified By', key: 'modifiedBy' },
+        { label: 'Created By', key: 'createdBy' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
             {openConfirmationDialog && (
@@ -825,9 +850,37 @@ const PurchasedItems = () => {
 
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    Items Entry
-                </Typography>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                        Items Entry
+                    </Typography>
+                    <CSVLink
+                        separator=","
+                        filename={'all-purchased-items.csv'}
+                        data={purchasedItems}
+                        headers={headers}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#1976d2',
+                                borderRadius: '50%',
+                            }}
+                        >
+                            <IconButton
+                                style={{ color: '#FFFFFF' }}
+                                size="medium"
+                            >
+                                <SummarizeIcon />
+                            </IconButton>
+                        </div>
+                    </CSVLink>
+                </div>
                 <Grid container spacing={3}>
                     {purchasedItems.map((purchaseItem) => (
                         <Grid key={purchaseItem._id} item xs={12} sm={6} md={3}>

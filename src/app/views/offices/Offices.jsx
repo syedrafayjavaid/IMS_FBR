@@ -30,6 +30,8 @@ import OfficeCard from './OfficeCard'
 import CloseIcon from '@mui/icons-material/Close'
 import config from 'config'
 import { ConfirmationDialog } from 'app/components'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import { CSVLink } from 'react-csv'
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -291,6 +293,16 @@ const Offices = () => {
         </React.Fragment>
     )
 
+    const headers = [
+        { label: 'Office Name', key: 'name' },
+        { label: 'Office Id', key: 'officeId' },
+        { label: 'Email', key: 'email' },
+        { label: 'Phone', key: 'phone' },
+        { label: 'Address', key: 'address' },
+        { label: 'City', key: 'city' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
             {open && (
@@ -304,6 +316,35 @@ const Offices = () => {
                     onYesClick={onDelhandler}
                 />
             )}
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" sx={{ m: 5 }}>
+                    Offices
+                </Typography>
+                <CSVLink
+                    separator=","
+                    filename={'all-offices.csv'}
+                    data={offices}
+                    headers={headers}
+                >
+                    <div
+                        style={{
+                            backgroundColor: '#1976d2',
+                            borderRadius: '50%',
+                            marginRight: '20px',
+                        }}
+                    >
+                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
+                            <SummarizeIcon />
+                        </IconButton>
+                    </div>
+                </CSVLink>
+            </div>
             <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
                 <Box overflow="auto">
                     <BrandTable>

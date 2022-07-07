@@ -18,13 +18,13 @@ import IconButton from '@mui/material/IconButton'
 import Snackbar from '@mui/material/Snackbar'
 import config from 'config'
 import { ConfirmationDialog } from 'app/components'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
-const modifiedBy = 'noor'
-const createdBy = 'imad'
-
 const CategoriesList = () => {
+    const userName = localStorage.getItem('username')
     const [categories, setCategories] = React.useState([])
     const [open, setOpen] = React.useState(false)
 
@@ -61,13 +61,12 @@ const CategoriesList = () => {
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
-     
+
         errorFunc(false)
     }
 
     const handleImage = (e) => {
         setImage(e.target.files[0])
-     
     }
 
     const handleCreateClickOpen = () => {
@@ -88,7 +87,6 @@ const CategoriesList = () => {
 
     const handleCreateClosed = (event, reason) => {
         if (reason === 'clickaway') {
-          
             return
         }
 
@@ -166,8 +164,7 @@ const CategoriesList = () => {
         let data = new FormData()
         data.append('file', imge)
         data.append('name', category)
-        data.append('modifiedBy', modifiedBy)
-        data.append('createdBy', createdBy)
+        data.append('createdBy', userName)
 
         const categoryNameExist = categories.find((categoryData) => {
             return categoryData.name === category
@@ -194,12 +191,12 @@ const CategoriesList = () => {
     const editHandler = () => {
         let data = new FormData()
         data.append('name', category)
+        data.append('modifiedBy', userName)
         data.append('file', imge)
 
         axios
             .put(`${config.base_url}/api/v1/category/${categoryId}`, data)
             .then((res) => {
-            
                 if (res) {
                     getAlldata()
                     handleEditClose()
@@ -216,11 +213,9 @@ const CategoriesList = () => {
         setCategoryId(id)
         setOpen(true)
         if (open && categoryId) {
-
             axios
                 .delete(`${config.base_url}/api/v1/category/${categoryId}`)
                 .then((res) => {
-               
                     getAlldata()
                     setOpen(false)
                 })
@@ -231,18 +226,22 @@ const CategoriesList = () => {
     }
 
     const onEdithandler = (id, category) => {
-     
         setEditCategoryDialog(true)
         setCategory(category)
         setImage(category.photo)
         setCategoryId(id)
     }
 
+    const headers = [
+        { label: 'Category Id', key: 'categoryId' },
+        { label: 'Category Name', key: 'name' },
+        { label: 'Created By', key: 'createdBy' },
+        { label: 'Last Modified', key: 'modifiedBy' },
+        { label: 'Creation Date', key: 'craetedAt' },
+    ]
+
     return (
         <>
-
-      
-           
             {open && (
                 <ConfirmationDialog
                     open={open}
@@ -272,9 +271,36 @@ const CategoriesList = () => {
             </Tooltip>
             <Container>
                 <br></br>
-                <Typography variant="h4" sx={{ mb: 5 }}>
-                    Categories
-                </Typography>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                        Categories
+                    </Typography>
+                    <CSVLink
+                        filename={'all-categories.csv'}
+                        data={categories}
+                        headers={headers}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#1976d2',
+                                borderRadius: '50%',
+                            }}
+                        >
+                            <IconButton
+                                style={{ color: '#FFFFFF' }}
+                                size="medium"
+                            >
+                                <SummarizeIcon />
+                            </IconButton>
+                        </div>
+                    </CSVLink>
+                </div>
                 <Grid container spacing={3}>
                     {categories.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>
@@ -301,60 +327,58 @@ const CategoriesList = () => {
                     {'ADD CATEGORY'}
                 </DialogTitle>
                 <DialogContent>
-                
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={5} md={5} sm={5} xs={5}>
-                                <TextField
-                                    error={categoryError}
-                                    id="category"
-                                    label="Category Name"
-                                    placeholder="Category Name"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        categoryError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={category}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCategory,
-                                            setCategoryError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-
-                            <Grid item lg={3} md={3} sm={3} xs={3}>
-                                <span>Active</span>
-                                <Switch {...label} defaultChecked />
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <label htmlFor="contained-button-file">
-                                    <Input
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        onChange={handleImage}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        component="span"
-                                        startIcon={<AddAPhotoIcon />}
-                                    >
-                                        Upload
-                                    </Button>
-                                </label>
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={5} md={5} sm={5} xs={5}>
+                            <TextField
+                                error={categoryError}
+                                id="category"
+                                label="Category Name"
+                                placeholder="Category Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    categoryError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={category}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setCategory,
+                                        setCategoryError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
                         </Grid>
-                   
+
+                        <Grid item lg={3} md={3} sm={3} xs={3}>
+                            <span>Active</span>
+                            <Switch {...label} defaultChecked />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <label htmlFor="contained-button-file">
+                                <Input
+                                    accept="image/*"
+                                    id="contained-button-file"
+                                    multiple
+                                    type="file"
+                                    onChange={handleImage}
+                                />
+                                <Button
+                                    variant="contained"
+                                    component="span"
+                                    startIcon={<AddAPhotoIcon />}
+                                >
+                                    Upload
+                                </Button>
+                            </label>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCreateClose}>Cancel</Button>
@@ -381,55 +405,53 @@ const CategoriesList = () => {
                     {'Edit Category'}
                 </DialogTitle>
                 <DialogContent>
-                
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={7} md={7} sm={7} xs={7}>
-                                <TextField
-                                    error={categoryError}
-                                    id="category"
-                                    label="Category Name"
-                                    placeholder="Category Name"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        categoryError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={category}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCategory,
-                                            setCategoryError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-
-                            <Grid item lg={5} md={5} sm={5} xs={5}>
-                                <label htmlFor="contained-button-file">
-                                    <Input
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        onChange={handleImage}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        component="span"
-                                        startIcon={<AddAPhotoIcon />}
-                                    >
-                                        Upload
-                                    </Button>
-                                </label>
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={7} md={7} sm={7} xs={7}>
+                            <TextField
+                                error={categoryError}
+                                id="category"
+                                label="Category Name"
+                                placeholder="Category Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    categoryError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={category}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setCategory,
+                                        setCategoryError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
                         </Grid>
-                   
+
+                        <Grid item lg={5} md={5} sm={5} xs={5}>
+                            <label htmlFor="contained-button-file">
+                                <Input
+                                    accept="image/*"
+                                    id="contained-button-file"
+                                    multiple
+                                    type="file"
+                                    onChange={handleImage}
+                                />
+                                <Button
+                                    variant="contained"
+                                    component="span"
+                                    startIcon={<AddAPhotoIcon />}
+                                >
+                                    Upload
+                                </Button>
+                            </label>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
@@ -451,7 +473,6 @@ const CategoriesList = () => {
                     action={editAction}
                 />
             </Dialog>
-           
         </>
     )
 }
