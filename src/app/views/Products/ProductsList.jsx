@@ -107,9 +107,9 @@ const ProductsList = () => {
 
     const [image, setImage] = React.useState('')
     const [imageError, setImageError] = React.useState(false)
-    const [createdBy, setCreatedBy] = React.useState('')
+    const [createdBy, setCreatedBy] = React.useState(userName)
     const [createdByError, setCreatedByError] = React.useState(false)
-    const [modifiedBy, setModifiedBy] = React.useState('')
+    const [modifiedBy, setModifiedBy] = React.useState(userName)
     const [modifiedByError, setModifiedByError] = React.useState(false)
 
     const [createProductDialog, setCreateProductDialog] = React.useState(false)
@@ -744,7 +744,7 @@ const ProductsList = () => {
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={userName}
+                                    value={createdBy}
                                     size="small"
                                     onChange={(e) =>
                                         handleChange(
@@ -1027,7 +1027,7 @@ const ProductsList = () => {
                                             ? 'Field Required'
                                             : ''
                                     }
-                                    value={userName}
+                                    value={modifiedBy}
                                     size="small"
                                     onChange={(e) =>
                                         handleChange(

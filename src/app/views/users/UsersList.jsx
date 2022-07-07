@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from 'react-paginate'
 import InputLabel from '@mui/material/InputLabel'
-import Pagination from '@mui/material/Pagination';
+import Pagination from '@mui/material/Pagination'
 import Select from '@mui/material/Select'
 // material
 import { makeStyles } from '@material-ui/core/styles'
@@ -27,7 +27,7 @@ import {
     TextField,
     Tooltip,
     Typography,
-    useTheme
+    useTheme,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
@@ -37,11 +37,13 @@ import { ConfirmationDialog } from 'app/components'
 import axios from 'axios'
 import config from 'config'
 import UsersCard from './UsersCard'
-import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
+import Stack from '@mui/material/Stack'
+import Autocomplete from '@mui/material/Autocomplete'
 
 import './user.css'
-import { setDate } from 'date-fns';
+import { setDate } from 'date-fns'
+import { CSVLink } from 'react-csv'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -64,7 +66,7 @@ const UsersList = () => {
     const [brandName, setBrandName] = React.useState([])
     const [statuName, setStatuName] = React.useState([])
     const [value, setValue] = React.useState([20, 37])
-  
+
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
@@ -102,7 +104,7 @@ const UsersList = () => {
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const label = { inputProps: { 'aria-label': 'Switch demo' } }
     ///////
-    
+
     const [mobileNumber1, setMobileNumber1] = React.useState('')
     const [mobilenumber1Error, setMobileNumber1Error] = React.useState(false)
     // const [remarks1,setRemarks1]= React.useState('')
@@ -117,7 +119,7 @@ const UsersList = () => {
     const [wing1, setWing1] = React.useState('')
     const [wing1Error, setWing1Error] = React.useState(false)
     const [department1, setDepartment1] = React.useState('')
-    
+
     const [department1Error, setDepartment1Error] = React.useState(false)
     const [dateOfJoinnig1, setDateOfJoinnig1] = React.useState(date)
     const [dateOfJoinnig1Error, setDateOfJoinnig1Error] = React.useState(false)
@@ -129,27 +131,24 @@ const UsersList = () => {
     const [reportManagError, setReportManagError] = React.useState(false)
     const [departmentError, setDepartmentError] = React.useState(false)
 
+    ///Search filters state
+    const [sdynamic, setDynamic] = React.useState('')
+    const [sdesignation, setSdesignation] = React.useState('')
+    const [sreportingManager, setSreportingManager] = React.useState('')
+    const [sdepartment, setSdepartment] = React.useState('')
+    const currentDate = new Date().toISOString().split('T')[0]
+    const [sdate, setSdate] = React.useState('')
+    const [sdate1, setSdate1] = React.useState('')
 
-      ///Search filters state
-      const [sdynamic, setDynamic] = React.useState("");
-      const [sdesignation, setSdesignation] = React.useState("");
-      const [sreportingManager, setSreportingManager] = React.useState("");
-      const [sdepartment, setSdepartment] = React.useState("");
-      const currentDate = new Date().toISOString().split('T')[0]
-      const [sdate, setSdate] = React.useState("");
-      const [sdate1, setSdate1] = React.useState("");
+    ////pagination code set here
 
-        ////pagination code set here
-
-        const [pageNumber, setPageNumber] = React.useState(0);
-        const usersPerPage = 8;
-        const pagesVisited = pageNumber * usersPerPage;
-        const pageCount = Math.ceil(users.length / usersPerPage);
-        const changePage = ({ selected }) => {
-          setPageNumber(selected);
-        };
-
-
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const usersPerPage = 8
+    const pagesVisited = pageNumber * usersPerPage
+    const pageCount = Math.ceil(users.length / usersPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const ITEM_HEIGHT = 48
     const ITEM_PADDING_TOP = 8
@@ -161,7 +160,7 @@ const UsersList = () => {
             },
         },
     }
- 
+
     const offices = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
     function getStyles(office, officeName, themesoffice) {
         return {
@@ -216,11 +215,9 @@ const UsersList = () => {
     }
 
     const handlePlaceOfJoining = (event) => {
-       
         setPlaceOfPosting1Name(event.target.value)
     }
 
-   
     function getoffice(office, officeName, themesoffice) {
         return {
             fontWeight:
@@ -592,11 +589,10 @@ const UsersList = () => {
 
     const handleEmployeeClose = () => {
         setEmployeeDialogs(false)
-        setSdate('');
-        setSdate1('');
-        setOffice('');
-        setName('');
-        
+        setSdate('')
+        setSdate1('')
+        setOffice('')
+        setName('')
     }
 
     const createAction = (
@@ -696,221 +692,216 @@ const UsersList = () => {
     }
 
     const ApplyFilters = () => {
-
-        let data = {};
+        let data = {}
         data.dynamic = sdynamic
         data.designation = sdesignation
         data.startDate = sdate
         data.endDate = sdate1
         data.location = officeName
         data.department = addDepartment
-     
+
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
                 if (res.data.data.length < 1) {
-                    alert("No record found")
+                    alert('No record found')
+                } else {
+                    setUsers(res.data.data)
+                    setEmployeeDialogs(false)
                 }
-                else {
-                    setUsers(res.data.data);
-                    setEmployeeDialogs(false);
-                }
-
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
-
     }
 
+    /////department nameid/employee
+    useEffect(() => {
+        getEmployee()
+        //  getData()
+    }, [])
 
-/////department nameid/employee
-useEffect(() => {
-    getEmployee()
-  //  getData()
-}, [])
+    const getEmployee = () => {
+        axios
+            .get(`${config.base_url}/api/v1/employee`)
+            .then((res) => {
+                setCustodianIds(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
 
-const getEmployee = () => {
-    axios
-        .get(`${config.base_url}/api/v1/employee`)
-        .then((res) => {
-            setCustodianIds(res.data.data)
-          
-        })
-        .catch((error) => {
-            console.log(error, 'error')
-        })
-       
-}
+    ///offices get the name
+    useEffect(() => {
+        getOfficedata()
+        //  getData()
+    }, [])
 
-///offices get the name
-useEffect(() => {
-    getOfficedata()
-  //  getData()
-}, [])
+    const getOfficedata = () => {
+        axios
+            .get(`${config.base_url}/api/v1/office`)
+            .then((res) => {
+                setOffice(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
 
-const getOfficedata = () => {
-    axios
-        .get(`${config.base_url}/api/v1/office`)
-        .then((res) => {
-            setOffice(res.data.data)
-           
-       
-        })
-        .catch((error) => {
-            console.log(error, 'error')
-        })
-       
-}
+    ////department
+    useEffect(() => {
+        getDepartmentdata()
+        //  getData()
+    }, [])
 
-////department
-useEffect(() => {
-    getDepartmentdata()
-  //  getData()
-}, [])
+    const getDepartmentdata = () => {
+        axios
+            .get(`${config.base_url}/api/v1/department`)
+            .then((res) => {
+                setAddDepartmentarr(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+    //////demy data
+    const top100Films = [
+        { label: 'The Shawshank Redemption', year: 1994 },
+        { label: 'The Godfather', year: 1972 },
+        { label: 'The Godfather: Part II', year: 1974 },
+        { label: 'The Dark Knight', year: 2008 },
+        { label: '12 Angry Men', year: 1957 },
+        { label: "Schindler's List", year: 1993 },
+        { label: 'Pulp Fiction', year: 1994 },
+        {
+            label: 'The Lord of the Rings: The Return of the King',
+            year: 2003,
+        },
+        { label: 'The Good, the Bad and the Ugly', year: 1966 },
+        { label: 'Fight Club', year: 1999 },
+        {
+            label: 'The Lord of the Rings: The Fellowship of the Ring',
+            year: 2001,
+        },
+        {
+            label: 'Star Wars: Episode V - The Empire Strikes Back',
+            year: 1980,
+        },
+        { label: 'Forrest Gump', year: 1994 },
+        { label: 'Inception', year: 2010 },
+        {
+            label: 'The Lord of the Rings: The Two Towers',
+            year: 2002,
+        },
+        { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
+        { label: 'Goodfellas', year: 1990 },
+        { label: 'The Matrix', year: 1999 },
+        { label: 'Seven Samurai', year: 1954 },
+        {
+            label: 'Star Wars: Episode IV - A New Hope',
+            year: 1977,
+        },
+        { label: 'City of God', year: 2002 },
+        { label: 'Se7en', year: 1995 },
+        { label: 'The Silence of the Lambs', year: 1991 },
+        { label: "It's a Wonderful Life", year: 1946 },
+        { label: 'Life Is Beautiful', year: 1997 },
+        { label: 'The Usual Suspects', year: 1995 },
+        { label: 'Léon: The Professional', year: 1994 },
+        { label: 'Spirited Away', year: 2001 },
+        { label: 'Saving Private Ryan', year: 1998 },
+        { label: 'Once Upon a Time in the West', year: 1968 },
+        { label: 'American History X', year: 1998 },
+        { label: 'Interstellar', year: 2014 },
+        { label: 'Casablanca', year: 1942 },
+        { label: 'City Lights', year: 1931 },
+        { label: 'Psycho', year: 1960 },
+        { label: 'The Green Mile', year: 1999 },
+        { label: 'The Intouchables', year: 2011 },
+        { label: 'Modern Times', year: 1936 },
+        { label: 'Raiders of the Lost Ark', year: 1981 },
+        { label: 'Rear Window', year: 1954 },
+        { label: 'The Pianist', year: 2002 },
+        { label: 'The Departed', year: 2006 },
+        { label: 'Terminator 2: Judgment Day', year: 1991 },
+        { label: 'Back to the Future', year: 1985 },
+        { label: 'Whiplash', year: 2014 },
+        { label: 'Gladiator', year: 2000 },
+        { label: 'Memento', year: 2000 },
+        { label: 'The Prestige', year: 2006 },
+        { label: 'The Lion King', year: 1994 },
+        { label: 'Apocalypse Now', year: 1979 },
+        { label: 'Alien', year: 1979 },
+        { label: 'Sunset Boulevard', year: 1950 },
+        {
+            label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
+            year: 1964,
+        },
+        { label: 'The Great Dictator', year: 1940 },
+        { label: 'Cinema Paradiso', year: 1988 },
+        { label: 'The Lives of Others', year: 2006 },
+        { label: 'Grave of the Fireflies', year: 1988 },
+        { label: 'Paths of Glory', year: 1957 },
+        { label: 'Django Unchained', year: 2012 },
+        { label: 'The Shining', year: 1980 },
+        { label: 'WALL·E', year: 2008 },
+        { label: 'American Beauty', year: 1999 },
+        { label: 'The Dark Knight Rises', year: 2012 },
+        { label: 'Princess Mononoke', year: 1997 },
+        { label: 'Aliens', year: 1986 },
+        { label: 'Oldboy', year: 2003 },
+        { label: 'Once Upon a Time in America', year: 1984 },
+        { label: 'Witness for the Prosecution', year: 1957 },
+        { label: 'Das Boot', year: 1981 },
+        { label: 'Citizen Kane', year: 1941 },
+        { label: 'North by Northwest', year: 1959 },
+        { label: 'Vertigo', year: 1958 },
+        {
+            label: 'Star Wars: Episode VI - Return of the Jedi',
+            year: 1983,
+        },
+        { label: 'Reservoir Dogs', year: 1992 },
+        { label: 'Braveheart', year: 1995 },
+        { label: 'M', year: 1931 },
+        { label: 'Requiem for a Dream', year: 2000 },
+        { label: 'Amélie', year: 2001 },
+        { label: 'A Clockwork Orange', year: 1971 },
+        { label: 'Like Stars on Earth', year: 2007 },
+        { label: 'Taxi Driver', year: 1976 },
+        { label: 'Lawrence of Arabia', year: 1962 },
+        { label: 'Double Indemnity', year: 1944 },
+        {
+            label: 'Eternal Sunshine of the Spotless Mind',
+            year: 2004,
+        },
+        { label: 'Amadeus', year: 1984 },
+        { label: 'To Kill a Mockingbird', year: 1962 },
+        { label: 'Toy Story 3', year: 2010 },
+        { label: 'Logan', year: 2017 },
+        { label: 'Full Metal Jacket', year: 1987 },
+        { label: 'Dangal', year: 2016 },
+        { label: 'The Sting', year: 1973 },
+        { label: '2001: A Space Odyssey', year: 1968 },
+        { label: "Singin' in the Rain", year: 1952 },
+        { label: 'Toy Story', year: 1995 },
+        { label: 'Bicycle Thieves', year: 1948 },
+        { label: 'The Kid', year: 1921 },
+        { label: 'Inglourious Basterds', year: 2009 },
+        { label: 'Snatch', year: 2000 },
+        { label: '3 Idiots', year: 2009 },
+        { label: 'Monty Python and the Holy Grail', year: 1975 },
+    ]
 
-const  getDepartmentdata = () => {
-    axios
-        .get(`${config.base_url}/api/v1/department`)
-        .then((res) => {
-            setAddDepartmentarr(res.data.data)
-          
-       
-        })
-        .catch((error) => {
-            console.log(error, 'error')
-        })
-       
-}
-//////demy data
-const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 },
-    { label: 'The Godfather: Part II', year: 1974 },
-    { label: 'The Dark Knight', year: 2008 },
-    { label: '12 Angry Men', year: 1957 },
-    { label: "Schindler's List", year: 1993 },
-    { label: 'Pulp Fiction', year: 1994 },
-    {
-      label: 'The Lord of the Rings: The Return of the King',
-      year: 2003,
-    },
-    { label: 'The Good, the Bad and the Ugly', year: 1966 },
-    { label: 'Fight Club', year: 1999 },
-    {
-      label: 'The Lord of the Rings: The Fellowship of the Ring',
-      year: 2001,
-    },
-    {
-      label: 'Star Wars: Episode V - The Empire Strikes Back',
-      year: 1980,
-    },
-    { label: 'Forrest Gump', year: 1994 },
-    { label: 'Inception', year: 2010 },
-    {
-      label: 'The Lord of the Rings: The Two Towers',
-      year: 2002,
-    },
-    { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
-    { label: 'Goodfellas', year: 1990 },
-    { label: 'The Matrix', year: 1999 },
-    { label: 'Seven Samurai', year: 1954 },
-    {
-      label: 'Star Wars: Episode IV - A New Hope',
-      year: 1977,
-    },
-    { label: 'City of God', year: 2002 },
-    { label: 'Se7en', year: 1995 },
-    { label: 'The Silence of the Lambs', year: 1991 },
-    { label: "It's a Wonderful Life", year: 1946 },
-    { label: 'Life Is Beautiful', year: 1997 },
-    { label: 'The Usual Suspects', year: 1995 },
-    { label: 'Léon: The Professional', year: 1994 },
-    { label: 'Spirited Away', year: 2001 },
-    { label: 'Saving Private Ryan', year: 1998 },
-    { label: 'Once Upon a Time in the West', year: 1968 },
-    { label: 'American History X', year: 1998 },
-    { label: 'Interstellar', year: 2014 },
-    { label: 'Casablanca', year: 1942 },
-    { label: 'City Lights', year: 1931 },
-    { label: 'Psycho', year: 1960 },
-    { label: 'The Green Mile', year: 1999 },
-    { label: 'The Intouchables', year: 2011 },
-    { label: 'Modern Times', year: 1936 },
-    { label: 'Raiders of the Lost Ark', year: 1981 },
-    { label: 'Rear Window', year: 1954 },
-    { label: 'The Pianist', year: 2002 },
-    { label: 'The Departed', year: 2006 },
-    { label: 'Terminator 2: Judgment Day', year: 1991 },
-    { label: 'Back to the Future', year: 1985 },
-    { label: 'Whiplash', year: 2014 },
-    { label: 'Gladiator', year: 2000 },
-    { label: 'Memento', year: 2000 },
-    { label: 'The Prestige', year: 2006 },
-    { label: 'The Lion King', year: 1994 },
-    { label: 'Apocalypse Now', year: 1979 },
-    { label: 'Alien', year: 1979 },
-    { label: 'Sunset Boulevard', year: 1950 },
-    {
-      label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-      year: 1964,
-    },
-    { label: 'The Great Dictator', year: 1940 },
-    { label: 'Cinema Paradiso', year: 1988 },
-    { label: 'The Lives of Others', year: 2006 },
-    { label: 'Grave of the Fireflies', year: 1988 },
-    { label: 'Paths of Glory', year: 1957 },
-    { label: 'Django Unchained', year: 2012 },
-    { label: 'The Shining', year: 1980 },
-    { label: 'WALL·E', year: 2008 },
-    { label: 'American Beauty', year: 1999 },
-    { label: 'The Dark Knight Rises', year: 2012 },
-    { label: 'Princess Mononoke', year: 1997 },
-    { label: 'Aliens', year: 1986 },
-    { label: 'Oldboy', year: 2003 },
-    { label: 'Once Upon a Time in America', year: 1984 },
-    { label: 'Witness for the Prosecution', year: 1957 },
-    { label: 'Das Boot', year: 1981 },
-    { label: 'Citizen Kane', year: 1941 },
-    { label: 'North by Northwest', year: 1959 },
-    { label: 'Vertigo', year: 1958 },
-    {
-      label: 'Star Wars: Episode VI - Return of the Jedi',
-      year: 1983,
-    },
-    { label: 'Reservoir Dogs', year: 1992 },
-    { label: 'Braveheart', year: 1995 },
-    { label: 'M', year: 1931 },
-    { label: 'Requiem for a Dream', year: 2000 },
-    { label: 'Amélie', year: 2001 },
-    { label: 'A Clockwork Orange', year: 1971 },
-    { label: 'Like Stars on Earth', year: 2007 },
-    { label: 'Taxi Driver', year: 1976 },
-    { label: 'Lawrence of Arabia', year: 1962 },
-    { label: 'Double Indemnity', year: 1944 },
-    {
-      label: 'Eternal Sunshine of the Spotless Mind',
-      year: 2004,
-    },
-    { label: 'Amadeus', year: 1984 },
-    { label: 'To Kill a Mockingbird', year: 1962 },
-    { label: 'Toy Story 3', year: 2010 },
-    { label: 'Logan', year: 2017 },
-    { label: 'Full Metal Jacket', year: 1987 },
-    { label: 'Dangal', year: 2016 },
-    { label: 'The Sting', year: 1973 },
-    { label: '2001: A Space Odyssey', year: 1968 },
-    { label: "Singin' in the Rain", year: 1952 },
-    { label: 'Toy Story', year: 1995 },
-    { label: 'Bicycle Thieves', year: 1948 },
-    { label: 'The Kid', year: 1921 },
-    { label: 'Inglourious Basterds', year: 2009 },
-    { label: 'Snatch', year: 2000 },
-    { label: '3 Idiots', year: 2009 },
-    { label: 'Monty Python and the Holy Grail', year: 1975 },
-  ];
-
-
+    const headers = [
+        { label: 'Office Name', key: 'name' },
+        { label: 'Office Id', key: 'officeId' },
+        { label: 'Email', key: 'email' },
+        { label: 'Phone', key: 'phone' },
+        { label: 'Address', key: 'address' },
+        { label: 'City', key: 'city' },
+        { label: 'Creation Date', key: 'createdAt' },
+    ]
 
     return (
         <>
@@ -927,43 +918,70 @@ const top100Films = [
             )}
             <Container>
                 <br></br>
-                <Typography component={'span'} variant="h4" sx={{ mb: 5 }}>
-                    Employees
-                </Typography>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                        Employees
+                    </Typography>
+                    <CSVLink
+                        separator=","
+                        filename={'all-employees.csv'}
+                        data={users}
+                        headers={headers}
+                    >
+                        <div
+                            style={{
+                                backgroundColor: '#1976d2',
+                                borderRadius: '50%',
+                            }}
+                        >
+                            <IconButton
+                                style={{ color: '#FFFFFF' }}
+                                size="medium"
+                            >
+                                <SummarizeIcon />
+                            </IconButton>
+                        </div>
+                    </CSVLink>
+                </div>
                 <Grid container spacing={3}>
-                    {users .slice(pagesVisited, pagesVisited + usersPerPage).map((user) => (
-                        <Grid key={user._id} item xs={12} sm={6} md={3}>
-                            <UsersCard
-                                user={user}
-                                onDelete={onDeleteHandler}
-                                onEdit={onEditHandler}
-                            />
-                        </Grid>
-                    ))}
+                    {users
+                        .slice(pagesVisited, pagesVisited + usersPerPage)
+                        .map((user) => (
+                            <Grid key={user._id} item xs={12} sm={6} md={3}>
+                                <UsersCard
+                                    user={user}
+                                    onDelete={onDeleteHandler}
+                                    onEdit={onEditHandler}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
                 <br></br>
                 <br></br>
                 <br></br>
-             
-      <ReactPaginate
-        previousLabel={"Previous"}
-        nextLabel={"Next"}
-        pageCount={pageCount}
-        onPageChange={changePage}
-        containerClassName={"paginationBttns"}
-        previousLinkClassName={"previousBttn"}
-        nextLinkClassName={"nextBttn"}
-        disabledClassName={"paginationDisabled"}
-        activeClassName={"paginationActive"}
-      />
-   
+
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
             </Container>
 
             {/* ////
                 this is the search dialods */}
-                {
-
-                }
+            {}
             <Tooltip title="Search Employee">
                 <Fab
                     color="primary"
@@ -981,39 +999,39 @@ const top100Films = [
                 </Fab>
             </Tooltip>
             <div>
-            <Tooltip title="Add Employee">
-                <Fab
-                    color="secondary"
-                    aria-label="Add"
-                    size="medium"
-                    style={{
-                        zIndex: 999,
-                        right: '4vw',
-                        bottom: '8vh',
-                        position: 'fixed',
-                    }}
-                    onClick={() => setCreateEmployeeDialog(true)}
-                >
-                    <AddIcon />
-                </Fab>
-            </Tooltip>
-            <Dialog
-                open={createEmployeeDialog}
-                onClose={handleCreateClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {'ADD EMPLOYEE'}
-                    <IconButton
-                        aria-label="settings"
-                        sx={{ ml: 45 }}
-                        // onClick={iconeHandler}
+                <Tooltip title="Add Employee">
+                    <Fab
+                        color="secondary"
+                        aria-label="Add"
+                        size="medium"
+                        style={{
+                            zIndex: 999,
+                            right: '4vw',
+                            bottom: '8vh',
+                            position: 'fixed',
+                        }}
+                        onClick={() => setCreateEmployeeDialog(true)}
                     >
-                        <MoreVertIcon />
-                    </IconButton>
+                        <AddIcon />
+                    </Fab>
+                </Tooltip>
+                <Dialog
+                    open={createEmployeeDialog}
+                    onClose={handleCreateClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {'ADD EMPLOYEE'}
+                        <IconButton
+                            aria-label="settings"
+                            sx={{ ml: 45 }}
+                            // onClick={iconeHandler}
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
 
-                    {/* 
+                        {/* 
          <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -1131,9 +1149,9 @@ const top100Films = [
             </MenuItem>
          
       </Menu>  */}
-                </DialogTitle>
+                    </DialogTitle>
 
-                <DialogContent>
+                    <DialogContent>
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
@@ -1331,12 +1349,9 @@ const top100Films = [
 </Grid> */}
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <FormControl
-                                    fullWidth
-                                    size="small"
-                                >
+                                <FormControl fullWidth size="small">
                                     <InputLabel id="demo-simple-select-label">
-                                       Location
+                                        Location
                                     </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
@@ -1383,23 +1398,22 @@ const top100Films = [
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                            <Box >
-                                <FormControl fullWidth >
-                                <InputLabel 
-                                id="demo-simple-select-label">        
-                                Wing
-                             </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value=''
-                                        label="Department"
-                                        size="small"
-                                        // onChange={(event) =>
-                                        //     setCustodianId(event.target.value)
-                                        // }
-                                    >
-                                       {/* {custodianIds.map((custodianId) => {
+                                <Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Wing
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value=""
+                                            label="Department"
+                                            size="small"
+                                            // onChange={(event) =>
+                                            //     setCustodianId(event.target.value)
+                                            // }
+                                        >
+                                            {/* {custodianIds.map((custodianId) => {
                                             return (
                                                 <MenuItem
                                                     key={custodianId._id}
@@ -1410,10 +1424,10 @@ const top100Films = [
                                                 </MenuItem>
                                             )
                                         })} */}
-                                    </Select>
+                                        </Select>
                                     </FormControl>
-                                    </Box>
-                                    </Grid>
+                                </Box>
+                            </Grid>
                             {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={wing1Error}
@@ -1436,38 +1450,38 @@ const top100Films = [
                                 />
                             </Grid> */}
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                            <Box >
-                                <FormControl fullWidth >
-                                <InputLabel 
-                                id="demo-simple-select-label">        
-                                Department
-                             </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={addDepartment}
-                                        label="Department"
-                                        size="small"
-                                        onChange={(event) =>
-                                            setAddDepartment(event.target.value)
-                                        }
-                                    >
-                                       {addDepartmentarr.map((depart) => {
-                                            return (
-                                                <MenuItem
-                                                    key={depart._id}
-                                                    value={depart.name}
-                                                >
-                                                  
-                                                    {depart.name}
-                                                </MenuItem>
-                                            )
-                                        })}
-                                    </Select>
+                                <Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Department
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={addDepartment}
+                                            label="Department"
+                                            size="small"
+                                            onChange={(event) =>
+                                                setAddDepartment(
+                                                    event.target.value
+                                                )
+                                            }
+                                        >
+                                            {addDepartmentarr.map((depart) => {
+                                                return (
+                                                    <MenuItem
+                                                        key={depart._id}
+                                                        value={depart.name}
+                                                    >
+                                                        {depart.name}
+                                                    </MenuItem>
+                                                )
+                                            })}
+                                        </Select>
                                     </FormControl>
-                                    </Box>
-                                    </Grid>
-                        
+                                </Box>
+                            </Grid>
+
                             {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={department1Error}
@@ -1592,23 +1606,22 @@ const top100Films = [
                                 />
                             </Grid>
                         </Grid>
-                    
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCreateClose}>Cancel</Button>
-                    <Button autoFocus onClick={handleCreateClickOpen}>
-                        Confirm
-                    </Button>
-                </DialogActions>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCreateClose}>Cancel</Button>
+                        <Button autoFocus onClick={handleCreateClickOpen}>
+                            Confirm
+                        </Button>
+                    </DialogActions>
 
-                <Snackbar
-                    open={createSnackBar}
-                    autoHideDuration={5000}
-                    onClose={handleCreateClosed}
-                    message="Employee with same Id already exists"
-                    action={createAction}
-                />
-            </Dialog>
+                    <Snackbar
+                        open={createSnackBar}
+                        autoHideDuration={5000}
+                        onClose={handleCreateClosed}
+                        message="Employee with same Id already exists"
+                        action={createAction}
+                    />
+                </Dialog>
             </div>
             <Dialog
                 open={editEmployeeDialog}
@@ -1744,31 +1757,29 @@ const top100Films = [
       </Menu>  */}
                 </DialogTitle>
                 <DialogContent>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={nameError}
-                                    id="category"
-                                    label="Name"
-                                    placeholder="Name"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        nameError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={name}
-                                    onChange={(e) =>
-                                        handleChange(e, setName, setNameError)
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={nameError}
+                                id="category"
+                                label="Name"
+                                placeholder="Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    nameError === true ? 'Field Required' : ''
+                                }
+                                value={name}
+                                onChange={(e) =>
+                                    handleChange(e, setName, setNameError)
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                        {/* <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={officeError}
                                     id="office"
@@ -1794,82 +1805,80 @@ const top100Films = [
                                 />
                             </Grid> */}
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={cnicError}
-                                    id="cnic"
-                                    type="number"
-                                    label="CNIC"
-                                    placeholder="Enter CNIC"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        cnicError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={cnic}
-                                    onChange={(e) =>
-                                        handleChange(e, setCnic, setCnicError)
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={cnicError}
+                                id="cnic"
+                                type="number"
+                                label="CNIC"
+                                placeholder="Enter CNIC"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    cnicError === true ? 'Field Required' : ''
+                                }
+                                value={cnic}
+                                onChange={(e) =>
+                                    handleChange(e, setCnic, setCnicError)
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={employeeIdError}
-                                    id="employeeId"
-                                    label="Employee ID"
-                                    placeholder="Enter Employee ID"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        employeeIdError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={employeeId}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEmployeeId,
-                                            setEmployeeIdError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={employeeIdError}
+                                id="employeeId"
+                                label="Employee ID"
+                                placeholder="Enter Employee ID"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    employeeIdError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={employeeId}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setEmployeeId,
+                                        setEmployeeIdError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={mobilenumber1Error}
-                                    id="category"
-                                    type="number"
-                                    label="Mobile Number"
-                                    placeholder="Mobile Number"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        mobilenumber1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={mobileNumber1}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setMobileNumber1,
-                                            setMobileNumber1Error
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-                            {/* 
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={mobilenumber1Error}
+                                id="category"
+                                type="number"
+                                label="Mobile Number"
+                                placeholder="Mobile Number"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    mobilenumber1Error === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={mobileNumber1}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setMobileNumber1,
+                                        setMobileNumber1Error
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        {/* 
  <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={remarks1Error}
@@ -1892,33 +1901,33 @@ const top100Films = [
  />
 </Grid> */}
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={emailAddress1Error}
-                                    id="category"
-                                    label="Email Address"
-                                    placeholder="Email Address"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        emailAddress1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={emailAddress1}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEmailAddress1,
-                                            setEmailAddress1Error
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={emailAddress1Error}
+                                id="category"
+                                label="Email Address"
+                                placeholder="Email Address"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    emailAddress1Error === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={emailAddress1}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setEmailAddress1,
+                                        setEmailAddress1Error
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            {/* <Grid item lg={4} md={4} sm={4} xs={6}>
+                        {/* <Grid item lg={4} md={4} sm={4} xs={6}>
  <TextField
      error={placeOfPosting1Error}
      id="category"
@@ -1939,7 +1948,7 @@ const top100Films = [
      fullWidth
  />
 </Grid> */}
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
                             <div>
                                 <FormControl
                                     sx={{ m: 1, minWidth: 150 }}
@@ -1968,128 +1977,124 @@ const top100Films = [
                                     </Select>
                                 </FormControl>
                             </div>
-                            </Grid>
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={pg1Error}
-                                    id="category"
-                                    label="PG"
-                                    placeholder="PG"
-                                    size="small"
-                                    autoComplete="off"
-                                    type="number"
-                                    helperText={
-                                        pg1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={pg1}
-                                    onChange={(e) =>
-                                        handleChange(e, setPg1, setPg1Error)
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={pg1Error}
+                                id="category"
+                                label="PG"
+                                placeholder="PG"
+                                size="small"
+                                autoComplete="off"
+                                type="number"
+                                helperText={
+                                    pg1Error === true ? 'Field Required' : ''
+                                }
+                                value={pg1}
+                                onChange={(e) =>
+                                    handleChange(e, setPg1, setPg1Error)
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={wing1Error}
-                                    id="category"
-                                    label="wing"
-                                    placeholder="wing"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        wing1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={wing1}
-                                    onChange={(e) =>
-                                        handleChange(e, setWing1, setWing1Error)
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={wing1Error}
+                                id="category"
+                                label="wing"
+                                placeholder="wing"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    wing1Error === true ? 'Field Required' : ''
+                                }
+                                value={wing1}
+                                onChange={(e) =>
+                                    handleChange(e, setWing1, setWing1Error)
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={department1Error}
-                                    id="category"
-                                    label="Department"
-                                    placeholder="Department"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        department1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={department1}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setDepartment1,
-                                            setDepartment1Error
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={department1Error}
+                                id="category"
+                                label="Department"
+                                placeholder="Department"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    department1Error === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={department1}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setDepartment1,
+                                        setDepartment1Error
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={dateOfJoinnig1Error}
-                                    id="date"
-                                    label="Date Of Joinnig"
-                                    placeholder="Date Of Joinnig"
-                                    type="date"
-                                    size="small"
-                                    helperText={
-                                        dateOfJoinnig1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={dateOfJoinnig1}
-                                    onChange={dateOfjoinnignHandler}
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={dateOfJoinnig1Error}
+                                id="date"
+                                label="Date Of Joinnig"
+                                placeholder="Date Of Joinnig"
+                                type="date"
+                                size="small"
+                                helperText={
+                                    dateOfJoinnig1Error === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={dateOfJoinnig1}
+                                onChange={dateOfjoinnignHandler}
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <TextField
-                                    error={designation1Error}
-                                    id="category"
-                                    label="Designation"
-                                    placeholder="Designation"
-                                    size="small"
-                                    autoComplete="off"
-                                    helperText={
-                                        designation1Error === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={designation1}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setDesignation1,
-                                            setDesignation1Error
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
+                        <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <TextField
+                                error={designation1Error}
+                                id="category"
+                                label="Designation"
+                                placeholder="Designation"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    designation1Error === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={designation1}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setDesignation1,
+                                        setDesignation1Error
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
 
-                            {/* old colde start */}
+                        {/* old colde start */}
 
-                            {/* 
+                        {/* 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={nameError}
@@ -2283,27 +2288,27 @@ const top100Films = [
 
  */}
 
-                            {/* old code end */}
+                        {/* old code end */}
 
-                            <Grid item lg={3} md={3} sm={3} xs={3}>
-                                <label htmlFor="contained-button-file">
-                                    <Input
-                                        accept="image/*"
-                                        id="contained-button-file"
-                                        multiple
-                                        type="file"
-                                        onChange={handleImage}
-                                    />
-                                    <Button
-                                        variant="contained"
-                                        component="span"
-                                        startIcon={<AddAPhotoIcon />}
-                                    >
-                                        Upload
-                                    </Button>
-                                </label>
-                            </Grid>
-                            {/* <Grid item lg={3} md={3} sm={3} xs={3}>
+                        <Grid item lg={3} md={3} sm={3} xs={3}>
+                            <label htmlFor="contained-button-file">
+                                <Input
+                                    accept="image/*"
+                                    id="contained-button-file"
+                                    multiple
+                                    type="file"
+                                    onChange={handleImage}
+                                />
+                                <Button
+                                    variant="contained"
+                                    component="span"
+                                    startIcon={<AddAPhotoIcon />}
+                                >
+                                    Upload
+                                </Button>
+                            </label>
+                        </Grid>
+                        {/* <Grid item lg={3} md={3} sm={3} xs={3}>
                                 <span>Purchase</span>
                                 <Switch
                                     {...label}
@@ -2314,31 +2319,31 @@ const top100Films = [
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </Grid> */}
 
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <TextField
-                                    error={descriptionError}
-                                    helperText={
-                                        descriptionError && 'Field Required'
-                                    }
-                                    label="Remarks"
-                                    placeholder="Remarks"
-                                    style={{ textAlign: 'left' }}
-                                    hinttext="Message Field"
-                                    floatinglabeltext="MultiLine and FloatingLabel"
-                                    multiline
-                                    fullWidth
-                                    rows={3}
-                                    value={description}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setDescription,
-                                            setDescriptionError
-                                        )
-                                    }
-                                />
-                            </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={descriptionError}
+                                helperText={
+                                    descriptionError && 'Field Required'
+                                }
+                                label="Remarks"
+                                placeholder="Remarks"
+                                style={{ textAlign: 'left' }}
+                                hinttext="Message Field"
+                                floatinglabeltext="MultiLine and FloatingLabel"
+                                multiline
+                                fullWidth
+                                rows={3}
+                                value={description}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setDescription,
+                                        setDescriptionError
+                                    )
+                                }
+                            />
                         </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose}>Cancel</Button>
@@ -2362,27 +2367,25 @@ const top100Films = [
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle >
-                    {'Search Filter'}
-                </DialogTitle>
+                <DialogTitle>{'Search Filter'}</DialogTitle>
 
                 <DialogContent>
-                    
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-
-
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Autocomplete
-                                 size="small"
-
+                                size="small"
                                 disablePortal
                                 id="combo-box-demo"
                                 options={top100Films}
-                              
-                                renderInput={(params) => <TextField {...params} label="Name/Email/CNIC/Employ Code" />}
-                                />
-                                {/* <TextField
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Name/Email/CNIC/Employ Code"
+                                    />
+                                )}
+                            />
+                            {/* <TextField
                                     id="category"
                                     label="Name/Email/CNIC/Employ Code"
                                     placeholder="Name/Email/CNIC/Employ Code"
@@ -2396,21 +2399,22 @@ const top100Films = [
                                     fullWidth
 
                                 /> */}
-                            </Grid>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-
-
-                                <Autocomplete
-                                 size="small"
-
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Autocomplete
+                                size="small"
                                 disablePortal
                                 id="combo-box-demo"
                                 options={top100Films}
-                              
-                                renderInput={(params) => <TextField {...params}   label="Designation" />}
-                                />
-                                    
-                                {/* <TextField
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Designation"
+                                    />
+                                )}
+                            />
+
+                            {/* <TextField
                                     id="category"
                                     label="Designation"
                                     placeholder="Designation"
@@ -2424,10 +2428,10 @@ const top100Films = [
                                     fullWidth
 
                                 /> */}
-                            </Grid>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Box sx={{ minWidth: 120 }}>
-                            <Autocomplete
+                                <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
                                         position: 'bottom-start',
@@ -2484,10 +2488,9 @@ const top100Films = [
                                         })}
                                     </Select>
                                     </FormControl> */}
-               
-                                    </Box>
-                                    </Grid>
-                            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
+                            </Box>
+                        </Grid>
+                        {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     id="category"
                                     label="Reporting Manager"
@@ -2504,7 +2507,7 @@ const top100Films = [
                                 />
                             </Grid> */}
 
-                            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
+                        {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     id="category"
                                     label="Department"
@@ -2520,10 +2523,9 @@ const top100Films = [
 
                                 />
                             </Grid> */}
-                             <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Box sx={{ minWidth: 120 }}>
-                               
-                                    <Autocomplete
+                                <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
                                         position: 'bottom-start',
@@ -2552,11 +2554,10 @@ const top100Films = [
                                         setCustodianId(vender)
                                     }}
                                 />
+                            </Box>
+                        </Grid>
 
-                                    </Box>
-                                    </Grid>
-
-                                    <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <Typography gutterBottom>Start Date</Typography>
                             <TextField
                                 value={sdate}
@@ -2580,7 +2581,7 @@ const top100Films = [
                                 fullWidth
                             />
                         </Grid>
-                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEmployeeClose}>Cancel</Button>
@@ -2588,13 +2589,7 @@ const top100Films = [
                         Confirm
                     </Button>
                 </DialogActions>
-
-
             </Dialog>
-
-
-
-            
         </>
     )
 }
