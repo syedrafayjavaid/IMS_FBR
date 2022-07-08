@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 // material
 import {
     Box,
+    Button,
     Card,
     CardActions,
     CardContent,
     CardMedia,
-    Stack,
     Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
@@ -72,27 +72,6 @@ function CategoryCard({ category, onEdit, onDelete }) {
                     <Typography variant="subtitle2" noWrap>
                         {category.name}
                     </Typography>
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        style={{ marginTop: '1px' }}
-                    >
-                        <Typography variant="subtitle1">
-                            <Typography
-                                component="span"
-                                variant="body1"
-                                sx={{
-                                    color: 'text.disabled',
-                                    textDecoration: '',
-                                }}
-                            >
-                                Quantitiy:
-                            </Typography>
-                            &nbsp;
-                            {/* {price} */}
-                        </Typography>
-                    </Stack>
                 </CardContent>
             </Box>
             <CardActions>
@@ -105,12 +84,25 @@ function CategoryCard({ category, onEdit, onDelete }) {
                             textDecoration: '',
                         }}
                     >
-                        <button onClick={delHandler}>
-                            <DeleteIcon />
-                        </button>
-                        <button onClick={adiitHandler}>
-                            <EditIcon />
-                        </button>
+                        <Button
+                            variant="outlined"
+                            style={{
+                                marginRight: '5px',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                            }}
+                            onClick={adiitHandler}
+                        >
+                            <EditIcon fontSize="small" />
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            style={{ marginLeft: '5px', marginBottom: '5px' }}
+                            onClick={delHandler}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </Button>
                     </Typography>
                 </Typography>
             </CardActions>

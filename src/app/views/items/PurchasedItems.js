@@ -675,7 +675,7 @@ const PurchasedItems = () => {
                 console.log(error, 'error')
             })
 
-        // setProductId(purchaseItem.productId)
+        setProductId(purchaseItem.productId)
 
         setSelectedProduct(productData)
 
@@ -822,12 +822,36 @@ const PurchasedItems = () => {
                     style={{
                         zIndex: 999,
                         right: '4vw',
-                        top: '13vh',
+                        top: '9vh',
                         position: 'fixed',
                     }}
                     onClick={() => setSearchItemsDialog(true)}
                 >
                     <SearchIcon />
+                </Fab>
+            </Tooltip>
+
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '17vh',
+                        position: 'fixed',
+                    }}
+                >
+                    <CSVLink
+                        filename={'all-purchased-items.csv'}
+                        data={purchasedItems}
+                        headers={headers}
+                    >
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
+                        </div>
+                    </CSVLink>
                 </Fab>
             </Tooltip>
 
@@ -850,37 +874,9 @@ const PurchasedItems = () => {
 
             <Container>
                 <br></br>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography variant="h4" sx={{ mb: 5 }}>
-                        Items Entry
-                    </Typography>
-                    <CSVLink
-                        separator=","
-                        filename={'all-purchased-items.csv'}
-                        data={purchasedItems}
-                        headers={headers}
-                    >
-                        <div
-                            style={{
-                                backgroundColor: '#1976d2',
-                                borderRadius: '50%',
-                            }}
-                        >
-                            <IconButton
-                                style={{ color: '#FFFFFF' }}
-                                size="medium"
-                            >
-                                <SummarizeIcon />
-                            </IconButton>
-                        </div>
-                    </CSVLink>
-                </div>
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                    Items Entry
+                </Typography>
                 <Grid container spacing={3}>
                     {purchasedItems.map((purchaseItem) => (
                         <Grid key={purchaseItem._id} item xs={12} sm={6} md={3}>
@@ -1104,7 +1100,6 @@ const PurchasedItems = () => {
                                             </MenuItem>
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {statusError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -1142,7 +1137,6 @@ const PurchasedItems = () => {
                                             })}
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {officeNameError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -1199,7 +1193,6 @@ const PurchasedItems = () => {
                                             </MenuItem>
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {ownerShipError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -1694,7 +1687,7 @@ const PurchasedItems = () => {
                                         }}
                                         value={selectedProduct}
                                         onChange={(_event, product) => {
-                                            setSelectedProduct(product)
+                                            setSelectedProduct(product._id)
                                         }}
                                     />
                                 </Box>
@@ -1861,7 +1854,6 @@ const PurchasedItems = () => {
                                             </MenuItem>
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {statusError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -1899,7 +1891,6 @@ const PurchasedItems = () => {
                                             })}
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {officeNameError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -2081,7 +2072,6 @@ const PurchasedItems = () => {
                                             </MenuItem>
                                         </Select>
                                         <FormHelperText>
-                                            {' '}
                                             {ownerShipError === true
                                                 ? 'Field Required'
                                                 : ''}
@@ -2253,7 +2243,7 @@ const PurchasedItems = () => {
                                         />
                                     </a>
                                 ) : null}
-                            </Grid>{' '}
+                            </Grid>
                         </Grid>
                     </CardContent>
                 </DialogContent>

@@ -252,47 +252,34 @@ const Brands = () => {
                     onYesClick={onDelhandler}
                 />
             )}
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography variant="h4" sx={{ m: 5 }}>
-                    Brands
-                </Typography>
-                <CSVLink
-                    separator=","
-                    filename={'all-brands.csv'}
-                    data={brand}
-                    headers={headers}
-                >
-                    <div
-                        style={{
-                            backgroundColor: '#1976d2',
-                            borderRadius: '50%',
-                            marginRight: '20px',
-                        }}
-                    >
-                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
-                            <SummarizeIcon />
-                        </IconButton>
-                    </div>
-                </CSVLink>
-            </div>
-            <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
+            <Typography variant="h4" sx={{ m: 5 }}>
+                Brands
+            </Typography>
+
+            <Card elevation={3} sx={{ pt: '20px', mx: 5 }}>
                 <Box overflow="auto">
                     <BrandTable>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ px: 3 }} colSpan={4}>
+                                <TableCell
+                                    sx={{ px: 3 }}
+                                    align="left"
+                                    colSpan={6}
+                                >
                                     Name
                                 </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                <TableCell
+                                    sx={{ px: 0 }}
+                                    align="center"
+                                    colSpan={3}
+                                >
                                     Edit
                                 </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={1}>
+                                <TableCell
+                                    sx={{ px: 0 }}
+                                    align="center"
+                                    colSpan={3}
+                                >
                                     Delete
                                 </TableCell>
                             </TableRow>
@@ -310,6 +297,30 @@ const Brands = () => {
                     </BrandTable>
                 </Box>
             </Card>
+
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '11vh',
+                        position: 'fixed',
+                    }}
+                >
+                    <CSVLink
+                        filename={'all-brands.csv'}
+                        data={brand}
+                        headers={headers}
+                    >
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
+                        </div>
+                    </CSVLink>
+                </Fab>
+            </Tooltip>
 
             <Dialog
                 open={createBrandDialog}

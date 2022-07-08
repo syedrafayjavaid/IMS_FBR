@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 // material
 import {
     Box,
+    Button,
     Card,
     CardActions,
     CardContent,
@@ -131,12 +132,25 @@ function ProductCard({ product, onDelete, onEdit }) {
                             textDecoration: '',
                         }}
                     >
-                        <button onClick={delHandler}>
-                            <DeleteIcon />
-                        </button>
-                        <button onClick={adiitHandler}>
-                            <EditIcon />
-                        </button>
+                        <Button
+                            variant="outlined"
+                            style={{
+                                marginRight: '5px',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                            }}
+                            onClick={adiitHandler}
+                        >
+                            <EditIcon fontSize="small" />
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            style={{ marginLeft: '5px', marginBottom: '5px' }}
+                            onClick={delHandler}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </Button>
                     </Typography>
                 </Typography>
             </CardActions>

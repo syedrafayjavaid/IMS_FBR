@@ -203,10 +203,7 @@ const UserDetail = () => {
         data.employId = custodianId
         data.employID = transferTo?.employeeId
 
-    
-
         if (quantity > 200) {
-        
             alert('Quantity Exceeds')
             return
         }
@@ -215,7 +212,7 @@ const UserDetail = () => {
             .then((res) => {
                 if (res) {
                     // handleCreateClose()
-              
+
                     // getData()
                     setOpen(false)
                 }
@@ -290,7 +287,7 @@ const UserDetail = () => {
 
     const transferProduct = (item) => {
         setOpen(true)
-    
+
         setEmployeeProductDetail(item)
     }
 
@@ -306,12 +303,13 @@ const UserDetail = () => {
                         <ContentBox>
                             <IMG
                                 src={
-                                    state.user.photo !== 'no-image'
-                                        ? config.base_url +
+                                    state.user.photo === 'no-image' ||
+                                    state.user.photo === undefined
+                                        ? avatar
+                                        : config.base_url +
                                           '/' +
                                           imgeBaseUrl +
                                           state.user.photo
-                                        : avatar
                                 }
                                 alt=""
                             />

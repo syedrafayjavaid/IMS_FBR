@@ -1,12 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 // material
-import TextTruncate from 'react-text-truncate';
+import TextTruncate from 'react-text-truncate'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
     Box,
-    Card, CardActions, CardContent, CardMedia, Stack, Typography
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Stack,
+    Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import config from 'config'
@@ -23,8 +29,6 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
         position: 'absolute',
     })
 
-
-      
     const imgeBaseUrl = 'uploads/'
 
     const onEditHandler = () => {
@@ -36,30 +40,26 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
     }
 
     const navigateToDetailsPage = () => {
-        navigate("/user/details", { state: { user: user } })
+        navigate('/user/details', { state: { user: user } })
     }
 
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <Box
-                onClick={navigateToDetailsPage}
-            >
+            <Box onClick={navigateToDetailsPage}>
                 <CardMedia sx={{ pt: '100%', position: 'relative' }}>
                     <UserImgStyle
-                 
-                        alt='No Image'
+                        alt="No Image"
                         src={
                             // user.photo !== 'no-image' ? config.base_url + '/' + imgeBaseUrl + user.photo : avatar
-                    
-                        user.photo === 'no-image' ||
-                        user.photo === undefined
-                            ? avatar
-                            : config.base_url +
-                              '/' +
-                              imgeBaseUrl +
-                              user.photo
-                    }
-                     
+
+                            user.photo === 'no-image' ||
+                            user.photo === undefined
+                                ? avatar
+                                : config.base_url +
+                                  '/' +
+                                  imgeBaseUrl +
+                                  user.photo
+                        }
                     />
                 </CardMedia>
                 <CardContent>
@@ -72,24 +72,21 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                         justifyContent="space-between"
                         style={{ marginTop: '10px' }}
                     >
-                        <Typography variant="subtitle1" >
+                        <Typography variant="subtitle1">
                             <Typography
                                 component="span"
                                 variant="body1"
                                 sx={{
                                     color: 'text',
-                                   
                                 }}
                             >
                                 <TextTruncate
-                                line={1}
-                                element="span"
-                                truncateText="…"
-                                text={`Name: ${user.name}`}
-                                textTruncateChild={<a href="#"> 
-                                </a>}
-                            />
-                               
+                                    line={1}
+                                    element="span"
+                                    truncateText="…"
+                                    text={`Name: ${user.name}`}
+                                    textTruncateChild={<a href="#"></a>}
+                                />
                             </Typography>
                         </Typography>
                     </Stack>
@@ -105,21 +102,15 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                 variant="body1"
                                 sx={{
                                     color: 'text',
-                                    
-                                
                                 }}
                             >
-                                 <TextTruncate
-                                line={1}
-                                element="span"
-                                truncateText="…"
-                                text={`Email: ${user.emailAddress}`}
-                                textTruncateChild={<a href="#">
-                                </a>}
-                            />
-                               
-                                
-                              
+                                <TextTruncate
+                                    line={1}
+                                    element="span"
+                                    truncateText="…"
+                                    text={`Email: ${user.emailAddress}`}
+                                    textTruncateChild={<a href="#"></a>}
+                                />
                             </Typography>
                         </Typography>
                     </Stack>
@@ -135,12 +126,25 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                             textDecoration: '',
                         }}
                     >
-                        <button onClick={onDeleteHandler}>
-                            <DeleteIcon />
-                        </button>
-                        <button onClick={onEditHandler}>
-                            <EditIcon />
-                        </button>
+                        <Button
+                            variant="outlined"
+                            style={{
+                                marginRight: '5px',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                            }}
+                            onClick={onEditHandler}
+                        >
+                            <EditIcon fontSize="small" />
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            style={{ marginLeft: '5px', marginBottom: '5px' }}
+                            onClick={onDeleteHandler}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </Button>
                     </Typography>
                 </Typography>
             </CardActions>

@@ -13,7 +13,7 @@ const DialogBox = styled('div')(() => ({
 const Title = styled('h4')(() => ({
     margin: 0,
     marginBottom: '8px',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
 }))
 
 const Controller = styled('div')(() => ({
@@ -33,18 +33,18 @@ const StyledButton = styled(Button)(({ theme }) => ({
     '&.yesBtn': {
         '&:hover': {
             color: '#ffffff',
-            background: `${theme.palette.primary.main} !important`,
-            backgroundColor: `${theme.palette.primary.main} !important`,
+            background: `${theme.palette.error.main} !important`,
+            backgroundColor: `${theme.palette.error.main} !important`,
             fallbacks: [{ color: 'white !important' }],
-        }
+        },
     },
     '&.noBtn': {
         '&:hover': {
             color: '#ffffff',
-            background: `${theme.palette.secondary.main} !important`,
-            backgroundColor: `${theme.palette.secondary.main} !important`,
+            background: `${theme.palette.primary.main} !important`,
+            backgroundColor: `${theme.palette.primary.main} !important`,
             fallbacks: [{ color: 'white !important' }],
-        }
+        },
     },
 }))
 
@@ -64,7 +64,7 @@ const ConfirmationDialog = ({
                     <StyledButton
                         className="yesBtn"
                         variant="outlined"
-                        color="primary"
+                        color="error"
                         onClick={onYesClick}
                     >
                         Yes
@@ -72,7 +72,7 @@ const ConfirmationDialog = ({
                     <StyledButton
                         className="noBtn"
                         variant="outlined"
-                        color="secondary"
+                        color="primary"
                         onClick={onConfirmDialogClose}
                     >
                         No

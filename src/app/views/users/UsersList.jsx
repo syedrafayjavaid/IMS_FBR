@@ -894,12 +894,18 @@ const UsersList = () => {
     ]
 
     const headers = [
-        { label: 'Office Name', key: 'name' },
-        { label: 'Office Id', key: 'officeId' },
-        { label: 'Email', key: 'email' },
-        { label: 'Phone', key: 'phone' },
-        { label: 'Address', key: 'address' },
-        { label: 'City', key: 'city' },
+        { label: 'Employee Name', key: 'name' },
+        { label: 'Employee Id', key: 'employeeId' },
+        { label: 'Email', key: 'emailAddress' },
+        { label: 'Phone', key: 'mobileNumber' },
+        { label: 'Department', key: 'department' },
+        { label: 'Designation', key: 'designation' },
+        { label: 'CNIC', key: 'cnic' },
+        { label: 'Pg', key: 'pg' },
+        { label: 'Wing', key: 'wing' },
+        { label: 'Date Of Joining', key: 'dateOfJoining' },
+        // { label: 'Place Of Posting', key: 'placeOfPosting' },
+        { label: 'Remarks', key: 'remarks' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
@@ -918,37 +924,10 @@ const UsersList = () => {
             )}
             <Container>
                 <br></br>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography variant="h4" sx={{ mb: 5 }}>
-                        Employees
-                    </Typography>
-                    <CSVLink
-                        separator=","
-                        filename={'all-employees.csv'}
-                        data={users}
-                        headers={headers}
-                    >
-                        <div
-                            style={{
-                                backgroundColor: '#1976d2',
-                                borderRadius: '50%',
-                            }}
-                        >
-                            <IconButton
-                                style={{ color: '#FFFFFF' }}
-                                size="medium"
-                            >
-                                <SummarizeIcon />
-                            </IconButton>
-                        </div>
-                    </CSVLink>
-                </div>
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                    Employees
+                </Typography>
+
                 <Grid container spacing={3}>
                     {users
                         .slice(pagesVisited, pagesVisited + usersPerPage)
@@ -982,7 +961,7 @@ const UsersList = () => {
             {/* ////
                 this is the search dialods */}
             {}
-            <Tooltip title="Search Employee">
+            <Tooltip title="Search Filters">
                 <Fab
                     color="primary"
                     aria-label="Add"
@@ -990,12 +969,35 @@ const UsersList = () => {
                     style={{
                         zIndex: 999,
                         right: '4vw',
-                        top: '13vh',
+                        top: '9vh',
                         position: 'fixed',
                     }}
                     onClick={() => setEmployeeDialogs(true)}
                 >
                     <SearchIcon />
+                </Fab>
+            </Tooltip>
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '17vh',
+                        position: 'fixed',
+                    }}
+                >
+                    <CSVLink
+                        filename={'all-employees.csv'}
+                        data={users}
+                        headers={headers}
+                    >
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
+                        </div>
+                    </CSVLink>
                 </Fab>
             </Tooltip>
             <div>
@@ -1400,7 +1402,10 @@ const UsersList = () => {
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <Box>
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">
+                                        <InputLabel
+                                            id="demo-simple-select-label"
+                                            size="small"
+                                        >
                                             Wing
                                         </InputLabel>
                                         <Select
@@ -1452,7 +1457,10 @@ const UsersList = () => {
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <Box>
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">
+                                        <InputLabel
+                                            id="demo-simple-select-label"
+                                            size="small"
+                                        >
                                             Department
                                         </InputLabel>
                                         <Select
@@ -2367,7 +2375,7 @@ const UsersList = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle>{'Search Filter'}</DialogTitle>
+                <DialogTitle>{'Search Filters'}</DialogTitle>
 
                 <DialogContent>
                     <br></br>

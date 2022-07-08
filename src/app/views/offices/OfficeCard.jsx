@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const OfficeCard = ({ office, onEdit, onDelete }) => {
     const navigate = useNavigate()
 
-    const adiitHandler = (adit) => {
+    const adiitHandler = () => {
         onEdit(
             office._id,
             office.name,
@@ -26,62 +26,62 @@ const OfficeCard = ({ office, onEdit, onDelete }) => {
     return (
         <TableRow hover>
             <TableCell
-                colSpan={2}
+                colSpan={3}
                 align="left"
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
-                <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.name}</Paragraph>
+                <Box>
+                    <Paragraph sx={{ m: 0, mx: 1 }}>{office.name}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={3}
+                align="center"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box>
+                    <Paragraph sx={{ m: 0, mx: 1 }}>{office.address}</Paragraph>
+                </Box>
+            </TableCell>
+            <TableCell
+                colSpan={1}
+                align="center"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box>
+                    <Paragraph sx={{ m: 0, mx: 1 }}>{office.city}</Paragraph>
                 </Box>
             </TableCell>
             <TableCell
                 colSpan={2}
-                align="left"
+                align="center"
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
-                <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.address}</Paragraph>
-                </Box>
-            </TableCell>
-            <TableCell
-                colSpan={2}
-                align="left"
-                sx={{ px: 0, textTransform: 'capitalize' }}
-            >
-                <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{office.city}</Paragraph>
-                </Box>
-            </TableCell>
-            <TableCell
-                colSpan={2}
-                align="left"
-                sx={{ px: 0, textTransform: 'capitalize' }}
-            >
-                <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>
+                <Box>
+                    <Paragraph sx={{ m: 0 }}>
                         {office.email === undefined ? 'N/A' : office.email}
                     </Paragraph>
                 </Box>
             </TableCell>
             <TableCell
-                colSpan={2}
-                align="left"
+                colSpan={1}
+                align="center"
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
-                <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>
+                <Box>
+                    <Paragraph sx={{ m: 0 }}>
                         {office.phone === undefined ? 'N/A' : office.phone}
                     </Paragraph>
                 </Box>
             </TableCell>
-            <TableCell sx={{ px: 0 }} align="left" colSpan={1}>
+            <TableCell sx={{ px: 0 }} align="center" colSpan={1}>
                 <Button onClick={adiitHandler}>
                     <EditIcon />
                 </Button>
             </TableCell>
-            <TableCell sx={{ px: 0 }} colSpan={1}>
+            <TableCell sx={{ px: 0 }} align="center" colSpan={1}>
                 <Button onClick={delHandler}>
-                    <DeleteIcon />
+                    <DeleteIcon color="error" />
                 </Button>
             </TableCell>
         </TableRow>

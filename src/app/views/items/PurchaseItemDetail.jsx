@@ -394,7 +394,7 @@ const PurchaseItemDetail = () => {
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
-                    <Title>PURCHASED ITEM DETAILS</Title>
+                    <Title>ITEMS ENTRY DETAILS</Title>
                 </CardHeader>
                 <hr></hr>
                 <Grid container>

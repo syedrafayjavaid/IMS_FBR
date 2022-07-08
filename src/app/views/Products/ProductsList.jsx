@@ -460,39 +460,35 @@ const ProductsList = () => {
                 </Fab>
             </Tooltip>
 
-            <Container>
-                <br></br>
-                <div
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '9vh',
+                        position: 'fixed',
                     }}
                 >
-                    <Typography variant="h4" sx={{ mb: 5 }}>
-                        Assets / Items
-                    </Typography>
                     <CSVLink
-                        separator=","
-                        filename={'all-assets-items.csv'}
+                        filename={'all-products.csv'}
                         data={product1}
                         headers={headers}
                     >
-                        <div
-                            style={{
-                                backgroundColor: '#1976d2',
-                                borderRadius: '50%',
-                            }}
-                        >
-                            <IconButton
-                                style={{ color: '#FFFFFF' }}
-                                size="medium"
-                            >
-                                <SummarizeIcon />
-                            </IconButton>
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
                         </div>
                     </CSVLink>
-                </div>
+                </Fab>
+            </Tooltip>
+
+            <Container>
+                <br></br>
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                    Assets / Items
+                </Typography>
                 <Grid container spacing={3}>
                     {product1.map((product) => (
                         <Grid

@@ -162,6 +162,7 @@ const CategoriesList = () => {
 
     const createHandler = () => {
         let data = new FormData()
+
         data.append('file', imge)
         data.append('name', category)
         data.append('createdBy', userName)
@@ -269,38 +270,34 @@ const CategoriesList = () => {
                     <AddIcon />
                 </Fab>
             </Tooltip>
-            <Container>
-                <br></br>
-                <div
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '9vh',
+                        position: 'fixed',
                     }}
                 >
-                    <Typography variant="h4" sx={{ mb: 5 }}>
-                        Categories
-                    </Typography>
                     <CSVLink
                         filename={'all-categories.csv'}
                         data={categories}
                         headers={headers}
                     >
-                        <div
-                            style={{
-                                backgroundColor: '#1976d2',
-                                borderRadius: '50%',
-                            }}
-                        >
-                            <IconButton
-                                style={{ color: '#FFFFFF' }}
-                                size="medium"
-                            >
-                                <SummarizeIcon />
-                            </IconButton>
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
                         </div>
                     </CSVLink>
-                </div>
+                </Fab>
+            </Tooltip>
+            <Container>
+                <br></br>
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                    Categories
+                </Typography>
                 <Grid container spacing={3}>
                     {categories.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>

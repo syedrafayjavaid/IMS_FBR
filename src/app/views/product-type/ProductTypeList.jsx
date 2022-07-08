@@ -155,36 +155,7 @@ const ProductTypeList = () => {
                         setSnackBar(true)
                     }
                 })
-            // const brandNameExist = productType.find((productType) => {
-            //   return productType.name === createBrandName;
-            // })
-            // if (brandNameExist) {
-            //   setSnackBar(true);
-            //   return;
-            // }
         }
-
-        // else{
-
-        //   let data = new FormData();
-        //   data.append('name', category);
-
-        //   axios.put(`http://192.168.18.117:5000/api/v1/category/${idCategory}`, data).then((res) => {
-        //     console.log(res.msg);
-        //     if (res) {
-        //       getAlldata();
-        //       handleClose()
-        //     //  console.log("hello console");
-        //     }
-
-        //   }).catch((error) => {
-        //     console.log(error, 'error');
-        //     console.log("hello console");
-        //     handleClick()
-
-        //   })
-
-        // }
     }
 
     const { palette } = useTheme()
@@ -302,50 +273,40 @@ const ProductTypeList = () => {
                     onYesClick={onDelhandler}
                 />
             )}
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography variant="h4" sx={{ m: 5 }}>
-                    Product Type
-                </Typography>
-                <CSVLink
-                    separator=","
-                    filename={'all-product-types.csv'}
-                    data={productList}
-                    headers={headers}
-                >
-                    <div
-                        style={{
-                            backgroundColor: '#1976d2',
-                            borderRadius: '50%',
-                            marginRight: '20px',
-                        }}
-                    >
-                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
-                            <SummarizeIcon />
-                        </IconButton>
-                    </div>
-                </CSVLink>
-            </div>
-            <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
+            <Typography variant="h4" sx={{ m: 5 }}>
+                Product Types
+            </Typography>
+            <Card elevation={3} sx={{ pt: '20px', mx: 5 }}>
                 <Box overflow="auto">
                     <ProductTable>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ px: 3 }} colSpan={4}>
+                                <TableCell
+                                    sx={{ px: 3 }}
+                                    align="left"
+                                    colSpan={5}
+                                >
                                     Name
                                 </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                <TableCell
+                                    sx={{ px: 0 }}
+                                    align="center"
+                                    colSpan={3}
+                                >
                                     Demo
                                 </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={2}>
+                                <TableCell
+                                    sx={{ px: 0 }}
+                                    align="center"
+                                    colSpan={2}
+                                >
                                     Edit
                                 </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={1}>
+                                <TableCell
+                                    sx={{ px: 0 }}
+                                    align="center"
+                                    colSpan={2}
+                                >
                                     Delete
                                 </TableCell>
                             </TableRow>
@@ -363,6 +324,29 @@ const ProductTypeList = () => {
                     </ProductTable>
                 </Box>
             </Card>
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '11vh',
+                        position: 'fixed',
+                    }}
+                >
+                    <CSVLink
+                        filename={'all-product-types.csv'}
+                        data={productList}
+                        headers={headers}
+                    >
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
+                        </div>
+                    </CSVLink>
+                </Fab>
+            </Tooltip>
 
             <Dialog
                 open={open}
@@ -473,102 +457,5 @@ const ProductTypeList = () => {
         </>
     )
 }
-
-// const productList = [{
-//     id:1,
-//     name:"Glass Dining Room Set Metal Leg",
-//     price:"1200",
-//     coverImage:'https://sc04.alicdn.com/kf/Hdc887d99681d4ee49ecd721a5b84eddbO.jpg',
-//     colors:"black",
-//     status:"active",
-//     category:"Table",
-//     priceSale:"1200",
-//     quantity:"80"
-
-//   },{
-//     id:2,
-//     name:"Pure Wood Table",
-//     cover:"coverimage",
-//     price:"1200",
-//     coverImage:'https://sc04.alicdn.com/kf/H6bd0cecce9034464ace0221e3cbc99d7l.jpg',
-//     colors:"black",
-//     status:"active",
-//     category:"Table",
-//     priceSale:"1200",
-//     quantity:"120"
-
-//   },{
-//     id:3,
-//     name:"Middle back conference net cloth Chair",
-//     cover:"coverimage",
-//     price:"1200",
-//     coverImage:'https://sc04.alicdn.com/kf/Hfe84e2ce9f1a41deb620baae3fee230bo.jpg',
-//     colors:"black",
-//     status:"active",
-//     category:"Chair",
-//     priceSale:"1200",
-//     quantity:"10"
-
-//   },{
-//     id:4,
-//     name:"Pure Leather Sofa",
-//     cover:"coverimage",
-//     coverImage:'https://sc04.alicdn.com/kf/H197463f73be24ae5b8ca20cd671736bcf.jpg',
-//     price:"1200",
-//     colors:"black",
-//     status:"active",
-//     category:"Sofa",
-//     priceSale:"1200",
-//     quantity:"50"
-
-//   },{
-//     id:5,
-//     name:"Nordic Upholstered Velvet Sofa ",
-//     cover:"coverimage",
-//     price:"1200",
-//     colors:"black",
-//     coverImage:'https://sc04.alicdn.com/kf/H5aecfcc540de4edcbe4c4974ef5148bd1.jpg',
-//     status:"active",
-//     category:"Sofa",
-//     priceSale:"1200",
-//     quantity:"40"
-
-//   },{
-//     id:6,
-//     name:"Core i7 RAM 8GB ROM 256 GB Laptop Computer Notebook",
-//     cover:"coverimage",
-//     price:"1200",
-//     coverImage:'https://sc04.alicdn.com/kf/Hb795434c17824a22a61ca30ba71d9384C.jpg',
-//     colors:"black",
-//     category:"Laptop",
-//     status:"active",
-//     priceSale:"1200",
-//     quantity:"30"
-
-//   },{
-//     id:7,
-//     name:" AIO Core I3 I5 I7 Laptops For Office Gaming ",
-//     cover:"coverimage",
-//     price:"1200",
-//     colors:"black",
-//     coverImage:'https://sc04.alicdn.com/kf/Ha5969bdc1fa941a0abd148617c235f2c6.jpg',
-//     status:"active",
-//     category:"Laptop",
-//     priceSale:"1200",
-//     quantity:"20"
-
-//   },{
-//     id:8,
-//     name:"Wooden Wardrobe Cabinet Clothes Closet",
-//     cover:"coverimage",
-//     price:"1200",
-//     colors:"black",
-//     coverImage:'https://sc04.alicdn.com/kf/H8840ba1e7c1e4a87a8f90fe055f04f7b4.jpg',
-//     status:"active",
-//     category:"Cabinet",
-//     priceSale:"1200",
-//     quantity:"20"
-
-//   }]
 
 export default ProductTypeList

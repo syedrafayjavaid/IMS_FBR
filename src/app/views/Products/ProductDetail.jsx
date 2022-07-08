@@ -101,7 +101,7 @@ const ProductsList = () => {
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
-                    <Title>PRODUCT DETAILS</Title>
+                    <Title>ASSETS DETAILS</Title>
                 </CardHeader>
                 <hr></hr>
                 <Grid container>

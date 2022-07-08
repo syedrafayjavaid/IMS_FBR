@@ -440,37 +440,9 @@ const AppUsersList = () => {
             </Tooltip>
             <Container>
                 <br></br>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography variant="h4" sx={{ mb: 5 }}>
-                        Users
-                    </Typography>
-                    <CSVLink
-                        separator=","
-                        filename={'all-users.csv'}
-                        data={users}
-                        headers={headers}
-                    >
-                        <div
-                            style={{
-                                backgroundColor: '#1976d2',
-                                borderRadius: '50%',
-                            }}
-                        >
-                            <IconButton
-                                style={{ color: '#FFFFFF' }}
-                                size="medium"
-                            >
-                                <SummarizeIcon />
-                            </IconButton>
-                        </div>
-                    </CSVLink>
-                </div>
+                <Typography variant="h4" sx={{ mb: 5 }}>
+                    Users
+                </Typography>
                 <Grid container spacing={3}>
                     {users.map((category) => (
                         <Grid key={category._id} item xs={12} sm={6} md={3}>
@@ -483,6 +455,30 @@ const AppUsersList = () => {
                     ))}
                 </Grid>
             </Container>
+
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                >
+                    <CSVLink
+                        filename={'all-users.csv'}
+                        data={users}
+                        headers={headers}
+                    >
+                        <div style={{ marginTop: '8px' }}>
+                            <SummarizeIcon />
+                        </div>
+                    </CSVLink>
+                </Fab>
+            </Tooltip>
 
             <Dialog
                 open={createUserDialog}

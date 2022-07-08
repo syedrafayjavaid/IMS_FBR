@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
     Box,
+    Button,
     Card,
     CardActions,
     CardContent,
@@ -14,12 +15,10 @@ import {
 import { styled } from '@mui/material/styles'
 import config from 'config'
 import avatar from './a.png'
-import { ConfirmationDialog } from 'app/components';
+import { ConfirmationDialog } from 'app/components'
 
 const UsersCard = ({ user, onDelete, onEdit }) => {
     const navigate = useNavigate()
-
-
 
     const UserImgStyle = styled('img')({
         top: 0,
@@ -36,7 +35,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
     }
 
     const onDeleteHandler = () => {
-        onDelete( user)
+        onDelete(user)
     }
 
     const userId = user._id
@@ -47,14 +46,10 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
 
     return (
         <>
-
             <Card sx={{ maxWidth: 345 }}>
-                <Box >
+                <Box>
                     <CardMedia sx={{ pt: '100%', position: 'relative' }}>
-                        <UserImgStyle
-                            alt={avatar}
-                            src={avatar}
-                        />
+                        <UserImgStyle alt={avatar} src={avatar} />
                     </CardMedia>
                     <CardContent>
                         <Typography variant="subtitle2" noWrap>
@@ -112,9 +107,17 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                 textDecoration: '',
                             }}
                         >
-                            <button onClick={onDeleteHandler}>
-                                <DeleteIcon />
-                            </button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={onDeleteHandler}
+                                style={{
+                                    marginLeft: '5px',
+                                    marginBottom: '5px',
+                                }}
+                            >
+                                <DeleteIcon fontSize="small" />
+                            </Button>
                             {/* <button onClick={onEditHandler}>
                             <EditIcon />
                         </button> */}
@@ -124,7 +127,6 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
             </Card>
         </>
     )
-
 }
 
 export default UsersCard

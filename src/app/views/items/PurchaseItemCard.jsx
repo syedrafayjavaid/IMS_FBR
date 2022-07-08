@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
     Box,
+    Button,
     Card,
     CardActions,
     CardContent,
@@ -104,12 +105,25 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
                             textDecoration: '',
                         }}
                     >
-                        <button onClick={onDeleteHandler}>
-                            <DeleteIcon />
-                        </button>
-                        <button onClick={onEditHandler}>
-                            <EditIcon />
-                        </button>
+                        <Button
+                            variant="outlined"
+                            style={{
+                                marginRight: '5px',
+                                marginLeft: '5px',
+                                marginBottom: '5px',
+                            }}
+                            onClick={onEditHandler}
+                        >
+                            <EditIcon fontSize="small" />
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            style={{ marginLeft: '5px', marginBottom: '5px' }}
+                            onClick={onDeleteHandler}
+                        >
+                            <DeleteIcon fontSize="small" />
+                        </Button>
                     </Typography>
                 </Typography>
             </CardActions>

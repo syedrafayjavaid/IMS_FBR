@@ -1,9 +1,11 @@
 import AddIcon from '@mui/icons-material/Add'
 import {
     Card,
+    CircularProgress,
     Fab,
     Grid,
     IconButton,
+    Skeleton,
     Snackbar,
     Table,
     TableBody,
@@ -316,77 +318,104 @@ const Offices = () => {
                     onYesClick={onDelhandler}
                 />
             )}
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography variant="h4" sx={{ m: 5 }}>
-                    Offices
-                </Typography>
-                <CSVLink
-                    separator=","
-                    filename={'all-offices.csv'}
-                    data={offices}
-                    headers={headers}
+            <Typography variant="h4" sx={{ m: 5 }}>
+                Offices
+            </Typography>
+            {/* {offices.length === 0 && <CircularProgress />} */}
+            {offices.length > 0 && (
+                <Card elevation={3} sx={{ pt: '20px', mx: 5 }}>
+                    <Box overflow="auto">
+                        <BrandTable>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell
+                                        sx={{ px: 3 }}
+                                        align="left"
+                                        colSpan={3}
+                                    >
+                                        Name
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={3}
+                                    >
+                                        Address
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={1}
+                                    >
+                                        City
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={2}
+                                    >
+                                        Email Address
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={1}
+                                    >
+                                        Contact
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={1}
+                                    >
+                                        Edit
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ px: 0 }}
+                                        align="center"
+                                        colSpan={1}
+                                    >
+                                        Delete
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {offices.map((office, index) => (
+                                    <OfficeCard
+                                        key={index}
+                                        office={office}
+                                        onEdit={onEdithandler}
+                                        onDelete={onDelhandler}
+                                    />
+                                ))}
+                            </TableBody>
+                        </BrandTable>
+                    </Box>
+                </Card>
+            )}
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '4vw',
+                        top: '11vh',
+                        position: 'fixed',
+                    }}
                 >
-                    <div
-                        style={{
-                            backgroundColor: '#1976d2',
-                            borderRadius: '50%',
-                            marginRight: '20px',
-                        }}
+                    <CSVLink
+                        filename={'all-offices.csv'}
+                        data={offices}
+                        headers={headers}
                     >
-                        <IconButton style={{ color: '#FFFFFF' }} size="medium">
+                        <div style={{ marginTop: '8px' }}>
                             <SummarizeIcon />
-                        </IconButton>
-                    </div>
-                </CSVLink>
-            </div>
-            <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-                <Box overflow="auto">
-                    <BrandTable>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ px: 3 }} colSpan={2}>
-                                    Name
-                                </TableCell>
-                                <TableCell sx={{ px: 3 }} colSpan={2}>
-                                    Address
-                                </TableCell>
-                                <TableCell sx={{ px: 3 }} colSpan={2}>
-                                    City
-                                </TableCell>
-                                <TableCell sx={{ px: 3 }} colSpan={2}>
-                                    Email Address
-                                </TableCell>
-                                <TableCell sx={{ px: 3 }} colSpan={2}>
-                                    Contact
-                                </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={1}>
-                                    Edit
-                                </TableCell>
-                                <TableCell sx={{ px: 0 }} colSpan={1}>
-                                    Delete
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {offices.map((office, index) => (
-                                <OfficeCard
-                                    key={index}
-                                    office={office}
-                                    onEdit={onEdithandler}
-                                    onDelete={onDelhandler}
-                                />
-                            ))}
-                        </TableBody>
-                    </BrandTable>
-                </Box>
-            </Card>
-
+                        </div>
+                    </CSVLink>
+                </Fab>
+            </Tooltip>
             <Dialog
                 open={createOfficeDialog}
                 onClose={handleCreateClose}
