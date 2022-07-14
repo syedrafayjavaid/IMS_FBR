@@ -147,6 +147,7 @@ const Offices = () => {
         setEditAddress(address)
         setEditCity(city)
         setEditContact(contact)
+      
         setEditEmail(email)
         setOfficeId(id)
     }

@@ -1,11 +1,12 @@
 import { useTheme } from '@mui/material/styles'
 import * as React from 'react'
-
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import Box from '@mui/material/Box'
-
+import Slider from '@mui/material/Slider';
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import QrCodeIcon from '@mui/icons-material/QrCode'
+
 import {
     Autocomplete,
     Checkbox,
@@ -117,6 +118,7 @@ const PurchasedItems = () => {
     ///dialog
     const [statusDialog, setStatusDialog] = React.useState([])
     const [statusValue, setStatusValue] = React.useState('')
+    
     const [officeDialog, setOfficeDialog] = React.useState([])
     const [officeNameList, setOfficeNameList] = React.useState('')
     const [purchasedDialog, setPurchasedDialog] = React.useState([])
@@ -167,6 +169,53 @@ const PurchasedItems = () => {
 
     const [searchByQrCode, setSearchByQrCode] = React.useState(false)
 
+    ////search filter state
+    const [searchStatus, setSearchStatus] = React.useState('')
+    const [ownerShipSearch, setOwnerShipSearch] = React.useState('')
+    const [purchaseOrderSearch, setPurchaseOrdersearch] = React.useState('')
+    const [sdate, setSdate] = React.useState('')
+    const [sdate1, setSdate1] = React.useState('')
+    
+    const handlestatus = (event) => {
+        setSearchStatus(event.target.value)
+    }
+    const handleOwnerShipe = (event) => {
+        setOwnerShipSearch(event.target.value)
+    }
+    const handlePurchasedOrderSearch = (event) => {
+        setPurchaseOrdersearch(event.target.value)
+    }
+function KeyboardDatePickerExample(props) {
+  const [selectedDate, handleDateChange] = useState(new Date());
+}
+
+    const marks = [
+        {
+          value: 0,
+          label: '0',
+        },
+        {
+          value: 100,
+          label: '100',
+        },
+        {
+          value: 500,
+          label: '500',
+        },
+        {
+          value: 700,
+          label: '700',
+        },
+        {
+            value: 1000,
+            label: '1000',
+          },
+      ];
+      
+      function valuetext(value) {
+        return `${value}`;
+      }
+///////
     const [pageNumber, setPageNumber] = React.useState(0)
     const ItemsEntryPerPage = 8
     const pagesVisited = pageNumber * ItemsEntryPerPage
@@ -1455,6 +1504,10 @@ const PurchasedItems = () => {
                 </DialogActions>
             </Dialog>
 
+
+
+
+
             {/* Search Items Dialog */}
 
             <Dialog
@@ -1492,11 +1545,11 @@ const PurchasedItems = () => {
                         </div>
                     </Tooltip>
                 </DialogTitle>
-                <DialogContent style={{ height: '250px' }}>
+                <DialogContent >
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1525,7 +1578,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1556,10 +1609,7 @@ const PurchasedItems = () => {
                                     }}
                                 />
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     id="name"
                                     label="Tag"
@@ -1578,7 +1628,11 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                       
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     id="name"
                                     label="Serial Number"
@@ -1597,8 +1651,106 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <Box sx={{ minWidth: 120 }}>
+
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Box>
+                                    <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={statusError}
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            Status
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={searchStatus}
+                                            label="Status"
+                                            onChange={handlestatus}
+                                        >
+                                            <MenuItem value={`inuse`}>
+                                                Inuse
+                                            </MenuItem>
+                                            <MenuItem value={`replacement`}>
+                                                Replacement
+                                            </MenuItem>
+                                            <MenuItem value={`scrap`}>
+                                                Scrap
+                                            </MenuItem>
+                                        </Select>
+                                        <FormHelperText>
+                                            {statusError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+
+
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Box>
+                                <FormControl
+                                        size="small"
+                                        fullWidth
+                                        error={ownerShipError}
+                                    >
+                                        <InputLabel id="demo-simple-select-label">
+                                            OwnerShip Search
+                                        </InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={ownerShipSearch}
+                                            label="Owner Ship"
+                                            onChange={handleOwnerShipe}
+                                        >
+                                            <MenuItem value={`PRAL`}>
+                                                PRAL
+                                            </MenuItem>
+                                            <MenuItem value={`FBR`}>
+                                                FBR
+                                            </MenuItem>
+                                        </Select>
+                                        <FormHelperText>
+                                            {ownerShipError === true
+                                                ? 'Field Required'
+                                                : ''}
+                                        </FormHelperText>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                            </Grid>
+                            <br></br>
+                            <Grid container spacing={3}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <TextField
+                                    error={purchasedOrderError}
+                                    id="name"
+                                    label="Purchase Order(PO)"
+                                    placeholder="Purchase Order(PO)"
+                                    autoComplete="off"
+                                    helperText={
+                                        purchasedOrderError === true
+                                            ? 'Field Required'
+                                            : ''
+                                    }
+                                    value={purchaseOrderSearch}
+                                    size="small"
+                                    onChange={(e) =>
+                                        handleChange(
+                                            e,
+                                            handlePurchasedOrderSearch,
+                                            setPurchasedError
+                                        )
+                                    }
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={8} md={8} sm={8} xs={8}>
+                                <Box>
                                     <Autocomplete
                                         ListboxProps={{
                                             style: { maxHeight: '8rem' },
@@ -1630,7 +1782,73 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
+                             </Grid>
+                            <br></br>
+                            <Grid container spacing={3}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Box>
+                            <Typography id="input-slider" gutterBottom>
+                                Price Range
+                            </Typography>
+                            <Slider
+                            aria-label="Custom marks"
+                            defaultValue={0}
+                            getAriaValueText={valuetext}
+                            step={100}
+                            min={0}
+                            max={1000}
+                            valueLabelDisplay="auto"
+                            marks={marks}
+                        />
+                       
+                          </Box>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Box>
+                            <Typography id="input-slider" gutterBottom>
+                            Quantity Range
+                            </Typography>
+                            <Slider
+                            aria-label="Custom marks"
+                            defaultValue={0}
+                            getAriaValueText={valuetext}
+                            step={100}
+                            min={0}
+                            max={1000}
+                            valueLabelDisplay="auto"
+                            marks={marks}
+                        />
+                          </Box>
+                            </Grid>
+                          </Grid>
+                             <br></br>
+                            <Grid container spacing={3}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Typography gutterBottom>Start Date</Typography>
+                            <TextField
+                                value={sdate}
+                                id="date"
+                                label="Start Date"
+                                type="date"
+                                onChange={(e) => setSdate(e.target.value)}
+                                size="small"
+                                fullWidth
+                            />
                         </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Typography gutterBottom>End Date</Typography>
+                            <TextField
+                                value={sdate1}
+                                id="date"
+                                label="End Date"
+                                type="date"
+                                onChange={(e) => setSdate1(e.target.value)}
+                                size="small"
+                                fullWidth
+                            />
+                        </Grid>
+                       
+                            </Grid>
                     </CardContent>
                 </DialogContent>
                 <DialogActions>

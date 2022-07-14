@@ -16,7 +16,7 @@ const OfficeCard = ({ office, onEdit, onDelete }) => {
             office.address,
             office.city,
             office.email,
-            office.contact
+            office.phone
         )
     }
     const delHandler = () => {
