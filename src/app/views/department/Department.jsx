@@ -23,6 +23,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import { Box, styled } from '@mui/system'
+import { ConfirmationDialog } from 'app/components'
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { CSVLink } from 'react-csv'
@@ -30,6 +31,7 @@ import ReactPaginate from 'react-paginate'
 import config from '../../../config'
 import '../users/user.css'
 import DepartmentCard from './DepartmentCard'
+import WingCard from './WingCard'
 
 const DepartmentTable = styled(Table)(() => ({
     minWidth: 400,
@@ -50,6 +52,8 @@ const DepartmentTable = styled(Table)(() => ({
 }))
 
 const Department = () => {
+    const userName = localStorage.getItem('username')
+
     // Form validation errors State Setting
     const [createBrandName, setCreateBrandName] = React.useState('')
     const [createBrandNameError, setCreateBrandNameError] =
@@ -60,21 +64,24 @@ const Department = () => {
     const [wingName, setWingName] = React.useState('')
     const [wingNameError, setWingNameError] = React.useState(false)
     const [departments, setDepartments] = React.useState([])
+    const [departmentId, setDepartmentId] = React.useState('')
     const [wings, setWings] = React.useState([])
     const [selectedDepartment, setSelectedDepartment] = React.useState(null)
 
     const [createWingDialog, setCreateWingDialog] = React.useState(false)
     const [viewWingDialog, setViewWingDialog] = React.useState(false)
+    const [wingId, setWingId] = React.useState('')
+    const [editWingDialog, setEditWingDialog] = React.useState(false)
 
     // Setting States
-    const [brand, setBrand] = React.useState([])
     const [brandId, setBrandId] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
 
     const [pageNumber, setPageNumber] = React.useState(0)
     const DepartmentsPerPage = 8
     const pagesVisited = pageNumber * DepartmentsPerPage
-    const pageCount = Math.ceil(brand.length / DepartmentsPerPage)
+    const pageCount = Math.ceil(departments.length / DepartmentsPerPage)
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
@@ -95,6 +102,10 @@ const Department = () => {
     const handleEditClose = () => {
         setEditBrandDialog(false)
         setEditBrandNameError(false)
+    }
+    const handleEditWingClose = () => {
+        setEditWingDialog(false)
+        setWingNameError(false)
     }
     const handleClosed = () => {
         setSnackBar(false)
@@ -126,6 +137,14 @@ const Department = () => {
             createWingHandler()
         }
     }
+    const handleEditWingClickOpen = () => {
+        // Check if any field of Form is Empty
+        if (wingName === '') {
+            setWingNameError(true)
+        } else {
+            editWingHandler()
+        }
+    }
 
     const handleEditClickOpen = () => {
         // Check if any field of Form is Empty
@@ -138,12 +157,39 @@ const Department = () => {
 
     useEffect(() => {
         getAlldata()
-    }, [])
+        if (departmentId) {
+            getDepartment(departmentId)
+            getWing(departmentId)
+        }
+    }, [departmentId])
+
+    const getDepartment = (departmentId) => {
+        axios
+            .get(`${config.base_url}/api/v1/department/${departmentId}`)
+            .then((res) => {
+                setSelectedDepartment(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
+    const getWing = (departmentId) => {
+        axios
+            .get(`${config.base_url}/api/v1/wing/${departmentId}`)
+            .then((res) => {
+                setWings(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
     const getAlldata = () => {
         axios
             .get(`${config.base_url}/api/v1/department`)
             .then((res) => {
-                setBrand(res.data.data)
+                setDepartments(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -168,8 +214,76 @@ const Department = () => {
         setBrandId(editDataId)
     }
 
+    const onEditHandler = (id, wing) => {
+        setEditWingDialog(true)
+        setWingId(id)
+        setWingName(wing.name)
+    }
+
+    const editWingHandler = () => {
+        let data = new FormData()
+
+        data.append('name', wingName)
+        data.append('department', selectedDepartment?._id)
+
+        axios
+            .put(`${config.base_url}/api/v1/wing/${wingId}`, data)
+            .then((res) => {
+                if (res) {
+                    getAlldata()
+                    handleEditWingClose()
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
+    const onDelHandler = (id) => {
+        // setWingId(id)
+        // setOpen(true)
+
+        // if (open) {
+        axios
+            .delete(`${config.base_url}/api/v1/wing/${id}`)
+            .then((res) => {
+                getAlldata()
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+        // }
+    }
+
     const createWingHandler = () => {
-        console.log(selectedDepartment)
+        let data = new FormData()
+
+        data.append('name', wingName)
+        data.append('createdBy', userName)
+        data.append('department', selectedDepartment?._id)
+
+        const wingNameExist = wings.find((wing) => {
+            return wing.name === wingName
+        })
+
+        if (wingNameExist) {
+            setSnackBar(true)
+            return
+        }
+
+        axios
+            .post(`${config.base_url}/api/v1/wing`, data)
+            .then((res) => {
+                if (res) {
+                    getAlldata()
+                    handleCreateWingClose()
+                }
+
+                setWingName('')
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const openCreateWingDialog = (department) => {
@@ -177,15 +291,26 @@ const Department = () => {
         setSelectedDepartment(department)
     }
 
-    const openViewWingDialog = () => {
+    const openViewWingDialog = (department) => {
         setViewWingDialog(true)
+
+        setDepartmentId(department?._id)
+
+        axios
+            .get(`${config.base_url}/api/v1/wing/${department?._id}`)
+            .then((res) => {
+                setWings(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const createHandler = () => {
         let data = new FormData()
         data.append('name', createBrandName)
 
-        const brandNameExist = brand.find((brand) => {
+        const brandNameExist = departments.find((brand) => {
             return brand.name === createBrandName
         })
 
@@ -211,7 +336,7 @@ const Department = () => {
         let data = new FormData()
         data.append('name', editBrandName)
 
-        const brandNameExist = brand.find((brand) => {
+        const brandNameExist = departments.find((brand) => {
             return brand.name === editBrandName
         })
 
@@ -254,8 +379,21 @@ const Department = () => {
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
+    console.log(wings)
+
     return (
         <>
+            {open && (
+                <ConfirmationDialog
+                    open={open}
+                    onConfirmDialogClose={() => {
+                        setOpen(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Wing?`}
+                    onYesClick={onDelHandler}
+                />
+            )}
             <Typography variant="h4" sx={{ m: 5 }}>
                 Departments
             </Typography>
@@ -276,14 +414,14 @@ const Department = () => {
                                     align="center"
                                     colSpan={2}
                                 >
-                                    View Wing
+                                    View Wings
                                 </TableCell>
                                 <TableCell
                                     sx={{ px: 3 }}
                                     align="center"
                                     colSpan={2}
                                 >
-                                    Add Wing
+                                    Add Wings
                                 </TableCell>
                                 <TableCell
                                     sx={{ px: 0 }}
@@ -302,7 +440,7 @@ const Department = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {brand
+                            {departments
                                 .slice(
                                     pagesVisited,
                                     pagesVisited + DepartmentsPerPage
@@ -351,7 +489,7 @@ const Department = () => {
                 >
                     <CSVLink
                         filename={'all-departments.csv'}
-                        data={brand}
+                        data={departments}
                         headers={headers}
                     >
                         <div style={{ marginTop: '8px' }}>
@@ -367,6 +505,60 @@ const Department = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">{'ADD WINGS'}</DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={wingNameError}
+                                id="brandname"
+                                label="Wing Name"
+                                placeholder="Enter Wing Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    wingNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={wingName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setWingName,
+                                        setWingNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateWingClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleCreateWingClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleClosed}
+                    message="Name already exists"
+                    action={action}
+                />
+            </Dialog>
+            <Dialog
+                open={editWingDialog}
+                onClose={handleEditWingClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'EDIT WINGS'}
+                </DialogTitle>
                 <DialogContent>
                     <br></br>
                     <Grid container spacing={3}>
@@ -398,7 +590,6 @@ const Department = () => {
                         <Grid item lg={6} md={6} sm={6} xs={6}>
                             <Box sx={{ minWidth: 120 }}>
                                 <Autocomplete
-                                    disabled
                                     ListboxProps={{
                                         style: { maxHeight: '4rem' },
                                         position: 'bottom-start',
@@ -430,8 +621,8 @@ const Department = () => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCreateWingClose}>Cancel</Button>
-                    <Button autoFocus onClick={handleCreateWingClickOpen}>
+                    <Button onClick={handleEditWingClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleEditWingClickOpen}>
                         Confirm
                     </Button>
                 </DialogActions>
@@ -453,11 +644,63 @@ const Department = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'VIEW WINGS'}
                 </DialogTitle>
-                <DialogContent style={{ width: '400px', height: '100px' }}>
+                <DialogContent style={{ minWidth: '600px' }}>
                     <br></br>
                     <Grid container spacing={3}>
                         {wings.length > 0 && (
-                            <Grid item lg={12} md={12} sm={12} xs={12}></Grid>
+                            <Box overflow="auto">
+                                <DepartmentTable>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell
+                                                sx={{ px: 3 }}
+                                                align="left"
+                                                colSpan={4}
+                                            >
+                                                Name
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ px: 3 }}
+                                                align="center"
+                                                colSpan={2}
+                                            >
+                                                Created Date
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ px: 3 }}
+                                                align="center"
+                                                colSpan={2}
+                                            >
+                                                Last Modified
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ px: 0 }}
+                                                align="center"
+                                                colSpan={2}
+                                            >
+                                                Edit
+                                            </TableCell>
+                                            <TableCell
+                                                sx={{ px: 0 }}
+                                                align="center"
+                                                colSpan={2}
+                                            >
+                                                Delete
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {wings.map((brand, index) => (
+                                            <WingCard
+                                                key={index}
+                                                wing={brand}
+                                                onEdit={onEditHandler}
+                                                onDelete={onDelHandler}
+                                            />
+                                        ))}
+                                    </TableBody>
+                                </DepartmentTable>
+                            </Box>
                         )}
                         {wings.length === 0 && (
                             <Grid item lg={12} md={12} sm={12} xs={12}>
