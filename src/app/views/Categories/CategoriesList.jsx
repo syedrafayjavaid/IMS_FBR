@@ -20,6 +20,8 @@ import config from 'config'
 import { ConfirmationDialog } from 'app/components'
 import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
+import ReactPaginate from 'react-paginate'
+import '../users/user.css'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -38,6 +40,14 @@ const CategoriesList = () => {
     const [createCategoryDialog, setCreateCategoryDialog] =
         React.useState(false)
     const [editCategoryDialog, setEditCategoryDialog] = React.useState(false)
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const categoriesPerPage = 8
+    const pagesVisited = pageNumber * categoriesPerPage
+    const pageCount = Math.ceil(categories.length / categoriesPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const handleCreateClose = () => {
         setCreateCategoryDialog(false)
@@ -299,19 +309,30 @@ const CategoriesList = () => {
                     Categories
                 </Typography>
                 <Grid container spacing={3}>
-                    {categories.map((category) => (
-                        <Grid key={category._id} item xs={12} sm={6} md={3}>
-                            <CategoryCard
-                                category={category}
-                                onEdit={onEdithandler}
-                                onDelete={onDelhandler}
-                            />
-                        </Grid>
-                    ))}
+                    {categories
+                        .slice(pagesVisited, pagesVisited + categoriesPerPage)
+                        .map((category) => (
+                            <Grid key={category._id} item xs={12} sm={6} md={3}>
+                                <CategoryCard
+                                    category={category}
+                                    onEdit={onEdithandler}
+                                    onDelete={onDelhandler}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
                 <br></br>
-                <br></br>
-                <br></br>
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
             </Container>
 
             <Dialog

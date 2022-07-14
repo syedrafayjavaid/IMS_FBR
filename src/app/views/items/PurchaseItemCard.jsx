@@ -13,9 +13,7 @@ import {
     Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import React, { useEffect } from 'react'
-import axios from 'axios'
-import config from 'config'
+import React from 'react'
 const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
     const [product, setProduct] = React.useState()
 
@@ -27,7 +25,6 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
         objectFit: 'cover',
         position: 'absolute',
     })
-    const imgeBaseUrl = 'uploads/'
 
     const onDeleteHandler = () => {
         onDelete(purchaseItem._id)

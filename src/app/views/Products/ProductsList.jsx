@@ -41,6 +41,8 @@ import { identity } from 'lodash'
 import { ConfirmationDialog } from 'app/components'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import { CSVLink } from 'react-csv'
+import ReactPaginate from 'react-paginate'
+import '../users/user.css'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -128,6 +130,14 @@ const ProductsList = () => {
     const [imageUrl1, setImageUrl1] = useState('')
     const [scanResultFile, setScanResultFile] = useState('')
     const classes = useStyles()
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const ProductsPerPage = 8
+    const pagesVisited = pageNumber * ProductsPerPage
+    const pageCount = Math.ceil(product1.length / ProductsPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const generateQrCode = async () => {
         try {
@@ -490,26 +500,37 @@ const ProductsList = () => {
                     Assets / Items
                 </Typography>
                 <Grid container spacing={3}>
-                    {product1.map((product) => (
-                        <Grid
-                            key={product._id}
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                            lg={4}
-                        >
-                            <ProductCard
-                                product={product}
-                                onDelete={onDelhandler}
-                                onEdit={onEditHandler}
-                            />
-                        </Grid>
-                    ))}
+                    {product1
+                        .slice(pagesVisited, pagesVisited + ProductsPerPage)
+                        .map((product) => (
+                            <Grid
+                                key={product._id}
+                                item
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={3}
+                            >
+                                <ProductCard
+                                    product={product}
+                                    onDelete={onDelhandler}
+                                    onEdit={onEditHandler}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
-                <br></br>
-                <br></br>
-                <br></br>
+                <br />
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
             </Container>
 
             <Dialog

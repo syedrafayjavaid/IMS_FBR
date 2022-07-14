@@ -37,6 +37,8 @@ import config from 'config'
 import { ConfirmationDialog } from 'app/components'
 import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
+import ReactPaginate from 'react-paginate'
+import '../users/user.css'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -85,6 +87,29 @@ const Small = styled('small')(({ bgcolor }) => ({
 const ProductTypeList = () => {
     const [productList, setProductList] = React.useState([])
     const [snackBar, setSnackBar] = React.useState(false)
+
+    const { palette } = useTheme()
+    const bgError = palette.error.main
+    const bgPrimary = palette.primary.main
+    const bgSecondary = palette.secondary.main
+    const navigate = useNavigate()
+    const [open, setOpen] = React.useState(false)
+    const [mopen, setMopen] = React.useState(false)
+    const [category, setCategory] = React.useState('')
+    // const [prodectTypeName,setProdectTypeName]=React.useState("");
+    const [demo, setDemo] = React.useState(false)
+    const [categoryError, setcategoryError] = React.useState(false)
+    const [catogoryId, setCatogoryId] = React.useState('')
+    const [confirmationDialogOpen, setConfirmationDialogOpen] =
+        React.useState(false)
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const ProductTypesPerPage = 8
+    const pagesVisited = pageNumber * ProductTypesPerPage
+    const pageCount = Math.ceil(productList.length / ProductTypesPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     useEffect(() => {
         getAlldata()
@@ -157,21 +182,6 @@ const ProductTypeList = () => {
                 })
         }
     }
-
-    const { palette } = useTheme()
-    const bgError = palette.error.main
-    const bgPrimary = palette.primary.main
-    const bgSecondary = palette.secondary.main
-    const navigate = useNavigate()
-    const [open, setOpen] = React.useState(false)
-    const [mopen, setMopen] = React.useState(false)
-    const [category, setCategory] = React.useState('')
-    // const [prodectTypeName,setProdectTypeName]=React.useState("");
-    const [demo, setDemo] = React.useState(false)
-    const [categoryError, setcategoryError] = React.useState(false)
-    const [catogoryId, setCatogoryId] = React.useState('')
-    const [confirmationDialogOpen, setConfirmationDialogOpen] =
-        React.useState(false)
 
     const handleClose = () => {
         setCategory('')
@@ -312,18 +322,35 @@ const ProductTypeList = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {productList.map((product, index) => (
-                                <ProductTypeCard
-                                    key={index}
-                                    product={product}
-                                    onEdit={onEdithandler}
-                                    onDelete={onDelhandler}
-                                />
-                            ))}
+                            {productList
+                                .slice(
+                                    pagesVisited,
+                                    pagesVisited + ProductTypesPerPage
+                                )
+                                .map((product, index) => (
+                                    <ProductTypeCard
+                                        key={index}
+                                        product={product}
+                                        onEdit={onEdithandler}
+                                        onDelete={onDelhandler}
+                                    />
+                                ))}
                         </TableBody>
                     </ProductTable>
                 </Box>
             </Card>
+            <br></br>
+            <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={'paginationBttns'}
+                previousLinkClassName={'previousBttn'}
+                nextLinkClassName={'nextBttn'}
+                disabledClassName={'paginationDisabled'}
+                activeClassName={'paginationActive'}
+            />
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"

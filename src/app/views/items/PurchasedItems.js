@@ -44,6 +44,8 @@ import PurchaseItemCard from './PurchaseItemCard'
 import QrReader from 'react-qr-reader'
 import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
+import '../users/user.css'
+import ReactPaginate from 'react-paginate'
 
 const dateStyles = makeStyles((theme) => ({
     container: {
@@ -132,6 +134,8 @@ const PurchasedItems = () => {
     const [venderEmailError, setVenderEmailError] = React.useState(false)
     const [venderNumber, setVenderNumber] = React.useState('')
     const [venderNumberError, setVenderNumberError] = React.useState(false)
+    const [departments, setDepartments] = React.useState([])
+    const [selectedDepartment, setSelectedDepartment] = React.useState(null)
 
     const date = new Date().toISOString().split('T')[0]
 
@@ -144,16 +148,12 @@ const PurchasedItems = () => {
     const [vender, setVender] = React.useState('')
     const [custodienIdName, setCustodienIdName] = React.useState('')
     const [productName, setProductName] = React.useState([])
-    const [tagsearch, setTagSearch] = React.useState('')
-    const [srnosearch, setSrnoSearch] = React.useState('')
-    const [allseachdata, setAllsearchdata] = React.useState([])
     const [tagdata, setTagdata] = React.useState('')
     const [tagdataError, setTagdataError] = React.useState(false)
     const [srno, setSrNo] = React.useState('')
     const [srnoError, setSrNoError] = React.useState(false)
     const [productData, setProductData] = React.useState()
     const [officeData, setOfficeData] = React.useState()
-    const [custodianIdData, setCustodianIdData] = React.useState()
     const [openConfirmationDialog, setOpenConfirmationDialog] =
         React.useState(false)
     const [selectedProduct, setSelectedProduct] = React.useState(null)
@@ -167,21 +167,18 @@ const PurchasedItems = () => {
 
     const [searchByQrCode, setSearchByQrCode] = React.useState(false)
 
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const ItemsEntryPerPage = 8
+    const pagesVisited = pageNumber * ItemsEntryPerPage
+    const pageCount = Math.ceil(purchasedItems.length / ItemsEntryPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
+
     const handleChecked = (event) => {
         setChecked(event.target.checked)
     }
 
-    const handleErrorFile = (error) => {
-        console.log(error)
-    }
-    const handleScanFile = (result) => {
-        if (result) {
-            setScanResultFile(result)
-        }
-    }
-    const onScanFile = () => {
-        qrRef.current.openImageDialog()
-    }
     const handleErrorWebCam = (error) => {
         console.log(error)
     }
@@ -191,30 +188,12 @@ const PurchasedItems = () => {
         }
     }
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } }
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
         errorFunc(false)
     }
-
-    // const handleModel = (e, func, errorFunc) => {
-    //   func(e.target.value);
-    //   console.log(e.target.model, e.target.value)
-    //   errorFunc(false)
-    // }
-
-    const handleType = (event) => {
-        setQuantity(event.target.value)
-    }
-
-    const handleProductName = (event) => {
-        setProductName(event.target.value)
-    }
     const handleModel = (event) => {
         setModel(event.target.value)
-    }
-    const handleVender = (event) => {
-        setVender(event.target.value)
     }
     const handlePrice = (event) => {
         setPrice(event.target.value)
@@ -226,13 +205,6 @@ const PurchasedItems = () => {
 
     const handleOfficeDialog = (event) => {
         setOfficeNameList(event.target.value)
-    }
-
-    const handleCustomerDialog = (event) => {
-        setUser(event.target.value)
-    }
-    const handleCustodianId = (event) => {
-        setCustodienIdName(event.target.value)
     }
 
     const handleCreatedByDialog = (event) => {
@@ -254,10 +226,6 @@ const PurchasedItems = () => {
     const handlePurchasedDate = (event) => {
         setDateOfPurchase(event.target.value)
     }
-    //   const attachment = (e) => {
-    //     attachment(e.target.files)
-    //     console.log(e.target.files[0], 'image upload')
-    // }
 
     const handlePhoto = (event) => {
         setImage(event.target.files)
@@ -330,10 +298,6 @@ const PurchasedItems = () => {
         // }
     }, [productId, officeNameList])
 
-    // const getAllData = React.useCallback(() => {
-    //     setOpen(true)
-    //   }, [])
-
     const getAlldata = () => {
         axios
             .get(`${config.base_url}/api/v1/products`)
@@ -363,6 +327,14 @@ const PurchasedItems = () => {
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
                 setCustodienId(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+        axios
+            .get(`${config.base_url}/api/v1/department`)
+            .then((res) => {
+                setDepartments(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -769,10 +741,7 @@ const PurchasedItems = () => {
                 `${config.base_url}/api/v1/purchaseProduct/searchFilters`,
                 data
             )
-            .then((res) => {
-                // setAllsearchdata(res.data.data)
-                // console.log(allseachdata, 'setAllsearchdata')
-            })
+
             .catch((error) => {
                 console.log(error, 'error')
             })
@@ -800,6 +769,12 @@ const PurchasedItems = () => {
         { label: 'Created By', key: 'createdBy' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
+
+    const [age, setAge] = React.useState('')
+
+    const handleWingChange = (event) => {
+        setAge(event.target.value)
+    }
 
     return (
         <>
@@ -878,19 +853,36 @@ const PurchasedItems = () => {
                     Items Entry
                 </Typography>
                 <Grid container spacing={3}>
-                    {purchasedItems.map((purchaseItem) => (
-                        <Grid key={purchaseItem._id} item xs={12} sm={6} md={3}>
-                            <PurchaseItemCard
-                                purchaseItem={purchaseItem}
-                                onDelete={onDelhandler}
-                                onEdit={onEdithandler}
-                            />
-                        </Grid>
-                    ))}
+                    {purchasedItems
+                        .slice(pagesVisited, pagesVisited + ItemsEntryPerPage)
+                        .map((purchaseItem) => (
+                            <Grid
+                                key={purchaseItem._id}
+                                item
+                                xs={12}
+                                sm={6}
+                                md={3}
+                            >
+                                <PurchaseItemCard
+                                    purchaseItem={purchaseItem}
+                                    onDelete={onDelhandler}
+                                    onEdit={onEdithandler}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
                 <br></br>
-                <br></br>
-                <br></br>
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
             </Container>
 
             <Dialog
@@ -909,10 +901,6 @@ const PurchasedItems = () => {
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <Box sx={{ minWidth: 120 }}>
                                     <Autocomplete
-                                        ListboxProps={{
-                                            style: { maxHeight: '13rem' },
-                                            position: 'bottom-start',
-                                        }}
                                         size="small"
                                         disablePortal
                                         id="combo-box-demo"
@@ -1200,6 +1188,62 @@ const PurchasedItems = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
+
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <Autocomplete
+                                        size="small"
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={departments}
+                                        filterSelectedOptions={true}
+                                        isOptionEqualToValue={(option, value) =>
+                                            option._id === value._id
+                                        }
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField
+                                                    {...params}
+                                                    label="Department"
+                                                />
+                                            )
+                                        }}
+                                        value={selectedDepartment}
+                                        onChange={(_event, department) => {
+                                            setSelectedDepartment(department)
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel
+                                            id="demo-simple-select-label"
+                                            size="small"
+                                        >
+                                            Wing
+                                        </InputLabel>
+                                        <Select
+                                            size="small"
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={age}
+                                            label="Wing"
+                                            onChange={handleWingChange}
+                                        >
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>
+                                                Twenty
+                                            </MenuItem>
+                                            <MenuItem value={30}>
+                                                Thirty
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     type={`text`}
@@ -1227,8 +1271,6 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
 
-                            <br></br>
-
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={venderEmailError}
@@ -1254,7 +1296,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
                                     error={venderNumberError}
                                     id="name"
@@ -1279,7 +1321,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={3} md={3} sm={3} xs={6}>
                                 <TextField
                                     error={tagdataError}
                                     id="name"
@@ -1319,7 +1361,7 @@ const PurchasedItems = () => {
                                     label="Disable Serial Number"
                                 />
                             </Grid>
-                            <Grid item lg={7} md={7} sm={7} xs={7}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 {checked ? (
                                     <TextField
                                         disabled={checked}
@@ -2080,6 +2122,65 @@ const PurchasedItems = () => {
                                 </Box>
                             </Grid>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <Autocomplete
+                                        // ListboxProps={{
+                                        //     style: { maxHeight: '4rem' },
+                                        //     position: 'bottom-start',
+                                        // }}
+                                        size="small"
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={departments}
+                                        filterSelectedOptions={true}
+                                        isOptionEqualToValue={(option, value) =>
+                                            option._id === value._id
+                                        }
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => {
+                                            return (
+                                                <TextField
+                                                    {...params}
+                                                    label="Department"
+                                                />
+                                            )
+                                        }}
+                                        value={selectedDepartment}
+                                        onChange={(_event, department) => {
+                                            setSelectedDepartment(department)
+                                        }}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel
+                                            id="demo-simple-select-label"
+                                            size="small"
+                                        >
+                                            Wing
+                                        </InputLabel>
+                                        <Select
+                                            size="small"
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={age}
+                                            label="Wing"
+                                            onChange={handleWingChange}
+                                        >
+                                            <MenuItem value={10}>Ten</MenuItem>
+                                            <MenuItem value={20}>
+                                                Twenty
+                                            </MenuItem>
+                                            <MenuItem value={30}>
+                                                Thirty
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     type={`text`}
                                     error={venderNameError}

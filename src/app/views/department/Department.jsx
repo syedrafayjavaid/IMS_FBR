@@ -1,5 +1,8 @@
 import AddIcon from '@mui/icons-material/Add'
+import CloseIcon from '@mui/icons-material/Close'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 import {
+    Autocomplete,
     Card,
     Fab,
     Grid,
@@ -16,20 +19,17 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { makeStyles } from '@mui/styles'
 import { Box, styled } from '@mui/system'
 import axios from 'axios'
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import DepartmentCard from './DepartmentCard'
-import CloseIcon from '@mui/icons-material/Close'
-import config from '../../../config'
-import SummarizeIcon from '@mui/icons-material/Summarize'
 import { CSVLink } from 'react-csv'
+import ReactPaginate from 'react-paginate'
+import config from '../../../config'
+import '../users/user.css'
+import DepartmentCard from './DepartmentCard'
 
 const DepartmentTable = styled(Table)(() => ({
     minWidth: 400,
@@ -57,25 +57,32 @@ const Department = () => {
     const [editBrandName, setEditBrandName] = React.useState('')
     const [editBrandNameError, setEditBrandNameError] = React.useState(false)
 
+    const [wingName, setWingName] = React.useState('')
+    const [wingNameError, setWingNameError] = React.useState(false)
+    const [departments, setDepartments] = React.useState([])
+    const [wings, setWings] = React.useState([])
+    const [selectedDepartment, setSelectedDepartment] = React.useState(null)
+
+    const [createWingDialog, setCreateWingDialog] = React.useState(false)
+    const [viewWingDialog, setViewWingDialog] = React.useState(false)
+
     // Setting States
-    const [quantity, setQuantity] = React.useState([])
     const [brand, setBrand] = React.useState([])
     const [brandId, setBrandId] = React.useState('')
-    const [image, setImage] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const DepartmentsPerPage = 8
+    const pagesVisited = pageNumber * DepartmentsPerPage
+    const pageCount = Math.ceil(brand.length / DepartmentsPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
 
         errorFunc(false)
-    }
-
-    const handleType = (event) => {
-        setQuantity(event.target.value)
-    }
-
-    const handleType2 = (event) => {
-        setBrand(event.target.value)
     }
 
     const [createBrandDialog, setCreateBrandDialog] = React.useState(false)
@@ -93,12 +100,30 @@ const Department = () => {
         setSnackBar(false)
     }
 
+    const handleCreateWingClose = () => {
+        setCreateWingDialog(false)
+        setWingName('')
+        setWingNameError(false)
+    }
+
+    const handleViewWingClose = () => {
+        setViewWingDialog(false)
+    }
+
     const handleCreateClickOpen = () => {
         // Check if any field of Form is Empty
         if (createBrandName === '') {
             setCreateBrandNameError(true)
         } else {
             createHandler()
+        }
+    }
+    const handleCreateWingClickOpen = () => {
+        // Check if any field of Form is Empty
+        if (wingName === '') {
+            setWingNameError(true)
+        } else {
+            createWingHandler()
         }
     }
 
@@ -109,17 +134,6 @@ const Department = () => {
         } else {
             editHandler()
         }
-    }
-
-    const handleOpen = (id) => {
-        setCreateBrandDialog(true)
-    }
-    const handleClickOpen2 = () => {
-        setCreateBrandDialog(true)
-    }
-
-    const handleImage = (e) => {
-        setImage(e.target.files[0])
     }
 
     useEffect(() => {
@@ -154,7 +168,18 @@ const Department = () => {
         setBrandId(editDataId)
     }
 
-    const navigate = useNavigate()
+    const createWingHandler = () => {
+        console.log(selectedDepartment)
+    }
+
+    const openCreateWingDialog = (department) => {
+        setCreateWingDialog(true)
+        setSelectedDepartment(department)
+    }
+
+    const openViewWingDialog = () => {
+        setViewWingDialog(true)
+    }
 
     const createHandler = () => {
         let data = new FormData()
@@ -242,39 +267,76 @@ const Department = () => {
                                 <TableCell
                                     sx={{ px: 3 }}
                                     align="left"
-                                    colSpan={6}
+                                    colSpan={4}
                                 >
                                     Name
                                 </TableCell>
                                 <TableCell
+                                    sx={{ px: 3 }}
+                                    align="center"
+                                    colSpan={2}
+                                >
+                                    View Wing
+                                </TableCell>
+                                <TableCell
+                                    sx={{ px: 3 }}
+                                    align="center"
+                                    colSpan={2}
+                                >
+                                    Add Wing
+                                </TableCell>
+                                <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
-                                    colSpan={3}
+                                    colSpan={2}
                                 >
                                     Edit
                                 </TableCell>
                                 <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
-                                    colSpan={3}
+                                    colSpan={2}
                                 >
                                     Delete
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {brand.map((brand, index) => (
-                                <DepartmentCard
-                                    key={index}
-                                    brand={brand}
-                                    onEdit={onEdithandler}
-                                    onDelete={onDelhandler}
-                                />
-                            ))}
+                            {brand
+                                .slice(
+                                    pagesVisited,
+                                    pagesVisited + DepartmentsPerPage
+                                )
+                                .map((brand, index) => (
+                                    <DepartmentCard
+                                        key={index}
+                                        brand={brand}
+                                        onCreateWingDialogOpen={
+                                            openCreateWingDialog
+                                        }
+                                        onViewWingDialogOpen={
+                                            openViewWingDialog
+                                        }
+                                        onEdit={onEdithandler}
+                                        onDelete={onDelhandler}
+                                    />
+                                ))}
                         </TableBody>
                     </DepartmentTable>
                 </Box>
             </Card>
+            <br></br>
+            <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={'paginationBttns'}
+                previousLinkClassName={'previousBttn'}
+                nextLinkClassName={'nextBttn'}
+                disabledClassName={'paginationDisabled'}
+                activeClassName={'paginationActive'}
+            />
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"
@@ -298,6 +360,116 @@ const Department = () => {
                     </CSVLink>
                 </Fab>
             </Tooltip>
+            <Dialog
+                open={createWingDialog}
+                onClose={handleCreateWingClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{'ADD WINGS'}</DialogTitle>
+                <DialogContent>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <TextField
+                                error={wingNameError}
+                                id="brandname"
+                                label="Wing Name"
+                                placeholder="Enter Wing Name"
+                                size="small"
+                                autoComplete="off"
+                                helperText={
+                                    wingNameError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={wingName}
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setWingName,
+                                        setWingNameError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Box sx={{ minWidth: 120 }}>
+                                <Autocomplete
+                                    disabled
+                                    ListboxProps={{
+                                        style: { maxHeight: '4rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={departments}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Department"
+                                            />
+                                        )
+                                    }}
+                                    value={selectedDepartment}
+                                    onChange={(_event, department) => {
+                                        setSelectedDepartment(department)
+                                    }}
+                                />
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateWingClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleCreateWingClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={handleClosed}
+                    message="Name already exists"
+                    action={action}
+                />
+            </Dialog>
+            <Dialog
+                open={viewWingDialog}
+                onClose={handleViewWingClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'VIEW WINGS'}
+                </DialogTitle>
+                <DialogContent style={{ width: '400px', height: '100px' }}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                        {wings.length > 0 && (
+                            <Grid item lg={12} md={12} sm={12} xs={12}></Grid>
+                        )}
+                        {wings.length === 0 && (
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                No Record Found
+                            </Grid>
+                        )}
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleViewWingClose}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
             <Dialog
                 open={createBrandDialog}
                 onClose={handleCreateClose}
@@ -427,23 +599,5 @@ const Department = () => {
         </>
     )
 }
-
-const useStyles = makeStyles((theme) => ({
-    conatiner: {
-        marginTop: 10,
-    },
-    title: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: '#3f51b5',
-        color: '#fff',
-        padding: 20,
-    },
-    btn: {
-        marginTop: 10,
-        marginBottom: 20,
-    },
-}))
 
 export default Department

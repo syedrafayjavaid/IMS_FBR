@@ -1,7 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
-import CloseIcon from '@mui/icons-material/Close'
-import SummarizeIcon from '@mui/icons-material/Summarize'
 import {
+    Autocomplete,
     Card,
     Fab,
     Grid,
@@ -18,20 +17,22 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
+import { makeStyles } from '@mui/styles'
 import { Box, styled } from '@mui/system'
-import { ConfirmationDialog } from 'app/components'
 import axios from 'axios'
 import React, { useEffect } from 'react'
-import { CSVLink } from 'react-csv'
-import ReactPaginate from 'react-paginate'
+import { useNavigate } from 'react-router-dom'
+import WingsCard from './WingsCard'
+import CloseIcon from '@mui/icons-material/Close'
 import config from '../../../config'
-import '../users/user.css'
-import BrandCard from './BrandCard'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import { CSVLink } from 'react-csv'
 
-const BrandTable = styled(Table)(() => ({
+const WingsTable = styled(Table)(() => ({
     minWidth: 400,
     whiteSpace: 'pre',
     '& small': {
@@ -49,29 +50,15 @@ const BrandTable = styled(Table)(() => ({
     },
 }))
 
-const Brands = () => {
+const WingsList = () => {
     // Form validation errors State Setting
-    const [createBrandName, setCreateBrandName] = React.useState('')
-    const [createBrandNameError, setCreateBrandNameError] =
-        React.useState(false)
-    const [editBrandName, setEditBrandName] = React.useState('')
-    const [editBrandNameError, setEditBrandNameError] = React.useState(false)
+    const [wingName, setWingName] = React.useState('')
+    const [wingNameError, setWingNameError] = React.useState(false)
+    const [selectedDepartment, setSelectedDepartment] = React.useState(null)
 
     // Setting States
-    const [quantity, setQuantity] = React.useState([])
-    const [brand, setBrand] = React.useState([])
-    const [brandId, setBrandId] = React.useState('')
-    const [image, setImage] = React.useState('')
+    const [departments, setDepartments] = React.useState([])
     const [snackBar, setSnackBar] = React.useState(false)
-    const [open, setOpen] = React.useState(false)
-
-    const [pageNumber, setPageNumber] = React.useState(0)
-    const BrandsPerPage = 8
-    const pagesVisited = pageNumber * BrandsPerPage
-    const pageCount = Math.ceil(brand.length / BrandsPerPage)
-    const changePage = ({ selected }) => {
-        setPageNumber(selected)
-    }
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
@@ -84,11 +71,11 @@ const Brands = () => {
 
     const handleCreateClose = () => {
         setCreateBrandDialog(false)
-        setCreateBrandNameError(false)
+        setWingNameError(false)
     }
     const handleEditClose = () => {
         setEditBrandDialog(false)
-        setEditBrandNameError(false)
+        setWingNameError(false)
     }
     const handleClosed = () => {
         setSnackBar(false)
@@ -96,8 +83,8 @@ const Brands = () => {
 
     const handleCreateClickOpen = () => {
         // Check if any field of Form is Empty
-        if (createBrandName === '') {
-            setCreateBrandNameError(true)
+        if (wingName === '') {
+            setWingNameError(true)
         } else {
             createHandler()
         }
@@ -105,11 +92,18 @@ const Brands = () => {
 
     const handleEditClickOpen = () => {
         // Check if any field of Form is Empty
-        if (editBrandName === '') {
-            setEditBrandName(true)
+        if (wingName === '') {
+            setWingNameError(true)
         } else {
             editHandler()
         }
+    }
+
+    const handleOpen = (id) => {
+        setCreateBrandDialog(true)
+    }
+    const handleClickOpen2 = () => {
+        setCreateBrandDialog(true)
     }
 
     useEffect(() => {
@@ -117,90 +111,81 @@ const Brands = () => {
     }, [])
     const getAlldata = () => {
         axios
-            .get(`${config.base_url}/api/v1/brand`)
+            .get(`${config.base_url}/api/v1/department`)
             .then((res) => {
-                setBrand(res.data.data)
+                setDepartments(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
     }
 
-    const onDelhandler = (id) => {
-        setOpen(true)
-        setBrandId(id)
-        if (open && brandId) {
-            axios
-                .delete(`${config.base_url}/api/v1/brand/${brandId}`)
-                .then((res) => {
-                    getAlldata()
-                    setOpen(false)
-                })
-                .catch((error) => {
-                    console.log(error, 'error')
-                })
-        }
+    const onDelhandler = (editData) => {
+        axios
+            .delete(`${config.base_url}/api/v1/department/${editData}`)
+            .then((res) => {
+                getAlldata()
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
-    const onEdithandler = (editDataId, editDataName) => {
+    const onEdithandler = (id, wing) => {
         setEditBrandDialog(true)
-
-        setEditBrandName(editDataName)
-        setBrandId(editDataId)
+        // setEditBrandName(editDataName)
+        // setBrandId(editDataId)
     }
+
+    const navigate = useNavigate()
 
     const createHandler = () => {
         let data = new FormData()
-        data.append('name', createBrandName)
+        data.append('name', wingName)
 
-        const brandNameExist = brand.find((brand) => {
-            return brand.name === createBrandName
-        })
+        // const brandNameExist = departments.find((brand) => {
+        //     return brand.name === wingName
+        // })
 
-        if (brandNameExist) {
-            setSnackBar(true)
-            return
-        }
+        // if (brandNameExist) {
+        //     setSnackBar(true)
+        //     return
+        // }
 
         axios
-            .post(`${config.base_url}/api/v1/brand`, data)
+            .post(`${config.base_url}/api/v1/department`, data)
             .then((res) => {
                 if (res) {
                     getAlldata()
                     handleCreateClose()
                 }
 
-                setCreateBrandName('')
+                setWingName('')
             })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+            .catch((error) => {})
     }
 
     const editHandler = () => {
-        let data = new FormData()
-        data.append('name', editBrandName)
-
-        const brandNameExist = brand.find((brand) => {
-            return brand.name === editBrandName
-        })
-
-        if (brandNameExist) {
-            setSnackBar(true)
-            return
-        }
-
-        axios
-            .put(`${config.base_url}/api/v1/brand/${brandId}`, data)
-            .then((res) => {
-                if (res) {
-                    getAlldata()
-                    handleEditClose()
-                }
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+        // let data = new FormData()
+        // data.append('name', editBrandName)
+        // const brandNameExist = brand.find((brand) => {
+        //     return brand.name === editBrandName
+        // })
+        // if (brandNameExist) {
+        //     setSnackBar(true)
+        //     return
+        // }
+        // axios
+        //     .put(`${config.base_url}/api/v1/department/${brandId}`, data)
+        //     .then((res) => {
+        //         if (res) {
+        //             getAlldata()
+        //             handleEditClose()
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.log(error, 'error')
+        //     })
     }
 
     const action = (
@@ -220,31 +205,18 @@ const Brands = () => {
     )
 
     const headers = [
-        { label: 'Brand Name', key: 'name' },
-        { label: 'Brand Id', key: 'brandId' },
+        { label: 'Department Name', key: 'name' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
     return (
         <>
-            {open && (
-                <ConfirmationDialog
-                    open={open}
-                    onConfirmDialogClose={() => {
-                        setOpen(false)
-                    }}
-                    title={`Are You Sure?`}
-                    text={`Are You Sure You Want To Delete This Brand?`}
-                    onYesClick={onDelhandler}
-                />
-            )}
             <Typography variant="h4" sx={{ m: 5 }}>
-                Brands
+                Wings
             </Typography>
-
             <Card elevation={3} sx={{ pt: '20px', mx: 5 }}>
                 <Box overflow="auto">
-                    <BrandTable>
+                    <WingsTable>
                         <TableHead>
                             <TableRow>
                                 <TableCell
@@ -271,37 +243,18 @@ const Brands = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {brand
-                                .slice(
-                                    pagesVisited,
-                                    pagesVisited + BrandsPerPage
-                                )
-                                .map((brand, index) => (
-                                    <BrandCard
-                                        key={index}
-                                        brand={brand}
-                                        onEdit={onEdithandler}
-                                        onDelete={onDelhandler}
-                                    />
-                                ))}
+                            {departments.map((brand, index) => (
+                                <WingsCard
+                                    key={index}
+                                    wing={brand}
+                                    onEdit={onEdithandler}
+                                    onDelete={onDelhandler}
+                                />
+                            ))}
                         </TableBody>
-                    </BrandTable>
+                    </WingsTable>
                 </Box>
             </Card>
-
-            <br></br>
-            <ReactPaginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={'paginationBttns'}
-                previousLinkClassName={'previousBttn'}
-                nextLinkClassName={'nextBttn'}
-                disabledClassName={'paginationDisabled'}
-                activeClassName={'paginationActive'}
-            />
-
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"
@@ -315,8 +268,8 @@ const Brands = () => {
                     }}
                 >
                     <CSVLink
-                        filename={'all-brands.csv'}
-                        data={brand}
+                        filename={'all-departments.csv'}
+                        data={departments}
                         headers={headers}
                     >
                         <div style={{ marginTop: '8px' }}>
@@ -325,41 +278,71 @@ const Brands = () => {
                     </CSVLink>
                 </Fab>
             </Tooltip>
-
             <Dialog
                 open={createBrandDialog}
                 onClose={handleCreateClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{'ADD BRAND'}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'ADD WING'}</DialogTitle>
                 <DialogContent>
                     <br></br>
                     <Grid container spacing={3}>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <TextField
-                                error={createBrandNameError}
+                                error={wingNameError}
                                 id="brandname"
-                                label="Brand Name"
-                                placeholder="Enter Brand Name"
+                                label="Wing Name"
+                                placeholder="Enter Wing Name"
                                 size="small"
                                 autoComplete="off"
                                 helperText={
-                                    createBrandNameError === true
+                                    wingNameError === true
                                         ? 'Field Required'
                                         : ''
                                 }
-                                value={createBrandName}
+                                value={wingName}
                                 onChange={(e) =>
                                     handleChange(
                                         e,
-                                        setCreateBrandName,
-                                        setCreateBrandNameError
+                                        setWingName,
+                                        setWingNameError
                                     )
                                 }
                                 variant="outlined"
                                 fullWidth
                             />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Box sx={{ minWidth: 120 }}>
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '4rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={departments}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Department"
+                                            />
+                                        )
+                                    }}
+                                    value={selectedDepartment}
+                                    onChange={(_event, department) => {
+                                        setSelectedDepartment(department)
+                                    }}
+                                />
+                            </Box>
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -385,36 +368,65 @@ const Brands = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    {'EDIT BRAND'}
-                </DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'EDIT WING'}</DialogTitle>
                 <DialogContent>
                     <br></br>
                     <Grid container spacing={3}>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                             <TextField
-                                error={editBrandNameError}
+                                error={wingNameError}
                                 id="brandname"
-                                label="Brand Name"
-                                placeholder="Enter Brand Name"
+                                label="Wing Name"
+                                placeholder="Enter Wing Name"
                                 size="small"
                                 autoComplete="off"
                                 helperText={
-                                    editBrandNameError === true
+                                    wingNameError === true
                                         ? 'Field Required'
                                         : ''
                                 }
-                                value={editBrandName}
+                                value={wingName}
                                 onChange={(e) =>
                                     handleChange(
                                         e,
-                                        setEditBrandName,
-                                        setEditBrandNameError
+                                        setWingName,
+                                        setWingNameError
                                     )
                                 }
                                 variant="outlined"
                                 fullWidth
                             />
+                        </Grid>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Box sx={{ minWidth: 120 }}>
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '4rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={departments}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Department"
+                                            />
+                                        )
+                                    }}
+                                    value={selectedDepartment}
+                                    onChange={(_event, department) => {
+                                        setSelectedDepartment(department)
+                                    }}
+                                />
+                            </Box>
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -434,7 +446,7 @@ const Brands = () => {
                 />
             </Dialog>
 
-            <Tooltip title="Add Brand">
+            <Tooltip title="Add department">
                 <Fab
                     color="secondary"
                     aria-label="Add"
@@ -454,4 +466,22 @@ const Brands = () => {
     )
 }
 
-export default Brands
+const useStyles = makeStyles((theme) => ({
+    conatiner: {
+        marginTop: 10,
+    },
+    title: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#3f51b5',
+        color: '#fff',
+        padding: 20,
+    },
+    btn: {
+        marginTop: 10,
+        marginBottom: 20,
+    },
+}))
+
+export default WingsList

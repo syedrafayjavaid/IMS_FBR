@@ -38,6 +38,11 @@ export const navigations = [
         icon: 'dirty_lens_icon',
         path: '/department/list',
     },
+    // {
+    //     name: 'Wings',
+    //     icon: 'dirty_lens_icon',
+    //     path: '/wings/list',
+    // },
     {
         name: 'Offices',
         icon: 'work_icon',

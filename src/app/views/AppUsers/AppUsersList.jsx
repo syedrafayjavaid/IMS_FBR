@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 import { Container, Fab, FormHelperText, Grid, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -14,48 +15,15 @@ import Select from '@mui/material/Select'
 import Snackbar from '@mui/material/Snackbar'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { Box, styled } from '@mui/system'
+import { styled } from '@mui/system'
 import { ConfirmationDialog } from 'app/components'
-import CategoryCard from 'app/components/categories/CategoryCard'
 import AppUserCaerd from 'app/views/AppUsers/AppUserCard'
 import axios from 'axios'
 import config from 'config'
 import React, { useEffect } from 'react'
 import { CSVLink } from 'react-csv'
-import SummarizeIcon from '@mui/icons-material/Summarize'
-
-const label = { inputProps: { 'aria-label': 'Switch demo' } }
-
-const modifiedBy = 'noor'
-const createdBy = 'imad'
-const FlexBox = styled(Box)(() => ({
-    display: 'flex',
-    alignItems: 'center',
-}))
-
-const JustifyBox = styled(FlexBox)(() => ({
-    justifyContent: 'center',
-}))
-
-const ContentBox = styled(JustifyBox)(() => ({
-    height: '100%',
-    padding: '32px',
-    background: 'rgba(0, 0, 0, 0.01)',
-}))
-
-const IMG = styled('img')(() => ({
-    width: '100%',
-}))
-
-const JWTRegister = styled(JustifyBox)(() => ({
-    background: '#1A2038',
-    minHeight: '100vh !important',
-    '& .card': {
-        maxWidth: 800,
-        borderRadius: 12,
-        margin: '1rem',
-    },
-}))
+import ReactPaginate from 'react-paginate'
+import '../users/user.css'
 
 const AppUsersList = () => {
     const [users, setUsers] = React.useState([])
@@ -86,6 +54,14 @@ const AppUsersList = () => {
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [createUserDialog, setCreateUserDialog] = React.useState(false)
     const [editUserDialog, setEditUserDialog] = React.useState(false)
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const usersPerPage = 8
+    const pagesVisited = pageNumber * usersPerPage
+    const pageCount = Math.ceil(users.length / usersPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const handleCreateClose = () => {
         setCreateUserDialog(false)
@@ -269,10 +245,6 @@ const AppUsersList = () => {
         </React.Fragment>
     )
 
-    const Input = styled('input')({
-        display: 'none',
-    })
-
     useEffect(() => {
         getAlldata()
     }, [])
@@ -299,12 +271,13 @@ const AppUsersList = () => {
             if (userData.userName === userName) {
                 setCreateSnackBar(true)
                 // setEmailSnackBar(true)
-                return
+                return null
             }
             if (userData.email === emailAddress) {
                 setEmailSnackBar(true)
-                return
+                return null
             }
+            return null
         })
 
         axios
@@ -444,16 +417,37 @@ const AppUsersList = () => {
                     Users
                 </Typography>
                 <Grid container spacing={3}>
-                    {users.map((category) => (
-                        <Grid key={category._id} item xs={12} sm={6} md={3}>
-                            <AppUserCaerd
-                                user={category}
-                                onEdit={onEdithandler}
-                                onDelete={onDelhandler}
-                            />
-                        </Grid>
-                    ))}
+                    {users
+                        .slice(pagesVisited, pagesVisited + usersPerPage)
+                        .map((category) => (
+                            <Grid
+                                key={category._id}
+                                item
+                                xs={12}
+                                sm={6}
+                                md={4}
+                                lg={3}
+                            >
+                                <AppUserCaerd
+                                    user={category}
+                                    onEdit={onEdithandler}
+                                    onDelete={onDelhandler}
+                                />
+                            </Grid>
+                        ))}
                 </Grid>
+                <br></br>
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
             </Container>
 
             <Tooltip title="Generate Report">

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 import { useNavigate } from 'react-router-dom'
 // material
 import TextTruncate from 'react-text-truncate'
@@ -85,7 +86,7 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                     element="span"
                                     truncateText="…"
                                     text={`Name: ${user.name}`}
-                                    textTruncateChild={<a href="#"></a>}
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                                 />
                             </Typography>
                         </Typography>
@@ -109,7 +110,6 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                     element="span"
                                     truncateText="…"
                                     text={`Email: ${user.emailAddress}`}
-                                    textTruncateChild={<a href="#"></a>}
                                 />
                             </Typography>
                         </Typography>

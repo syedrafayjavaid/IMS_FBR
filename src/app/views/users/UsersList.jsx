@@ -1,8 +1,7 @@
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
 import React, { useEffect } from 'react'
 import ReactPaginate from 'react-paginate'
-import InputLabel from '@mui/material/InputLabel'
-import Pagination from '@mui/material/Pagination'
-import Select from '@mui/material/Select'
 // material
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@mui/icons-material/Add'
@@ -16,19 +15,17 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     Fab,
-    FormHelperText,
     Grid,
     IconButton,
-    OutlinedInput,
     Snackbar,
     TextField,
     Tooltip,
     Typography,
     useTheme,
 } from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
@@ -37,13 +34,10 @@ import { ConfirmationDialog } from 'app/components'
 import axios from 'axios'
 import config from 'config'
 import UsersCard from './UsersCard'
-import Stack from '@mui/material/Stack'
-import Autocomplete from '@mui/material/Autocomplete'
 
-import './user.css'
-import { setDate } from 'date-fns'
-import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
+import { CSVLink } from 'react-csv'
+import './user.css'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -57,30 +51,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 const UsersList = () => {
-    const classes = useStyles()
-    const theme = useTheme()
-    const themes = useTheme()
-    const themestatu = useTheme()
-    const themesoffice = useTheme()
     const [personName, setPersonName] = React.useState([])
     const [brandName, setBrandName] = React.useState([])
-    const [statuName, setStatuName] = React.useState([])
-    const [value, setValue] = React.useState([20, 37])
 
     const [users, setUsers] = React.useState([])
     const [image, setImage] = React.useState('')
     //const [designation, setDesignation] = React.useState('')
-    const [reportmanag, setReportManage] = React.useState('')
-    const [department2, setDepartment2] = React.useState('')
     const [createSnackBar, setCreateSnackBar] = React.useState(false)
     const [editSnackBar, setEditSnackBar] = React.useState(false)
     const [userId, setUserId] = React.useState('')
-    const [statusError, setStatusError] = React.useState(false)
     const [createEmployeeDialog, setCreateEmployeeDialog] =
         React.useState(false)
     const [editEmployeeDialog, setEditEmployeeDialog] = React.useState(false)
     const date = new Date().toISOString().split('T')[0]
-    const [datejoin, setDatetejoin] = React.useState(date)
     const [name, setName] = React.useState('')
     const [nameError, setNameError] = React.useState(false)
     const [custodianIds, setCustodianIds] = React.useState([])
@@ -150,94 +133,15 @@ const UsersList = () => {
         setPageNumber(selected)
     }
 
-    const ITEM_HEIGHT = 48
-    const ITEM_PADDING_TOP = 8
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-                width: 250,
-            },
-        },
-    }
-
-    const offices = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
-    function getStyles(office, officeName, themesoffice) {
-        return {
-            fontWeight:
-                officeName.indexOf(office) === -1
-                    ? themesoffice.typography.fontWeightRegular
-                    : themesoffice.typography.fontWeightMedium,
-        }
-    }
-    const status = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
-    function getStatu(office, officeName, themesoffice) {
-        return {
-            fontWeight:
-                officeName.indexOf(office) === -1
-                    ? themesoffice.typography.fontWeightRegular
-                    : themesoffice.typography.fontWeightMedium,
-        }
-    }
-
-    const names = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
-    function getBrand(office, officeName, themesoffice) {
-        return {
-            fontWeight:
-                officeName.indexOf(office) === -1
-                    ? themesoffice.typography.fontWeightRegular
-                    : themesoffice.typography.fontWeightMedium,
-        }
-    }
-
-    const brands = [' Hansen', ' Henry', 'Tucker', 'Hubbard']
-
     const [open5, setOpen5] = React.useState(false)
-
-    const handleChan = (event) => {
-        const {
-            target: { value },
-        } = event
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value
-        )
-    }
-
-    const handleBrand = (event) => {
-        const {
-            target: { value },
-        } = event
-        setBrandName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value
-        )
-    }
 
     const handlePlaceOfJoining = (event) => {
         setPlaceOfPosting1Name(event.target.value)
     }
 
-    function getoffice(office, officeName, themesoffice) {
-        return {
-            fontWeight:
-                officeName.indexOf(office) === -1
-                    ? themesoffice.typography.fontWeightRegular
-                    : themesoffice.typography.fontWeightMedium,
-        }
-    }
-
     const Input = styled('input')({
         display: 'none',
     })
-
-    // const handleCreateChange = (event) => {
-    //     setChecked(event.target.checked)
-    // }
-
-    // const handleEditChange = (event) => {
-    //     setChecked(event.target.checked)
-    // }
 
     useEffect(() => {
         getAlldata()

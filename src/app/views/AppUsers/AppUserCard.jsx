@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom'
 // material
 import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
 import {
     Box,
     Button,
@@ -13,13 +11,10 @@ import {
     Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import config from 'config'
+import TextTruncate from 'react-text-truncate'
 import avatar from './a.png'
-import { ConfirmationDialog } from 'app/components'
 
 const UsersCard = ({ user, onDelete, onEdit }) => {
-    const navigate = useNavigate()
-
     const UserImgStyle = styled('img')({
         top: 0,
         width: '100%',
@@ -28,20 +23,8 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
         position: 'absolute',
     })
 
-    const imgeBaseUrl = 'uploads/'
-
-    const onEditHandler = () => {
-        onEdit(user._id, user)
-    }
-
     const onDeleteHandler = () => {
         onDelete(user)
-    }
-
-    const userId = user._id
-
-    const navigateToDetailsPage = () => {
-        navigate('/appUser/details', { state: { id: userId } })
     }
 
     return (
@@ -70,8 +53,12 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                         textDecoration: '',
                                     }}
                                 >
-                                    Name: &nbsp;
-                                    {user.userName}
+                                    <TextTruncate
+                                        line={1}
+                                        element="span"
+                                        truncateText="…"
+                                        text={`Name: ${user.userName}`}
+                                    />
                                 </Typography>
                             </Typography>
                         </Stack>
@@ -90,8 +77,12 @@ const UsersCard = ({ user, onDelete, onEdit }) => {
                                         textDecoration: '',
                                     }}
                                 >
-                                    Email: &nbsp;
-                                    {user.email}
+                                    <TextTruncate
+                                        line={1}
+                                        element="span"
+                                        truncateText="…"
+                                        text={`Email: ${user.email}`}
+                                    />
                                 </Typography>
                             </Typography>
                         </Stack>

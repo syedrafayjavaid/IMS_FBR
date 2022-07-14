@@ -34,6 +34,8 @@ import config from 'config'
 import { ConfirmationDialog } from 'app/components'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import { CSVLink } from 'react-csv'
+import '../users/user.css'
+import ReactPaginate from 'react-paginate'
 
 const BrandTable = styled(Table)(() => ({
     minWidth: 400,
@@ -83,6 +85,14 @@ const Offices = () => {
     const [officeId, setOfficeId] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
     const [open, setOpen] = React.useState(false)
+
+    const [pageNumber, setPageNumber] = React.useState(0)
+    const OfficesPerPage = 8
+    const pagesVisited = pageNumber * OfficesPerPage
+    const pageCount = Math.ceil(offices.length / OfficesPerPage)
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const handleChange = (e, func, errorFunc) => {
         func(e.target.value)
@@ -380,19 +390,36 @@ const Offices = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {offices.map((office, index) => (
-                                    <OfficeCard
-                                        key={index}
-                                        office={office}
-                                        onEdit={onEdithandler}
-                                        onDelete={onDelhandler}
-                                    />
-                                ))}
+                                {offices
+                                    .slice(
+                                        pagesVisited,
+                                        pagesVisited + OfficesPerPage
+                                    )
+                                    .map((office, index) => (
+                                        <OfficeCard
+                                            key={index}
+                                            office={office}
+                                            onEdit={onEdithandler}
+                                            onDelete={onDelhandler}
+                                        />
+                                    ))}
                             </TableBody>
                         </BrandTable>
                     </Box>
                 </Card>
             )}
+            <br></br>
+            <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={'paginationBttns'}
+                previousLinkClassName={'previousBttn'}
+                nextLinkClassName={'nextBttn'}
+                disabledClassName={'paginationDisabled'}
+                activeClassName={'paginationActive'}
+            />
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"

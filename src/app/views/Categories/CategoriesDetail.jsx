@@ -114,12 +114,6 @@ const CategoriesDetail = () => {
                             </Grid>
                         </Grid>
                         <hr></hr>
-                        {/* <Box>
-                    <h4>Detail: </h4>    
-                    {state.category.detail}
-                    </Box>
-    
-                    <br></br> */}
                     </Grid>
                 </Grid>
             </Card>

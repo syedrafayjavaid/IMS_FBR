@@ -19,6 +19,7 @@ import officesRoutes from 'app/views/offices/OfficeRoutes'
 import purchaseditemsRoute from 'app/views/items/purchaseditemsRoute'
 import DepartmentRouter from 'app/views/department/DepartmentRouter'
 import AppUsersRoutes from 'app/views/AppUsers/AppUsersRoutes'
+import wingsRoutes from 'app/views/wings/WingsRoutes'
 
 export const AllPages = () => {
     const all_routes = [
@@ -42,7 +43,8 @@ export const AllPages = () => {
                 ...officesRoutes,
                 ...DepartmentRouter,
                 ...purchaseditemsRoute,
-                ...AppUsersRoutes
+                ...AppUsersRoutes,
+                ...wingsRoutes,
             ],
         },
         ...sessionRoutes,
