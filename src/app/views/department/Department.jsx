@@ -247,7 +247,7 @@ const Department = () => {
         axios
             .delete(`${config.base_url}/api/v1/wing/${id}`)
             .then((res) => {
-                getAlldata()
+                getWing(departmentId)
             })
             .catch((error) => {
                 console.log(error, 'error')
