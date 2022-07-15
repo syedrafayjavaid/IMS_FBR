@@ -249,19 +249,18 @@ const PurchaseItemDetail = () => {
         let data = new FormData()
 
         data.append('employId', custodianId)
-        // data.append('productId', state.purchaseItem.productId)
         data.append('ItemId', state.purchaseItem._id)
         data.append('quantity', quantity)
         data.append('status', 'valid')
         data.append('createdBy', userName)
-        data.append('transferedTo', 'N/A')
-        data.append('transferedFrom', 'store')
-        // data.append('employName')
-        // data.append('employName')
-        data.append('productTagNo', state.purchaseItem.tagNo)
-        data.append('productSrNo', state.purchaseItem.srNo)
-        data.append('productName', productData?.name)
+        data.append('productId', state.purchaseItem.productId)
+        // data.append('transferedTo', 'N/A')
+        // data.append('transferedFrom', 'store')
 
+        if (quantity < 1) {
+            setSnackBar(true)
+            return
+        }
         if (quantity > state.purchaseItem.quantity) {
             setSnackBar(true)
             return
@@ -279,7 +278,6 @@ const PurchaseItemDetail = () => {
             })
             .catch((error) => {
                 console.log(error, 'error')
-                // handleClick()
             })
     }
 
@@ -318,8 +316,6 @@ const PurchaseItemDetail = () => {
             )
             .then((res) => {
                 setProductTransferDetails(res.data.data)
-                // setProduct1(res.data.data)
-                // console.log(product1, 'setProduct1')
             })
             .catch((error) => {
                 // console.log(error, 'error');
@@ -356,10 +352,6 @@ const PurchaseItemDetail = () => {
         },
     }))
 
-    const editHandler = (id) => {
-        console.log(id)
-    }
-
     const editfunction = (item) => {
         setCurrentData(item)
         setEditDialogOpen(true)
@@ -370,9 +362,13 @@ const PurchaseItemDetail = () => {
     }
 
     const UpdateRecord = () => {
-        let data = {}
-        data = currentData
-        data.quantity = quantity
+        let data = new FormData()
+        data.append('employId', custodianId)
+        data.append('ItemId', state.purchaseItem._id)
+        data.append('quantity', quantity)
+        data.append('status', 'valid')
+        data.append('createdBy', userName)
+        data.append('productId', state.purchaseItem.productId)
 
         axios
             .put(`${config.base_url}/api/v1/productTransfer/update`, data)
@@ -382,13 +378,14 @@ const PurchaseItemDetail = () => {
                     setEditDialogOpen(false)
                     setCustodianId('')
                     setQuantity('')
-                    // handleEditDialogClose()
                 }
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
     }
+
+    console.log(productTransferDetails)
 
     return (
         <>
@@ -725,7 +722,9 @@ const PurchaseItemDetail = () => {
                                                 >
                                                     <Paragraph>
                                                         {
-                                                            productTransfer.employID
+                                                            productTransfer
+                                                                .employees[0]
+                                                                .employeeId
                                                         }
                                                     </Paragraph>
                                                 </TableCell>
@@ -738,7 +737,10 @@ const PurchaseItemDetail = () => {
                                                             'capitalize',
                                                     }}
                                                 >
-                                                    {productTransfer.employName}
+                                                    {
+                                                        productTransfer
+                                                            .employees[0].name
+                                                    }
                                                 </TableCell>
                                                 <TableCell
                                                     align="center"
@@ -966,7 +968,11 @@ const PurchaseItemDetail = () => {
                     open={snackBar}
                     autoHideDuration={6000}
                     onClose={handleSnackBarClose}
-                    message={`Quantity Must Be Smaller Than ${state.purchaseItem.quantity}`}
+                    message={
+                        quantity < 1
+                            ? `Quantity Must Be Greater Than ${quantity}`
+                            : `Quantity Must Be Smaller Than ${state.purchaseItem.quantity}`
+                    }
                     action={action}
                 />
             </Dialog>

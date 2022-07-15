@@ -203,24 +203,28 @@ const UserDetail = () => {
         data.employId = custodianId
         data.employID = transferTo?.employeeId
 
+        if (custodianId === transferTo?._id) {
+            alert("You Can't Transfer Product To Yourself")
+        }
+
         if (quantity > 200) {
             alert('Quantity Exceeds')
             return
         }
-        axios
-            .post(`${config.base_url}/api/v1/productTransfer/transfer`, data)
-            .then((res) => {
-                if (res) {
-                    // handleCreateClose()
+        // axios
+        //     .post(`${config.base_url}/api/v1/productTransfer/transfer`, data)
+        //     .then((res) => {
+        //         if (res) {
+        //             // handleCreateClose()
 
-                    // getData()
-                    setOpen(false)
-                }
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-                // handleClick()
-            })
+        //             // getData()
+        //             setOpen(false)
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.log(error, 'error')
+        //         // handleClick()
+        //     })
     }
 
     useEffect(() => {
