@@ -24,7 +24,7 @@ import { useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import QRCode from 'qrcode'
-
+import ChipInput from 'material-ui-chip-input'
 import { CardContent } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -189,6 +189,10 @@ const PurchasedItems = () => {
         const [selectedDate, handleDateChange] = useState(new Date())
     }
 
+    <ChipInput
+  defaultValue={['foo', 'bar']}
+  onChange={(chips) => handleChange(chips)}
+/>
     const marks = [
         {
             value: 0,
@@ -1866,6 +1870,15 @@ const PurchasedItems = () => {
                             </Grid>
                         </Grid>
                         <br></br>
+                            <Grid container spacing={3}>
+                           
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <ChipInput   />          
+                    
+                            </Grid>
+                          
+                            </Grid>
+                        <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box>
@@ -1901,9 +1914,11 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
+                            </Grid>
+                       
+                            <br></br>
+
+                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Typography gutterBottom>Start Date of Purchased Items</Typography>
                                 <TextField
