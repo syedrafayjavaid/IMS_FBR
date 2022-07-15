@@ -1,12 +1,11 @@
 import { useTheme } from '@mui/material/styles'
 import * as React from 'react'
-import { KeyboardDatePicker } from "@material-ui/pickers";
+import { KeyboardDatePicker } from '@material-ui/pickers'
 import Box from '@mui/material/Box'
-import Slider from '@mui/material/Slider';
+import Slider from '@mui/material/Slider'
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import QrCodeIcon from '@mui/icons-material/QrCode'
-
 
 import {
     Autocomplete,
@@ -119,7 +118,7 @@ const PurchasedItems = () => {
     ///dialog
     const [statusDialog, setStatusDialog] = React.useState([])
     const [statusValue, setStatusValue] = React.useState('')
-    
+
     const [officeDialog, setOfficeDialog] = React.useState([])
     const [officeNameList, setOfficeNameList] = React.useState('')
     const [purchasedDialog, setPurchasedDialog] = React.useState([])
@@ -176,7 +175,7 @@ const PurchasedItems = () => {
     const [purchaseOrderSearch, setPurchaseOrdersearch] = React.useState('')
     const [sdate, setSdate] = React.useState('')
     const [sdate1, setSdate1] = React.useState('')
-    
+
     const handlestatus = (event) => {
         setSearchStatus(event.target.value)
     }
@@ -186,37 +185,37 @@ const PurchasedItems = () => {
     const handlePurchasedOrderSearch = (event) => {
         setPurchaseOrdersearch(event.target.value)
     }
-function KeyboardDatePickerExample(props) {
-  const [selectedDate, handleDateChange] = useState(new Date());
-}
+    function KeyboardDatePickerExample(props) {
+        const [selectedDate, handleDateChange] = useState(new Date())
+    }
 
     const marks = [
         {
-          value: 0,
-          label: '0',
+            value: 0,
+            label: '0',
         },
         {
-          value: 100,
-          label: '100',
+            value: 100,
+            label: '100',
         },
         {
-          value: 500,
-          label: '500',
+            value: 500,
+            label: '500',
         },
         {
-          value: 700,
-          label: '700',
+            value: 700,
+            label: '700',
         },
         {
             value: 1000,
             label: '1000',
-          },
-      ];
-      
-      function valuetext(value) {
-        return `${value}`;
-      }
-///////
+        },
+    ]
+
+    function valuetext(value) {
+        return `${value}`
+    }
+    ///////
     const [pageNumber, setPageNumber] = React.useState(0)
     const ItemsEntryPerPage = 8
     const pagesVisited = pageNumber * ItemsEntryPerPage
@@ -798,11 +797,11 @@ function KeyboardDatePickerExample(props) {
     }
 
     const headers = [
-        { label: 'Product Id', key: 'productId' },
+        { label: 'Product', key: 'product[0].name' },
         { label: 'Price', key: 'price' },
         { label: 'Quantity', key: 'quantity' },
         { label: 'Model', key: 'model' },
-        { label: 'Office Id', key: 'officeId' },
+        { label: 'Office', key: 'office[0].name' },
         { label: 'Purchase Product Id', key: 'purchaseProductId' },
         { label: 'Purchase Order', key: 'purchaseOrder' },
         { label: 'Ownership', key: 'ownership' },
@@ -835,7 +834,7 @@ function KeyboardDatePickerExample(props) {
         { title: '12 Angry Men', year: 1957 },
         { title: "Schindler's List", year: 1993 },
         { title: 'Pulp Fiction', year: 1994 },
-      
+
         { title: 'City of God', year: 2002 },
         { title: 'Se7en', year: 1995 },
         { title: 'The Silence of the Lambs', year: 1991 },
@@ -868,15 +867,14 @@ function KeyboardDatePickerExample(props) {
         { title: 'Apocalypse Now', year: 1979 },
         { title: 'Alien', year: 1979 },
         { title: 'Sunset Boulevard', year: 1950 },
-       
+
         { title: 'Once Upon a Time in America', year: 1984 },
         { title: 'Witness for the Prosecution', year: 1957 },
         { title: 'Das Boot', year: 1981 },
         { title: 'Citizen Kane', year: 1941 },
         { title: 'North by Northwest', year: 1959 },
         { title: 'Vertigo', year: 1958 },
-       
-      ];
+    ]
     return (
         <>
             {openConfirmationDialog && (
@@ -1556,10 +1554,6 @@ function KeyboardDatePickerExample(props) {
                 </DialogActions>
             </Dialog>
 
-
-
-
-
             {/* Search Items Dialog */}
 
             <Dialog
@@ -1597,7 +1591,7 @@ function KeyboardDatePickerExample(props) {
                         </div>
                     </Tooltip>
                 </DialogTitle>
-                <DialogContent >
+                <DialogContent>
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
@@ -1683,7 +1677,6 @@ function KeyboardDatePickerExample(props) {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                       
                             <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     id="name"
@@ -1740,10 +1733,9 @@ function KeyboardDatePickerExample(props) {
                                 </Box>
                             </Grid>
 
-
                             <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <Box>
-                                <FormControl
+                                    <FormControl
                                         size="small"
                                         fullWidth
                                         error={ownerShipError}
@@ -1773,9 +1765,9 @@ function KeyboardDatePickerExample(props) {
                                     </FormControl>
                                 </Box>
                             </Grid>
-                            </Grid>
-                            <br></br>
-                            <Grid container spacing={3}>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
                             <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     error={purchasedOrderError}
@@ -1834,93 +1826,90 @@ function KeyboardDatePickerExample(props) {
                                     />
                                 </Box>
                             </Grid>
-                             </Grid>
-                             <br></br>
-                            <Grid container spacing={3}>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
-
-                             <Autocomplete
-                            multiple
-                            limitTags={2}
-                            id="multiple-limit-tags"
-                            options={top100Films}
-                            getOptionLabel={(option) => option.title}
-                           
-                            renderInput={(params) => (
-                                <TextField {...params} label="features suggestive" placeholder="features suggestive" />
-                            )}
-                            
-                            />
-                              
+                                <Autocomplete
+                                    multiple
+                                    limitTags={2}
+                                    id="multiple-limit-tags"
+                                    options={top100Films}
+                                    getOptionLabel={(option) => option.title}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="features suggestive"
+                                            placeholder="features suggestive"
+                                        />
+                                    )}
+                                />
                             </Grid>
-                       </Grid>
-                            <br></br>
-                            <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <Box>
-                            <Typography id="input-slider" gutterBottom>
-                                Price Range
-                            </Typography>
-                            <Slider
-                            aria-label="Custom marks"
-                            defaultValue={0}
-                            getAriaValueText={valuetext}
-                            step={100}
-                            min={0}
-                            max={1000}
-                            valueLabelDisplay="auto"
-                            marks={marks}
-                        />
-                       
-                          </Box>
-                            </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <Box>
-                            <Typography id="input-slider" gutterBottom>
-                            Quantity Range
-                            </Typography>
-                            <Slider
-                            aria-label="Custom marks"
-                            defaultValue={0}
-                            getAriaValueText={valuetext}
-                            step={100}
-                            min={0}
-                            max={1000}
-                            valueLabelDisplay="auto"
-                            marks={marks}
-                        />
-                          </Box>
-                            </Grid>
-                          </Grid>
-                             <br></br>
-                            <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <Typography gutterBottom>Start Date</Typography>
-                            <TextField
-                                value={sdate}
-                                id="date"
-                                label="Start Date"
-                                type="date"
-                                onChange={(e) => setSdate(e.target.value)}
-                                size="small"
-                                fullWidth
-                            />
                         </Grid>
-                        <Grid item lg={6} md={6} sm={6} xs={6}>
-                            <Typography gutterBottom>End Date</Typography>
-                            <TextField
-                                value={sdate1}
-                                id="date"
-                                label="End Date"
-                                type="date"
-                                onChange={(e) => setSdate1(e.target.value)}
-                                size="small"
-                                fullWidth
-                            />
-                        </Grid>
-                       
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Box>
+                                    <Typography id="input-slider" gutterBottom>
+                                        Price Range
+                                    </Typography>
+                                    <Slider
+                                        aria-label="Custom marks"
+                                        defaultValue={0}
+                                        getAriaValueText={valuetext}
+                                        step={100}
+                                        min={0}
+                                        max={1000}
+                                        valueLabelDisplay="auto"
+                                        marks={marks}
+                                    />
+                                </Box>
                             </Grid>
-                           
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Box>
+                                    <Typography id="input-slider" gutterBottom>
+                                        Quantity Range
+                                    </Typography>
+                                    <Slider
+                                        aria-label="Custom marks"
+                                        defaultValue={0}
+                                        getAriaValueText={valuetext}
+                                        step={100}
+                                        min={0}
+                                        max={1000}
+                                        valueLabelDisplay="auto"
+                                        marks={marks}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Typography gutterBottom>Start Date</Typography>
+                                <TextField
+                                    value={sdate}
+                                    id="date"
+                                    label="Start Date"
+                                    type="date"
+                                    onChange={(e) => setSdate(e.target.value)}
+                                    size="small"
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Typography gutterBottom>End Date</Typography>
+                                <TextField
+                                    value={sdate1}
+                                    id="date"
+                                    label="End Date"
+                                    type="date"
+                                    onChange={(e) => setSdate1(e.target.value)}
+                                    size="small"
+                                    fullWidth
+                                />
+                            </Grid>
+                        </Grid>
                     </CardContent>
                 </DialogContent>
                 <DialogActions>

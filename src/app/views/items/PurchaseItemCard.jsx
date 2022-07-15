@@ -40,6 +40,8 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
         })
     }
 
+    const productName = purchaseItem.product[0].name
+
     return (
         <Card sx={{ maxWidth: 345 }}>
             <Box onClick={navigateToDetailsPage}>
@@ -50,6 +52,9 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
                     />
                 </CardMedia>
                 <CardContent>
+                    <Typography variant="subtitle2" noWrap>
+                        {productName}
+                    </Typography>
                     <Stack
                         direction="row"
                         alignItems="center"
