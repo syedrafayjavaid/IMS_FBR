@@ -370,6 +370,15 @@ const PurchaseItemDetail = () => {
         data.append('createdBy', userName)
         data.append('productId', state.purchaseItem.productId)
 
+        if (quantity < 1) {
+            setSnackBar(true)
+            return
+        }
+        if (quantity > state.purchaseItem.quantity) {
+            setSnackBar(true)
+            return
+        }
+
         axios
             .put(`${config.base_url}/api/v1/productTransfer/update`, data)
             .then((res) => {
@@ -1078,7 +1087,11 @@ const PurchaseItemDetail = () => {
                     open={snackBar}
                     autoHideDuration={6000}
                     onClose={handleSnackBarClose}
-                    message="Quantity Must Be Smaller Than 60"
+                    message={
+                        quantity < 1
+                            ? `Quantity Must Be Greater Than ${quantity}`
+                            : `Quantity Must Be Smaller Than ${state.purchaseItem.quantity}`
+                    }
                     action={action}
                 />
             </Dialog>
