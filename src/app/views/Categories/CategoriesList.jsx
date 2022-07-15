@@ -322,7 +322,8 @@ const CategoriesList = () => {
                         ))}
                 </Grid>
                 <br></br>
-                <ReactPaginate
+                {
+                    categories.length > 0 &&  <ReactPaginate
                     previousLabel={'Previous'}
                     nextLabel={'Next'}
                     pageCount={pageCount}
@@ -333,6 +334,8 @@ const CategoriesList = () => {
                     disabledClassName={'paginationDisabled'}
                     activeClassName={'paginationActive'}
                 />
+                }
+               
             </Container>
 
             <Dialog

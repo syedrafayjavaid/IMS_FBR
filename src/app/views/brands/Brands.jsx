@@ -290,7 +290,8 @@ const Brands = () => {
             </Card>
 
             <br></br>
-            <ReactPaginate
+            {
+                brand.length > 0 && <ReactPaginate
                 previousLabel={'Previous'}
                 nextLabel={'Next'}
                 pageCount={pageCount}
@@ -302,6 +303,8 @@ const Brands = () => {
                 activeClassName={'paginationActive'}
             />
 
+            }
+            
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"

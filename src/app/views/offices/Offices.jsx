@@ -410,7 +410,8 @@ const Offices = () => {
                 </Card>
             )}
             <br></br>
-            <ReactPaginate
+            {
+                offices.length> 0 && <ReactPaginate
                 previousLabel={'Previous'}
                 nextLabel={'Next'}
                 pageCount={pageCount}
@@ -421,6 +422,8 @@ const Offices = () => {
                 disabledClassName={'paginationDisabled'}
                 activeClassName={'paginationActive'}
             />
+            }
+            
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"

@@ -437,7 +437,8 @@ const AppUsersList = () => {
                         ))}
                 </Grid>
                 <br></br>
-                <ReactPaginate
+                {
+                    users.length> 0 && <ReactPaginate
                     previousLabel={'Previous'}
                     nextLabel={'Next'}
                     pageCount={pageCount}
@@ -448,6 +449,8 @@ const AppUsersList = () => {
                     disabledClassName={'paginationDisabled'}
                     activeClassName={'paginationActive'}
                 />
+                }
+                
             </Container>
 
             <Tooltip title="Generate Report">

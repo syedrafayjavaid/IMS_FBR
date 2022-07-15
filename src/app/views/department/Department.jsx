@@ -464,7 +464,8 @@ const Department = () => {
                 </Box>
             </Card>
             <br></br>
-            <ReactPaginate
+            {
+                departments.length > 0 && <ReactPaginate
                 previousLabel={'Previous'}
                 nextLabel={'Next'}
                 pageCount={pageCount}
@@ -475,6 +476,8 @@ const Department = () => {
                 disabledClassName={'paginationDisabled'}
                 activeClassName={'paginationActive'}
             />
+            }
+            
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"
