@@ -40,7 +40,7 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
         })
     }
 
-    const productName = purchaseItem.product[0].name
+    const productName = purchaseItem.product[0]?.name
 
     return (
         <Card sx={{ maxWidth: 345 }}>

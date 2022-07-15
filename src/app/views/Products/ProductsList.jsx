@@ -4,6 +4,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import {
+    Autocomplete,
     Container,
     Fab,
     FormHelperText,
@@ -440,6 +441,56 @@ const ProductsList = () => {
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
+    ///////add fe3atue demay data
+    const top100Films = [
+        { title: 'The Shawshank Redemption', year: 1994 },
+        { title: 'The Godfather', year: 1972 },
+        { title: 'The Godfather: Part II', year: 1974 },
+        { title: 'The Dark Knight', year: 2008 },
+        { title: '12 Angry Men', year: 1957 },
+        { title: "Schindler's List", year: 1993 },
+        { title: 'Pulp Fiction', year: 1994 },
+
+        { title: 'City of God', year: 2002 },
+        { title: 'Se7en', year: 1995 },
+        { title: 'The Silence of the Lambs', year: 1991 },
+        { title: "It's a Wonderful Life", year: 1946 },
+        { title: 'Life Is Beautiful', year: 1997 },
+        { title: 'The Usual Suspects', year: 1995 },
+        { title: 'Léon: The Professional', year: 1994 },
+        { title: 'Spirited Away', year: 2001 },
+        { title: 'Saving Private Ryan', year: 1998 },
+        { title: 'Once Upon a Time in the West', year: 1968 },
+        { title: 'American History X', year: 1998 },
+        { title: 'Interstellar', year: 2014 },
+        { title: 'Casablanca', year: 1942 },
+        { title: 'City Lights', year: 1931 },
+        { title: 'Psycho', year: 1960 },
+        { title: 'The Green Mile', year: 1999 },
+        { title: 'The Intouchables', year: 2011 },
+        { title: 'Modern Times', year: 1936 },
+        { title: 'Raiders of the Lost Ark', year: 1981 },
+        { title: 'Rear Window', year: 1954 },
+        { title: 'The Pianist', year: 2002 },
+        { title: 'The Departed', year: 2006 },
+        { title: 'Terminator 2: Judgment Day', year: 1991 },
+        { title: 'Back to the Future', year: 1985 },
+        { title: 'Whiplash', year: 2014 },
+        { title: 'Gladiator', year: 2000 },
+        { title: 'Memento', year: 2000 },
+        { title: 'The Prestige', year: 2006 },
+        { title: 'The Lion King', year: 1994 },
+        { title: 'Apocalypse Now', year: 1979 },
+        { title: 'Alien', year: 1979 },
+        { title: 'Sunset Boulevard', year: 1950 },
+
+        { title: 'Once Upon a Time in America', year: 1984 },
+        { title: 'Witness for the Prosecution', year: 1957 },
+        { title: 'Das Boot', year: 1981 },
+        { title: 'Citizen Kane', year: 1941 },
+        { title: 'North by Northwest', year: 1959 },
+        { title: 'Vertigo', year: 1958 },
+    ]
     return (
         <>
             {open && (
@@ -520,7 +571,8 @@ const ProductsList = () => {
                         ))}
                 </Grid>
                 <br />
-                <ReactPaginate
+                {
+                    product1.length> 0 && <ReactPaginate
                     previousLabel={'Previous'}
                     nextLabel={'Next'}
                     pageCount={pageCount}
@@ -531,6 +583,8 @@ const ProductsList = () => {
                     disabledClassName={'paginationDisabled'}
                     activeClassName={'paginationActive'}
                 />
+                }
+               
             </Container>
 
             <Dialog
@@ -548,7 +602,7 @@ const ProductsList = () => {
 
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={createNameError}
                                     id="name"
@@ -574,8 +628,8 @@ const ProductsList = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box sx={{ minWidth: 120 }}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={createProductTypeNameError}
@@ -612,8 +666,12 @@ const ProductsList = () => {
                                 </Box>
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box sx={{ minWidth: 120 }}>
+                           
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={createProductCategoryError}
@@ -652,36 +710,12 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <TextField
-                                    error={createModelError}
-                                    id="name"
-                                    label="Model"
-                                    placeholder="Model"
-                                    autoComplete="off"
-                                    helperText={
-                                        createModelError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={createModel}
-                                    size="small"
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setCreateModel,
-                                            setCreateModelError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
+                           
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <Box sx={{ minWidth: 120 }}>
+                            <br></br>
+                            <Grid container spacing={3}>
+                            <Grid item lg={8} md={8} sm={8} xs={8}>
+                                <Box>
                                     <FormControl
                                         size="small"
                                         error={createBrandNameError}
@@ -743,12 +777,34 @@ const ProductsList = () => {
                                         </Button>
                                     </label>
                                 </Box>
-                            </Grid>
+                          
+                        </Grid>
                         </Grid>
                         <br></br>
-
                         <Grid container spacing={3}>
-                            <Grid item lg={7} md={7} sm={7} xs={7}>
+                           
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Autocomplete
+                                    multiple
+                                    limitTags={2}
+                                    id="multiple-limit-tags"
+                                    options={top100Films}
+                                    getOptionLabel={(option) => option.title}
+                                    renderInput={(params) => (
+                                        <TextField
+                                       // value={features}
+                                            {...params}
+                                            label="features suggestive"
+                                            placeholder="features suggestive"
+                                            // onClick={guardarNumeros()}
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            </Grid>
+                            <br></br>
+                        <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     disabled
                                     error={createdByError}
@@ -832,7 +888,7 @@ const ProductsList = () => {
 
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
                                 <TextField
                                     error={editNameError}
                                     id="name"
@@ -859,7 +915,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box sx={{ minWidth: 120 }}>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={editProductTypeNameError}
@@ -896,8 +952,8 @@ const ProductsList = () => {
                                 </Box>
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box sx={{ minWidth: 120 }}>
+                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={editProductCategoryError}
@@ -938,32 +994,7 @@ const ProductsList = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <TextField
-                                    error={editModelError}
-                                    id="name"
-                                    label="Model"
-                                    placeholder="Model"
-                                    autoComplete="off"
-                                    helperText={
-                                        editModelError === true
-                                            ? 'Field Required'
-                                            : ''
-                                    }
-                                    value={editModel}
-                                    size="small"
-                                    onChange={(e) =>
-                                        handleChange(
-                                            e,
-                                            setEditModel,
-                                            setEditModelError
-                                        )
-                                    }
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={8} md={8} sm={8} xs={8}>
                                 <Box sx={{ minWidth: 120 }}>
                                     <FormControl
                                         size="small"
@@ -1031,7 +1062,7 @@ const ProductsList = () => {
                         <br></br>
 
                         <Grid container spacing={3}>
-                            <Grid item lg={7} md={7} sm={7} xs={7}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     disabled
                                     error={modifiedByError}

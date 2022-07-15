@@ -340,7 +340,8 @@ const ProductTypeList = () => {
                 </Box>
             </Card>
             <br></br>
-            <ReactPaginate
+            {
+                productList.length > 0 &&  <ReactPaginate
                 previousLabel={'Previous'}
                 nextLabel={'Next'}
                 pageCount={pageCount}
@@ -351,6 +352,8 @@ const ProductTypeList = () => {
                 disabledClassName={'paginationDisabled'}
                 activeClassName={'paginationActive'}
             />
+            }
+           
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"

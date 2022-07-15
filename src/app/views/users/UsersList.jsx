@@ -848,18 +848,20 @@ const UsersList = () => {
                 <br></br>
                 <br></br>
                 <br></br>
-
-                    <ReactPaginate
-                    previousLabel={'Previous'}
-                    nextLabel={'Next'}
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={'paginationBttns'}
-                    previousLinkClassName={'previousBttn'}
-                    nextLinkClassName={'nextBttn'}
-                    disabledClassName={'paginationDisabled'}
-                    activeClassName={'paginationActive'}
-                  />
+{
+    users.length > 0 && <ReactPaginate
+    previousLabel={'Previous'}
+    nextLabel={'Next'}
+    pageCount={pageCount}
+    onPageChange={changePage}
+    containerClassName={'paginationBttns'}
+    previousLinkClassName={'previousBttn'}
+    nextLinkClassName={'nextBttn'}
+    disabledClassName={'paginationDisabled'}
+    activeClassName={'paginationActive'}
+  />
+}
+                    
                  </Container>
 
             {/* ////

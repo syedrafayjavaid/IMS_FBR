@@ -175,7 +175,7 @@ const PurchasedItems = () => {
     const [purchaseOrderSearch, setPurchaseOrdersearch] = React.useState('')
     const [sdate, setSdate] = React.useState('')
     const [sdate1, setSdate1] = React.useState('')
-
+    
     const handlestatus = (event) => {
         setSearchStatus(event.target.value)
     }
@@ -826,6 +826,16 @@ const PurchasedItems = () => {
     }
 
     //////demy data for the chips input value
+    // function guardarNumeros() {
+
+
+    //     const items=top100Films.push(features);
+       
+    //     return items; 
+    //   }
+
+
+    
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
         { title: 'The Godfather', year: 1972 },
@@ -962,16 +972,19 @@ const PurchasedItems = () => {
                                 sm={6}
                                 md={3}
                             >
+
                                 <PurchaseItemCard
                                     purchaseItem={purchaseItem}
                                     onDelete={onDelhandler}
                                     onEdit={onEdithandler}
                                 />
-                            </Grid>
+                             </Grid>
                         ))}
                 </Grid>
                 <br></br>
-                <ReactPaginate
+
+                {
+                    purchasedItems.length > 0 &&  <ReactPaginate
                     previousLabel={'Previous'}
                     nextLabel={'Next'}
                     pageCount={pageCount}
@@ -982,6 +995,8 @@ const PurchasedItems = () => {
                     disabledClassName={'paginationDisabled'}
                     activeClassName={'paginationActive'}
                 />
+                }
+              
             </Container>
 
             <Dialog
@@ -1595,7 +1610,7 @@ const PurchasedItems = () => {
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1624,7 +1639,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1655,7 +1670,11 @@ const PurchasedItems = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                           
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     id="name"
                                     label="Tag"
@@ -1674,10 +1693,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     id="name"
                                     label="Serial Number"
@@ -1697,7 +1713,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Box>
                                     <FormControl
                                         size="small"
@@ -1733,7 +1749,7 @@ const PurchasedItems = () => {
                                 </Box>
                             </Grid>
 
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Box>
                                     <FormControl
                                         size="small"
@@ -1768,7 +1784,7 @@ const PurchasedItems = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={4} md={4} sm={4} xs={4}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={purchasedOrderError}
                                     id="name"
@@ -1793,7 +1809,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item lg={8} md={8} sm={8} xs={8}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Box>
                                     <Autocomplete
                                         ListboxProps={{
@@ -1826,6 +1842,7 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
+                            
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1838,9 +1855,11 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
+                                       // value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
+                                            // onClick={guardarNumeros()}
                                         />
                                     )}
                                 />
@@ -1848,7 +1867,7 @@ const PurchasedItems = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box>
                                     <Typography id="input-slider" gutterBottom>
                                         Price Range
@@ -1865,7 +1884,7 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box>
                                     <Typography id="input-slider" gutterBottom>
                                         Quantity Range
@@ -1886,7 +1905,7 @@ const PurchasedItems = () => {
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>Start Date</Typography>
+                                <Typography gutterBottom>Start Date of Purchased Items</Typography>
                                 <TextField
                                     value={sdate}
                                     id="date"
@@ -1898,7 +1917,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>End Date</Typography>
+                                <Typography gutterBottom>End Date Purchased Items</Typography>
                                 <TextField
                                     value={sdate1}
                                     id="date"
