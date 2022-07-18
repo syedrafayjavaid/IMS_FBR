@@ -361,6 +361,119 @@ const PurchaseItemDetail = () => {
         setQuantity(item.quantity)
     }
 
+    const handleCreateClickOpen = () => {
+        if (
+            price === '' ||
+            dataOfPurchase === '' ||
+            officeNameList === '' ||
+            ownerShip === '' ||
+            statusValue === '' ||
+            model === '' ||
+            purchaseOrder === '' ||
+            productQuantity === '' ||
+            venderName === '' ||
+            venderNumber === '' ||
+            tagdata === ''
+        ) {
+            if (price === '') {
+                setPriceError(true)
+            }
+
+            if (dataOfPurchase === '') {
+                setDateOfPurchaseError(true)
+            }
+            if (ownerShip === '') {
+                setOwnerShipError(true)
+            }
+            if (officeNameList === '') {
+                setOfficeNameError(true)
+            }
+            if (statusValue === '') {
+                setStatusError(true)
+            }
+            if (model === '') {
+                setModelError(true)
+            }
+            if (purchaseOrder === '') {
+                setPurchasedOrderError(true)
+            }
+            if (productQuantity === '') {
+                setProductQuantityError(true)
+            }
+            if (venderName === '') {
+                setVenderNameError(true)
+            }
+            if (venderNumber === '') {
+                setVenderNumberError(true)
+            }
+            if (tagdata === '') {
+                setTagdataError(true)
+            }
+        } else {
+            createHandler()
+        }
+    }
+
+    const createHandler = () => {
+        let data = new FormData()
+
+        // data.append('productId', selectedProduct?._id)
+        data.append('price', price)
+        data.append('dataOfPurchase', dataOfPurchase)
+        data.append('ownership', ownerShip)
+        data.append('officeId', officeNameList)
+        data.append('status', statusValue)
+        data.append('venderName', venderName)
+        data.append('venderEmail', venderEmail)
+        data.append('venderContact', venderNumber)
+        data.append('attachment', image)
+        data.append('QRCodeImage', imageUrl1)
+        data.append('model', model)
+        data.append('purchaseOrder', purchaseOrder)
+        data.append('quantity', productQuantity)
+        data.append('QRCode', qrCode)
+        data.append('srNo', srno)
+        data.append('tagNo', tagdata)
+        // data.append('active', checked)
+
+        // setProductId(selectedProduct?._id)
+
+        if (imageUrl1 === '') {
+            return
+        }
+
+        axios
+            .post(`${config.base_url}/api/v1/purchaseProduct`, data)
+            .then((res) => {
+                if (res) {
+                    // handleCreateClose()
+                    // getAlldata()
+                    setOpen(false)
+                }
+                setStatusValue('')
+                setPrice('')
+                setDateOfPurchase('')
+                setOwnerShip('')
+                setOfficeNameList('')
+                setVenderName('')
+                setVenderEmail('')
+                setVenderNumber('')
+                setImage('')
+                setImageUrl1('')
+                setModel('')
+                setQrCode('')
+                setProductQuantity('')
+                setPurchaseOrder('')
+                setSrNo('')
+                setTagdata('')
+                // setSelectedProduct(null)
+                // setChecked(false)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
     const UpdateRecord = () => {
         let data = new FormData()
         data.append('employId', custodianId)
@@ -393,8 +506,6 @@ const PurchaseItemDetail = () => {
                 console.log(error, 'error')
             })
     }
-
-    console.log(productTransferDetails)
 
     return (
         <>
@@ -1660,12 +1771,7 @@ const PurchaseItemDetail = () => {
                     <Button onClick={() => setDuplicateDialogOpen(false)}>
                         Cancel
                     </Button>
-                    <Button
-                        autoFocus
-                        onClick={() => {
-                            console.log('Button Clicked')
-                        }}
-                    >
+                    <Button autoFocus onClick={handleCreateClickOpen}>
                         Confirm
                     </Button>
                 </DialogActions>

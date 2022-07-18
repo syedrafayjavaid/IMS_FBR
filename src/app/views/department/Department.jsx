@@ -77,6 +77,8 @@ const Department = () => {
     const [brandId, setBrandId] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
     const [open, setOpen] = React.useState(false)
+    const [openConfirmationDialog, setOpenConfirmationDialog] =
+        React.useState(false)
 
     const [pageNumber, setPageNumber] = React.useState(0)
     const DepartmentsPerPage = 8
@@ -197,14 +199,20 @@ const Department = () => {
     }
 
     const onDelhandler = (editData) => {
-        axios
-            .delete(`${config.base_url}/api/v1/department/${editData}`)
-            .then((res) => {
-                getAlldata()
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
+        setOpenConfirmationDialog(true)
+        setDepartmentId(editData)
+
+        if (openConfirmationDialog && departmentId) {
+            axios
+                .delete(`${config.base_url}/api/v1/department/${departmentId}`)
+                .then((res) => {
+                    getAlldata()
+                    setOpenConfirmationDialog(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
     }
 
     const onEdithandler = (editDataId, editDataName) => {
@@ -379,8 +387,6 @@ const Department = () => {
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
-    console.log(wings)
-
     return (
         <>
             {open && (
@@ -392,6 +398,17 @@ const Department = () => {
                     title={`Are You Sure?`}
                     text={`Are You Sure You Want To Delete This Wing?`}
                     onYesClick={onDelHandler}
+                />
+            )}
+            {openConfirmationDialog && (
+                <ConfirmationDialog
+                    open={openConfirmationDialog}
+                    onConfirmDialogClose={() => {
+                        setOpenConfirmationDialog(false)
+                    }}
+                    title={`Are You Sure?`}
+                    text={`Are You Sure You Want To Delete This Department?`}
+                    onYesClick={onDelhandler}
                 />
             )}
             <Typography variant="h4" sx={{ m: 5 }}>
@@ -428,14 +445,14 @@ const Department = () => {
                                     align="center"
                                     colSpan={2}
                                 >
-                                    Edit
+                                    Edit Department
                                 </TableCell>
                                 <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
                                     colSpan={2}
                                 >
-                                    Delete
+                                    Delete Department
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -464,20 +481,20 @@ const Department = () => {
                 </Box>
             </Card>
             <br></br>
-            {
-                departments.length > 0 && <ReactPaginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={'paginationBttns'}
-                previousLinkClassName={'previousBttn'}
-                nextLinkClassName={'nextBttn'}
-                disabledClassName={'paginationDisabled'}
-                activeClassName={'paginationActive'}
-            />
-            }
-            
+            {departments.length > 0 && (
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
+            )}
+
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"
