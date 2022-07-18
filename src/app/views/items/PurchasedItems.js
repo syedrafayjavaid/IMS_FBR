@@ -1527,6 +1527,28 @@ const PurchasedItems = () => {
                                     />
                                 )}
                             </Grid>
+                         
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Autocomplete
+                                    multiple
+                                    limitTags={2}
+                                    id="multiple-limit-tags"
+                                    options={top100Films}
+                                    getOptionLabel={(option) => option.title}
+                                    renderInput={(params) => (
+                                        <TextField
+                                       // value={features}
+                                            {...params}
+                                            label="features suggestive"
+                                            placeholder="features suggestive"
+                                            // onClick={guardarNumeros()}
+                                        />
+                                    )}
+                                />
+                            </Grid>
                         </Grid>
                         <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
                         <Grid container spacing={2}>
@@ -1937,6 +1959,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
+                            
                         </Grid>
                     </CardContent>
                 </DialogContent>
