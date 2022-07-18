@@ -248,19 +248,20 @@ const Department = () => {
     }
 
     const onDelHandler = (id) => {
-        // setWingId(id)
-        // setOpen(true)
+        setWingId(id)
+        setOpen(true)
 
-        // if (open) {
-        axios
-            .delete(`${config.base_url}/api/v1/wing/${id}`)
-            .then((res) => {
-                getWing(departmentId)
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
-        // }
+        if (open && wingId) {
+            axios
+                .delete(`${config.base_url}/api/v1/wing/${wingId}`)
+                .then((res) => {
+                    getWing(departmentId)
+                    setOpen(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
     }
 
     const createWingHandler = () => {

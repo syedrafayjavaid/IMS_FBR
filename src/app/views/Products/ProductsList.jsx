@@ -197,8 +197,8 @@ const ProductsList = () => {
             createProductTypeName === '' ||
             createProductCategory === '' ||
             createBrandName === '' ||
-            createDescription === '' ||
-            createModel === ''
+            createDescription === ''
+            // createModel === ''
         ) {
             if (createName === '') {
                 setCreateNameError(true)
@@ -215,9 +215,9 @@ const ProductsList = () => {
             if (createBrandName === '') {
                 setCreateBrandNameError(true)
             }
-            if (createModel === '') {
-                setCreateModelError(true)
-            }
+            // if (createModel === '') {
+            //     setCreateModelError(true)
+            // }
         } else {
             checking()
         }
@@ -230,8 +230,8 @@ const ProductsList = () => {
             editProductTypeName === '' ||
             editProductCategory === '' ||
             editBrandName === '' ||
-            editDescription === '' ||
-            editModel === ''
+            editDescription === ''
+            // || editModel === ''
         ) {
             if (editName === '') {
                 setEditNameError(true)
@@ -248,9 +248,9 @@ const ProductsList = () => {
             if (editBrandName === '') {
                 setEditBrandNameError(true)
             }
-            if (editModel === '') {
-                setEditModelError(true)
-            }
+            // if (editModel === '') {
+            //     setEditModelError(true)
+            // }
         } else {
             editHandler()
         }
@@ -312,7 +312,7 @@ const ProductsList = () => {
         data.append('name', createName)
         data.append('productTypeId', createProductTypeName)
         data.append('categoryId', createProductCategory)
-        data.append('model', createModel)
+        // data.append('model', createModel)
         data.append('brandId', createBrandName)
         data.append('file', image)
         data.append('createdBy', createdBy)
@@ -442,7 +442,7 @@ const ProductsList = () => {
     ]
 
     ///////add fe3atue demay data
-   
+
     return (
         <>
             {open && (
@@ -523,20 +523,19 @@ const ProductsList = () => {
                         ))}
                 </Grid>
                 <br />
-                {
-                    product1.length> 0 && <ReactPaginate
-                    previousLabel={'Previous'}
-                    nextLabel={'Next'}
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={'paginationBttns'}
-                    previousLinkClassName={'previousBttn'}
-                    nextLinkClassName={'nextBttn'}
-                    disabledClassName={'paginationDisabled'}
-                    activeClassName={'paginationActive'}
-                />
-                }
-               
+                {product1.length > 0 && (
+                    <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={pageCount}
+                        onPageChange={changePage}
+                        containerClassName={'paginationBttns'}
+                        previousLinkClassName={'previousBttn'}
+                        nextLinkClassName={'nextBttn'}
+                        disabledClassName={'paginationDisabled'}
+                        activeClassName={'paginationActive'}
+                    />
+                )}
             </Container>
 
             <Dialog
@@ -581,7 +580,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Box >
+                                <Box>
                                     <FormControl
                                         size="small"
                                         error={createProductTypeNameError}
@@ -617,13 +616,11 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
-
-                           
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <Box >
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Box>
                                     <FormControl
                                         size="small"
                                         error={createProductCategoryError}
@@ -662,10 +659,9 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
-                           
-                            </Grid>
-                            <br></br>
-                            <Grid container spacing={3}>
+                        </Grid>
+                        <br></br>
+                        <Grid container spacing={3}>
                             <Grid item lg={8} md={8} sm={8} xs={8}>
                                 <Box>
                                     <FormControl
@@ -729,13 +725,12 @@ const ProductsList = () => {
                                         </Button>
                                     </label>
                                 </Box>
-                          
+                            </Grid>
                         </Grid>
-                        </Grid>
-                       
-                            <br></br>
+
+                        <br></br>
                         <Grid container spacing={3}>
-                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     disabled
                                     error={createdByError}
@@ -846,7 +841,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box >
+                                <Box>
                                     <FormControl
                                         size="small"
                                         error={editProductTypeNameError}
@@ -884,7 +879,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <Box >
+                                <Box>
                                     <FormControl
                                         size="small"
                                         error={editProductCategoryError}
