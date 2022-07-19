@@ -1,3 +1,4 @@
+import SearchIcon from '@mui/icons-material/Search'
 import AddIcon from '@mui/icons-material/Add'
 import {
     Card,
@@ -12,7 +13,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Typography,
+    Typography,Autocomplete
 } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -60,6 +61,16 @@ const Offices = () => {
     const [brandError, setbrandError] = React.useState(false)
 
     // Setting States
+    const [searchName, setSearchName] = React.useState(null)
+    const [searchEmail, setSearchEmail] = React.useState(null)
+    const [searchCity, setSearchCity] = React.useState(null)
+    const [searchContact, setSearchContact] = React.useState(null)
+
+
+
+
+
+    
     const [offices, setOffices] = React.useState([])
     const [createName, setCreateName] = React.useState('')
     const [createNameError, setCreateNameError] = React.useState(false)
@@ -305,6 +316,23 @@ const Offices = () => {
             </IconButton>
         </React.Fragment>
     )
+
+//////search dialog
+const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    const handleEmployeeClose = () => {
+        setEmployeeDialogs(false)
+       
+    }
+
+    //////post data
+    const ApplyFilters = () => {
+      
+                    setEmployeeDialogs(false)
+             
+    }
+
+
+
 
     const headers = [
         { label: 'Office Name', key: 'name' },
@@ -755,6 +783,183 @@ const Offices = () => {
                     action={action}
                 />
             </Dialog>
+   {/* /////search filter of the data */}
+   <Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={offices}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Name"
+                                            />
+                                        )
+                                    }}
+                                    value={searchName}
+                                    onChange={(_event, vender) => {
+                                        setSearchName(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={offices}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.city}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="City"
+                                            />
+                                        )
+                                    }}
+                                    value={searchCity}
+                                    onChange={(_event, vender) => {
+                                        setSearchCity(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={offices}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Email"
+                                            />
+                                        )
+                                    }}
+                                    value={searchEmail}
+                                    onChange={(_event, vender) => {
+                                        setSearchEmail(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={offices}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Contact"
+                                            />
+                                        )
+                                    }}
+                                    value={searchContact}
+                                    onChange={(_event, vender) => {
+                                        setSearchContact(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+
 
             <Tooltip title="Add Office">
                 <Fab
@@ -763,8 +968,8 @@ const Offices = () => {
                     size="medium"
                     style={{
                         zIndex: 999,
-                        right: '4vw',
-                        bottom: '8vh',
+                        right: '9vw',
+                        bottom: '4vh',
                         position: 'fixed',
                     }}
                     onClick={() => setCreateOfficeDialog(true)}

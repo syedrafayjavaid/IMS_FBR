@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import SummarizeIcon from '@mui/icons-material/Summarize'
+import SearchIcon from '@mui/icons-material/Search'
 import {
     Autocomplete,
     Card,
@@ -64,6 +65,7 @@ const Department = () => {
     const [wingName, setWingName] = React.useState('')
     const [wingNameError, setWingNameError] = React.useState(false)
     const [departments, setDepartments] = React.useState([])
+    const [searchdepartments, setSearchDepartments] = React.useState(null)
     const [departmentId, setDepartmentId] = React.useState('')
     const [wings, setWings] = React.useState([])
     const [selectedDepartment, setSelectedDepartment] = React.useState(null)
@@ -387,6 +389,22 @@ const Department = () => {
         { label: 'Department Name', key: 'name' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
+
+
+
+    //////search dialog
+const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+const handleEmployeeClose = () => {
+    setEmployeeDialogs(false)
+   
+}
+
+//////post data
+const ApplyFilters = () => {
+  
+                setEmployeeDialogs(false)
+         
+}
 
     return (
         <>
@@ -741,9 +759,9 @@ const Department = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {'ADD DEPARTMENT'}
+                    {'Add Department'}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent >
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -843,6 +861,119 @@ const Department = () => {
                     action={action}
                 />
             </Dialog>
+
+
+{/* /////search filter of the data */}
+<Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={departments}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Wind Departments"
+                                            />
+                                        )
+                                    }}
+                                    value={searchdepartments}
+                                    onChange={(_event, vender) => {
+                                        setSearchDepartments(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={departments}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Department"
+                                            />
+                                        )
+                                    }}
+                                    value={searchdepartments}
+                                    onChange={(_event, vender) => {
+                                        setSearchDepartments(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+
+
 
             <Tooltip title="Add department">
                 <Fab

@@ -1,7 +1,7 @@
 // material
 import React, { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
-
+import SearchIcon from '@mui/icons-material/Search'
 import Tooltip from '@mui/material/Tooltip'
 import { Fab, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -29,6 +29,7 @@ import {
     TableRow,
     TableCell,
     TableBody,
+    Autocomplete,
     Avatar,
 } from '@mui/material'
 import ProductTypeCard from 'app/components/productType/ProductTypeCard'
@@ -86,6 +87,7 @@ const Small = styled('small')(({ bgcolor }) => ({
 
 const ProductTypeList = () => {
     const [productList, setProductList] = React.useState([])
+    const [searchproductList, setSearchProductList] = React.useState(null)
     const [snackBar, setSnackBar] = React.useState(false)
 
     const { palette } = useTheme()
@@ -269,6 +271,19 @@ const ProductTypeList = () => {
         { label: 'Demo', key: 'demo' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
+
+    const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    const handleEmployeeClose = () => {
+        setEmployeeDialogs(false)
+       
+    }
+    
+    //////post data
+    const ApplyFilters = () => {
+      
+                    setEmployeeDialogs(false)
+             
+    }
 
     return (
         <>
@@ -464,6 +479,86 @@ const ProductTypeList = () => {
                     action={action}
                 />
             </Dialog>
+
+
+
+{/* /////search filter of the data */}
+<Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    
+                       
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={productList}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Product Type Name"
+                                            />
+                                        )
+                                    }}
+                                    value={searchproductList}
+                                    onChange={(_event, vender) => {
+                                        setSearchProductList(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+
 
             <Tooltip title="ADD PRODUCT LIST">
                 <Fab

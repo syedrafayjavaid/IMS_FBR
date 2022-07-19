@@ -22,12 +22,18 @@ import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import ReactPaginate from 'react-paginate'
 import '../users/user.css'
-
+import SearchIcon from '@mui/icons-material/Search'
+import {
+  
+    Autocomplete,
+   Box
+} from '@mui/material'
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
 const CategoriesList = () => {
     const userName = localStorage.getItem('username')
     const [categories, setCategories] = React.useState([])
+    const [searchcategories, setSearchCategories] = React.useState(null)
     const [open, setOpen] = React.useState(false)
 
     const [imge, setImage] = React.useState('')
@@ -250,6 +256,21 @@ const CategoriesList = () => {
         { label: 'Last Modified', key: 'modifiedBy' },
         { label: 'Creation Date', key: 'craetedAt' },
     ]
+
+
+    const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    const handleEmployeeClose = () => {
+        setEmployeeDialogs(false)
+       
+    }
+    
+    //////post data
+    const ApplyFilters = () => {
+      
+                    setEmployeeDialogs(false)
+             
+    }
+
 
     return (
         <>
@@ -494,6 +515,84 @@ const CategoriesList = () => {
                     action={editAction}
                 />
             </Dialog>
+
+
+            {/* /////search filter of the data */}
+<Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    
+                       
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={categories}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Category Name"
+                                            />
+                                        )
+                                    }}
+                                    value={searchcategories}
+                                    onChange={(_event, vender) => {
+                                        setSearchCategories(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
         </>
     )
 }

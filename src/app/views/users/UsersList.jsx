@@ -2345,7 +2345,7 @@ const UsersList = () => {
                                 /> */}
                         </Grid>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box sx={{ minWidth: 120 }}>
+                            <Box >
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -2375,34 +2375,7 @@ const UsersList = () => {
                                         setOfficeName(vender)
                                     }}
                                 />
-                                {/* <FormControl fullWidth >
-                                <InputLabel 
-                                id="demo-simple-select-label">        
-                                Location
-                             </InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={officeName}
-                                        label="Location"
-                                        size="small"
-                                        onChange={(event) =>
-                                            setOfficeName(event.target.value)
-                                        }
-                                    >
-                                       {office.map((officeId) => {
-                                            return (
-                                                <MenuItem
-                                                    key={officeId._id}
-                                                    value={officeId.name}
-                                                >
-                                                  
-                                                    {officeId.name}
-                                                </MenuItem>
-                                            )
-                                        })}
-                                    </Select>
-                                    </FormControl> */}
+                  
                             </Box>
                         </Grid>
                         {/* <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -2439,7 +2412,7 @@ const UsersList = () => {
                                 />
                             </Grid> */}
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box sx={{ minWidth: 120 }}>
+                            <Box >
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -2471,6 +2444,27 @@ const UsersList = () => {
                                 />
                             </Box>
                         </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <TextField
+                                error={pg1Error}
+                                id="category"
+                                label="PG"
+                                placeholder="PG"
+                                size="small"
+                                autoComplete="off"
+                                type="number"
+                                helperText={
+                                    pg1Error === true ? 'Field Required' : ''
+                                }
+                                value={pg1}
+                                onChange={(e) =>
+                                    handleChange(e, setPg1, setPg1Error)
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+
 
                         <Grid item lg={6} md={6} sm={6} xs={6}>
                             <Typography gutterBottom>Start Date</Typography>

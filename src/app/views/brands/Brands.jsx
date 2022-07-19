@@ -13,7 +13,9 @@ import {
     TableHead,
     TableRow,
     Typography,
+    Autocomplete
 } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -60,6 +62,7 @@ const Brands = () => {
     // Setting States
     const [quantity, setQuantity] = React.useState([])
     const [brand, setBrand] = React.useState([])
+    const [searchbrands, setSearchBrands] = React.useState(null)
     const [brandId, setBrandId] = React.useState('')
     const [image, setImage] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
@@ -225,6 +228,19 @@ const Brands = () => {
         { label: 'Creation Date', key: 'createdAt' },
     ]
 
+
+    const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+const handleEmployeeClose = () => {
+    setEmployeeDialogs(false)
+   
+}
+
+//////post data
+const ApplyFilters = () => {
+  
+                setEmployeeDialogs(false)
+         
+}
     return (
         <>
             {open && (
@@ -436,7 +452,82 @@ const Brands = () => {
                     action={action}
                 />
             </Dialog>
+{/* /////search filter of the data */}
+<Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
 
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    
+                       
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={brand}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Brand Name"
+                                            />
+                                        )
+                                    }}
+                                    value={searchbrands}
+                                    onChange={(_event, vender) => {
+                                        setSearchBrands(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
             <Tooltip title="Add Brand">
                 <Fab
                     color="secondary"

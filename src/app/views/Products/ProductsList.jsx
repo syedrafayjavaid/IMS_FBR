@@ -125,6 +125,19 @@ const ProductsList = () => {
     const [brands, setBrands] = React.useState([])
 
     // web came code
+ ///Search filters state
+ const [pname, setPname] = React.useState(null)
+ const [pname1, setPname1] = React.useState([])
+ const [productType, setProductType] = React.useState(null)
+ const [productType1, setProductType1] = React.useState([])
+ const [productcategory, setProductcategory] = React.useState(null)
+ const [productcategory1, setProductcategory1] = React.useState([])
+ const [selectbrand, setSelectbrand] = React.useState(null)
+ const [selectbrand1, setSelectbrand1] = React.useState([])
+ const [selectcreateby, setSelectcreateby] = React.useState(null)
+ const [selectcreateby1, setSelectcreateby1] = React.useState([])
+ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+
 
     const [text1, setText1] = useState('')
     const [open, setOpen] = React.useState(false)
@@ -139,6 +152,11 @@ const ProductsList = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
+
+
+
+
+
 
     const generateQrCode = async () => {
         try {
@@ -197,8 +215,8 @@ const ProductsList = () => {
             createProductTypeName === '' ||
             createProductCategory === '' ||
             createBrandName === '' ||
-            createDescription === ''
-            // createModel === ''
+            createDescription === '' ||
+            createModel === ''
         ) {
             if (createName === '') {
                 setCreateNameError(true)
@@ -215,9 +233,9 @@ const ProductsList = () => {
             if (createBrandName === '') {
                 setCreateBrandNameError(true)
             }
-            // if (createModel === '') {
-            //     setCreateModelError(true)
-            // }
+            if (createModel === '') {
+                setCreateModelError(true)
+            }
         } else {
             checking()
         }
@@ -230,8 +248,8 @@ const ProductsList = () => {
             editProductTypeName === '' ||
             editProductCategory === '' ||
             editBrandName === '' ||
-            editDescription === ''
-            // || editModel === ''
+            editDescription === '' ||
+            editModel === ''
         ) {
             if (editName === '') {
                 setEditNameError(true)
@@ -248,9 +266,9 @@ const ProductsList = () => {
             if (editBrandName === '') {
                 setEditBrandNameError(true)
             }
-            // if (editModel === '') {
-            //     setEditModelError(true)
-            // }
+            if (editModel === '') {
+                setEditModelError(true)
+            }
         } else {
             editHandler()
         }
@@ -280,6 +298,7 @@ const ProductsList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
+       
         axios
             .get(config.base_url + '/api/v1/category')
             .then((res) => {
@@ -312,7 +331,7 @@ const ProductsList = () => {
         data.append('name', createName)
         data.append('productTypeId', createProductTypeName)
         data.append('categoryId', createProductCategory)
-        // data.append('model', createModel)
+        data.append('model', createModel)
         data.append('brandId', createBrandName)
         data.append('file', image)
         data.append('createdBy', createdBy)
@@ -442,6 +461,60 @@ const ProductsList = () => {
     ]
 
     ///////add fe3atue demay data
+    const handleEmployeeClose = () => {
+        setEmployeeDialogs(false)
+       
+    }
+
+    //////post data
+    const ApplyFilters = () => {
+      
+                    setEmployeeDialogs(false)
+             
+    }
+
+
+
+
+
+    const top100Films = [
+       
+        { label: 'The Great Dictator', year: 1940 },
+        { label: 'Cinema Paradiso', year: 1988 },
+        { label: 'The Lives of Others', year: 2006 },
+        { label: 'Grave of the Fireflies', year: 1988 },
+        { label: 'Paths of Glory', year: 1957 },
+        { label: 'Django Unchained', year: 2012 },
+        { label: 'The Shining', year: 1980 },
+        { label: 'WALL·E', year: 2008 },
+        { label: 'American Beauty', year: 1999 },
+        { label: 'The Dark Knight Rises', year: 2012 },
+        { label: 'Princess Mononoke', year: 1997 },
+        { label: 'Aliens', year: 1986 },
+        { label: 'Oldboy', year: 2003 },
+        { label: 'Once Upon a Time in America', year: 1984 },
+        { label: 'Witness for the Prosecution', year: 1957 },
+        { label: 'Das Boot', year: 1981 },
+        { label: 'Citizen Kane', year: 1941 },
+        { label: 'North by Northwest', year: 1959 },
+        { label: 'Vertigo', year: 1958 },
+        {
+            label: 'Star Wars: Episode VI - Return of the Jedi',
+            year: 1983,
+        },
+        { label: 'Reservoir Dogs', year: 1992 },
+        { label: 'Braveheart', year: 1995 },
+        { label: 'M', year: 1931 },
+        { label: 'Requiem for a Dream', year: 2000 },
+        { label: 'Amélie', year: 2001 },
+        { label: 'A Clockwork Orange', year: 1971 },
+        { label: 'Like Stars on Earth', year: 2007 },
+        { label: 'Taxi Driver', year: 1976 },
+        { label: 'Lawrence of Arabia', year: 1962 },
+        { label: 'Double Indemnity', year: 1944 },
+       
+    ]
+
 
     return (
         <>
@@ -472,8 +545,7 @@ const ProductsList = () => {
                     <AddIcon />
                 </Fab>
             </Tooltip>
-
-            <Tooltip title="Generate Report">
+            <Tooltip title="Search Filters">
                 <Fab
                     color="primary"
                     aria-label="Add"
@@ -481,6 +553,22 @@ const ProductsList = () => {
                     style={{
                         zIndex: 999,
                         right: '4vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+            <Tooltip title="Generate Report">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
                         top: '9vh',
                         position: 'fixed',
                     }}
@@ -523,19 +611,20 @@ const ProductsList = () => {
                         ))}
                 </Grid>
                 <br />
-                {product1.length > 0 && (
-                    <ReactPaginate
-                        previousLabel={'Previous'}
-                        nextLabel={'Next'}
-                        pageCount={pageCount}
-                        onPageChange={changePage}
-                        containerClassName={'paginationBttns'}
-                        previousLinkClassName={'previousBttn'}
-                        nextLinkClassName={'nextBttn'}
-                        disabledClassName={'paginationDisabled'}
-                        activeClassName={'paginationActive'}
-                    />
-                )}
+                {
+                    product1.length> 0 && <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
+                }
+               
             </Container>
 
             <Dialog
@@ -580,7 +669,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Box>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={createProductTypeNameError}
@@ -616,11 +705,13 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
+
+                           
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <Box>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={createProductCategoryError}
@@ -659,9 +750,10 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
+                           
+                            </Grid>
+                            <br></br>
+                            <Grid container spacing={3}>
                             <Grid item lg={8} md={8} sm={8} xs={8}>
                                 <Box>
                                     <FormControl
@@ -688,7 +780,7 @@ const ProductsList = () => {
                                                         {brand.name}
                                                     </MenuItem>
                                                 )
-                                            })}
+                                            })}   
                                         </Select>
                                         <FormHelperText>
                                             {createBrandNameError === true
@@ -725,12 +817,13 @@ const ProductsList = () => {
                                         </Button>
                                     </label>
                                 </Box>
-                            </Grid>
+                          
                         </Grid>
-
-                        <br></br>
+                        </Grid>
+                       
+                            <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <TextField
                                     disabled
                                     error={createdByError}
@@ -841,7 +934,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={6}>
-                                <Box>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={editProductTypeNameError}
@@ -879,7 +972,7 @@ const ProductsList = () => {
                             </Grid>
 
                             <Grid item lg={4} md={4} sm={4} xs={4}>
-                                <Box>
+                                <Box >
                                     <FormControl
                                         size="small"
                                         error={editProductCategoryError}
@@ -1055,6 +1148,198 @@ const ProductsList = () => {
                     message="Name already exists"
                     action={action}
                 />
+            </Dialog>
+
+            {/* /////search filter of the data */}
+            <Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={category}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Created by"
+                                            />
+                                        )
+                                    }}
+                                    value={productcategory}
+                                    onChange={(_event, vender) => {
+                                        setProductcategory(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={category}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Category"
+                                            />
+                                        )
+                                    }}
+                                    value={productcategory}
+                                    onChange={(_event, vender) => {
+                                        setProductcategory(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={quantity}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Product Type"
+                                            />
+                                        )
+                                    }}
+                                    value={productType}
+                                    onChange={(_event, vender) => {
+                                        setProductType(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={brands}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Brands"
+                                            />
+                                        )
+                                    }}
+                                    value={selectbrand}
+                                    onChange={(_event, vender) => {
+                                        setSelectbrand(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={product1}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.name}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Product Name"
+                                            />
+                                        )
+                                    }}
+                                    value={pname}
+                                    onChange={(_event, vender) => {
+                                        setPname(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     )

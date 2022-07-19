@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import SummarizeIcon from '@mui/icons-material/Summarize'
-import { Container, Fab, FormHelperText, Grid, Typography } from '@mui/material'
+import { Container, Fab, FormHelperText, Grid, Typography, Autocomplete, Box } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -24,9 +24,11 @@ import React, { useEffect } from 'react'
 import { CSVLink } from 'react-csv'
 import ReactPaginate from 'react-paginate'
 import '../users/user.css'
+import SearchIcon from '@mui/icons-material/Search'
 
 const AppUsersList = () => {
     const [users, setUsers] = React.useState([])
+    const [searchusers, setSearchUsers] = React.useState(null)
     const [userName, setUserName] = React.useState('')
     const [userNameError, setUserNameError] = React.useState(false)
 
@@ -378,6 +380,19 @@ const AppUsersList = () => {
         { label: 'Role', key: 'role' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
+//////search dialog
+const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    const handleEmployeeClose = () => {
+        setEmployeeDialogs(false)
+       
+    }
+
+    //////post data
+    const ApplyFilters = () => {
+      
+                    setEmployeeDialogs(false)
+             
+    }
 
     return (
         <>
@@ -1075,6 +1090,152 @@ const AppUsersList = () => {
                     <Button onClick={handleMessageClose}>OK</Button>
                 </DialogActions>
             </Dialog>
+
+
+            {/* /////search filter of the data */}
+   <Dialog
+                open={employeeDialogs}
+                onClose={handleEmployeeClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle>{'Search Filters'}</DialogTitle>
+
+                <DialogContent style={{width:'500px'}}>
+                    <br></br>
+                    <Grid container spacing={3}>
+                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={users}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.role}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Role"
+                                            />
+                                        )
+                                    }}
+                                    value={searchusers}
+                                    onChange={(_event, vender) => {
+                                        setSearchUsers(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                       
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={users}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.userName}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Name"
+                                            />
+                                        )
+                                    }}
+                                    value={searchusers}
+                                    onChange={(_event, vender) => {
+                                        setSearchUsers(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box >
+                                <Autocomplete
+                                    ListboxProps={{
+                                        style: { maxHeight: '13rem' },
+                                        position: 'bottom-start',
+                                    }}
+                                    size="small"
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={users}
+                                    filterSelectedOptions={true}
+                                    isOptionEqualToValue={(option, value) =>
+                                        option._id === value._id
+                                    }
+                                    getOptionLabel={(option) =>
+                                        `${option.email}`
+                                    }
+                                    renderInput={(params) => {
+                                        return (
+                                            <TextField
+                                                {...params}
+                                                label="Email"
+                                            />
+                                        )
+                                    }}
+                                    value={searchusers}
+                                    onChange={(_event, vender) => {
+                                        setSearchUsers(vender)
+                                    }}
+                                />
+                  
+                            </Box>
+                        </Grid>
+                      
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button autoFocus onClick={ApplyFilters}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
+            <Tooltip title="Search Filters">
+                <Fab
+                    color="primary"
+                    aria-label="Add"
+                    size="medium"
+                    style={{
+                        zIndex: 999,
+                        right: '9vw',
+                        top: '9vh',
+                        position: 'fixed',
+                    }}
+                    onClick={() => setEmployeeDialogs(true)}
+                >
+                    <SearchIcon />
+                </Fab>
+            </Tooltip>
+
         </>
     )
 }

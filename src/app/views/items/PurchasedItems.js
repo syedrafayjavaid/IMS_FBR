@@ -66,7 +66,9 @@ const Input = styled('input')({
 
 const PurchasedItems = () => {
     const userName = localStorage.getItem('username')
-
+    const [mychips, setMyChips] = React.useState('')
+    const [features, setmyFeatures] = React.useState('')
+    
     const [editmodifyOnError, seteditModifyOnError] = React.useState(false)
     // Form validation errors State Setting
     const [priceError, setPriceError] = React.useState(false)
@@ -175,7 +177,7 @@ const PurchasedItems = () => {
     const [purchaseOrderSearch, setPurchaseOrdersearch] = React.useState('')
     const [sdate, setSdate] = React.useState('')
     const [sdate1, setSdate1] = React.useState('')
-
+    
     const handlestatus = (event) => {
         setSearchStatus(event.target.value)
     }
@@ -189,10 +191,8 @@ const PurchasedItems = () => {
         const [selectedDate, handleDateChange] = useState(new Date())
     }
 
-    ;<ChipInput
-        defaultValue={['foo', 'bar']}
-        onChange={(chips) => handleChange(chips)}
-    />
+  
+    
     const marks = [
         {
             value: 0,
@@ -557,7 +557,7 @@ const PurchasedItems = () => {
                 console.log(error, 'error')
             })
     }
-
+///////error
     //error handling
     const handleCreateClickOpen = () => {
         if (
@@ -829,13 +829,15 @@ const PurchasedItems = () => {
         setAge(event.target.value)
     }
 
-    //////demy data for the chips input value
-    // function guardarNumeros() {
+//     ////demy data for the chips input value
+  
+//    const arr=[{features}];
+//    const arr2=[{mychips}]
 
-    //     const items=top100Films.push(features);
+//     const chips = arr2.concat(arr);
+      
 
-    //     return items;
-    //   }
+const option=(option===top100Films)? option : <ChipInput />
 
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
@@ -973,29 +975,31 @@ const PurchasedItems = () => {
                                 sm={6}
                                 md={3}
                             >
+
                                 <PurchaseItemCard
                                     purchaseItem={purchaseItem}
                                     onDelete={onDelhandler}
                                     onEdit={onEdithandler}
                                 />
-                            </Grid>
+                             </Grid>
                         ))}
                 </Grid>
                 <br></br>
 
-                {purchasedItems.length > 0 && (
-                    <ReactPaginate
-                        previousLabel={'Previous'}
-                        nextLabel={'Next'}
-                        pageCount={pageCount}
-                        onPageChange={changePage}
-                        containerClassName={'paginationBttns'}
-                        previousLinkClassName={'previousBttn'}
-                        nextLinkClassName={'nextBttn'}
-                        disabledClassName={'paginationDisabled'}
-                        activeClassName={'paginationActive'}
-                    />
-                )}
+                {
+                    purchasedItems.length > 0 &&  <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
+                }
+              
             </Container>
 
             <Dialog
@@ -1540,7 +1544,7 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                       // value={features}
+                                      //  value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
@@ -1550,9 +1554,21 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                         </Grid>
-                        <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xl={4} lg={4} md={6} sm={12} xs={12}>
+                        <br></br>
+                        <p>Add Features Suggestive</p>
+                            <Grid container spacing={3}>
+                           
+                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                          <ChipInput value={features} />          
+                    
+                            </Grid>
+                          
+                            </Grid>
+                            <br></br>
+                           
+                     
+                        <Grid container spacing={3}>
+                            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                 <Button
                                     className={classes.btn}
                                     variant="contained"
@@ -1631,7 +1647,7 @@ const PurchasedItems = () => {
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1691,10 +1707,11 @@ const PurchasedItems = () => {
                                     }}
                                 />
                             </Grid>
+                           
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     id="name"
                                     label="Tag"
@@ -1804,7 +1821,7 @@ const PurchasedItems = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                        <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={purchasedOrderError}
                                     id="name"
@@ -1862,6 +1879,7 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
+                            
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1874,7 +1892,7 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                            // value={features}
+                                       // value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
@@ -1884,12 +1902,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                         </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <ChipInput />
-                            </Grid>
-                        </Grid>
+                      
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -1926,15 +1939,13 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
-                        </Grid>
+                            </Grid>
+                       
+                            <br></br>
 
-                        <br></br>
-
-                        <Grid container spacing={3}>
+                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>
-                                    Start Date of Purchased Items
-                                </Typography>
+                                <Typography gutterBottom>Start Date of Purchased Items</Typography>
                                 <TextField
                                     value={sdate}
                                     id="date"
@@ -1946,9 +1957,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>
-                                    End Date Purchased Items
-                                </Typography>
+                                <Typography gutterBottom>End Date Purchased Items</Typography>
                                 <TextField
                                     value={sdate1}
                                     id="date"
@@ -2536,6 +2545,7 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
+                            
                             <br></br>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -2650,6 +2660,7 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                         </Grid>
+                       
                         <br></br>
                         <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
                         <Grid container spacing={2}>
