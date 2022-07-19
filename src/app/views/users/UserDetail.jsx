@@ -141,7 +141,7 @@ const UserDetail = () => {
     ]
 
     useEffect(() => {
-        getOffice()
+        // getOffice()
     }, [])
 
     const getOffice = () => {
@@ -196,35 +196,37 @@ const UserDetail = () => {
     const productTransferHandler = () => {
         // getTransferTo(custodianId)
 
-        let data = {}
-        data = employeeProductDetail
-        data.transferedTo = transferTo?.name
-        data.quantity = quantity
-        data.employId = custodianId
-        data.employID = transferTo?.employeeId
+        let data = new FormData()
+
+        data.append('itemId', employeeProductDetail?.itemId)
+        data.append('employId', custodianId)
+        data.append('productId', employeeProductDetail?.productId)
+        data.append('quantity', quantity)
+        data.append('_id', employeeProductDetail?._id)
 
         if (custodianId === state.user._id) {
             alert("You Can't Transfer Product To Yourself")
+        } else if (quantity < 1) {
+            alert(`Quantity Must Be Greater Than ${quantity}`)
+        } else if (quantity > employeeProductDetail?.quantity) {
+            alert(
+                `Quantity Must Be Smaller or Equal To ${employeeProductDetail?.quantity}`
+            )
+        } else {
+            axios
+                .post(
+                    `${config.base_url}/api/v1/productTransfer/transfer`,
+                    data
+                )
+                .then((res) => {
+                    if (res) {
+                        setOpen(false)
+                    }
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
         }
-
-        if (quantity > 200) {
-            alert('Quantity Exceeds')
-            return
-        }
-        axios
-            .post(`${config.base_url}/api/v1/productTransfer/transfer`, data)
-            .then((res) => {
-                if (res) {
-                    // handleCreateClose()
-
-                    // getData()
-                    setOpen(false)
-                }
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-                // handleClick()
-            })
     }
 
     useEffect(() => {
@@ -293,6 +295,22 @@ const UserDetail = () => {
         setOpen(true)
 
         setEmployeeProductDetail(item)
+    }
+
+    const getEmployeeDetails = () => {
+        axios
+            .get(
+                `${config.base_url}/api/v1/employee/currentProducts/${state.user._id}`
+            )
+            .then((res) => {
+                setEmployeeProducts(res.data.data)
+                setShowTable(true)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+                alert('Record Not Found')
+                setShowTable(false)
+            })
     }
 
     return (
@@ -499,23 +517,7 @@ const UserDetail = () => {
                                 <Button
                                     variant="contained"
                                     type="button"
-                                    onClick={() => {
-                                        axios
-                                            .get(
-                                                `${config.base_url}/api/v1/employee/currentProducts/${state.user._id}`
-                                            )
-                                            .then((res) => {
-                                                setEmployeeProducts(
-                                                    res.data.data
-                                                )
-                                                setShowTable(true)
-                                            })
-                                            .catch((error) => {
-                                                console.log(error, 'error')
-                                                alert('Record Not Found')
-                                                setShowTable(false)
-                                            })
-                                    }}
+                                    onClick={getEmployeeDetails}
                                 >
                                     Employee Details
                                 </Button>
@@ -578,89 +580,112 @@ const UserDetail = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {employeeProducts &&
-                                    employeeProducts.map((employeeProduct) => {
-                                        return (
-                                            <TableRow hover>
-                                                <TableCell
-                                                    align="center"
-                                                    colSpan={2}
-                                                >
-                                                    <Paragraph>
-                                                        {
-                                                            employeeProduct.productName
-                                                        }
-                                                    </Paragraph>
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    colSpan={2}
-                                                    sx={{
-                                                        px: 0,
-                                                        textTransform:
-                                                            'capitalize',
-                                                    }}
-                                                >
-                                                    {employeeProduct.quantity}
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    colSpan={2}
-                                                    sx={{
-                                                        px: 0,
-                                                        textTransform:
-                                                            'capitalize',
-                                                    }}
-                                                >
-                                                    {
-                                                        employeeProduct.productSrNo
-                                                    }
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    colSpan={2}
-                                                    sx={{
-                                                        px: 0,
-                                                        textTransform:
-                                                            'capitalize',
-                                                    }}
-                                                >
-                                                    {
-                                                        employeeProduct.productTagNo
-                                                    }
-                                                </TableCell>
-                                                <TableCell
-                                                    align="center"
-                                                    colSpan={2}
-                                                    sx={{
-                                                        px: 0,
-                                                        textTransform:
-                                                            'capitalize',
-                                                    }}
-                                                >
-                                                    {
-                                                        employeeProduct.transferedFrom
-                                                    }
-                                                </TableCell>
+                                {console.log('length', employeeProducts)}
+                                {employeeProducts.length > 0
+                                    ? employeeProducts.map(
+                                          (employeeProduct) => {
+                                              return (
+                                                  <TableRow hover>
+                                                      <TableCell
+                                                          align="center"
+                                                          colSpan={2}
+                                                      >
+                                                          <Paragraph>
+                                                              {
+                                                                  employeeProduct
+                                                                      .products[0]
+                                                                      .name
+                                                              }
+                                                          </Paragraph>
+                                                      </TableCell>
+                                                      <TableCell
+                                                          align="center"
+                                                          colSpan={2}
+                                                          sx={{
+                                                              px: 0,
+                                                              textTransform:
+                                                                  'capitalize',
+                                                          }}
+                                                      >
+                                                          {
+                                                              employeeProduct.quantity
+                                                          }
+                                                      </TableCell>
+                                                      <TableCell
+                                                          align="center"
+                                                          colSpan={2}
+                                                          sx={{
+                                                              px: 0,
+                                                              textTransform:
+                                                                  'capitalize',
+                                                          }}
+                                                      >
+                                                          {
+                                                              employeeProduct
+                                                                  .PurchaseProduct[0]
+                                                                  .srNo
+                                                          }
+                                                      </TableCell>
+                                                      <TableCell
+                                                          align="center"
+                                                          colSpan={2}
+                                                          sx={{
+                                                              px: 0,
+                                                              textTransform:
+                                                                  'capitalize',
+                                                          }}
+                                                      >
+                                                          {
+                                                              employeeProduct
+                                                                  .PurchaseProduct[0]
+                                                                  .tagNo
+                                                          }
+                                                      </TableCell>
+                                                      <TableCell
+                                                          align="center"
+                                                          colSpan={2}
+                                                          sx={{
+                                                              px: 0,
+                                                              textTransform:
+                                                                  'capitalize',
+                                                          }}
+                                                      >
+                                                          {employeeProduct.transferedFrom ===
+                                                          'store'
+                                                              ? 'Store'
+                                                              : employeeProduct
+                                                                    .transferedFromEmploy
+                                                                    .length ===
+                                                                0
+                                                              ? 'N/A'
+                                                              : employeeProduct
+                                                                    .transferedFrom[
+                                                                    'name'
+                                                                ]}
+                                                      </TableCell>
 
-                                                <TableCell
-                                                    sx={{ px: 0 }}
-                                                    align="center"
-                                                    colSpan={2}
-                                                >
-                                                    <Button
-                                                        onClick={() => {
-                                                            transferProduct(
-                                                                employeeProduct
-                                                            )
-                                                        }}
-                                                    >
-                                                        <BiTransfer size={22} />
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        )
-                                    })}
+                                                      <TableCell
+                                                          sx={{ px: 0 }}
+                                                          align="center"
+                                                          colSpan={2}
+                                                      >
+                                                          <Button
+                                                              onClick={() => {
+                                                                  transferProduct(
+                                                                      employeeProduct
+                                                                  )
+                                                              }}
+                                                          >
+                                                              <BiTransfer
+                                                                  size={22}
+                                                              />
+                                                          </Button>
+                                                      </TableCell>
+                                                  </TableRow>
+                                              )
+                                          }
+                                      )
+                                    : ''}
                             </TableBody>
                         </EmployeeTable>
                     </Box>
@@ -764,13 +789,6 @@ const UserDetail = () => {
                         Confirm
                     </Button>
                 </DialogActions>
-                <Snackbar
-                    open={snackBar}
-                    autoHideDuration={6000}
-                    onClose={handleSnackBarClose}
-                    message={`Quantity Must Be Smaller Than 60 ${employeeProductDetail?.quantity}`}
-                    action={action}
-                />
             </Dialog>
         </>
     )

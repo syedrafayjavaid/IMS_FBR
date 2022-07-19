@@ -925,8 +925,8 @@ const option=(option===top100Films)? option : <ChipInput />
                     size="medium"
                     style={{
                         zIndex: 999,
-                        right: '4vw',
-                        top: '17vh',
+                        right: '9vw',
+                        top: '9vh',
                         position: 'fixed',
                     }}
                 >
@@ -1531,7 +1531,6 @@ const option=(option===top100Films)? option : <ChipInput />
                                     />
                                 )}
                             </Grid>
-                         
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1544,7 +1543,7 @@ const option=(option===top100Films)? option : <ChipInput />
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                      //  value={features}
+                                            // value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
@@ -1968,7 +1967,6 @@ const option=(option===top100Films)? option : <ChipInput />
                                     fullWidth
                                 />
                             </Grid>
-                            
                         </Grid>
                     </CardContent>
                 </DialogContent>

@@ -795,8 +795,8 @@ const ProductsList = () => {
                                 item
                                 lg={4}
                                 md={4}
-                                sm={4}
-                                xs={4}
+                                sm={6}
+                                xs={6}
                                 style={{ justifyContent: 'center' }}
                             >
                                 <Box>
