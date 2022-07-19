@@ -1,4 +1,7 @@
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
+import CloseIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import {
     Button,
     Card,
@@ -29,11 +32,9 @@ import axios from 'axios'
 import config from 'config'
 import moment from 'moment'
 import QRCode from 'qrcode'
-import React, { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import EditIcon from '@mui/icons-material/Edit'
-import CloseIcon from '@mui/icons-material/Close'
+import React, { useRef, useState } from 'react'
 import { BiTransfer } from 'react-icons/bi'
+import { useLocation } from 'react-router-dom'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -86,6 +87,13 @@ const PurchaseItemDetail = () => {
     const [productId, setproductId] = React.useState('')
     const [purchaseOrder, setPurchaseOrder] = React.useState('')
     const [image, setImage] = React.useState('')
+    const [openTransferDialog, setOpenTransferDialog] = React.useState(false)
+    const [transferQuantity, setTransferQuantity] = React.useState('')
+    const [transferQuantityError, setTransferQuantityError] =
+        React.useState(false)
+    const [transferCustodianId, setTransferCustodianId] = React.useState('')
+    const [transferCustodianIdError, setTransferCustodianIdError] =
+        React.useState('')
 
     ///
     //API For the dialogbox
@@ -122,8 +130,8 @@ const PurchaseItemDetail = () => {
     const [office, setOffice] = React.useState()
 
     const [productTransferDetails, setProductTransferDetails] = React.useState()
-    const [productData, setProductData] = React.useState()
     const [currentData, setCurrentData] = React.useState()
+    const [PurchaseItemDetail, setPurchaseItemDetail] = React.useState()
 
     const generateQrCode = async () => {
         try {
@@ -222,6 +230,9 @@ const PurchaseItemDetail = () => {
     const handleClose = () => {
         setOpen(false)
     }
+    const handleTransferDialogClose = () => {
+        setOpenTransferDialog(false)
+    }
 
     const handleEditClose = () => {
         setEditDialogOpen(false)
@@ -241,11 +252,24 @@ const PurchaseItemDetail = () => {
                 setQuantityError(true)
             }
         } else {
+            allocationHandler()
+        }
+    }
+
+    const handleTransferClickOpen = () => {
+        if (transferCustodianId === '' || transferQuantity === '') {
+            if (transferCustodianId === '') {
+                setTransferCustodianIdError(true)
+            }
+            if (transferQuantity === '') {
+                setTransferQuantityError(true)
+            }
+        } else {
             productTransferHandler()
         }
     }
 
-    const productTransferHandler = () => {
+    const allocationHandler = () => {
         let data = new FormData()
 
         data.append('employId', custodianId)
@@ -255,7 +279,7 @@ const PurchaseItemDetail = () => {
         data.append('createdBy', userName)
         data.append('productId', state.purchaseItem.productId)
         // data.append('transferedTo', 'N/A')
-        // data.append('transferedFrom', 'store')
+        data.append('transferedFrom', 'store')
 
         if (quantity < 1) {
             setSnackBar(true)
@@ -272,7 +296,6 @@ const PurchaseItemDetail = () => {
                 if (res) {
                     // handleCreateClose()
 
-                    getData()
                     setOpen(false)
                 }
             })
@@ -281,12 +304,43 @@ const PurchaseItemDetail = () => {
             })
     }
 
-    useEffect(() => {
-        getEmployee()
-        getData()
-    }, [])
+    const productTransferHandler = () => {
+        console.log(PurchaseItemDetail)
+        let data = new FormData()
+
+        data.append('itemId', PurchaseItemDetail?.itemId)
+        data.append('employId', transferCustodianId)
+        data.append('productId', PurchaseItemDetail?.productId)
+        data.append('quantity', transferQuantity)
+        data.append('_id', PurchaseItemDetail?._id)
+
+        // if (custodianId === state.user._id) {
+        //     alert("You Can't Transfer Product To Yourself")
+        // }
+
+        if (transferQuantity < 1) {
+            alert(`Quantity Must Be Greater Than ${transferQuantity}`)
+        } else if (transferQuantity > PurchaseItemDetail?.quantity) {
+            alert(
+                `Quantity Must Be Smaller or Equal To ${PurchaseItemDetail?.quantity}`
+            )
+        } else {
+            axios
+                .post(
+                    `${config.base_url}/api/v1/productTransfer/transfer`,
+                    data
+                )
+                .then((res) => {
+                    setOpenTransferDialog(false)
+                })
+                .catch((error) => {
+                    console.log(error, 'error')
+                })
+        }
+    }
 
     const getEmployee = () => {
+        setOpen(true)
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
@@ -294,31 +348,6 @@ const PurchaseItemDetail = () => {
             })
             .catch((error) => {
                 console.log(error, 'error')
-            })
-    }
-
-    const getData = () => {
-        axios
-            .get(
-                `${config.base_url}/api/v1/products/${state.purchaseItem.productId}`
-            )
-            .then((res) => {
-                setProductData(res.data.data)
-                // setProduct1(res.data.data)
-                // console.log(product1, 'setProduct1')
-            })
-            .catch((error) => {
-                // console.log(error, 'error');
-            })
-        axios
-            .get(
-                `${config.base_url}/api/v1/productTransfer/${state.purchaseItem._id}`
-            )
-            .then((res) => {
-                setProductTransferDetails(res.data.data)
-            })
-            .catch((error) => {
-                // console.log(error, 'error');
             })
     }
 
@@ -492,18 +521,54 @@ const PurchaseItemDetail = () => {
             return
         }
 
+        // axios
+        //     .put(`${config.base_url}/api/v1/productTransfer/update`, data)
+        //     .then((res) => {
+        //         if (res) {
+        //             setEditDialogOpen(false)
+        //             setCustodianId('')
+        //             setQuantity('')
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.log(error, 'error')
+        //     })
+    }
+
+    const transferProduct = (item) => {
+        setOpenTransferDialog(true)
+
+        getEmployee()
+
+        console.log(item)
+
+        setPurchaseItemDetail(item)
+    }
+
+    const deleteTransferProduct = (productTransfer) => {
         axios
-            .put(`${config.base_url}/api/v1/productTransfer/update`, data)
+            .delete(
+                `${config.base_url}/api/v1/productTransfer/${productTransfer._id}`
+            )
+            .then((res) => {})
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+
+    const getProductTransferDetails = () => {
+        axios
+            .get(
+                `${config.base_url}/api/v1/productTransfer/${state.purchaseItem._id}`
+            )
             .then((res) => {
-                if (res) {
-                    getData()
-                    setEditDialogOpen(false)
-                    setCustodianId('')
-                    setQuantity('')
-                }
+                setProductTransferDetails(res.data.data)
+                setShowTable(true)
             })
             .catch((error) => {
                 console.log(error, 'error')
+                alert('No Record Found')
+                setShowTable(false)
             })
     }
 
@@ -675,9 +740,7 @@ const PurchaseItemDetail = () => {
                                         variant="contained"
                                         type="button"
                                         style={{ width: '200px' }}
-                                        onClick={() => {
-                                            setOpen(true)
-                                        }}
+                                        onClick={getEmployee}
                                     >
                                         Allocate Items
                                     </Button>
@@ -687,9 +750,7 @@ const PurchaseItemDetail = () => {
                                         variant="contained"
                                         type="button"
                                         style={{ width: '200px' }}
-                                        onClick={() => {
-                                            setShowTable(true)
-                                        }}
+                                        onClick={getProductTransferDetails}
                                     >
                                         Track History
                                     </Button>
@@ -733,9 +794,7 @@ const PurchaseItemDetail = () => {
                                     <Button
                                         variant="contained"
                                         type="button"
-                                        onClick={() => {
-                                            setOpen(true)
-                                        }}
+                                        onClick={getEmployee}
                                     >
                                         Allocate Items
                                     </Button>
@@ -744,9 +803,7 @@ const PurchaseItemDetail = () => {
                                     <Button
                                         variant="contained"
                                         type="button"
-                                        onClick={() => {
-                                            setShowTable(true)
-                                        }}
+                                        onClick={getProductTransferDetails}
                                     >
                                         Track History
                                     </Button>
@@ -778,7 +835,7 @@ const PurchaseItemDetail = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell
-                                        align="center"
+                                        align="left"
                                         sx={{ px: 3 }}
                                         colSpan={2}
                                     >
@@ -786,46 +843,53 @@ const PurchaseItemDetail = () => {
                                     </TableCell>
                                     <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
+                                        sx={{ px: 0 }}
                                         colSpan={2}
                                     >
                                         Employee Name
                                     </TableCell>
                                     <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
+                                        sx={{ px: 0 }}
                                         colSpan={2}
                                     >
                                         Allocation Date
                                     </TableCell>
                                     <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
-                                        colSpan={2}
+                                        sx={{ px: 0 }}
+                                        colSpan={1}
                                     >
                                         Quantity
                                     </TableCell>
                                     <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
+                                        sx={{ px: 0 }}
                                         colSpan={2}
                                     >
                                         Transferred From
                                     </TableCell>
                                     <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
-                                        colSpan={2}
+                                        sx={{ px: 0 }}
+                                        colSpan={1}
                                     >
                                         Edit
                                     </TableCell>
-                                    {/* <TableCell
+                                    <TableCell
                                         align="center"
-                                        sx={{ px: 3 }}
-                                        colSpan={2}
+                                        sx={{ px: 0 }}
+                                        colSpan={1}
                                     >
                                         Transfer
-                                    </TableCell> */}
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ px: 0 }}
+                                        colSpan={1}
+                                    >
+                                        Delete
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -837,16 +901,21 @@ const PurchaseItemDetail = () => {
                                                 hover
                                             >
                                                 <TableCell
-                                                    align="center"
+                                                    align="left"
+                                                    sx={{ px: 0 }}
                                                     colSpan={2}
                                                 >
-                                                    <Paragraph>
-                                                        {
-                                                            productTransfer
-                                                                .employees[0]
-                                                                .employeeId
-                                                        }
-                                                    </Paragraph>
+                                                    <Box>
+                                                        <Paragraph
+                                                            sx={{ m: 0, ml: 1 }}
+                                                        >
+                                                            {
+                                                                productTransfer
+                                                                    .employees[0]
+                                                                    .employeeId
+                                                            }
+                                                        </Paragraph>
+                                                    </Box>
                                                 </TableCell>
                                                 <TableCell
                                                     align="center"
@@ -875,7 +944,7 @@ const PurchaseItemDetail = () => {
                                                 </TableCell>
                                                 <TableCell
                                                     align="center"
-                                                    colSpan={2}
+                                                    colSpan={1}
                                                     sx={{
                                                         px: 0,
                                                         textTransform:
@@ -893,13 +962,21 @@ const PurchaseItemDetail = () => {
                                                             'capitalize',
                                                     }}
                                                 >
-                                                    {
-                                                        productTransfer.transferedFrom
-                                                    }
+                                                    {productTransfer.transferedFrom ===
+                                                    'store'
+                                                        ? 'Store'
+                                                        : productTransfer
+                                                              .transferedFromEmploye
+                                                              .length === 0
+                                                        ? 'N/A'
+                                                        : productTransfer
+                                                              .transferedFromEmploye[
+                                                              'name'
+                                                          ]}
                                                 </TableCell>
                                                 <TableCell
                                                     align="center"
-                                                    colSpan={2}
+                                                    colSpan={1}
                                                     sx={{
                                                         px: 0,
                                                         textTransform:
@@ -917,15 +994,36 @@ const PurchaseItemDetail = () => {
                                                     </Button>
                                                 </TableCell>
 
-                                                {/* <TableCell
+                                                <TableCell
                                                     sx={{ px: 0 }}
                                                     align="center"
-                                                    colSpan={2}
+                                                    colSpan={1}
                                                 >
-                                                    <Button onClick={() => {}}>
+                                                    <Button
+                                                        onClick={() =>
+                                                            transferProduct(
+                                                                productTransfer
+                                                            )
+                                                        }
+                                                    >
                                                         <BiTransfer size={22} />
                                                     </Button>
-                                                </TableCell> */}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{ px: 0 }}
+                                                    align="center"
+                                                    colSpan={1}
+                                                >
+                                                    <Button
+                                                        onClick={() => {
+                                                            deleteTransferProduct(
+                                                                productTransfer
+                                                            )
+                                                        }}
+                                                    >
+                                                        <DeleteIcon color="error" />
+                                                    </Button>
+                                                </TableCell>
                                             </TableRow>
                                         )
                                     )}
@@ -934,57 +1032,6 @@ const PurchaseItemDetail = () => {
                     </Box>
                 </Card>
             )}
-            {/* {showCard && (
-                <Card elevation={3} sx={{ p: '20px', mb: 10, margin: '50px' }}>
-                    <Box sx={{ maxWidth: 400 }}>
-                        <Stepper activeStep={activeStep} orientation="vertical">
-                            {steps.map((step, index) => (
-                                <Step key={step.label}>
-                                    <StepLabel>{step.label}</StepLabel>
-                                    <StepContent>
-                                        <Typography>
-                                            {step.description}
-                                        </Typography>
-                                        <Box sx={{ mb: 2 }}>
-                                            <div>
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={handleNext}
-                                                    sx={{ mt: 1, mr: 1 }}
-                                                >
-                                                    {index === steps.length - 1
-                                                        ? 'Finish'
-                                                        : 'Continue'}
-                                                </Button>
-                                                <Button
-                                                    disabled={index === 0}
-                                                    onClick={handleBack}
-                                                    sx={{ mt: 1, mr: 1 }}
-                                                >
-                                                    Back
-                                                </Button>
-                                            </div>
-                                        </Box>
-                                    </StepContent>
-                                </Step>
-                            ))}
-                        </Stepper>
-                        {activeStep === steps.length && (
-                            <Paper square elevation={0} sx={{ p: 3 }}>
-                                <Typography>
-                                    All steps completed - you&apos;re finished
-                                </Typography>
-                                <Button
-                                    onClick={handleReset}
-                                    sx={{ mt: 1, mr: 1 }}
-                                >
-                                    Reset
-                                </Button>
-                            </Paper>
-                        )}
-                    </Box>
-                </Card>
-            )} */}
 
             <Dialog
                 open={open}
@@ -1772,6 +1819,111 @@ const PurchaseItemDetail = () => {
                         Cancel
                     </Button>
                     <Button autoFocus onClick={handleCreateClickOpen}>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openTransferDialog}
+                fullWidth={true}
+                onClose={handleTransferDialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'TRANSFER ITEMS'}
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={4}>
+                        <Grid
+                            item
+                            lg={5}
+                            md={5}
+                            sm={5}
+                            xs={5}
+                            sx={{ marginTop: '10px' }}
+                        >
+                            <TextField
+                                type={`number`}
+                                error={transferQuantityError}
+                                id="quantity"
+                                label="Quantity"
+                                placeholder="Enter Quantity"
+                                autoComplete="off"
+                                helperText={
+                                    transferQuantityError === true
+                                        ? 'Field Required'
+                                        : ''
+                                }
+                                value={transferQuantity}
+                                size="small"
+                                onChange={(e) =>
+                                    handleChange(
+                                        e,
+                                        setTransferQuantity,
+                                        setTransferQuantityError
+                                    )
+                                }
+                                variant="outlined"
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid
+                            item
+                            lg={7}
+                            md={7}
+                            sm={7}
+                            xs={7}
+                            sx={{ marginTop: '10px' }}
+                        >
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl
+                                    fullWidth
+                                    error={transferCustodianIdError}
+                                >
+                                    <InputLabel
+                                        size="small"
+                                        id="demo-simple-select-label"
+                                    >
+                                        Transfer To
+                                    </InputLabel>
+                                    <Select
+                                        size="small"
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={transferCustodianId}
+                                        label="Transfer To"
+                                        onChange={(event) => {
+                                            setTransferCustodianId(
+                                                event.target.value
+                                            )
+                                        }}
+                                    >
+                                        {custodianIds.map((custodianId) => {
+                                            return (
+                                                <MenuItem
+                                                    key={custodianId._id}
+                                                    value={custodianId._id}
+                                                >
+                                                    {custodianId.employeeId}
+                                                    &nbsp;/&nbsp;
+                                                    {custodianId.name}
+                                                </MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                    <FormHelperText>
+                                        {transferCustodianIdError &&
+                                            'Field Required'}
+                                    </FormHelperText>
+                                </FormControl>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleTransferDialogClose}>Cancel</Button>
+                    <Button autoFocus onClick={handleTransferClickOpen}>
                         Confirm
                     </Button>
                 </DialogActions>

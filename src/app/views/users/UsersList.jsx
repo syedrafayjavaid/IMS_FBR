@@ -78,7 +78,7 @@ const UsersList = () => {
     const [office, setOffice] = React.useState([])
     const [officeName, setOfficeName] = React.useState(null)
     const [anchorEl, setAnchorEl] = React.useState(null)
-   // const open1 = Boolean(anchorEl)
+    // const open1 = Boolean(anchorEl)
     const [anchorEl1, setAnchorEl1] = React.useState(null)
     const open2 = Boolean(anchorEl1)
     const [addDepartment, setAddDepartment] = React.useState('')
@@ -848,21 +848,20 @@ const UsersList = () => {
                 <br></br>
                 <br></br>
                 <br></br>
-{
-    users.length > 0 && <ReactPaginate
-    previousLabel={'Previous'}
-    nextLabel={'Next'}
-    pageCount={pageCount}
-    onPageChange={changePage}
-    containerClassName={'paginationBttns'}
-    previousLinkClassName={'previousBttn'}
-    nextLinkClassName={'nextBttn'}
-    disabledClassName={'paginationDisabled'}
-    activeClassName={'paginationActive'}
-  />
-}
-                    
-                 </Container>
+                {users.length > 0 && (
+                    <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={pageCount}
+                        onPageChange={changePage}
+                        containerClassName={'paginationBttns'}
+                        previousLinkClassName={'previousBttn'}
+                        nextLinkClassName={'nextBttn'}
+                        disabledClassName={'paginationDisabled'}
+                        activeClassName={'paginationActive'}
+                    />
+                )}
+            </Container>
 
             {/* ////
                 this is the search dialods */}
@@ -894,7 +893,7 @@ const UsersList = () => {
                         top: '17vh',
                         position: 'fixed',
                     }}
-                  >
+                >
                     <CSVLink
                         filename={'all-employees.csv'}
                         data={users}
@@ -2275,7 +2274,7 @@ const UsersList = () => {
             </Dialog>
 
             {/* this is the dialogs of the employee search button */}
-            
+
             <Dialog
                 open={employeeDialogs}
                 onClose={handleEmployeeClose}

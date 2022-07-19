@@ -619,7 +619,7 @@ const ProductsList = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                            <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Grid item lg={4} md={4} sm={6} xs={6}>
                                 <Box>
                                     <FormControl
                                         size="small"
@@ -659,10 +659,9 @@ const ProductsList = () => {
                                     </FormControl>
                                 </Box>
                             </Grid>
-                        </Grid>
-                        <br></br>
-                        <Grid container spacing={3}>
-                            <Grid item lg={8} md={8} sm={8} xs={8}>
+
+                            <br></br>
+                            <Grid item lg={4} md={4} sm={6} xs={6}>
                                 <Box>
                                     <FormControl
                                         size="small"
@@ -703,8 +702,8 @@ const ProductsList = () => {
                                 item
                                 lg={4}
                                 md={4}
-                                sm={4}
-                                xs={4}
+                                sm={6}
+                                xs={6}
                                 style={{ justifyContent: 'center' }}
                             >
                                 <Box>

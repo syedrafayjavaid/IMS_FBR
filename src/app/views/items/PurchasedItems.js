@@ -923,8 +923,8 @@ const PurchasedItems = () => {
                     size="medium"
                     style={{
                         zIndex: 999,
-                        right: '4vw',
-                        top: '17vh',
+                        right: '9vw',
+                        top: '9vh',
                         position: 'fixed',
                     }}
                 >
@@ -1527,7 +1527,6 @@ const PurchasedItems = () => {
                                     />
                                 )}
                             </Grid>
-                         
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1540,7 +1539,7 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                       // value={features}
+                                            // value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
@@ -1959,7 +1958,6 @@ const PurchasedItems = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            
                         </Grid>
                     </CardContent>
                 </DialogContent>

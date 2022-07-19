@@ -36,7 +36,7 @@ const PurchaseItemCard = ({ purchaseItem, onEdit, onDelete }) => {
 
     const navigateToDetailsPage = () => {
         navigate('/items/PurchasedItemsDetail', {
-            state: { purchaseItem: purchaseItem, productName: product },
+            state: { purchaseItem: purchaseItem },
         })
     }
 
