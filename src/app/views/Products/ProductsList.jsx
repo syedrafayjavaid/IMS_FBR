@@ -127,6 +127,8 @@ const ProductsList = () => {
     // web came code
  ///Search filters state
  const [pname, setPname] = React.useState(null)
+ const [createdby, setCreatedby] = React.useState(null)
+ const [createdbysearch, setCreatedsearch] = React.useState([])
  const [pname1, setPname1] = React.useState([])
  const [productType, setProductType] = React.useState(null)
  const [productType1, setProductType1] = React.useState([])
@@ -137,6 +139,7 @@ const ProductsList = () => {
  const [selectcreateby, setSelectcreateby] = React.useState(null)
  const [selectcreateby1, setSelectcreateby1] = React.useState([])
  const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+ const [searchCreatedBy, setSearchCreatedBy] = React.useState([])
 
 
     const [text1, setText1] = useState('')
@@ -288,6 +291,7 @@ const ProductsList = () => {
 
     useEffect(() => {
         getAlldata()
+      
     }, [])
     const getAlldata = () => {
         axios
@@ -298,7 +302,14 @@ const ProductsList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
-       
+            // axios
+            // .get(`${config.base_url}/api/v1/products/createdBySuggestions`)
+            // .then((res) => {
+            //     setCreatedsearch(res.data.data)
+            // })
+            // .catch((error) => {
+            //     console.log(error, 'error')
+            // })
         axios
             .get(config.base_url + '/api/v1/category')
             .then((res) => {
@@ -323,7 +334,34 @@ const ProductsList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
+            axios
+            .post(config.base_url + '/api/v1/products/createdBySuggestions')
+
+            .then((res) => {
+               // console.log(res.data.data,"rgrewrewtwrt")
+                setSearchCreatedBy(res.data.data)
+            }) 
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
+
+    ///api send data for the search api
+    const search = () => {
+        console.log(productType._id,"productType")
+        let data = new FormData()
+
+        data.append('createdby', createdby._id)
+        console.log(createdby._id,'createdby fgfg')
+        data.append('category', productcategory._id)
+        data.append('quantity', productType._id)
+        data.append('brands', selectbrand._id)
+        data.append('pname', pname._id)
+       
+       
+    }
+
+
 
     const checking = () => {
         let data = new FormData()
@@ -349,6 +387,7 @@ const ProductsList = () => {
         axios
             .post(config.base_url + '/api/v1/products ', data)
             .then((res) => {
+                
                 if (res) {
                     handleCreateClose()
                     getAlldata()
@@ -461,7 +500,7 @@ const ProductsList = () => {
     ]
 
     ///////add fe3atue demay data
-    const handleEmployeeClose = () => {
+    const   handlesearchClose = () => {
         setEmployeeDialogs(false)
        
     }
@@ -470,7 +509,7 @@ const ProductsList = () => {
     const ApplyFilters = () => {
       
                     setEmployeeDialogs(false)
-             
+                    search()
     }
 
 
@@ -1153,7 +1192,7 @@ const ProductsList = () => {
             {/* /////search filter of the data */}
             <Dialog
                 open={employeeDialogs}
-                onClose={handleEmployeeClose}
+                onClose={handlesearchClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -1172,25 +1211,23 @@ const ProductsList = () => {
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={category}
+                                    options={searchCreatedBy}
                                     filterSelectedOptions={true}
-                                    isOptionEqualToValue={(option, value) =>
-                                        option._id === value._id
-                                    }
+                                    
                                     getOptionLabel={(option) =>
-                                        `${option.name}`
+                                        `${option._id}`
                                     }
                                     renderInput={(params) => {
                                         return (
                                             <TextField
                                                 {...params}
-                                                label="Created by"
+                                                label="Created By"
                                             />
                                         )
                                     }}
-                                    value={productcategory}
+                                    value={createdby}
                                     onChange={(_event, vender) => {
-                                        setProductcategory(vender)
+                                        setCreatedby(vender)
                                     }}
                                 />
                   
@@ -1335,7 +1372,7 @@ const ProductsList = () => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button onClick={handlesearchClose}>Cancel</Button>
                     <Button autoFocus onClick={ApplyFilters}>
                         Confirm
                     </Button>
