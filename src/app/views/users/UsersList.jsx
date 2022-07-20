@@ -116,12 +116,15 @@ const UsersList = () => {
 
     ///Search filters state
     const [sdynamic, setDynamic] = React.useState('')
-    const [sdesignation, setSdesignation] = React.useState('')
+    const [sdesignation, setSdesignation] = React.useState()
     const [sreportingManager, setSreportingManager] = React.useState('')
-    const [sdepartment, setSdepartment] = React.useState('')
-    const currentDate = new Date().toISOString().split('T')[0]
+    const [sdepartment, setSdepartment] = React.useState()
     const [sdate, setSdate] = React.useState('')
     const [sdate1, setSdate1] = React.useState('')
+    const [sOffice, setSOffice] = React.useState()
+
+    const [designations, setDesignations] = React.useState([])
+    const [departments, setDepartments] = React.useState([])
 
     ////pagination code set here
 
@@ -155,11 +158,27 @@ const UsersList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
+        axios
+            .get(`${config.base_url}/api/v1/department`)
+            .then((res) => {
+                setDepartments(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
 
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
                 setPlaceOfPosting1(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+        axios
+            .post(`${config.base_url}/api/v1/employee/designationSuggestions`)
+            .then((res) => {
+                setDesignations(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -604,6 +623,14 @@ const UsersList = () => {
         data.location = officeName
         data.department = addDepartment
 
+        if (sdate !== '' && sdate1 === '') {
+            alert('Please Select End Date Too')
+            return
+        } else if (sdate === '' && sdate1 !== '') {
+            alert('Please Select Start Date Too')
+            return
+        }
+
         axios
             .post(`${config.base_url}/api/v1/employee/search`, data)
             .then((res) => {
@@ -808,7 +835,7 @@ const UsersList = () => {
         { label: 'Pg', key: 'pg' },
         { label: 'Wing', key: 'wing' },
         { label: 'Date Of Joining', key: 'dateOfJoining' },
-        // { label: 'Place Of Posting', key: 'placeOfPosting' },
+        { label: 'Place Of Posting', key: 'office[0].name' },
         { label: 'Remarks', key: 'remarks' },
         { label: 'Creation Date', key: 'createdAt' },
     ]
@@ -863,9 +890,6 @@ const UsersList = () => {
                 )}
             </Container>
 
-            {/* ////
-                this is the search dialods */}
-            {}
             <Tooltip title="Search Filters">
                 <Fab
                     color="primary"
@@ -2288,6 +2312,35 @@ const UsersList = () => {
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Autocomplete
+                                ListboxProps={{
+                                    style: { maxHeight: '13rem' },
+                                    position: 'bottom-start',
+                                }}
+                                size="small"
+                                disablePortal
+                                id="combo-box-demo"
+                                options={custodianIds}
+                                filterSelectedOptions={true}
+                                isOptionEqualToValue={(option, value) =>
+                                    option._id === value._id
+                                }
+                                getOptionLabel={(option) =>
+                                    `${option.name} / ${option.emailAddress} / ${option.cnic} / ${option.employeeId}`
+                                }
+                                renderInput={(params) => {
+                                    return (
+                                        <TextField
+                                            {...params}
+                                            label="Name/Email/CNIC/Employee Code"
+                                        />
+                                    )
+                                }}
+                                value={custodianId}
+                                onChange={(_event, vender) => {
+                                    setCustodianId(vender)
+                                }}
+                            />
+                            {/* <Autocomplete
                                 size="small"
                                 disablePortal
                                 id="combo-box-demo"
@@ -2298,7 +2351,7 @@ const UsersList = () => {
                                         label="Name/Email/CNIC/Employee Code"
                                     />
                                 )}
-                            />
+                            /> */}
                             {/* <TextField
                                     id="category"
                                     label="Name/Email/CNIC/Employ Code"
@@ -2319,13 +2372,19 @@ const UsersList = () => {
                                 size="small"
                                 disablePortal
                                 id="combo-box-demo"
-                                options={top100Films}
+                                options={designations}
+                                getOptionLabel={(option) => option._id}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         label="Designation"
                                     />
                                 )}
+                                value={sdesignation}
+                                onChange={(_event, designation) => {
+                                    console.log(designation)
+                                    setSdesignation(designation)
+                                }}
                             />
 
                             {/* <TextField
@@ -2344,7 +2403,7 @@ const UsersList = () => {
                                 /> */}
                         </Grid>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -2353,7 +2412,7 @@ const UsersList = () => {
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={office}
+                                    options={placeOfPosting1}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
@@ -2369,12 +2428,11 @@ const UsersList = () => {
                                             />
                                         )
                                     }}
-                                    value={officeName}
-                                    onChange={(_event, vender) => {
-                                        setOfficeName(vender)
+                                    value={sOffice}
+                                    onChange={(_event, office) => {
+                                        setSOffice(office)
                                     }}
                                 />
-                  
                             </Box>
                         </Grid>
                         {/* <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -2411,7 +2469,7 @@ const UsersList = () => {
                                 />
                             </Grid> */}
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -2420,14 +2478,12 @@ const UsersList = () => {
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={custodianIds}
+                                    options={departments}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) =>
-                                        `${option.name}`
-                                    }
+                                    getOptionLabel={(option) => option.name}
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -2436,9 +2492,9 @@ const UsersList = () => {
                                             />
                                         )
                                     }}
-                                    value={custodianId}
-                                    onChange={(_event, vender) => {
-                                        setCustodianId(vender)
+                                    value={sdepartment}
+                                    onChange={(_event, department) => {
+                                        setSdepartment(department)
                                     }}
                                 />
                             </Box>
@@ -2463,7 +2519,6 @@ const UsersList = () => {
                                 fullWidth
                             />
                         </Grid>
-
 
                         <Grid item lg={6} md={6} sm={6} xs={6}>
                             <Typography gutterBottom>Start Date</Typography>
