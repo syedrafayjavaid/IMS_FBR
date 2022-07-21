@@ -6,6 +6,7 @@ import Slider from '@mui/material/Slider'
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import QrCodeIcon from '@mui/icons-material/QrCode'
+import { v4 as uuidv4 } from 'uuid';
 
 import {
     Autocomplete,
@@ -67,11 +68,10 @@ const PurchasedItems = () => {
 
     // States
     const userName = localStorage.getItem('username')
+    const [qrUUID, setQrUUID] = React.useState('')
     const [mychips, setMyChips] = React.useState('')
-    const [features, setFeatures] = React.useState([])
-    const [selectedFeatures, setSelectedFeatures] = React.useState([])
-    const [newFeatures, setNewFeatures] = React.useState([])
-   // const [createdBy, setCreatedBy] = React.useState('')
+    const [features, setmyFeatures] = React.useState('')
+
     const [editmodifyOnError, seteditModifyOnError] = React.useState(false)
     // Form validation errors State Setting
     const [priceError, setPriceError] = React.useState(false)
@@ -373,13 +373,13 @@ const PurchasedItems = () => {
             .then((res) => {
                 setProduct(res.data.data)
             })
-            .catch((error) => {})
+            .catch((error) => { })
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
                 setOfficeDialog(res.data.data)
             })
-            .catch((error) => {})
+            .catch((error) => { })
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
@@ -470,7 +470,10 @@ const PurchasedItems = () => {
 
             const qrSrNo = srno === '' ? 'N/A' : srno
 
-            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVendor Name: ${qrVenderName}\nVendor Email: ${qrVenderEmail}\nVendor Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}`
+            const qrUUID = uuidv4();
+
+            setQrUUID(qrUUID);
+            const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVendor Name: ${qrVenderName}\nVendor Email: ${qrVenderEmail}\nVendor Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}\nqrUUID: ${qrUUID}`
 
             setQrCode(qrCode)
             const response = await QRCode.toDataURL(qrCode)
@@ -547,6 +550,7 @@ const PurchasedItems = () => {
         data.append('F', combinedFeatures)
         data.append('tagNo', tagdata)
         data.append('active', checked)
+        data.append('qrUUID', qrUUID);
 
         setProductId(selectedProduct?._id)
 
@@ -582,13 +586,14 @@ const PurchasedItems = () => {
                 setTagdata('')
                 setSelectedProduct(null)
                 setChecked(false)
+                setQrUUID('');
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
            
     }
-///////error
+    ///////error
     //error handling
     const handleCreateClickOpen = () => {
         if (
@@ -859,17 +864,16 @@ const PurchasedItems = () => {
     const handleWingChange = (event) => {
         setAge(event.target.value)
     }
-const handlefeature = () => {
-    setFeatures(features => [...features,mychips] )
-    console.log("slected features has ",features);
-}
-//     ////demy data for the chips input value
-  
-//    const arr=[{features}];
-//    const arr2=[{mychips}]
 
-//     const chips = arr2.concat(arr);
-      
+    //     ////demy data for the chips input value
+
+    //    const arr=[{features}];
+    //    const arr2=[{mychips}]
+
+    //     const chips = arr2.concat(arr);
+
+
+    const option = (option === top100Films) ? option : <ChipInput />
 
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
@@ -917,6 +921,29 @@ const handlefeature = () => {
       
         setSelectedFeatures(items)
       }
+
+      const qrBasedSearch = (qrcode) => {
+
+
+        const qrArray = qrcode.split(" ");
+        const id = qrArray[qrArray.length - 1];
+
+        axios
+            .get(`${config.base_url}/api/v1/purchaseProduct/qrBasedSearch/${id}`)
+            .then((res) => {
+                setPurchasedItems(res.data.data);
+                setScanResultWebCam('');
+                setSearchByQrCode(false)
+                setSearchItemsDialog(false)
+
+
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+
+
+    }
      
 
 
@@ -1013,25 +1040,25 @@ const handlefeature = () => {
                                     onDelete={onDelhandler}
                                     onEdit={onEdithandler}
                                 />
-                             </Grid>
+                            </Grid>
                         ))}
                 </Grid>
                 <br></br>
 
                 {
-                    purchasedItems.length > 0 &&  <ReactPaginate
-                    previousLabel={'Previous'}
-                    nextLabel={'Next'}
-                    pageCount={pageCount}
-                    onPageChange={changePage}
-                    containerClassName={'paginationBttns'}
-                    previousLinkClassName={'previousBttn'}
-                    nextLinkClassName={'nextBttn'}
-                    disabledClassName={'paginationDisabled'}
-                    activeClassName={'paginationActive'}
-                />
+                    purchasedItems.length > 0 && <ReactPaginate
+                        previousLabel={'Previous'}
+                        nextLabel={'Next'}
+                        pageCount={pageCount}
+                        onPageChange={changePage}
+                        containerClassName={'paginationBttns'}
+                        previousLinkClassName={'previousBttn'}
+                        nextLinkClassName={'nextBttn'}
+                        disabledClassName={'paginationDisabled'}
+                        activeClassName={'paginationActive'}
+                    />
                 }
-              
+
             </Container>
 
             <Dialog
@@ -1577,9 +1604,9 @@ const handlefeature = () => {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Select Features"
-                                            placeholder="Select Features"
-                                            
+                                            label="features suggestive"
+                                            placeholder="features suggestive"
+                                        // onClick={guardarNumeros()}
                                         />
                                     )}
                                     value={selectedFeatures}
@@ -1592,27 +1619,18 @@ const handlefeature = () => {
                             </Grid>
                         </Grid>
                         <br></br>
-                        <br></br>
-                            <Grid container spacing={3}>
-                           
+                        <p>Add Features Suggestive</p>
+                        <Grid container spacing={3}>
+
                             <Grid item lg={12} md={12} sm={12} xs={12}>
-                           
-                                <TagsInput
-                                    selectedTags={handleNewTags}
-                                    fullWidth
-                                    variant="outlined"
-                                    id="features"
-                                    name="features"
-                                    placeholder="features"
-                                    label="Add New Features"
-                                />
+                                <ChipInput value={features} />
 
                             </Grid>
-                          
-                            </Grid>
-                            <br></br>
-                           
-                     
+
+                        </Grid>
+                        <br></br>
+
+
                         <Grid container spacing={3}>
                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                 <Button
@@ -1693,7 +1711,7 @@ const handlefeature = () => {
                     <br></br>
                     <CardContent>
                         <Grid container spacing={3}>
-                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -1753,11 +1771,11 @@ const handlefeature = () => {
                                     }}
                                 />
                             </Grid>
-                           
+
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     id="name"
                                     label="Tag"
@@ -1867,7 +1885,7 @@ const handlefeature = () => {
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
-                        <Grid item lg={6} md={6} sm={6} xs={6}>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <TextField
                                     error={purchasedOrderError}
                                     id="name"
@@ -1925,7 +1943,7 @@ const handlefeature = () => {
                                     />
                                 </Box>
                             </Grid>
-                            
+
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1942,13 +1960,13 @@ const handlefeature = () => {
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
-                                            // onClick={guardarNumeros()}
+                                        // onClick={guardarNumeros()}
                                         />
                                     )}
                                 />
                             </Grid>
                         </Grid>
-                      
+
                         <br></br>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -1985,11 +2003,11 @@ const handlefeature = () => {
                                     />
                                 </Box>
                             </Grid>
-                            </Grid>
-                       
-                            <br></br>
+                        </Grid>
 
-                         <Grid container spacing={3}>
+                        <br></br>
+
+                        <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <Typography gutterBottom>Start Date of Purchased Items</Typography>
                                 <TextField
@@ -2047,16 +2065,17 @@ const handlefeature = () => {
                     <CardContent>
                         <Grid container>
                             <Grid item xl={11} lg={11} md={11} sm={11} xs={11}>
-                                <h3>Qr Code Scan by Web Cam</h3>
+                                <h3>Please Search Your Qr code Below</h3>
                                 <QrReader
                                     delay={300}
                                     style={{ width: '100%' }}
                                     onError={handleErrorWebCam}
                                     onScan={handleScanWebCam}
                                 />
-                                <h3>
+                                {/* <h3>
                                     Scanned By WebCam Code: {scanResultWebCam}
-                                </h3>
+                                </h3> */}
+                                {scanResultWebCam != '' ? qrBasedSearch(scanResultWebCam) : ""}
                             </Grid>
                         </Grid>
                         <br></br>
@@ -2071,7 +2090,7 @@ const handlefeature = () => {
                     >
                         Cancel
                     </Button>
-                    <Button autoFocus onClick={() => {}}>
+                    <Button autoFocus onClick={() => { }}>
                         Confirm
                     </Button>
                 </DialogActions>
@@ -2457,8 +2476,8 @@ const handlefeature = () => {
                                         modifyOnDialog === undefined
                                             ? 'N/A'
                                             : moment(modifyOnDialog).format(
-                                                  'LL'
-                                              )
+                                                'LL'
+                                            )
                                     }
                                     size="small"
                                     onChange={(e) =>
@@ -2590,7 +2609,7 @@ const handlefeature = () => {
                                     fullWidth
                                 />
                             </Grid>
-                            
+
                             <br></br>
                             <Grid item lg={4} md={4} sm={4} xs={6}>
                                 <TextField
@@ -2705,7 +2724,7 @@ const handlefeature = () => {
                                 />
                             </Grid>
                         </Grid>
-                       
+
                         <br></br>
                         <Grid item lg={4} md={4} sm={4} xs={4}></Grid>
                         <Grid container spacing={2}>
