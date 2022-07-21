@@ -10,6 +10,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Fab,
     FormControl,
     FormHelperText,
     Grid,
@@ -24,6 +25,7 @@ import {
     TableHead,
     TableRow,
     TextField,
+    Tooltip,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { Box, styled } from '@mui/system'
@@ -32,9 +34,12 @@ import axios from 'axios'
 import config from 'config'
 import moment from 'moment'
 import QRCode from 'qrcode'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { CSVLink } from 'react-csv'
 import { BiTransfer } from 'react-icons/bi'
 import { useLocation } from 'react-router-dom'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import avatar from '../AppUsers/a.png'
 
 const Title = styled('span')(() => ({
     fontSize: '1rem',
@@ -132,6 +137,11 @@ const PurchaseItemDetail = () => {
     const [productTransferDetails, setProductTransferDetails] = React.useState()
     const [currentData, setCurrentData] = React.useState()
     const [PurchaseItemDetail, setPurchaseItemDetail] = React.useState()
+    const [itemsEntryDetail, setItemsEntryDetail] = React.useState()
+
+    const [employeeDetailDialog, setEmployeeDetailDialog] =
+        React.useState(false)
+    const [employee, setEmployee] = React.useState()
 
     const generateQrCode = async () => {
         try {
@@ -314,7 +324,7 @@ const PurchaseItemDetail = () => {
         data.append('quantity', transferQuantity)
         data.append('_id', PurchaseItemDetail?._id)
 
-        // if (custodianId === state.user._id) {
+        // if (custodianId === employee?._id) {
         //     alert("You Can't Transfer Product To Yourself")
         // }
 
@@ -540,8 +550,6 @@ const PurchaseItemDetail = () => {
 
         getEmployee()
 
-        console.log(item)
-
         setPurchaseItemDetail(item)
     }
 
@@ -556,14 +564,18 @@ const PurchaseItemDetail = () => {
             })
     }
 
-    const getProductTransferDetails = () => {
+    useEffect(() => {
+        getProductTransferDetails()
+        getItemsEntryDetail()
+    }, [])
+
+    const getItemsEntryDetail = () => {
         axios
             .get(
-                `${config.base_url}/api/v1/productTransfer/${state.purchaseItem._id}`
+                `${config.base_url}/api/v1/purchaseProduct/${state.purchaseItem._id}`
             )
             .then((res) => {
-                setProductTransferDetails(res.data.data)
-                setShowTable(true)
+                setItemsEntryDetail(res.data.data)
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -572,8 +584,67 @@ const PurchaseItemDetail = () => {
             })
     }
 
+    const getProductTransferDetails = () => {
+        axios
+            .get(
+                `${config.base_url}/api/v1/productTransfer/${state.purchaseItem._id}`
+            )
+            .then((res) => {
+                setProductTransferDetails(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+                alert('No Record Found')
+                setShowTable(false)
+            })
+    }
+
+    const headers = [
+        { label: 'Name', key: 'products[0].name' },
+        { label: 'Price', key: 'PurchaseProduct[0].price' },
+        { label: 'Quantity', key: 'PurchaseProduct[0].quantity' },
+        { label: 'PurchaseOrder', key: 'PurchaseProduct[0].purchaseOrder' },
+        { label: 'Vender Name', key: 'PurchaseProduct[0].venderName' },
+        { label: 'Vender Email', key: 'PurchaseProduct[0].venderEmail' },
+        { label: 'Vender Contact', key: 'PurchaseProduct[0].venderContact' },
+        { label: 'Date Of Purchase', key: 'PurchaseProduct[0].dataOfPurchase' },
+        { label: 'Ownership', key: 'PurchaseProduct[0].ownership' },
+        { label: 'Status', key: 'PurchaseProduct[0].status' },
+        { label: 'Sr No', key: 'PurchaseProduct[0].srNo' },
+        { label: 'Tag No', key: 'PurchaseProduct[0].tagNo' },
+        { label: 'Transferred From', key: 'transferedFrom' },
+        { label: 'Transfer Quantity', key: 'quantity' },
+        { label: 'Employee Name', key: 'employees[0].name' },
+        { label: 'Employee Id', key: 'employees[0].employeeId' },
+    ]
+
     return (
         <>
+            {productTransferDetails && (
+                <Tooltip title="Generate Report">
+                    <Fab
+                        color="primary"
+                        aria-label="Add"
+                        size="medium"
+                        style={{
+                            zIndex: 999,
+                            right: '4vw',
+                            top: '10vh',
+                            position: 'fixed',
+                        }}
+                    >
+                        <CSVLink
+                            filename={'product-details.csv'}
+                            data={productTransferDetails}
+                            headers={headers}
+                        >
+                            <div style={{ marginTop: '8px' }}>
+                                <SummarizeIcon />
+                            </div>
+                        </CSVLink>
+                    </Fab>
+                </Tooltip>
+            )}
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
                 <CardHeader>
                     <Title>ITEMS ENTRY DETAILS</Title>
@@ -750,7 +821,9 @@ const PurchaseItemDetail = () => {
                                         variant="contained"
                                         type="button"
                                         style={{ width: '200px' }}
-                                        onClick={getProductTransferDetails}
+                                        onClick={() => {
+                                            setShowTable(true)
+                                        }}
                                     >
                                         Track History
                                     </Button>
@@ -803,7 +876,9 @@ const PurchaseItemDetail = () => {
                                     <Button
                                         variant="contained"
                                         type="button"
-                                        onClick={getProductTransferDetails}
+                                        onClick={() => {
+                                            setShowTable(true)
+                                        }}
                                     >
                                         Track History
                                     </Button>
@@ -907,7 +982,20 @@ const PurchaseItemDetail = () => {
                                                 >
                                                     <Box>
                                                         <Paragraph
-                                                            sx={{ m: 0, ml: 1 }}
+                                                            sx={{
+                                                                m: 0,
+                                                                ml: 1,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                            onClick={() => {
+                                                                setEmployee(
+                                                                    productTransfer
+                                                                        .employees[0]
+                                                                )
+                                                                setEmployeeDetailDialog(
+                                                                    true
+                                                                )
+                                                            }}
                                                         >
                                                             {
                                                                 productTransfer
@@ -924,12 +1012,30 @@ const PurchaseItemDetail = () => {
                                                         px: 0,
                                                         textTransform:
                                                             'capitalize',
+                                                        cursor: 'pointer',
                                                     }}
                                                 >
-                                                    {
-                                                        productTransfer
-                                                            .employees[0].name
-                                                    }
+                                                    <Paragraph
+                                                        sx={{
+                                                            m: 0,
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onClick={() => {
+                                                            setEmployeeDetailDialog(
+                                                                true
+                                                            )
+                                                            setEmployee(
+                                                                productTransfer
+                                                                    .employees[0]
+                                                            )
+                                                        }}
+                                                    >
+                                                        {
+                                                            productTransfer
+                                                                .employees[0]
+                                                                .name
+                                                        }
+                                                    </Paragraph>
                                                 </TableCell>
                                                 <TableCell
                                                     align="center"
@@ -1925,6 +2031,281 @@ const PurchaseItemDetail = () => {
                     <Button onClick={handleTransferDialogClose}>Cancel</Button>
                     <Button autoFocus onClick={handleTransferClickOpen}>
                         Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={employeeDetailDialog}
+                onClose={() => setEmployeeDetailDialog(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{`Employee Details`}</DialogTitle>
+                <DialogContent>
+                    <Card elevation={3}>
+                        <Grid container>
+                            <Grid item lg={5} md={5} sm={12} xs={12}>
+                                <ContentBox>
+                                    <IMG
+                                        src={
+                                            employee?.photo === 'no-image' ||
+                                            employee?.photo === undefined
+                                                ? avatar
+                                                : config.base_url +
+                                                  '/' +
+                                                  imgeBaseUrl +
+                                                  employee?.photo
+                                        }
+                                        alt=""
+                                    />
+                                </ContentBox>
+                            </Grid>
+
+                            <Grid
+                                item
+                                lg={7}
+                                md={7}
+                                sm={12}
+                                xs={12}
+                                style={{ padding: '1rem 3rem' }}
+                            >
+                                <h3>
+                                    {employee?.name === undefined
+                                        ? 'N/A'
+                                        : employee?.name}
+                                </h3>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Email Address: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.emailAddress ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.emailAddress}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Mobile Number: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.mobileNumber ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.mobileNumber}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Department: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.department ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.department}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Designation: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.designation ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.designation}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Pg: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.pg === undefined
+                                                    ? 'N/A'
+                                                    : employee?.pg}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Wing: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.wing.length < 1
+                                                    ? 'N/A'
+                                                    : employee?.wing}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Office: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.office === undefined
+                                                    ? 'N/A'
+                                                    : employee?.office}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>CNIC: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.cnic === undefined
+                                                    ? 'N/A'
+                                                    : employee?.cnic}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Created Date: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {moment(
+                                                    employee?.createdAt
+                                                ).format('LL')}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Modification Date: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.modifiedAt ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : moment(
+                                                          employee?.modifiedAt
+                                                      ).format('LL')}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Gender </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.gender === undefined
+                                                    ? 'N/A'
+                                                    : employee?.gender}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Date of Birth: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.dob === undefined
+                                                    ? 'N/A'
+                                                    : employee?.dob}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Date Of Joining: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.dateOfJoining ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.dateOfJoining}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Reporting Manager: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.reportingManager ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee.reportingManager}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Employee Id: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.employeeId ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.employeeId}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr />
+                                <Grid container>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <span>Job Title: </span>
+                                        <span style={{ color: 'green' }}>
+                                            <b>
+                                                {employee?.jobTitle ===
+                                                undefined
+                                                    ? 'N/A'
+                                                    : employee?.jobTitle}
+                                            </b>
+                                        </span>
+                                    </Grid>
+                                </Grid>
+                                <hr></hr>
+                                <Box sx={{ marginBottom: '5px' }}>
+                                    <h4>Detail: </h4>
+                                    {employee?.remarks === undefined
+                                        ? 'N/A'
+                                        : employee?.remarks}
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Card>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setEmployeeDetailDialog(false)}>
+                        Close
                     </Button>
                 </DialogActions>
             </Dialog>

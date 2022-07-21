@@ -23,7 +23,6 @@ import {
     TextField,
     Tooltip,
     Typography,
-    useTheme,
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
@@ -38,9 +37,6 @@ import UsersCard from './UsersCard'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import { CSVLink } from 'react-csv'
 import './user.css'
-import { LocalizationProvider } from '@mui/x-date-pickers'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { DatePicker } from '@material-ui/pickers'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -732,15 +728,14 @@ const UsersList = () => {
                 console.log(error, 'error')
             })
     }
-    //////demy data
 
     const headers = [
         { label: 'Employee Code', key: 'employeeId' },
         { label: 'Name', key: 'name' },
         { label: 'Phone', key: 'mobileNumber' },
-        //TODO Date Of Birth
+        { label: 'Date Of Birth', key: 'dob' },
         { label: 'CNIC', key: 'cnic' },
-        //TODO Gender
+        { label: 'Gender', key: 'gender' },
         { label: 'Joining Date', key: 'dateOfJoining' },
         { label: 'Official Email', key: 'emailAddress' },
         { label: 'Place Of Posting', key: 'office[0].city' },
@@ -749,9 +744,7 @@ const UsersList = () => {
         { label: 'Wing', key: 'wing' },
         { label: 'Department', key: 'department' },
         { label: 'Designation', key: 'designation' },
-        //TODO Job Title
-        // { label: 'Remarks', key: 'remarks' },
-        // { label: 'Creation Date', key: 'createdAt' },
+        { label: 'Job Title', key: 'jobTitle' },
     ]
 
     return (

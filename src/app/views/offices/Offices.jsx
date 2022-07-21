@@ -13,7 +13,8 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Typography,Autocomplete
+    Typography,
+    Autocomplete,
 } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -66,11 +67,6 @@ const Offices = () => {
     const [searchCity, setSearchCity] = React.useState(null)
     const [searchContact, setSearchContact] = React.useState(null)
 
-
-
-
-
-    
     const [offices, setOffices] = React.useState([])
     const [createName, setCreateName] = React.useState('')
     const [createNameError, setCreateNameError] = React.useState(false)
@@ -96,6 +92,10 @@ const Offices = () => {
     const [officeId, setOfficeId] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
     const [open, setOpen] = React.useState(false)
+    const [cities, setCities] = React.useState([])
+    const [phones, setPhones] = React.useState([])
+    const [emails, setEmails] = React.useState([])
+    const [names, setNames] = React.useState([])
 
     const [pageNumber, setPageNumber] = React.useState(0)
     const OfficesPerPage = 8
@@ -134,6 +134,53 @@ const Offices = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
+        axios
+            .post(`${config.base_url}/api/v1/office/multiSuggestion`)
+            .then((res) => {
+                const filteredCities = res.data.cities.filter(
+                    (filteredCity) => {
+                        return (
+                            filteredCity?._id !== null ||
+                            filteredCity?._id !== '' ||
+                            filteredCity?._id !== undefined
+                        )
+                    }
+                )
+
+                const filteredEmails = res.data.emails.filter(
+                    (filteredEmail) => {
+                        return (
+                            filteredEmail?._id !== null ||
+                            filteredEmail?._id !== '' ||
+                            filteredEmail?._id !== undefined
+                        )
+                    }
+                )
+                const filteredNames = res.data.names.filter((filteredName) => {
+                    return (
+                        filteredName?._id !== null ||
+                        filteredName?._id !== '' ||
+                        filteredName?._id !== undefined
+                    )
+                })
+                const filteredPhones = res.data.phones.filter(
+                    (filteredPhone) => {
+                        return (
+                            filteredPhone?._id !== null ||
+                            filteredPhone?._id !== '' ||
+                            filteredPhone?._id !== undefined
+                        )
+                    }
+                )
+
+                setCities(filteredCities)
+                setEmails(filteredEmails)
+                setNames(filteredNames)
+                setPhones(filteredPhones)
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
 
     const onDelhandler = (id) => {
@@ -158,7 +205,7 @@ const Offices = () => {
         setEditAddress(address)
         setEditCity(city)
         setEditContact(contact)
-      
+
         setEditEmail(email)
         setOfficeId(id)
     }
@@ -317,22 +364,18 @@ const Offices = () => {
         </React.Fragment>
     )
 
-//////search dialog
-const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+    //////search dialog
+    const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
     const handleEmployeeClose = () => {
         setEmployeeDialogs(false)
-       
     }
 
     //////post data
     const ApplyFilters = () => {
-      
-                    setEmployeeDialogs(false)
-             
+        setEmployeeDialogs(false)
+
+        console.log('Apply Filters')
     }
-
-
-
 
     const headers = [
         { label: 'Office Name', key: 'name' },
@@ -438,20 +481,20 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                 </Card>
             )}
             <br></br>
-            {
-                offices.length> 0 && <ReactPaginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
-                pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={'paginationBttns'}
-                previousLinkClassName={'previousBttn'}
-                nextLinkClassName={'nextBttn'}
-                disabledClassName={'paginationDisabled'}
-                activeClassName={'paginationActive'}
-            />
-            }
-            
+            {offices.length > 0 && (
+                <ReactPaginate
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={pageCount}
+                    onPageChange={changePage}
+                    containerClassName={'paginationBttns'}
+                    previousLinkClassName={'previousBttn'}
+                    nextLinkClassName={'nextBttn'}
+                    disabledClassName={'paginationDisabled'}
+                    activeClassName={'paginationActive'}
+                />
+            )}
+
             <Tooltip title="Generate Report">
                 <Fab
                     color="primary"
@@ -783,8 +826,8 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                     action={action}
                 />
             </Dialog>
-   {/* /////search filter of the data */}
-   <Dialog
+            {/* /////search filter of the data */}
+            <Dialog
                 open={employeeDialogs}
                 onClose={handleEmployeeClose}
                 aria-labelledby="alert-dialog-title"
@@ -792,11 +835,11 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
             >
                 <DialogTitle>{'Search Filters'}</DialogTitle>
 
-                <DialogContent style={{width:'500px'}}>
+                <DialogContent style={{ width: '500px' }}>
                     <br></br>
                     <Grid container spacing={3}>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -805,14 +848,12 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={offices}
+                                    options={names}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) =>
-                                        `${option.name}`
-                                    }
+                                    getOptionLabel={(option) => `${option._id}`}
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -826,11 +867,10 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                         setSearchName(vender)
                                     }}
                                 />
-                  
                             </Box>
                         </Grid>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -839,14 +879,12 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={offices}
+                                    options={cities}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) =>
-                                        `${option.city}`
-                                    }
+                                    getOptionLabel={(option) => `${option._id}`}
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -860,11 +898,10 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                         setSearchCity(vender)
                                     }}
                                 />
-                  
                             </Box>
                         </Grid>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -873,14 +910,12 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={offices}
+                                    options={emails}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) =>
-                                        `${option.name}`
-                                    }
+                                    getOptionLabel={(option) => `${option._id}`}
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -894,11 +929,10 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                         setSearchEmail(vender)
                                     }}
                                 />
-                  
                             </Box>
                         </Grid>
-                      <Grid item lg={12} md={12} sm={12} xs={12}>
-                            <Box >
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Box>
                                 <Autocomplete
                                     ListboxProps={{
                                         style: { maxHeight: '13rem' },
@@ -907,14 +941,12 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={offices}
+                                    options={phones}
                                     filterSelectedOptions={true}
                                     isOptionEqualToValue={(option, value) =>
                                         option._id === value._id
                                     }
-                                    getOptionLabel={(option) =>
-                                        `${option.name}`
-                                    }
+                                    getOptionLabel={(option) => `${option._id}`}
                                     renderInput={(params) => {
                                         return (
                                             <TextField
@@ -928,10 +960,8 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                                         setSearchContact(vender)
                                     }}
                                 />
-                  
                             </Box>
                         </Grid>
-                      
                     </Grid>
                 </DialogContent>
                 <DialogActions>
@@ -941,7 +971,6 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                     </Button>
                 </DialogActions>
             </Dialog>
-
 
             <Tooltip title="Search Filters">
                 <Fab
@@ -959,7 +988,6 @@ const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
                     <SearchIcon />
                 </Fab>
             </Tooltip>
-
 
             <Tooltip title="Add Office">
                 <Fab

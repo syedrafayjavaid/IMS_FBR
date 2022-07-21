@@ -274,6 +274,8 @@ const UserDetail = () => {
         // { label: 'Creation Date', key: 'createdAt' },
     ]
 
+    console.log(state.user)
+
     return (
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
@@ -517,9 +519,9 @@ const UserDetail = () => {
                                 </Button>
                             </Grid>
                             {showTable && (
-                                <Grid item lg={6} md={6} sm={6} xs={12}>
+                                <Grid item lg={12} md={12} sm={12} xs={12}>
                                     <CSVLink
-                                        filename={'all-employees.csv'}
+                                        filename={'product-details.csv'}
                                         data={employeeProducts}
                                     >
                                         <Button
@@ -589,7 +591,6 @@ const UserDetail = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {console.log('length', employeeProducts)}
                                 {employeeProducts.length > 0
                                     ? employeeProducts.map(
                                           (employeeProduct) => {
@@ -615,7 +616,7 @@ const UserDetail = () => {
                                                           }}
                                                       >
                                                           {
-                                                              employeeProduct?.quantity
+                                                              employeeProduct.quantity
                                                           }
                                                       </TableCell>
                                                       <TableCell

@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider'
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
 import QrCodeIcon from '@mui/icons-material/QrCode'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
 import {
     Autocomplete,
@@ -193,24 +193,47 @@ const PurchasedItems = () => {
         const [selectedDate, handleDateChange] = useState(new Date())
     }
 
-
-
-    const marks = [
+    const priceMarks = [
         {
             value: 0,
             label: '0',
         },
+
         {
-            value: 100,
-            label: '100',
+            value: 250000,
+            label: '250000',
+        },
+        {
+            value: 500000,
+            label: '500000',
+        },
+        {
+            value: 750000,
+            label: '750000',
+        },
+        {
+            value: 1000000,
+            label: '1000000',
+        },
+    ]
+
+    const quantityMarks = [
+        {
+            value: 0,
+            label: '0',
+        },
+
+        {
+            value: 250,
+            label: '250',
         },
         {
             value: 500,
             label: '500',
         },
         {
-            value: 700,
-            label: '700',
+            value: 750,
+            label: '750',
         },
         {
             value: 1000,
@@ -371,13 +394,13 @@ const PurchasedItems = () => {
             .then((res) => {
                 setProduct(res.data.data)
             })
-            .catch((error) => { })
+            .catch((error) => {})
         axios
             .get(`${config.base_url}/api/v1/office`)
             .then((res) => {
                 setOfficeDialog(res.data.data)
             })
-            .catch((error) => { })
+            .catch((error) => {})
         axios
             .get(`${config.base_url}/api/v1/employee`)
             .then((res) => {
@@ -468,9 +491,9 @@ const PurchasedItems = () => {
 
             const qrSrNo = srno === '' ? 'N/A' : srno
 
-            const qrUUID = uuidv4();
+            const qrUUID = uuidv4()
 
-            setQrUUID(qrUUID);
+            setQrUUID(qrUUID)
             const qrCode = `Product Name: ${qrProduct}\nModel: ${qrModel}\nPrice: ${qrPrice}\nPurchase Order: ${qrPurchaseOrder}\nQuantity: ${qrProductQuantity}\nStatus: ${qrStatus}\nOffice: ${qrOffice}\nDate Of Purchase: ${qrDateOfPurchase}\nOwnership: ${qrOwnerShip}\nVendor Name: ${qrVenderName}\nVendor Email: ${qrVenderEmail}\nVendor Number: ${qrVenderNumber}\nTag: ${qrTag}\nSr No: ${qrSrNo}\nqrUUID: ${qrUUID}`
 
             setQrCode(qrCode)
@@ -524,7 +547,7 @@ const PurchasedItems = () => {
         data.append('srNo', srno)
         data.append('tagNo', tagdata)
         data.append('active', checked)
-        data.append('qrUUID', qrUUID);
+        data.append('qrUUID', qrUUID)
 
         setProductId(selectedProduct?._id)
 
@@ -558,7 +581,7 @@ const PurchasedItems = () => {
                 setTagdata('')
                 setSelectedProduct(null)
                 setChecked(false)
-                setQrUUID('');
+                setQrUUID('')
             })
             .catch((error) => {
                 console.log(error, 'error')
@@ -796,6 +819,14 @@ const PurchasedItems = () => {
         data.tag = searchTag
         data.srNo = searchSrNo
 
+        if (sdate !== '' && sdate1 === '') {
+            alert('Select End Date Too')
+            return
+        } else if (sdate === '' && sdate1 !== '') {
+            alert('Select Start Date Too')
+            return
+        }
+
         axios
             .post(
                 `${config.base_url}/api/v1/purchaseProduct/searchFilters`,
@@ -813,7 +844,6 @@ const PurchasedItems = () => {
         { label: 'Quantity', key: 'quantity' },
         { label: 'Model', key: 'model' },
         { label: 'Office', key: 'office[0].name' },
-        { label: 'Purchase Product Id', key: 'purchaseProductId' },
         { label: 'Purchase Order', key: 'purchaseOrder' },
         { label: 'Ownership', key: 'ownership' },
         { label: 'Date Of Purchase', key: 'dataOfPurchase' },
@@ -822,7 +852,6 @@ const PurchasedItems = () => {
         { label: 'Vender Contact', key: 'venderContact' },
         { label: 'Sr No', key: 'srNo' },
         { label: 'Tag', key: 'tagNo' },
-        { label: 'Active', key: 'active' },
         { label: 'Status', key: 'status' },
         { label: 'Modification Date', key: 'modifiedAt' },
         { label: 'Modified By', key: 'modifiedBy' },
@@ -843,8 +872,7 @@ const PurchasedItems = () => {
 
     //     const chips = arr2.concat(arr);
 
-
-    const option = (option === top100Films) ? option : <ChipInput />
+    const option = option === top100Films ? option : <ChipInput />
 
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
@@ -896,32 +924,24 @@ const PurchasedItems = () => {
         { title: 'Vertigo', year: 1958 },
     ]
 
-
-
     const qrBasedSearch = (qrcode) => {
-
-
-        const qrArray = qrcode.split(" ");
-        const id = qrArray[qrArray.length - 1];
+        const qrArray = qrcode.split(' ')
+        const id = qrArray[qrArray.length - 1]
 
         axios
-            .get(`${config.base_url}/api/v1/purchaseProduct/qrBasedSearch/${id}`)
+            .get(
+                `${config.base_url}/api/v1/purchaseProduct/qrBasedSearch/${id}`
+            )
             .then((res) => {
-                setPurchasedItems(res.data.data);
-                setScanResultWebCam('');
+                setPurchasedItems(res.data.data)
+                setScanResultWebCam('')
                 setSearchByQrCode(false)
                 setSearchItemsDialog(false)
-
-
             })
             .catch((error) => {
                 console.log(error, 'error')
             })
-
-
     }
-
-
 
     return (
         <>
@@ -1010,7 +1030,6 @@ const PurchasedItems = () => {
                                 sm={6}
                                 md={3}
                             >
-
                                 <PurchaseItemCard
                                     purchaseItem={purchaseItem}
                                     onDelete={onDelhandler}
@@ -1021,8 +1040,8 @@ const PurchasedItems = () => {
                 </Grid>
                 <br></br>
 
-                {
-                    purchasedItems.length > 0 && <ReactPaginate
+                {purchasedItems.length > 0 && (
+                    <ReactPaginate
                         previousLabel={'Previous'}
                         nextLabel={'Next'}
                         pageCount={pageCount}
@@ -1033,8 +1052,7 @@ const PurchasedItems = () => {
                         disabledClassName={'paginationDisabled'}
                         activeClassName={'paginationActive'}
                     />
-                }
-
+                )}
             </Container>
 
             <Dialog
@@ -1582,7 +1600,7 @@ const PurchasedItems = () => {
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
-                                        // onClick={guardarNumeros()}
+                                            // onClick={guardarNumeros()}
                                         />
                                     )}
                                 />
@@ -1591,15 +1609,11 @@ const PurchasedItems = () => {
                         <br></br>
                         <p>Add Features Suggestive</p>
                         <Grid container spacing={3}>
-
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <ChipInput value={features} />
-
                             </Grid>
-
                         </Grid>
                         <br></br>
-
 
                         <Grid container spacing={3}>
                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
@@ -1741,7 +1755,6 @@ const PurchasedItems = () => {
                                     }}
                                 />
                             </Grid>
-
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1913,7 +1926,6 @@ const PurchasedItems = () => {
                                     />
                                 </Box>
                             </Grid>
-
                         </Grid>
                         <br></br>
                         <Grid container spacing={3}>
@@ -1930,7 +1942,7 @@ const PurchasedItems = () => {
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
-                                        // onClick={guardarNumeros()}
+                                            // onClick={guardarNumeros()}
                                         />
                                     )}
                                 />
@@ -1948,11 +1960,11 @@ const PurchasedItems = () => {
                                         aria-label="Custom marks"
                                         defaultValue={0}
                                         getAriaValueText={valuetext}
-                                        step={100}
+                                        step={50000}
                                         min={0}
-                                        max={1000}
+                                        max={1000000}
                                         valueLabelDisplay="auto"
-                                        marks={marks}
+                                        marks={priceMarks}
                                     />
                                 </Box>
                             </Grid>
@@ -1965,11 +1977,11 @@ const PurchasedItems = () => {
                                         aria-label="Custom marks"
                                         defaultValue={0}
                                         getAriaValueText={valuetext}
-                                        step={100}
+                                        step={50}
                                         min={0}
                                         max={1000}
                                         valueLabelDisplay="auto"
-                                        marks={marks}
+                                        marks={quantityMarks}
                                     />
                                 </Box>
                             </Grid>
@@ -1979,7 +1991,9 @@ const PurchasedItems = () => {
 
                         <Grid container spacing={3}>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>Start Date of Purchased Items</Typography>
+                                <Typography gutterBottom>
+                                    Start Date of Purchased Items
+                                </Typography>
                                 <TextField
                                     value={sdate}
                                     id="date"
@@ -1991,7 +2005,9 @@ const PurchasedItems = () => {
                                 />
                             </Grid>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
-                                <Typography gutterBottom>End Date Purchased Items</Typography>
+                                <Typography gutterBottom>
+                                    End Date Purchased Items
+                                </Typography>
                                 <TextField
                                     value={sdate1}
                                     id="date"
@@ -2045,7 +2061,9 @@ const PurchasedItems = () => {
                                 {/* <h3>
                                     Scanned By WebCam Code: {scanResultWebCam}
                                 </h3> */}
-                                {scanResultWebCam != '' ? qrBasedSearch(scanResultWebCam) : ""}
+                                {scanResultWebCam != ''
+                                    ? qrBasedSearch(scanResultWebCam)
+                                    : ''}
                             </Grid>
                         </Grid>
                         <br></br>
@@ -2060,7 +2078,7 @@ const PurchasedItems = () => {
                     >
                         Cancel
                     </Button>
-                    <Button autoFocus onClick={() => { }}>
+                    <Button autoFocus onClick={() => {}}>
                         Confirm
                     </Button>
                 </DialogActions>
@@ -2446,8 +2464,8 @@ const PurchasedItems = () => {
                                         modifyOnDialog === undefined
                                             ? 'N/A'
                                             : moment(modifyOnDialog).format(
-                                                'LL'
-                                            )
+                                                  'LL'
+                                              )
                                     }
                                     size="small"
                                     onChange={(e) =>
