@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { Switch, Grid, Card, Table, TableHead, TableBody } from '@mui/material'
 import { Avatar, TableCell, TableRow } from '@mui/material'
-
+import moment from 'moment'
 import { Paragraph } from 'app/components/Typography'
 const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
@@ -24,6 +24,8 @@ const ProductTypeCard = ({ product, onEdit, onDelete }) => {
     const delHandler = () => {
         onDelete(product._id)
     }
+
+    
 
     return (
         <TableRow
@@ -44,9 +46,24 @@ const ProductTypeCard = ({ product, onEdit, onDelete }) => {
                 colSpan={3}
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
-                <Switch {...label} defaultChecked />
+                <Box>
+                    <Paragraph sx={{ m: 0, ml: 1 }}>
+                        {product.createdAt === undefined
+                                            ? 'N/A'
+                                            : moment(
+                                                product.createdAt
+                                              ).format('LL')}</Paragraph>
+                </Box>
             </TableCell>
-
+            <TableCell
+                colSpan={3}
+                align="left"
+                sx={{ px: 0, textTransform: 'capitalize' }}
+            >
+                <Box>
+                    <Paragraph sx={{ m: 0, ml: 1 }}>{product.modifiedAt === undefined ?  'N/A' : product.modifiedAt}</Paragraph>
+                </Box>
+            </TableCell>
             <TableCell sx={{ px: 0 }} align="center" colSpan={2}>
                 <Button onClick={adiitHandler}>
                     <EditIcon />

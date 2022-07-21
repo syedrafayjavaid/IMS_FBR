@@ -87,7 +87,7 @@ const Small = styled('small')(({ bgcolor }) => ({
 
 const ProductTypeList = () => {
     const [productList, setProductList] = React.useState([])
-    const [searchproductList, setSearchProductList] = React.useState(null)
+    const [searchproductList, setSearchProductList] = React.useState()
     const [snackBar, setSnackBar] = React.useState(false)
 
     const { palette } = useTheme()
@@ -112,6 +112,31 @@ const ProductTypeList = () => {
     const changePage = ({ selected }) => {
         setPageNumber(selected)
     }
+
+
+    const SEARCH = () => {
+    
+        let data = new FormData()
+    
+        data.append('searchproductList', searchproductList)
+
+        console.log(searchproductList,"data responce of t")
+        axios .get(`${config.base_url}/api/v1/productType/${searchproductList._id}`)
+         
+       
+            .then((res) => {
+                setProductList([res.data.data])
+             console.log(res.data.data,"data responce of t")
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+    
+
+
+
+
 
     useEffect(() => {
         getAlldata()
@@ -282,7 +307,7 @@ const ProductTypeList = () => {
     const ApplyFilters = () => {
       
                     setEmployeeDialogs(false)
-             
+                    SEARCH()
     }
 
     return (
@@ -314,16 +339,26 @@ const ProductTypeList = () => {
                                     Name
                                 </TableCell>
                                 <TableCell
+                                    sx={{ px: 3 }}
+                                    align="left"
+                                    colSpan={3}
+                                >
+                         
+                                    Created Date
+                                </TableCell>
+                                <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
                                     colSpan={3}
-                                >
-                                    Demo
+                                    
+                                >  
+                                 Modified 
                                 </TableCell>
                                 <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
                                     colSpan={2}
+                                 
                                 >
                                     Edit
                                 </TableCell>
@@ -432,11 +467,11 @@ const ProductTypeList = () => {
                             />
                         </Grid>
 
-                        <Grid item lg={3} md={3} sm={3} xs={3}>
+                        {/* <Grid item lg={3} md={3} sm={3} xs={3}>
                             <span>Demo</span>
                             <Switch {...label} defaultChecked />
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </Grid>
+                        </Grid> */}
                         <Grid item lg={4} md={4} sm={4} xs={4}>
                             {/* <label htmlFor="contained-button-file">
                   <Input accept="image/*" id="contained-button-file" multiple type="file" onChange={handleImage} />
@@ -483,7 +518,7 @@ const ProductTypeList = () => {
 
 
 {/* /////search filter of the data */}
-<Dialog
+            <Dialog
                 open={employeeDialogs}
                 onClose={handleEmployeeClose}
                 aria-labelledby="alert-dialog-title"

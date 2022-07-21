@@ -62,7 +62,7 @@ const Brands = () => {
     // Setting States
     const [quantity, setQuantity] = React.useState([])
     const [brand, setBrand] = React.useState([])
-    const [searchbrands, setSearchBrands] = React.useState(null)
+    const [searchbrands, setSearchBrands] = React.useState()
     const [brandId, setBrandId] = React.useState('')
     const [image, setImage] = React.useState('')
     const [snackBar, setSnackBar] = React.useState(false)
@@ -114,7 +114,29 @@ const Brands = () => {
             editHandler()
         }
     }
+    ///////
+    const SEARCH = () => {
+    
+        let data = new FormData()
+    
+        data.append('searchbrands', searchbrands)
 
+      //  console.log(searchproductList,"data responce of t")
+        axios .get(`${config.base_url}/api/v1/brand/${searchbrands._id}`)
+         
+       
+            .then((res) => {
+                setBrand([res.data.data])
+             console.log(res.data.data,"data responce of t")
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            })
+    }
+    
+
+
+    //////
     useEffect(() => {
         getAlldata()
     }, [])
@@ -239,7 +261,7 @@ const handleEmployeeClose = () => {
 const ApplyFilters = () => {
   
                 setEmployeeDialogs(false)
-         
+                SEARCH()
 }
     return (
         <>
