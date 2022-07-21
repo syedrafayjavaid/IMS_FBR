@@ -37,6 +37,7 @@ import avatar from '../AppUsers/a.png'
 import { BiTransfer } from 'react-icons/bi'
 import { Paragraph } from 'app/components/Typography'
 import CloseIcon from '@mui/icons-material/Close'
+import { CSVLink } from 'react-csv'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -78,8 +79,6 @@ const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
 const UserDetail = () => {
     // States
     const [showTable, setShowTable] = React.useState(false)
-    const [showCard, setShowCard] = React.useState(false)
-    const [office, setOffice] = React.useState()
     const [employeeProducts, setEmployeeProducts] = React.useState([])
 
     const [quantity, setQuantity] = React.useState('')
@@ -93,69 +92,9 @@ const UserDetail = () => {
     const [employeeProductDetail, setEmployeeProductDetail] = React.useState()
     const [transferTo, setTransferTo] = React.useState()
 
-    const [activeStep, setActiveStep] = React.useState(0)
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    }
-
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1)
-    }
-
-    const handleReset = () => {
-        setActiveStep(0)
-    }
-
-    const showTbl = () => {
-        setShowTable(true)
-        setShowCard(false)
-    }
-    const showCrd = () => {
-        setShowCard(true)
-        setShowTable(false)
-    }
-
-    const myRef = useRef(null)
-    const executeScroll = () => scrollToRef(myRef)
-
     const { state } = useLocation()
 
     const imgeBaseUrl = 'uploads/'
-
-    const steps = [
-        {
-            label: 'Select campaign settings',
-            description: `For each ad campaign that you create, you can control how much
-                    you're willing to spend on clicks and conversions.`,
-        },
-        {
-            label: 'Create an ad group',
-            description:
-                'An ad group contains one or more ads which target a shared set of keywords.',
-        },
-        {
-            label: 'Create an ad',
-            description: `Try out different ad text to see what brings in the most customers.`,
-        },
-    ]
-
-    useEffect(() => {
-        // getOffice()
-    }, [])
-
-    const getOffice = () => {
-        axios
-            .get(
-                `${config.base_url}/api/v1/office/${state.user.placeOfPosting}`
-            )
-            .then((res) => {
-                setOffice(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error, 'error')
-            })
-    }
 
     const EmployeeTable = styled(Table)(() => ({
         minWidth: 400,
@@ -313,6 +252,28 @@ const UserDetail = () => {
             })
     }
 
+    const officeName = state.user.office[0]?.name
+
+    const headers = [
+        { label: 'Employee Code', key: 'employeeId' },
+        { label: 'Name', key: 'name' },
+        { label: 'Phone', key: 'mobileNumber' },
+        //TODO Date Of Birth
+        { label: 'CNIC', key: 'cnic' },
+        //TODO Gender
+        { label: 'Joining Date', key: 'dateOfJoining' },
+        { label: 'Official Email', key: 'emailAddress' },
+        { label: 'Place Of Posting', key: 'office[0].city' },
+        { label: 'Branch', key: 'office[0].name' },
+        { label: 'Grade', key: 'pg' },
+        { label: 'Wing', key: 'wing' },
+        { label: 'Department', key: 'department' },
+        { label: 'Designation', key: 'designation' },
+        //TODO Job Title
+        // { label: 'Remarks', key: 'remarks' },
+        // { label: 'Creation Date', key: 'createdAt' },
+    ]
+
     return (
         <>
             <Card elevation={3} sx={{ pt: '20px', mb: 10, margin: '50px' }}>
@@ -412,7 +373,7 @@ const UserDetail = () => {
                                 <span>Wing: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {state.user.wing === undefined
+                                        {state.user.wing.length < 1
                                             ? 'N/A'
                                             : state.user.wing}
                                     </b>
@@ -425,9 +386,9 @@ const UserDetail = () => {
                                 <span>Office: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
-                                        {office === undefined
+                                        {state.user.office === undefined
                                             ? 'N/A'
-                                            : office.name}
+                                            : officeName}
                                     </b>
                                 </span>
                             </Grid>
@@ -471,6 +432,29 @@ const UserDetail = () => {
                         <hr></hr>
                         <Grid container>
                             <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Gender </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {state.user.gender === undefined
+                                            ? 'N/A'
+                                            : state.user.gender}
+                                    </b>
+                                </span>
+                            </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Date of Birth: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {state.user.dob === undefined
+                                            ? 'N/A'
+                                            : state.user.dob}
+                                    </b>
+                                </span>
+                            </Grid>
+                        </Grid>
+                        <hr />
+                        <Grid container>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Date Of Joining: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
@@ -504,6 +488,16 @@ const UserDetail = () => {
                                     </b>
                                 </span>
                             </Grid>
+                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                                <span>Job Title: </span>
+                                <span style={{ color: 'green' }}>
+                                    <b>
+                                        {state.user.jobTitle === undefined
+                                            ? 'N/A'
+                                            : state.user.jobTitle}
+                                    </b>
+                                </span>
+                            </Grid>
                         </Grid>
                         <hr></hr>
                         <Box sx={{ marginBottom: '5px' }}>
@@ -522,6 +516,21 @@ const UserDetail = () => {
                                     Employee Details
                                 </Button>
                             </Grid>
+                            {showTable && (
+                                <Grid item lg={6} md={6} sm={6} xs={12}>
+                                    <CSVLink
+                                        filename={'all-employees.csv'}
+                                        data={employeeProducts}
+                                    >
+                                        <Button
+                                            variant="contained"
+                                            type="button"
+                                        >
+                                            Product Details Report
+                                        </Button>
+                                    </CSVLink>
+                                </Grid>
+                            )}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -590,13 +599,11 @@ const UserDetail = () => {
                                                           align="center"
                                                           colSpan={2}
                                                       >
-                                                          <Paragraph>
-                                                              {
-                                                                  employeeProduct
-                                                                      .products[0]
-                                                                      .name
-                                                              }
-                                                          </Paragraph>
+                                                          {
+                                                              employeeProduct
+                                                                  .products[0]
+                                                                  .name
+                                                          }
                                                       </TableCell>
                                                       <TableCell
                                                           align="center"
@@ -608,7 +615,7 @@ const UserDetail = () => {
                                                           }}
                                                       >
                                                           {
-                                                              employeeProduct.quantity
+                                                              employeeProduct?.quantity
                                                           }
                                                       </TableCell>
                                                       <TableCell
