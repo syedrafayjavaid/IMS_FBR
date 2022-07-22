@@ -527,7 +527,7 @@ const Offices = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'ADD OFFICE'}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{width:'500px'}}>
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={6} md={6} sm={6} xs={6}>

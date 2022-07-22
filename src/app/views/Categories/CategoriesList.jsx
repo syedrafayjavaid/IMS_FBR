@@ -288,12 +288,12 @@ const SEARCH = () => {
        
     }
     
-    //////post data
+    
     const ApplyFilters = () => {
                   SEARCH()
                     setEmployeeDialogs(false)
              
-    }
+             }
 
 
     return (
@@ -392,7 +392,7 @@ const SEARCH = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'ADD CATEGORY'}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{width:'500px'}}>
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={5} md={5} sm={5} xs={5}>

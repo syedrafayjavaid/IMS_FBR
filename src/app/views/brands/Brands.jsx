@@ -293,6 +293,20 @@ const ApplyFilters = () => {
                                     Name
                                 </TableCell>
                                 <TableCell
+                                    sx={{ px: 3 }}
+                                    align="left"
+                                    colSpan={3}
+                                >
+                                    Create Date
+                                </TableCell>
+                                <TableCell
+                                    sx={{ px: 3 }}
+                                    align="left"
+                                    colSpan={3}
+                                >
+                                    Modified
+                                </TableCell>
+                                <TableCell
                                     sx={{ px: 0 }}
                                     align="center"
                                     colSpan={3}
@@ -374,7 +388,7 @@ const ApplyFilters = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">{'ADD BRAND'}</DialogTitle>
-                <DialogContent>
+                <DialogContent style={{width:'500px'}}>
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -474,8 +488,8 @@ const ApplyFilters = () => {
                     action={action}
                 />
             </Dialog>
-{/* /////search filter of the data */}
-<Dialog
+            {/* /////search filter of the data */}
+              <Dialog
                 open={employeeDialogs}
                 onClose={handleEmployeeClose}
                 aria-labelledby="alert-dialog-title"

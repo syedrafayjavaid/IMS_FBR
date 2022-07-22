@@ -57,7 +57,7 @@ const ProductTypeCard = ({ product, onEdit, onDelete }) => {
             </TableCell>
             <TableCell
                 colSpan={3}
-                align="left"
+                align="center"
                 sx={{ px: 0, textTransform: 'capitalize' }}
             >
                 <Box>

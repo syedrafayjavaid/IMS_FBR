@@ -544,7 +544,7 @@ const ApplyFilters = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">{'ADD WINGS'}</DialogTitle>
-                <DialogContent>
+                <DialogContent >
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -761,7 +761,7 @@ const ApplyFilters = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'Add Department'}
                 </DialogTitle>
-                <DialogContent >
+                <DialogContent style={{width:'500px'}}>
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={12} md={12} sm={12} xs={12}>

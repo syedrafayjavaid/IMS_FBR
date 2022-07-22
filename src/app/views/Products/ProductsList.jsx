@@ -84,8 +84,7 @@ const ProductsList = () => {
     const [createProductCategory, setCreateProductCategory] = React.useState('')
     const [createProductCategoryError, setCreateProductCategoryError] =
         React.useState(false)
-    const [createModel, setCreateModel] = React.useState('')
-    const [createModelError, setCreateModelError] = React.useState(false)
+  
     const [createBrandName, setCreateBrandName] = React.useState('')
     const [createBrandNameError, setCreateBrandNameError] =
         React.useState(false)
@@ -101,8 +100,7 @@ const ProductsList = () => {
     const [editProductCategory, setEditProductCategory] = React.useState('')
     const [editProductCategoryError, setEditProductCategoryError] =
         React.useState(false)
-    const [editModel, setEditModel] = React.useState('')
-    const [editModelError, setEditModelError] = React.useState(false)
+   
     const [editBrandName, setEditBrandName] = React.useState('')
     const [editBrandNameError, setEditBrandNameError] = React.useState(false)
     const [editDescription, setEditDescription] = React.useState('')
@@ -111,7 +109,7 @@ const ProductsList = () => {
 
     const [image, setImage] = React.useState('')
     const [imageError, setImageError] = React.useState(false)
-    const [createdBy, setCreatedBy] = React.useState()
+    const [createdBy, setCreatedBy] = React.useState(userName)
     const [createdByError, setCreatedByError] = React.useState(false)
     const [modifiedBy, setModifiedBy] = React.useState(userName)
     const [modifiedByError, setModifiedByError] = React.useState(false)
@@ -128,14 +126,14 @@ const ProductsList = () => {
     // web came code
  ///Search filters state
  const [pname, setPname] = React.useState(null)
- const [createdby, setCreatedby] = React.useState()
+ const [createdby, setCreatedby] = React.useState(null)
  const [createdbysearch, setCreatedsearch] = React.useState([])
  const [pname1, setPname1] = React.useState([])
- const [productType, setProductType] = React.useState()
+ const [productType, setProductType] = React.useState(null)
  const [productType1, setProductType1] = React.useState([])
- const [productcategory, setProductcategory] = React.useState()
+ const [productcategory, setProductcategory] = React.useState(null)
  const [productcategory1, setProductcategory1] = React.useState([])
- const [selectbrand, setSelectbrand] = React.useState()
+ const [selectbrand, setSelectbrand] = React.useState(null)
  const [selectbrand1, setSelectbrand1] = React.useState([])
  const [selectcreateby, setSelectcreateby] = React.useState()
  const [selectcreateby1, setSelectcreateby1] = React.useState([])
@@ -219,8 +217,8 @@ const ProductsList = () => {
             createProductTypeName === '' ||
             createProductCategory === '' ||
             createBrandName === '' ||
-            createDescription === '' ||
-            createModel === ''
+            createDescription === '' 
+          
         ) {
             if (createName === '') {
                 setCreateNameError(true)
@@ -237,9 +235,7 @@ const ProductsList = () => {
             if (createBrandName === '') {
                 setCreateBrandNameError(true)
             }
-            if (createModel === '') {
-                setCreateModelError(true)
-            }
+            
         } else {
             checking()
         }
@@ -252,8 +248,8 @@ const ProductsList = () => {
             editProductTypeName === '' ||
             editProductCategory === '' ||
             editBrandName === '' ||
-            editDescription === '' ||
-            editModel === ''
+            editDescription === '' 
+          
         ) {
             if (editName === '') {
                 setEditNameError(true)
@@ -270,9 +266,7 @@ const ProductsList = () => {
             if (editBrandName === '') {
                 setEditBrandNameError(true)
             }
-            if (editModel === '') {
-                setEditModelError(true)
-            }
+          
         } else {
             editHandler()
         }
@@ -352,36 +346,38 @@ const ProductsList = () => {
       
         let data = new FormData()
 
-        data.append('createdby', createdby?._id)
+            data.append('createdBy', createdby?createdby._id:"")
         
-       console.log(pname?._id,"jfvjxdjvd")
-        data.append('category', productcategory?._id)
-        data.append('quantity', productType?._id)
-        data.append('brands', selectbrand?._id)
-        data.append('pname', pname?._id)
+        console.log(pname?._id,"jfvjxdjvd")
+        data.append('categoryId', productcategory?productcategory._id:"")
+        data.append('productTypeId', productType?productType._id:"")
+        data.append('brandId', selectbrand?selectbrand._id:"")
+        data.append('productId', pname?pname._id:"")
        
         axios 
-        .post(`${config.base_url}/api/v1/products/searchProducts`, data)
-   
+        .post(`${config.base_url}/api/v1/products/searchProducts/`,data)
+       
         .then((res) => {
-         setProduct1([res.data.data])
-        console.log(res.data)
+         setProduct1(res.data.data)
+       
         })
         .catch((error) => {
             alert('Record Not Found')
             console.log(error, 'error')
         })
-}
+                            
+    }
 
 
 
-    const checking = () => {
+         const checking = () => {
+
         let data = new FormData()
 
         data.append('name', createName)
         data.append('productTypeId', createProductTypeName)
         data.append('categoryId', createProductCategory)
-        data.append('model', createModel)
+      
         data.append('brandId', createBrandName)
         data.append('file', image)
         data.append('createdBy', createdBy)
@@ -415,7 +411,7 @@ const ProductsList = () => {
         setEditName(product.name)
         setEditProductTypeName(product.productTypeId)
         setEditProductCategory(product.categoryId)
-        setEditModel(product.model)
+       
         setEditBrandName(product.brandId)
         setImage(product.photo)
         setModifiedBy(product.createdBy)
@@ -428,7 +424,7 @@ const ProductsList = () => {
         data.append('name', editName)
         data.append('productTypeId', editProductTypeName)
         data.append('categoryId', editProductCategory)
-        data.append('model', editModel)
+     
         data.append('brandId', editBrandName)
         data.append('photo', image)
         data.append('modifiedBy', modifiedBy)
@@ -501,7 +497,7 @@ const ProductsList = () => {
     const headers = [
         { label: 'Product Name', key: 'name' },
         { label: 'Product Id', key: 'productId' },
-        // { label: 'Model', key: 'model' },
+       
         { label: 'Detail', key: 'detail' },
         { label: 'Quantity', key: 'quantity' },
         { label: 'Average Price', key: 'averagePrice' },
@@ -523,9 +519,6 @@ const ProductsList = () => {
                     setEmployeeDialogs(false)
                     searchData()
     }
-
-
-
 
 
     const top100Films = [
@@ -1202,6 +1195,7 @@ const ProductsList = () => {
             </Dialog>
 
             {/* /////search filter of the data */}
+            
             <Dialog
                 open={employeeDialogs}
                 onClose={handlesearchClose}
@@ -1394,7 +1388,6 @@ const ProductsList = () => {
     )
 }
 
-// qrcode
 
 const useStyles = makeStyles((theme) => ({
     conatiner: {

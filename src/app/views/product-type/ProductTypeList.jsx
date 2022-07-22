@@ -358,7 +358,7 @@ const ProductTypeList = () => {
                                     sx={{ px: 0 }}
                                     align="center"
                                     colSpan={2}
-                                 
+                                   style={{marginReight:"12px"}}
                                 >
                                     Edit
                                 </TableCell>
@@ -437,7 +437,7 @@ const ProductTypeList = () => {
                 <DialogTitle id="alert-dialog-title">
                     {'ADD PRODUCT LIST'}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent style={{width:'500px'}}>
                     <br></br>
                     <Grid container spacing={3}>
                         <Grid item lg={5} md={5} sm={5} xs={5}>
