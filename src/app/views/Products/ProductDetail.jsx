@@ -186,7 +186,7 @@ const ProductsList = () => {
                         </Grid>
                         <hr></hr>
                         <Grid container>
-                            <Grid item lg={6} md={6} sm={6} xs={6}>
+                            {/* <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Model: </span>
                                 <span style={{ color: 'green' }}>
                                     <b>
@@ -195,7 +195,7 @@ const ProductsList = () => {
                                             : state.product.model}
                                     </b>
                                 </span>
-                            </Grid>
+                            </Grid> */}
                             <Grid item lg={6} md={6} sm={6} xs={6}>
                                 <span>Brand: </span>
                                 <span style={{ color: 'green' }}>

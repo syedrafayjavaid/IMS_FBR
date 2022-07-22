@@ -76,6 +76,7 @@ const ProductsList = () => {
 
     // Form validation errors State Setting
     const [createName, setCreateName] = React.useState('')
+    const [search, setSearch] = React.useState([])
     const [createNameError, setCreateNameError] = React.useState(false)
     const [createProductTypeName, setCreateProductTypeName] = React.useState('')
     const [createProductTypeNameError, setCreateProductTypeNameError] =
@@ -110,7 +111,7 @@ const ProductsList = () => {
 
     const [image, setImage] = React.useState('')
     const [imageError, setImageError] = React.useState(false)
-    const [createdBy, setCreatedBy] = React.useState(userName)
+    const [createdBy, setCreatedBy] = React.useState()
     const [createdByError, setCreatedByError] = React.useState(false)
     const [modifiedBy, setModifiedBy] = React.useState(userName)
     const [modifiedByError, setModifiedByError] = React.useState(false)
@@ -127,16 +128,19 @@ const ProductsList = () => {
     // web came code
  ///Search filters state
  const [pname, setPname] = React.useState(null)
+ const [createdby, setCreatedby] = React.useState()
+ const [createdbysearch, setCreatedsearch] = React.useState([])
  const [pname1, setPname1] = React.useState([])
- const [productType, setProductType] = React.useState(null)
+ const [productType, setProductType] = React.useState()
  const [productType1, setProductType1] = React.useState([])
- const [productcategory, setProductcategory] = React.useState(null)
+ const [productcategory, setProductcategory] = React.useState()
  const [productcategory1, setProductcategory1] = React.useState([])
- const [selectbrand, setSelectbrand] = React.useState(null)
+ const [selectbrand, setSelectbrand] = React.useState()
  const [selectbrand1, setSelectbrand1] = React.useState([])
- const [selectcreateby, setSelectcreateby] = React.useState(null)
+ const [selectcreateby, setSelectcreateby] = React.useState()
  const [selectcreateby1, setSelectcreateby1] = React.useState([])
  const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+ const [searchCreatedBy, setSearchCreatedBy] = React.useState([])
 
 
     const [text1, setText1] = useState('')
@@ -288,6 +292,7 @@ const ProductsList = () => {
 
     useEffect(() => {
         getAlldata()
+      
     }, [])
     const getAlldata = () => {
         axios
@@ -298,7 +303,14 @@ const ProductsList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
-       
+            // axios
+            // .get(`${config.base_url}/api/v1/products/createdBySuggestions`)
+            // .then((res) => {
+            //     setCreatedsearch(res.data.data)
+            // })
+            // .catch((error) => {
+            //     console.log(error, 'error')
+            // })
         axios
             .get(config.base_url + '/api/v1/category')
             .then((res) => {
@@ -323,7 +335,45 @@ const ProductsList = () => {
             .catch((error) => {
                 console.log(error, 'error')
             })
+            axios
+            .post(config.base_url + '/api/v1/products/createdBySuggestions')
+
+            .then((res) => {
+               // console.log(res.data.data,"rgrewrewtwrt")
+                setSearchCreatedBy(res.data.data)
+            }) 
+            .catch((error) => {
+                console.log(error, 'error')
+            })
     }
+
+    ///api send data for the search api
+    const searchData = () => {
+      
+        let data = new FormData()
+
+        data.append('createdby', createdby?._id)
+        
+       console.log(pname?._id,"jfvjxdjvd")
+        data.append('category', productcategory?._id)
+        data.append('quantity', productType?._id)
+        data.append('brands', selectbrand?._id)
+        data.append('pname', pname?._id)
+       
+        axios 
+        .post(`${config.base_url}/api/v1/products/searchProducts`, data)
+   
+        .then((res) => {
+         setProduct1([res.data.data])
+        console.log(res.data)
+        })
+        .catch((error) => {
+            alert('Record Not Found')
+            console.log(error, 'error')
+        })
+}
+
+
 
     const checking = () => {
         let data = new FormData()
@@ -349,6 +399,7 @@ const ProductsList = () => {
         axios
             .post(config.base_url + '/api/v1/products ', data)
             .then((res) => {
+                
                 if (res) {
                     handleCreateClose()
                     getAlldata()
@@ -450,7 +501,7 @@ const ProductsList = () => {
     const headers = [
         { label: 'Product Name', key: 'name' },
         { label: 'Product Id', key: 'productId' },
-        { label: 'Model', key: 'model' },
+        // { label: 'Model', key: 'model' },
         { label: 'Detail', key: 'detail' },
         { label: 'Quantity', key: 'quantity' },
         { label: 'Average Price', key: 'averagePrice' },
@@ -461,7 +512,7 @@ const ProductsList = () => {
     ]
 
     ///////add fe3atue demay data
-    const handleEmployeeClose = () => {
+    const   handlesearchClose = () => {
         setEmployeeDialogs(false)
        
     }
@@ -470,7 +521,7 @@ const ProductsList = () => {
     const ApplyFilters = () => {
       
                     setEmployeeDialogs(false)
-             
+                    searchData()
     }
 
 
@@ -1153,7 +1204,7 @@ const ProductsList = () => {
             {/* /////search filter of the data */}
             <Dialog
                 open={employeeDialogs}
-                onClose={handleEmployeeClose}
+                onClose={handlesearchClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -1172,25 +1223,23 @@ const ProductsList = () => {
                                     size="small"
                                     disablePortal
                                     id="combo-box-demo"
-                                    options={category}
+                                    options={searchCreatedBy}
                                     filterSelectedOptions={true}
-                                    isOptionEqualToValue={(option, value) =>
-                                        option._id === value._id
-                                    }
+                                    
                                     getOptionLabel={(option) =>
-                                        `${option.name}`
+                                        `${option._id}`
                                     }
                                     renderInput={(params) => {
                                         return (
                                             <TextField
                                                 {...params}
-                                                label="Created by"
+                                                label="Created By"
                                             />
                                         )
                                     }}
-                                    value={productcategory}
+                                    value={createdby}
                                     onChange={(_event, vender) => {
-                                        setProductcategory(vender)
+                                        setCreatedby(vender)
                                     }}
                                 />
                   
@@ -1335,7 +1384,7 @@ const ProductsList = () => {
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEmployeeClose}>Cancel</Button>
+                    <Button onClick={handlesearchClose}>Cancel</Button>
                     <Button autoFocus onClick={ApplyFilters}>
                         Confirm
                     </Button>

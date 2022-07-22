@@ -21,11 +21,9 @@ import {
 } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import { useEffect, useRef, useState } from 'react'
-
 import { makeStyles } from '@material-ui/core/styles'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import QRCode from 'qrcode'
-import ChipInput from 'material-ui-chip-input'
 import { CardContent } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -48,6 +46,7 @@ import { CSVLink } from 'react-csv'
 import SummarizeIcon from '@mui/icons-material/Summarize'
 import '../users/user.css'
 import ReactPaginate from 'react-paginate'
+import TagsInput from './TagsInput'
 
 const dateStyles = makeStyles((theme) => ({
     container: {
@@ -66,6 +65,7 @@ const Input = styled('input')({
 })
 
 const PurchasedItems = () => {
+    // States
     const userName = localStorage.getItem('username')
     const [qrUUID, setQrUUID] = React.useState('')
     const [mychips, setMyChips] = React.useState('')
@@ -104,13 +104,10 @@ const PurchasedItems = () => {
     const [product1, setProduct1] = React.useState([])
     const myclass = dateStyles()
 
-    ///
     //API For the dialogbox
     const [purchaseBy, setPurchaseBy] = React.useState([])
     ///dialog state
     const [model, setModel] = React.useState('')
-
-    // web came code
 
     const [qrCode, setQrCode] = useState('')
     const [imageUrl1, setImageUrl1] = useState('')
@@ -128,7 +125,7 @@ const PurchasedItems = () => {
     const [purchasedDialog, setPurchasedDialog] = React.useState([])
     const [customerDialog, setCustomerDialog] = React.useState([])
     const [custodienId, setCustodienId] = React.useState([])
-    const [createdBy, setCreatedBy] = React.useState('')
+    const [createdBy, setCreatedBy] = React.useState(userName)
     const [createdAt, setCreatedAt] = React.useState('')
     const [modifyByDialog, setModifyByDialog] = React.useState([])
     const [modifyOnDialog, setModifyOnDialog] = React.useState([])
@@ -179,6 +176,9 @@ const PurchasedItems = () => {
     const [purchaseOrderSearch, setPurchaseOrdersearch] = React.useState('')
     const [sdate, setSdate] = React.useState('')
     const [sdate1, setSdate1] = React.useState('')
+
+    const [selectedFeatures, setSelectedFeatures] = React.useState([])
+    const [newFeatures, setNewFeatures] = React.useState([])
 
     const handlestatus = (event) => {
         setSearchStatus(event.target.value)
@@ -244,6 +244,7 @@ const PurchasedItems = () => {
     function valuetext(value) {
         return `${value}`
     }
+
     ///////
     const [pageNumber, setPageNumber] = React.useState(0)
     const ItemsEntryPerPage = 8
@@ -316,6 +317,7 @@ const PurchasedItems = () => {
     const handleCloseClick = () => {
         setSearchItemsDialog(false)
     }
+
     const handleCreateClose = () => {
         setOpen(false)
         setStatusValue('')
@@ -337,6 +339,7 @@ const PurchasedItems = () => {
         setSelectedProduct(null)
         setChecked(false)
     }
+
     const handleEditDialogClose = () => {
         setHandleEditDialog(false)
         setStatusValue('')
@@ -515,22 +518,33 @@ const PurchasedItems = () => {
             })
     }
 
-    // const getCustodianId = (custodianId) => {
-    //     axios
-    //         .get(`${config.base_url}/api/v1/employee/${custodianId}`)
-    //         .then((res) => {
-    //             setCustodianIdData(res.data.data)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error, 'error')
-    //         })
-    // }
+    // Combine Features Function
+
+    const combine = () => {
+        // Combining features
+        let combineFeaturesArray = []
+
+        if (selectedFeatures.length > 0) {
+            selectedFeatures.map((feature) => {
+                combineFeaturesArray.push(feature.title)
+            })
+        }
+        if (newFeatures.length > 0) {
+            combineFeaturesArray = combineFeaturesArray.concat(newFeatures)
+        }
+
+        return combineFeaturesArray
+    }
 
     const createHandler = () => {
-        let data = new FormData()
+        // Calling combine features function
+        const combinedFeatures = combine()
 
+        let data = new FormData()
         data.append('productId', selectedProduct?._id)
         data.append('price', price)
+        data.append('createdBy', createdBy)
+
         data.append('dataOfPurchase', dataOfPurchase)
         data.append('ownership', ownerShip)
         data.append('officeId', officeNameList)
@@ -545,6 +559,8 @@ const PurchasedItems = () => {
         data.append('quantity', productQuantity)
         data.append('QRCode', qrCode)
         data.append('srNo', srno)
+        data.append('features', combinedFeatures)
+        data.append('F', combinedFeatures)
         data.append('tagNo', tagdata)
         data.append('active', checked)
         data.append('qrUUID', qrUUID)
@@ -557,7 +573,9 @@ const PurchasedItems = () => {
 
         axios
             .post(`${config.base_url}/api/v1/purchaseProduct`, data)
+
             .then((res) => {
+                console.log('created by', res)
                 if (res) {
                     handleCreateClose()
                     getAlldata()
@@ -872,7 +890,7 @@ const PurchasedItems = () => {
 
     //     const chips = arr2.concat(arr);
 
-    const option = option === top100Films ? option : <ChipInput />
+    // const option = option === top100Films ? option : <ChipInput />
 
     const top100Films = [
         { title: 'The Shawshank Redemption', year: 1994 },
@@ -909,20 +927,15 @@ const PurchasedItems = () => {
         { title: 'Back to the Future', year: 1985 },
         { title: 'Whiplash', year: 2014 },
         { title: 'Gladiator', year: 2000 },
-        { title: 'Memento', year: 2000 },
-        { title: 'The Prestige', year: 2006 },
-        { title: 'The Lion King', year: 1994 },
-        { title: 'Apocalypse Now', year: 1979 },
-        { title: 'Alien', year: 1979 },
-        { title: 'Sunset Boulevard', year: 1950 },
-
-        { title: 'Once Upon a Time in America', year: 1984 },
-        { title: 'Witness for the Prosecution', year: 1957 },
-        { title: 'Das Boot', year: 1981 },
-        { title: 'Citizen Kane', year: 1941 },
-        { title: 'North by Northwest', year: 1959 },
-        { title: 'Vertigo', year: 1958 },
     ]
+
+    function handleNewTags(items) {
+        setNewFeatures(items)
+    }
+
+    const handleSelectedTags = (items) => {
+        setSelectedFeatures(items)
+    }
 
     const qrBasedSearch = (qrcode) => {
         const qrArray = qrcode.split(' ')
@@ -1596,13 +1609,16 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                            // value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"
                                             // onClick={guardarNumeros()}
                                         />
                                     )}
+                                    value={selectedFeatures}
+                                    onChange={(_event, feature) => {
+                                        handleSelectedTags(feature)
+                                    }}
                                 />
                             </Grid>
                         </Grid>
@@ -1610,7 +1626,15 @@ const PurchasedItems = () => {
                         <p>Add Features Suggestive</p>
                         <Grid container spacing={3}>
                             <Grid item lg={12} md={12} sm={12} xs={12}>
-                                <ChipInput value={features} />
+                                <TagsInput
+                                    selectedTags={handleNewTags}
+                                    fullWidth
+                                    variant="outlined"
+                                    id="features"
+                                    name="features"
+                                    placeholder="features"
+                                    label="Add New Features"
+                                />
                             </Grid>
                         </Grid>
                         <br></br>
@@ -1938,7 +1962,7 @@ const PurchasedItems = () => {
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => (
                                         <TextField
-                                            // value={features}
+                                            value={features}
                                             {...params}
                                             label="features suggestive"
                                             placeholder="features suggestive"

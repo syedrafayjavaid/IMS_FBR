@@ -33,7 +33,7 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } }
 const CategoriesList = () => {
     const userName = localStorage.getItem('username')
     const [categories, setCategories] = React.useState([])
-    const [searchcategories, setSearchCategories] = React.useState(null)
+    const [searchcategories, setSearchCategories] = React.useState()
     const [open, setOpen] = React.useState(false)
 
     const [imge, setImage] = React.useState('')
@@ -175,6 +175,27 @@ const CategoriesList = () => {
                 console.log(error, 'error')
             })
     }
+////CATEGORIES SEARCH FILYTER API DATA WITH
+
+const SEARCH = () => {
+
+    let data = new FormData()
+
+    data.append('department', searchcategories)
+   
+    axios 
+        .get(`${config.base_url}/api/v1/category/${searchcategories._id}`)
+   
+        .then((res) => {
+           setCategories([res.data.data])
+       console.log(res.data.data, 'rewtertertrt')
+        })
+        .catch((error) => {
+            console.log(error, 'error')
+        })
+}
+
+
 
     const createHandler = () => {
         let data = new FormData()
@@ -259,6 +280,9 @@ const CategoriesList = () => {
 
 
     const [employeeDialogs, setEmployeeDialogs] = React.useState(false)
+
+
+
     const handleEmployeeClose = () => {
         setEmployeeDialogs(false)
        
@@ -266,7 +290,7 @@ const CategoriesList = () => {
     
     //////post data
     const ApplyFilters = () => {
-      
+                  SEARCH()
                     setEmployeeDialogs(false)
              
     }
@@ -518,7 +542,7 @@ const CategoriesList = () => {
 
 
             {/* /////search filter of the data */}
-<Dialog
+                <Dialog
                 open={employeeDialogs}
                 onClose={handleEmployeeClose}
                 aria-labelledby="alert-dialog-title"
